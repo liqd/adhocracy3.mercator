@@ -6,7 +6,7 @@
             <p>{{ content.data['adhocracy.sheets.document.IParagraph'].content }}</p>
         </div>
         <div data-ng-switch-when="edit">
-            <adh-paragraph-sheet-edit data-sheet="content.data['adhocracy.sheets.document.IParagraph']"></adh-paragraph-sheet-edit>
+            <textarea data-ng-model="content.data['adhocracy.sheets.document.IParagraph'].content"></textarea>
         </div>
         <div data-ng-switch-default="">
             internal error: unknown view mode: [{{ viewmode }}]

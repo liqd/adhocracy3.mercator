@@ -134,8 +134,6 @@ export var init = (config, meta_api) => {
     app.directive("adhProposalDetail", () => new Proposal.ProposalDetail().createDirective());
     app.directive("adhProposalVersionDetail",
         ["adhConfig", (adhConfig) => new Proposal.ProposalVersionDetail().createDirective(adhConfig)]);
-    app.directive("adhProposalVersionEdit",
-        ["adhConfig", (adhConfig) => new Proposal.ProposalVersionEdit().createDirective(adhConfig)]);
     app.directive("adhProposalVersionNew",
         ["adhHttp", "adhConfig", "adhProposal", (adhHttp, adhConfig, adhProposal) =>
             new Proposal.ProposalVersionNew().createDirective(adhHttp, adhConfig, adhProposal)]);
@@ -144,13 +142,6 @@ export var init = (config, meta_api) => {
             new Proposal.SectionVersionDetail().createDirective(adhConfig, recursionHelper)]);
     app.directive("adhParagraphVersionDetail",
         ["adhConfig", (adhConfig) => new Proposal.ParagraphVersionDetail().createDirective(adhConfig)]);
-    app.directive("adhDocumentSheetEdit",
-        ["adhHttp", "$q", "adhConfig", (adhHttp, $q, adhConfig) =>
-            new Proposal.DocumentSheetEdit().createDirective(adhHttp, $q, adhConfig)]);
-    app.directive("adhDocumentSheetShow",
-        ["adhConfig", (adhConfig) => new Proposal.DocumentSheetShow().createDirective(adhConfig)]);
-    app.directive("adhParagraphSheetEdit",
-        ["adhConfig", (adhConfig) => new Proposal.ParagraphSheetEdit().createDirective(adhConfig)]);
 
 
     // get going
