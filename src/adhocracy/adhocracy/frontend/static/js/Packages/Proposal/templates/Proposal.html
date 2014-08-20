@@ -16,10 +16,6 @@
             <adh-user-meta data-path="{{content.data['adhocracy.sheets.metadata.IMetadata'].creator}}"</adh-user-meta>
         </div>
         <div data-ng-switch-when="edit">
-            <div class="buttons_box">
-                <button type="button" class="reset_button" data-ng-click="reset()">reset</button>
-                <button type="button" class="save_button" data-ng-click="commit()">save</button>
-            </div>
             <input type="text" name="title" class="m-title" data-ng-model="content.data['adhocracy.sheets.document.IDocument'].title" placeholder="title"></input>
             <textarea name="description" data-ng-model="content.data['adhocracy.sheets.document.IDocument'].description" placeholder="description"></textarea>
         </div>
@@ -32,4 +28,8 @@
         data-ref="sectionRef"
         data-viewmode="viewmode">
     </adh-section-version-detail>
+    <div class="buttons_box" data-ng-if="viewmode == 'edit'">
+        <button type="button" class="save_button" data-ng-click="commit()">save</button>
+        <a href="" data-ng-click="reset()">cancel</a>
+    </div>
 </div>
