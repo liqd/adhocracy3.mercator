@@ -25,11 +25,11 @@
     </div>
     <adh-section-version-detail
         data-ng-repeat="sectionRef in content.data['adhocracy.sheets.document.IDocument'].elements"
-        data-ref="sectionRef"
+        data-path="{{sectionRef}}"
         data-viewmode="viewmode">
     </adh-section-version-detail>
     <div class="buttons_box" data-ng-if="viewmode == 'edit'">
         <button type="button" class="save_button" data-ng-click="commit()">save</button>
-        <a href="" data-ng-click="reset()">cancel</a>
+        <a href="" data-ng-click="onCancel()">cancel</a>
     </div>
 </div>

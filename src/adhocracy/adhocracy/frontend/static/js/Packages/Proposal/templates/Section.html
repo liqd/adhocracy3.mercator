@@ -9,12 +9,12 @@
     </div>
     <adh-paragraph-version-detail
         data-ng-repeat="paragraphRef in content.data['adhocracy.sheets.document.ISection'].elements"
-        data-ref="paragraphRef"
+        data-path="{{paragraphRef}}"
         data-viewmode="viewmode">
     </adh-paragraph-version-detail>
     <adh-section-version-detail
         data-ng-repeat="sectionRef in content.data['adhocracy.sheets.document.ISection'].subsections"
-        data-ref="sectionRef"
+        data-path="{{sectionRef}}"
         data-viewmode="viewmode">
     </adh-section-version-detail>
 </section>
