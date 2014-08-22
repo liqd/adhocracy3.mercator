@@ -30,7 +30,7 @@ import AdhCommentAdapter = require("./Packages/Comment/Adapter");
 
 import Listing = require("./Packages/Listing/Listing");
 import DocumentWorkbench = require("./Packages/DocumentWorkbench/DocumentWorkbench");
-import Proposal = require("./Packages/Proposal/Proposal");
+import AdhProposal = require("./Packages/Proposal/Proposal");
 import Embed = require("./Packages/Embed/Embed");
 
 
@@ -77,7 +77,7 @@ export var init = (config, meta_api) => {
 
     app.value("Modernizr", modernizr);
 
-    app.service("adhProposal", Proposal.Service);
+    app.service("adhProposal", AdhProposal.Service);
     app.service("adhUser", ["adhHttp", "$q", "$http", "$window", "Modernizr", AdhUser.User]);
     app.directive("adhLogin", ["adhConfig", AdhUser.loginDirective]);
     app.directive("adhRegister", ["adhConfig", "$location", AdhUser.registerDirective]);
@@ -131,17 +131,17 @@ export var init = (config, meta_api) => {
         var widget = new AdhComment.CommentDetail(adapter);
         return widget.createDirective(adhConfig, recursionHelper);
     }]);
-    app.directive("adhProposalDetail", () => new Proposal.ProposalDetail().createDirective());
+    app.directive("adhProposalDetail", () => new AdhProposal.ProposalDetail().createDirective());
     app.directive("adhProposalVersionDetail",
-        ["adhConfig", (adhConfig) => new Proposal.ProposalVersionDetail().createDirective(adhConfig)]);
+        ["adhConfig", (adhConfig) => new AdhProposal.ProposalVersionDetail().createDirective(adhConfig)]);
     app.directive("adhProposalVersionNew",
         ["adhHttp", "adhConfig", "adhProposal", (adhHttp, adhConfig, adhProposal) =>
-            new Proposal.ProposalVersionNew().createDirective(adhHttp, adhConfig, adhProposal)]);
+            new AdhProposal.ProposalVersionNew().createDirective(adhHttp, adhConfig, adhProposal)]);
     app.directive("adhSectionVersionDetail",
         ["adhConfig", "recursionHelper", (adhConfig, recursionHelper) =>
-            new Proposal.SectionVersionDetail().createDirective(adhConfig, recursionHelper)]);
+            new AdhProposal.SectionVersionDetail().createDirective(adhConfig, recursionHelper)]);
     app.directive("adhParagraphVersionDetail",
-        ["adhConfig", (adhConfig) => new Proposal.ParagraphVersionDetail().createDirective(adhConfig)]);
+        ["adhConfig", (adhConfig) => new AdhProposal.ParagraphVersionDetail().createDirective(adhConfig)]);
 
 
     // get going
