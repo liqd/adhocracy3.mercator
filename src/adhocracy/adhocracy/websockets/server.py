@@ -8,11 +8,8 @@ import logging
 
 from autobahn.asyncio.websocket import WebSocketServerProtocol
 from autobahn.websocket.protocol import ConnectionRequest
-from pyramid.traversal import resource_path
 import colander
 
-from adhocracy.interfaces import IResource
-from adhocracy.interfaces import IItemVersion
 from adhocracy.websockets import WebSocketError
 from adhocracy.websockets.schemas import ClientRequestSchema
 from adhocracy.websockets.schemas import Notification
@@ -32,34 +29,31 @@ class ClientTracker():
         self._clients2resource_paths = defaultdict(set)
         self._resource_paths2clients = defaultdict(set)
 
-    def is_subscribed(self, client: Hashable, resource: IResource) -> bool:
-        """Check whether a client is subscribed to a resource."""
-        path = resource_path(resource)
+    def is_subscribed(self, client: Hashable, path: str) -> bool:
+        """Check whether a client is subscribed to a resource path."""
         return (client in self._clients2resource_paths and
                 path in self._clients2resource_paths[client])
 
-    def subscribe(self, client: Hashable, resource: IResource) -> bool:
-        """Subscribe a client to a resource, if necessary.
+    def subscribe(self, client: Hashable, path: str) -> bool:
+        """Subscribe a client to a resource path, if necessary.
 
         :return: True if the subscription was successful, False if it was
                  unnecessary (the client was already subscribed).
         """
-        if self.is_subscribed(client, resource):
+        if self.is_subscribed(client, path):
             return False
-        path = resource_path(resource)
         self._clients2resource_paths[client].add(path)
         self._resource_paths2clients[path].add(client)
         return True
 
-    def unsubscribe(self, client: Hashable, resource: IResource) -> bool:
+    def unsubscribe(self, client: Hashable, path: str) -> bool:
         """Unsubscribe a client from a resource, if necessary.
 
         :return: True if the unsubscription was successful, False if it was
                  unnecessary (the client was not subscribed).
         """
-        if not self.is_subscribed(client, resource):
+        if not self.is_subscribed(client, path):
             return False
-        path = resource_path(resource)
         self._discard_from_set_valued_dict(self._clients2resource_paths,
                                            client,
                                            path)
@@ -84,9 +78,8 @@ class ClientTracker():
             self._discard_from_set_valued_dict(self._resource_paths2clients,
                                                path, client)
 
-    def iterate_subscribers(self, resource: IResource) -> Iterable:
+    def iterate_subscribers(self, path: str) -> Iterable:
         """Return an iterator over all clients subscribed to a resource."""
-        path = resource_path(resource)
         # 'if' check is necessary to avoid creating spurious empty sets
         if path in self._resource_paths2clients:
             for client in self._resource_paths2clients[path]:
@@ -106,17 +99,6 @@ class ClientCommunicator(WebSocketServerProtocol):
     # All instances of this class share the same tracker
     _tracker = ClientTracker()
 
-    def _get_context(self):
-        """Get a context object to resolve resource paths.
-
-        :raises KeyError: if the zodb root has no app_root child.
-        :raises AttributeError: if the `zodb_connection` attribute is None.
-
-        """
-        self.zodb_connection.sync()
-        root = self.zodb_connection.root()
-        return root['app_root']
-
     def onConnect(self, request: ConnectionRequest):  # noqa
         self._client = request.peer
         self._client_may_send_notifications = self._client_runs_on_localhost()
@@ -134,10 +116,8 @@ class ClientCommunicator(WebSocketServerProtocol):
             json_object = self._parse_message(payload, is_binary)
             if self._handle_if_event_notification(json_object):
                 return
-            context = self._get_context()
             request = self._parse_json_via_schema(json_object,
-                                                  ClientRequestSchema,
-                                                  context)
+                                                  ClientRequestSchema)
             self._handle_client_request_and_send_response(request)
         except Exception as err:
             self._send_error_message(err)
@@ -166,31 +146,26 @@ class ClientCommunicator(WebSocketServerProtocol):
         """
         if (self._client_may_send_notifications and
                 self._looks_like_event_notification(json_object)):
-            context = self._get_context()
             notification = self._parse_json_via_schema(json_object,
-                                                       Notification,
-                                                       context,)
+                                                       Notification)
             self._dispatch_event_notification_to_subscribers(notification)
             return True
         else:
             return False
 
     def _parse_json_via_schema(self, json_object, schema:
-                               colander.MappingSchema, context) -> dict:
+                               colander.MappingSchema) -> dict:
         try:
-            schema_with_context = schema().bind(context=context)
-            return schema_with_context.deserialize(json_object)
+            return schema().deserialize(json_object)
         except colander.Invalid as err:
+            # FIXME: why do we need this special error "unknown action"?
+            # The normal json error gives your more detailed error information
             self._raise_if_unknown_field_value('action', err, json_object)
-            self._raise_if_unknown_field_value('resource', err, json_object)
             self._raise_invalid_json_from_colander_invalid(err)
-        except Exception as err:
-            self._raise_invalid_json_from_exception(err)
 
     def _handle_client_request_and_send_response(self, request: dict):
         action = request['action']
         resource = request['resource']
-        self._raise_if_forbidden_request(action, resource)
         update_was_necessary = self._update_resource_subscription(action,
                                                                   resource)
         self._send_status_confirmation(update_was_necessary, action, resource)
@@ -211,13 +186,15 @@ class ClientCommunicator(WebSocketServerProtocol):
 
     def _dispatch_event_notification_to_subscribers(self, notification: dict):
         event = notification['event']
-        resource = notification['resource']
+        path = notification['resource']
         if event == 'created':
-            self._dispatch_created_event(resource)
+            self._dispatch_created_event(path)
+        elif event == 'new_version':
+            self._dispatch_new_version_event(path)
         elif event == 'modified':
-            self._dispatch_modified_event(resource)
+            self._dispatch_modified_event(path)
         elif event == 'deleted':
-            self._dispatch_deleted_event(resource)
+            self._dispatch_deleted_event(path)
         else:
             details = 'unknown event: {}'.format(event)
             raise WebSocketError('invalid_json', details)
@@ -241,34 +218,24 @@ class ClientCommunicator(WebSocketServerProtocol):
         details = ' / '.join(sorted(errlist))
         raise WebSocketError('invalid_json', details)
 
-    def _raise_invalid_json_from_exception(self, err: Exception):
-        raise WebSocketError('invalid_json', str(err))
-
-    def _raise_if_forbidden_request(self, action: str, resource: IResource):
-        """Raise an error if a client tries to subscribe to an ItemVersion."""
-        if action == 'subscribe' and IItemVersion.providedBy(resource):
-            raise WebSocketError('subscribe_not_supported',
-                                 resource_path(resource))
-
     def _update_resource_subscription(self, action: str,
-                                      resource: str) -> bool:
+                                      path: str) -> bool:
         """(Un)subscribe this instance to/from a resource.
 
         :return: True if the request was necessary, False if it was an
                  unnecessary no-op
         """
         if action == 'subscribe':
-            return self._tracker.subscribe(self, resource)
+            return self._tracker.subscribe(self, path)
         else:
-            return self._tracker.unsubscribe(self, resource)
+            return self._tracker.unsubscribe(self, path)
 
     def _send_status_confirmation(self, update_was_necessary: bool,
-                                  action: str, resource: IResource):
+                                  action: str, path: str):
         status = 'ok' if update_was_necessary else 'redundant'
-        context = self._get_context()
-        schema = StatusConfirmation().bind(context=context)
+        schema = StatusConfirmation()
         json_message = schema.serialize(
-            {'status': status, 'action': action, 'resource': resource})
+            {'status': status, 'action': action, 'resource': path})
         self._send_json_message(json_message)
 
     def _send_json_message(self, json_message: dict):
@@ -277,75 +244,83 @@ class ClientCommunicator(WebSocketServerProtocol):
         logger.debug('Sending message to client %s: %s', self._client, text)
         self.sendMessage(text.encode())
 
-    def _dispatch_created_event(self, resource: IResource):
-        if IItemVersion.providedBy(resource):
-            self._notify_new_version(resource.__parent__, resource)
-        else:
-            self._notify_new_child(resource.__parent__, resource)
+    def _dispatch_created_event(self, path: str):
+        parent_path = self._get_parent_path(path)
+        self._notify_new_child(parent_path, path)
 
-    def _dispatch_modified_event(self, resource: IResource):
-        self._notify_resource_modified(resource)
-        self._notify_modified_child(resource.__parent__, resource)
+    def _dispatch_new_version_event(self, path: str):
+        # FIXME: we assume here the parent of the item version is
+        # the item this version belongs to. This works but now but may change
+        # in the future.
+        parent_path = self._get_parent_path(path)
+        self._notify_new_version(parent_path, path)
 
-    def _dispatch_deleted_event(self, resource: IResource):
+    def _get_parent_path(self, path):
+        parent_parts = path.split('/')[:-1]
+        parent_path = '/'.join(parent_parts)
+        return parent_path
+
+    def _dispatch_modified_event(self, path: str):
+        self._notify_resource_modified(path)
+        parent_path = self._get_parent_path(path)
+        self._notify_modified_child(parent_path, path)
+
+    def _dispatch_deleted_event(self, path: str):
         # FIXME Should we also notify subscribers of the deleted resource?
-        # That's currently not part of the API.
-        self._notify_removed_child(resource.__parent__, resource)
+        # Deleting is currently not part of the API, so we can remove this.
+        parent = self._get_parent_path(path)
+        self._notify_removed_child(parent, path)
 
-    def _notify_new_version(self, parent: IResource,
-                            new_version: IItemVersion):
+    def _notify_new_version(self, parent: str, new_version: str):
         """Notify subscribers if a new version has been added to an item."""
         for client in self._tracker.iterate_subscribers(parent):
             client.send_new_version_notification(parent, new_version)
 
-    def _notify_new_child(self, parent: IResource, child: IResource):
+    def _notify_new_child(self, parent: str, child: str):
         """Notify subscribers if a child has been added to a pool or item."""
         for client in self._tracker.iterate_subscribers(parent):
             client.send_child_notification('new', parent, child)
 
-    def _notify_resource_modified(self, resource: IResource):
+    def _notify_resource_modified(self, path: str):
         """Notify subscribers if a resource has been modified."""
-        for client in self._tracker.iterate_subscribers(resource):
-            client.send_modified_notification(resource)
+        for client in self._tracker.iterate_subscribers(path):
+            client.send_modified_notification(path)
 
-    def _notify_modified_child(self, parent: IResource, child: IResource):
+    def _notify_modified_child(self, parent: str, child: str):
         """Notify subscribers if a child in a pool has been modified."""
         for client in self._tracker.iterate_subscribers(parent):
             client.send_child_notification('modified', parent, child)
 
-    def _notify_removed_child(self, parent: IResource, child: IResource):
+    def _notify_removed_child(self, parent: str, child: str):
         """Notify subscribers if a child has been removed from a pool."""
         for client in self._tracker.iterate_subscribers(parent):
             client.send_child_notification('removed', parent, child)
 
-    def send_modified_notification(self, resource: IResource):
-        """Send notification about a modified resource."""
-        context = self._get_context()
-        schema = Notification().bind(context=context)
-        data = schema.serialize({'event': 'modified', 'resource': resource})
+    def send_modified_notification(self, path: str):
+        """Send notification about a modified resource path."""
+        schema = Notification()
+        data = schema.serialize({'event': 'modified', 'resource': path})
         self._send_json_message(data)
 
-    def send_child_notification(self, status: str, resource: IResource,
-                                child: IResource):
-        """Send notification concerning a child resource.
+    def send_child_notification(self, status: str, path: str,
+                                child_path: str):
+        """Send notification concerning a child resource path.
 
         :param status: should be 'new', 'removed', or 'modified'
         """
-        context = self._get_context()
-        schema = ChildNotification().bind(context=context)
+        schema = ChildNotification()
         data = schema.serialize({'event': status + '_child',
-                                 'resource': resource,
-                                 'child': child})
+                                 'resource': path,
+                                 'child': child_path})
         self._send_json_message(data)
 
-    def send_new_version_notification(self, resource: IResource,
-                                      new_version: IResource):
+    def send_new_version_notification(self, path: str,
+                                      new_version_path: str):
         """Send notification if a new version has been added."""
-        context = self._get_context()
-        schema = VersionNotification().bind(context=context)
+        schema = VersionNotification()
         data = schema.serialize({'event': 'new_version',
-                                 'resource': resource,
-                                 'version': new_version})
+                                 'resource': path,
+                                 'version': new_version_path})
         self._send_json_message(data)
 
     def onClose(self, was_clean: bool, code: int, reason: str):  # noqa

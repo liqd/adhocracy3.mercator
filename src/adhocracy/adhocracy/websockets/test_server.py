@@ -2,8 +2,6 @@ from json import dumps
 from json import loads
 import unittest
 
-from pyramid import testing
-from zope.interface import alsoProvides
 import pytest
 
 from adhocracy.websockets.server import ClientCommunicator
@@ -17,18 +15,6 @@ class DummyConnectionRequest():
 
     def __init__(self, peer: str):
         self.peer = peer
-
-
-class DummyZODBConnection():
-
-    def __init__(self, zodb_root=None):
-        self.zodb_root = zodb_root
-
-    def sync(self):
-        pass
-
-    def root(self):
-        return self.zodb_root or {}
 
 
 class QueueingClientCommunicator(ClientCommunicator):
@@ -48,14 +34,7 @@ class QueueingClientCommunicator(ClientCommunicator):
 class ClientCommunicatorUnitTests(unittest.TestCase):
 
     def setUp(self):
-        app_root = testing.DummyResource()
-        app_root['child'] = testing.DummyResource()
-        zodb_root = testing.DummyResource()
-        zodb_root['app_root'] = app_root
-        app_root.__name__ = app_root.__parent__ = None
-        self._child = app_root['child']
-        QueueingClientCommunicator.zodb_connection = DummyZODBConnection(
-            zodb_root=zodb_root)
+        self._child = '/child'
         self._comm = QueueingClientCommunicator()
         self._peer = 'websocket peer'
         self._connect()
@@ -121,15 +100,6 @@ class ClientCommunicatorUnitTests(unittest.TestCase):
                                         'action': 'subscribe',
                                         'resource': '/child'}
 
-    def test_onMessage_subscribe_item_version(self):
-        from adhocracy.interfaces import IItemVersion
-        alsoProvides(self._child, IItemVersion)
-        msg = build_message({'action': 'subscribe', 'resource': '/child'})
-        self._comm.onMessage(msg, False)
-        assert len(self._comm.queue) == 1
-        assert self._comm.queue[0] == {'error': 'subscribe_not_supported',
-                                       'details': '/child'}
-
     def test_onMessage_with_binary_message(self):
         self._comm.onMessage(b'DEADBEEF', True)
         assert len(self._comm.queue) == 1
@@ -166,31 +136,12 @@ class ClientCommunicatorUnitTests(unittest.TestCase):
         assert self._comm.queue[0] == {'error': 'unknown_action',
                                        'details': 'just do it!'}
 
-    def test_onMessage_with_invalid_resource(self):
-        msg = build_message({'action': 'subscribe',
-                             'resource': '/wrong_child'})
-        self._comm.onMessage(msg, False)
-        assert len(self._comm.queue) == 1
-        assert self._comm.queue[0] == {'error': 'unknown_resource',
-                                       'details': '/wrong_child'}
-
-    def test_onMessage_with_both_invalid(self):
-        msg = build_message({'action': 'just do it!',
-                             'resource': '/wrong_child'})
-        self._comm.onMessage(msg, False)
-        assert len(self._comm.queue) == 1
-        last_message = self._comm.queue[0]
-        assert last_message['error'] == 'invalid_json'
-        assert 'action' in last_message['details']
-        assert 'resource' in last_message['details']
-
     def test_onMessage_with_invalid_json_type(self):
         msg = build_message({'action': 'subscribe', 'resource': 7})
         self._comm.onMessage(msg, False)
         assert len(self._comm.queue) == 1
         assert self._comm.queue[0] == {'error': 'invalid_json',
-            'details': 'coercing to str: need bytes, bytearray or '
-                       'buffer-like object, int found'}
+                                       'details': "resource: 7 is not a string: {'resource': ''}"}
 
     def test_send_modified_notification(self):
         self._comm.send_modified_notification(self._child)
@@ -200,8 +151,7 @@ class ClientCommunicatorUnitTests(unittest.TestCase):
 
     def test_send_child_notification(self):
         child = self._child
-        child['grandchild'] = testing.DummyResource()
-        self._comm.send_child_notification('new', child, child['grandchild'])
+        self._comm.send_child_notification('new', child, child + '/grandchild')
         assert len(self._comm.queue) == 1
         assert self._comm.queue[0] == {'event': 'new_child',
                                        'resource': '/child',
@@ -209,8 +159,7 @@ class ClientCommunicatorUnitTests(unittest.TestCase):
 
     def test_send_new_version_notification(self):
         child = self._child
-        child['version_007'] = testing.DummyResource()
-        self._comm.send_new_version_notification(child, child['version_007'])
+        self._comm.send_new_version_notification(child, child + '/version_007')
         assert len(self._comm.queue) == 1
         assert self._comm.queue[0] == {'event': 'new_version',
                                        'resource': '/child',
@@ -234,16 +183,6 @@ class EventDispatchUnitTests(unittest.TestCase):
     """Test event dispatch from one ClientCommunicator to others."""
 
     def setUp(self):
-        app_root = testing.DummyResource()
-        app_root['child'] = testing.DummyResource()
-        app_root['child']['grandchild'] = testing.DummyResource()
-        zodb_root = testing.DummyResource()
-        zodb_root['app_root'] = app_root
-        app_root.__name__ = app_root.__parent__ = None
-        self._child = app_root['child']
-        self._grandchild = app_root['child']['grandchild']
-        QueueingClientCommunicator.zodb_connection = DummyZODBConnection(
-            zodb_root=zodb_root)
         self._subscriber = QueueingClientCommunicator()
         request = DummyConnectionRequest('websocket peer')
         self._subscriber.onConnect(request)
@@ -267,9 +206,7 @@ class EventDispatchUnitTests(unittest.TestCase):
                                               'child': '/child/grandchild'}
 
     def test_dispatch_created_notification_new_version(self):
-        from adhocracy.interfaces import IItemVersion
-        alsoProvides(self._grandchild, IItemVersion)
-        msg = build_message({'event': 'created',
+        msg = build_message({'event': 'new_version',
                              'resource': '/child/grandchild'})
         self._dispatcher.onMessage(msg, False)
         assert len(self._dispatcher.queue) == 0
@@ -318,9 +255,7 @@ class ClientTrackerUnitTests(unittest.TestCase):
 
     def setUp(self):
         from adhocracy.websockets.server import ClientTracker
-        app_root = testing.DummyResource()
-        app_root['child'] = testing.DummyResource()
-        self._child = app_root['child']
+        self._child = '/child'
         self._tracker = ClientTracker()
 
     def test_subscribe(self):
@@ -345,7 +280,7 @@ class ClientTrackerUnitTests(unittest.TestCase):
         """Test client subscribing to two resources."""
         client = self._make_client()
         resource1 = self._child
-        resource2 = self._child.__parent__['child2'] = testing.DummyResource()
+        resource2 = '/child2'
         result1 = self._tracker.subscribe(client, resource1)
         result2 = self._tracker.subscribe(client, resource2)
         assert result1 is True

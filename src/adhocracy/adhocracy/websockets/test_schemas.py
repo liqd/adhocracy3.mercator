@@ -11,38 +11,26 @@ class ClientRequestSchemaUnitTests(unittest.TestCase):
 
     """Test ClientRequestSchema deserialization."""
 
-    def setUp(self):
-        self.context = testing.DummyResource()
-        self.child = testing.DummyResource()
-        self.context['child'] = self.child
-
     def _make_one(self):
         from adhocracy.websockets.schemas import ClientRequestSchema
-        schema = ClientRequestSchema()
-        return schema.bind(context=self.context)
+        return ClientRequestSchema()
 
     def test_deserialize_subscribe(self):
         inst = self._make_one()
         result = inst.deserialize(
             {'action': 'subscribe', 'resource': '/child'})
-        assert result == {'action': 'subscribe', 'resource': self.child}
+        assert result == {'action': 'subscribe', 'resource': '/child'}
 
     def test_deserialize_unsubscribe(self):
         inst = self._make_one()
         result = inst.deserialize(
             {'action': 'unsubscribe', 'resource': '/child'})
-        assert result == {'action': 'unsubscribe', 'resource': self.child}
+        assert result == {'action': 'unsubscribe', 'resource': '/child'}
 
     def test_deserialize_invalid_action(self):
         inst = self._make_one()
         with pytest.raises(colander.Invalid):
             inst.deserialize({'action': 'blah', 'resource': '/child'})
-
-    def test_deserialize_invalid_resource(self):
-        inst = self._make_one()
-        with pytest.raises(colander.Invalid):
-            inst.deserialize(
-                {'action': 'subscribe', 'resource': '/wrong_child'})
 
     def test_deserialize_no_action(self):
         inst = self._make_one()
@@ -79,88 +67,69 @@ class StatusConfirmationUnitTests(unittest.TestCase):
 
     """Test StatusConfirmation serialization."""
 
-    def setUp(self):
-        self.context = testing.DummyResource()
-        self.child = testing.DummyResource()
-        self.context['child'] = self.child
-
     def _make_one(self):
         from adhocracy.websockets.schemas import StatusConfirmation
-        schema = StatusConfirmation()
-        return schema.bind(context=self.context)
+        return StatusConfirmation()
 
     def test_serialize_ok(self):
         inst = self._make_one()
         result = inst.serialize(
-            {'status': 'ok', 'action': 'subscribe', 'resource': self.child})
+            {'status': 'ok', 'action': 'subscribe', 'resource': '/parent/child'})
         assert result == {'status': 'ok',
                           'action': 'subscribe',
-                          'resource': '/child'}
+                          'resource': '/parent/child'}
 
     def test_serialize_redundant(self):
         inst = self._make_one()
         result = inst.serialize(
             {'status': 'redundant',
              'action': 'unsubscribe',
-             'resource': self.child})
+             'resource': '/parent/child'})
         assert result == {'status': 'redundant',
                           'action': 'unsubscribe',
-                          'resource': '/child'}
+                          'resource': '/parent/child'}
 
     def test_serialize_default_status(self):
         inst = self._make_one()
         result = inst.serialize({'action': 'subscribe',
-                                 'resource': self.child})
+                                 'resource': '/parent/child'})
         assert result == {'status': 'ok',
                           'action': 'subscribe',
-                          'resource': '/child'}
+                          'resource': '/parent/child'}
 
 
 class NotificationUnitTests(unittest.TestCase):
 
     """Test serialization of Notification and its subclasses."""
 
-    def setUp(self):
-        self.context = testing.DummyResource()
-        self.parent = testing.DummyResource()
-        self.context['parent'] = self.parent
-
-    def _bind(self, schema: Notification) -> Notification:
-        return schema.bind(context=self.context)
-
     def test_serialize_notification(self):
-        schema = Notification()
-        inst = self._bind(schema)
-        result = inst.serialize({'event': 'modified', 'resource': self.parent})
+        inst = Notification()
+        result = inst.serialize({'event': 'modified', 'resource': '/parent'})
         assert result == {'event': 'modified', 'resource': '/parent'}
 
     def test_deserialize_notification(self):
-        schema = Notification()
-        inst = self._bind(schema)
+        inst = Notification()
         result = inst.deserialize(
             {'event': 'created', 'resource': '/parent'})
-        assert result == {'event': 'created', 'resource': self.parent}
+        assert result == {'event': 'created', 'resource': '/parent'}
 
     def test_serialize_child_notification(self):
-        self.child = testing.DummyResource('child', self.parent)
+        self.child = testing.DummyResource('child', '/parent')
         from adhocracy.websockets.schemas import ChildNotification
-        schema = ChildNotification()
-        inst = self._bind(schema)
+        inst = ChildNotification()
         result = inst.serialize({'event': 'removed_child',
-                                 'resource': self.parent,
-                                 'child': self.child})
+                                 'resource': '/parent',
+                                 'child': '/parent/child'})
         assert result == {'event': 'removed_child',
                           'resource': '/parent',
                           'child': '/parent/child'}
 
     def test_serialize_version_notification(self):
         from adhocracy.websockets.schemas import VersionNotification
-        self.version = testing.DummyResource('version', self.parent)
-        schema = VersionNotification()
-        inst = self._bind(schema)
+        inst = VersionNotification()
         result = inst.serialize({'event': 'removed_child',
-                                 'resource': self.parent,
-                                 'version': self.version})
+                                 'resource': '/parent',
+                                 'version': '/parent/version'})
         assert result == {'event': 'removed_child',
                           'resource': '/parent',
                           'version': '/parent/version'}

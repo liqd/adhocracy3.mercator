@@ -21,6 +21,8 @@ import colander
 
 from adhocracy.interfaces import SheetMetadata
 from adhocracy.interfaces import ResourceMetadata
+from adhocracy.resources.subscriber import ChangelogMetadata
+# FIXME: move this to adhocracy.interface to import package isolation
 
 
 #####################################
@@ -76,6 +78,14 @@ def sheet_meta() -> SheetMetadata:
                                    schema_class=colander.MappingSchema)
 
 
+@fixture
+def changelog_meta() -> ChangelogMetadata:
+    """ Return changelog metadata."""
+    from adhocracy.resources.subscriber import changelog_metadata
+    return changelog_metadata
+
+
+@fixture
 class CorniceDummyRequest(testing.DummyRequest):
 
     def __init__(self, **kwargs):
@@ -138,11 +148,10 @@ def node() -> colander.MappingSchema:
 
 
 @fixture
-def transaction_changelog():
+def transaction_changelog(changelog_meta):
     """Return transaction_changelog dictionary."""
     from collections import defaultdict
-    from adhocracy.resources.subscriber import changelog_metadata
-    metadata = lambda: changelog_metadata
+    metadata = lambda: changelog_meta
     return defaultdict(metadata)
 
 
@@ -256,7 +265,7 @@ def zeo(request) -> bool:
 
 
 @fixture(scope='class')
-def websocket(request, zeo, ws_settings) -> bool:
+def websocket(request, ws_settings) -> bool:
     """Start websocket server."""
     is_running = os.path.isfile(ws_settings['pid_file'])
     if is_running:
@@ -287,7 +296,7 @@ def _kill_pid_in_file(path_to_pid_file):
 
 
 @fixture(scope='class')
-def app(zeo, settings, websocket):
+def app(websocket, zeo, settings):
     """Return the adhocracy wsgi application."""
     import adhocracy
     configurator = Configurator(settings=settings,

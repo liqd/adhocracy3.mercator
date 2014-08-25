@@ -9,9 +9,7 @@ import os
 import sys
 
 from autobahn.asyncio.websocket import WebSocketServerFactory
-from ZODB import DB
 from adhocracy.websockets.server import ClientCommunicator
-from zodburi import resolve_uri
 import asyncio
 
 
@@ -84,8 +82,6 @@ def _register_sigterm_handler(pid_file: str):
 
 def _start_loop(config: ConfigParser, port: int, pid_file: str):
     try:
-        connection = _get_zodb_connection(config)
-        ClientCommunicator.zodb_connection = connection
         factory = WebSocketServerFactory('ws://localhost:{}'.format(port))
         factory.protocol = ClientCommunicator
         loop = asyncio.get_event_loop()
@@ -119,15 +115,6 @@ def _read_config(config_file: str) -> ConfigParser:
     config.read(config_file)
     _inject_here_variable(config, config_file)
     return config
-
-
-def _get_zodb_connection(config: ConfigParser) -> dict:
-    zodb_uri = config['app:main']['zodbconn.uri']
-    logger.info('Opening ZEO database on {}'.format(zodb_uri))
-    storage_factory, dbkw = resolve_uri(zodb_uri)
-    storage = storage_factory()
-    db = DB(storage, **dbkw)
-    return db.open()
 
 
 def _inject_here_variable(config: ConfigParser, config_file: str):

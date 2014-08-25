@@ -1,7 +1,7 @@
 """Colander schemas to validate and (de)serialize Websocket messages."""
 import colander
 
-from adhocracy.schema import ResourceObject
+from adhocracy.schema import AbsolutePath
 
 
 class Action(colander.SchemaNode):
@@ -17,7 +17,7 @@ class ClientRequestSchema(colander.MappingSchema):
     """Data structure for client requests."""
 
     action = Action()
-    resource = colander.SchemaNode(ResourceObject())
+    resource = AbsolutePath()
 
 
 class Status(colander.SchemaNode):
@@ -56,18 +56,18 @@ class Notification(colander.MappingSchema):
     """Notification sent to a client if a resource has changed."""
 
     event = Event()
-    resource = colander.SchemaNode(ResourceObject())
+    resource = AbsolutePath()
 
 
 class ChildNotification(Notification):
 
     """Notification involving a child resource."""
 
-    child = colander.SchemaNode(ResourceObject())
+    child = AbsolutePath()
 
 
 class VersionNotification(Notification):
 
     """Notification involving a version."""
 
-    version = colander.SchemaNode(ResourceObject())
+    version = AbsolutePath()

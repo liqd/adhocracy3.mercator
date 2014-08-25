@@ -3,21 +3,16 @@ import unittest
 from websocket import ABNF
 from pytest import fixture
 from pytest import mark
+from pyramid.testing import DummyResource
 
 
 class DummyClient():
 
-    def __init__(self):
-        self.messages_sent = False
+    messages_sent = False
 
-    def add_message_resource_modified(self, resource):
-        self.message_modfied_added = True
-
-    def add_message_resource_created(self, resource):
-        self.message_created_added = True
-
-    def send_messages(self):
-        self.messages_sent = True
+    def send_messages(self, changelog_metadata):
+        if changelog_metadata:
+            self.messages_sent = True
 
 
 class DummyWSConnection():
@@ -64,33 +59,29 @@ class SendMessageAfterCommitUnitTests(unittest.TestCase):
     def test_send_messages_after_commit_hook_success_and_empty_changelog(self):
         from adhocracy.websockets.client import send_messages_after_commit_hook
         send_messages_after_commit_hook(success=True, registry=self._registry)
-        assert self._client.messages_sent is True
+        assert self._client.messages_sent is False
 
     def test_send_messages_after_commit_hook_no_success_and_empty_changelog(self):
         from adhocracy.websockets.client import send_messages_after_commit_hook
         send_messages_after_commit_hook(success=False, registry=self._registry)
         assert self._client.messages_sent is False
 
-    def test_send_messages_after_commit_hook_success_and_modified_in_changelog(self):
+    def test_send_messages_after_commit_hook_success_and_non_empty_changelog(self):
         from pyramid.testing import DummyResource
         from adhocracy.websockets.client import send_messages_after_commit_hook
         self._registry._transaction_changelog['/'] = \
             self._changelog_metadata._replace(modified=True,
                                               resource=DummyResource())
         send_messages_after_commit_hook(success=True, registry=self._registry)
-        assert self._client.message_modfied_added
-
-    def test_send_messages_after_commit_hook_success_and_created_in_changelog(self):
-        from pyramid.testing import DummyResource
-        from adhocracy.websockets.client import send_messages_after_commit_hook
-        self._registry._transaction_changelog['/'] = \
-            self._changelog_metadata._replace(created=True,
-                                              resource=DummyResource())
-        send_messages_after_commit_hook(success=True, registry=self._registry)
-        assert self._client.message_created_added
+        assert self._client.messages_sent is True
 
 
-class ClientUnitTests(unittest.TestCase):
+class TestClient:
+
+    @fixture()
+    def changelog_meta(self, changelog_meta):
+        child = self._make_resource()
+        return changelog_meta._replace(resource=child)
 
     def _make_one(self, frame: ABNF):
         from adhocracy.websockets.client import Client
@@ -147,60 +138,85 @@ class ClientUnitTests(unittest.TestCase):
         client.send_messages()
         assert self._dummy_connection.nothing_sent is True
 
-    def test_send_messages_nonempty_queue(self):
+    def test_send_messages_nonempty_queue(self, changelog_meta):
         client = self._make_one(None)
         client._is_running = True
-        child = self._make_resource()
-        client.add_message_resource_created(child)
-        client.send_messages()
+        metadata = [changelog_meta._replace(created=True)]
+        client.send_messages(metadata)
         assert self._dummy_connection.nothing_sent is False
         assert len(self._dummy_connection.queue) == 1
         assert 'created' in self._dummy_connection.queue[0]
 
-    def test_send_messages_if_not_running(self):
+    def test_send_messages_if_not_running(self, changelog_meta):
         client = self._make_one(None)
         client._is_running = False
-        child = self._make_resource()
-        client.add_message_resource_created(child)
-        client.send_messages()
+        metadata = [changelog_meta._replace(created=True)]
+        client.send_messages(metadata)
         assert self._dummy_connection.nothing_sent is True
 
-    def test_send_messages_duplicate_modified(self):
+    def test_send_messages_not_modified_or_created(self, changelog_meta):
+        client = self._make_one(None)
+        client._is_running = True
+        metadata = [changelog_meta]
+        client.send_messages(metadata)
+        assert self._dummy_connection.nothing_sent is True
+        assert len(self._dummy_connection.queue) == 0
+
+    def test_send_messages_without_resource(self, changelog_meta):
+        client = self._make_one(None)
+        client._is_running = True
+        metadata = [changelog_meta._replace(resource=None,
+                                            created=True)]
+        client.send_messages(metadata)
+        assert self._dummy_connection.nothing_sent is True
+        assert len(self._dummy_connection.queue) == 0
+
+    def test_send_messages_duplicate_modified(self, changelog_meta):
         """If a resource has been modified (or created) twice, only one
         event should be sent.
         """
         client = self._make_one(None)
         client._is_running = True
-        child = self._make_resource()
-        client.add_message_resource_modified(child)
-        client.add_message_resource_modified(child)
-        client.send_messages()
+        metadata = [changelog_meta._replace(modified=True),
+                    changelog_meta._replace(modified=True)]
+        client.send_messages(metadata)
         assert self._dummy_connection.nothing_sent is False
         assert len(self._dummy_connection.queue) == 1
         assert 'modified' in self._dummy_connection.queue[0]
 
-    def test_send_messages_created_and_modified(self):
+    def test_send_messages_created_and_modified(self, changelog_meta):
         """If a resource has been created and then modified, only a
         'created' event should be sent.
         """
         client = self._make_one(None)
         client._is_running = True
-        child = self._make_resource()
-        client.add_message_resource_created(child)
-        client.add_message_resource_modified(child)
-        client.send_messages()
+        metadata = [changelog_meta._replace(created=True,
+                                            modified=True)]
+        client.send_messages(metadata)
         assert self._dummy_connection.nothing_sent is False
         assert len(self._dummy_connection.queue) == 1
         assert 'created' in self._dummy_connection.queue[0]
 
-    def test_send_messages_two_resources(self):
+    def test_send_messages_created_new_version(self, changelog_meta):
+        from adhocracy.interfaces import IItemVersion
         client = self._make_one(None)
         client._is_running = True
-        child = self._make_resource()
-        child2 = self._make_resource('child2')
-        client.add_message_resource_created(child)
-        client.add_message_resource_created(child2)
-        client.send_messages()
+        resource = DummyResource(__provides__=IItemVersion)
+        metadata = [changelog_meta._replace(created=True,
+                                            resource=resource)]
+        client.send_messages(metadata)
+        assert self._dummy_connection.nothing_sent is False
+        assert len(self._dummy_connection.queue) == 1
+        assert 'new_version' in self._dummy_connection.queue[0]
+
+    def test_send_messages_two_resources(self, changelog_meta):
+        client = self._make_one(None)
+        client._is_running = True
+        resource2 = DummyResource()
+        metadata = [changelog_meta._replace(created=True),
+                    changelog_meta._replace(created=True,
+                                            resource=resource2)]
+        client.send_messages(metadata)
         assert self._dummy_connection.nothing_sent is False
         assert len(self._dummy_connection.queue) == 2
 
@@ -224,15 +240,14 @@ class TestFunctionalClient:
         assert not websocket_client._is_running
         assert not websocket_client._ws_connection.connected
 
-    def test_queue_and_send_messages(self, websocket_client):
+    def test_queue_and_send_messages(self, websocket_client, changelog_meta):
         from pyramid.testing import DummyResource
         context = DummyResource()
         child = DummyResource()
         context['child'] = child
-        websocket_client.add_message_resource_created(child)
-        assert child in websocket_client._created_resources
-        websocket_client._send_messages()
-        assert child not in websocket_client._created_resources
+        metadata = [changelog_meta._replace(resource=child)]
+        websocket_client._send_messages(metadata)
+        assert websocket_client.changelog_metadata_messages_to_send == set()
 
     def test_includeme_without_ws_url_setting(self, config):
         from adhocracy.websockets.client import includeme
@@ -247,3 +262,21 @@ class TestFunctionalClient:
         settings['adhocracy.ws_url'] = 'ws://localhost:8080'
         includeme(config)
         assert isinstance(config.registry.ws_client, Client)
+
+
+def test_get_ws_client_with_none():
+    from adhocracy.websockets.client import get_ws_client
+    assert get_ws_client(None) is None
+
+
+def test_get_ws_client_with_registry():
+    from adhocracy.websockets.client import get_ws_client
+    assert get_ws_client(None) is None
+
+
+def test_get_ws_client_with_registry_and_ws_client(context):
+    context.ws_client = object()
+    from adhocracy.websockets.client import get_ws_client
+    assert get_ws_client(context) == context.ws_client
+
+
