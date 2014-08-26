@@ -42,7 +42,7 @@ def create_proposal(listing: WebDriverElement, title: str, description='',
         form.find_by_css('[name="add-paragraph"]').first.click()
         form.find_by_css('textarea')[-1].fill(paragraph)
 
-    form.find_by_css('input[type="submit"]').first.click()
+    form.find_by_css('.save_button').first.click()
 
     # FIXME Remove max_steps param once proposal creation is faster, see above!
     wait(lambda: get_list_element(listing, title), max_steps=40)

@@ -1,9 +1,0 @@
-<adh-proposal-version-edit data-content="proposalVersion"></adh-proposal-version-edit>
-<div data-ng-repeat="paragraph in paragraphVersions">
-    <textarea data-ng-model="paragraph.data['adhocracy.sheets.document.IParagraph'].content"></textarea>
-</div>
-<div class="button_box">
-    <input type="submit" value="send" data-ng-click="commit()" />
-    <button type="button" name="add-paragraph" data-ng-click="addParagraphVersion()">new paragraph</button>
-    <a href="" data-ng-click="onCancel()">Cancel</a>
-</div>

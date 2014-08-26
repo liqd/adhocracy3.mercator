@@ -84,7 +84,7 @@ export class ProposalDetail {
 }
 
 export class ProposalVersionDetail {
-    public static templateUrl : string = "Resources/IProposalVersion/Detail.html";
+    public static templateUrl : string = "Proposal.html";
 
     public createDirective(adhConfig : AdhConfig.Type) {
         var _self = this;
@@ -141,28 +141,15 @@ export class ProposalVersionDetail {
     }
 }
 
-export class ProposalVersionEdit {
-
-    public createDirective(adhConfig : AdhConfig.Type) {
-
-        return {
-            restrict: "E",
-            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Resources/IProposalVersion/Edit.html",
-            scope: {
-                content: "="
-            }
-        };
-    }
-}
-
 interface IScopeProposalVersion {
-    proposalVersion : RIProposalVersion;
+    content : RIProposalVersion;
     paragraphVersions : RIParagraphVersion[];
     addParagraphVersion : () => void;
     commit : () => void;
     onNewProposal : (any) => void;
     onCancel : () => void;
     poolPath : string;
+    viewmode : string;
 }
 
 export class ProposalVersionNew {
@@ -171,15 +158,17 @@ export class ProposalVersionNew {
 
         return {
             restrict: "E",
-            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Resources/IProposalVersion/New.html",
+            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Proposal.html",
             scope: {
                 onNewProposal: "=",
                 onCancel: "=",
                 poolPath: "@"
             },
             controller: ["$scope", ($scope : IScopeProposalVersion) => {
-                $scope.proposalVersion = new RIProposalVersion();
-                $scope.proposalVersion.data["adhocracy.sheets.document.IDocument"] = {
+                $scope.viewmode = "edit";
+
+                $scope.content = new RIProposalVersion();
+                $scope.content.data["adhocracy.sheets.document.IDocument"] = {
                     title: "",
                     description: "",
                     elements: []
@@ -195,7 +184,7 @@ export class ProposalVersionNew {
                 };
 
                 $scope.commit = () => {
-                    adhProposal.postProposalWithParagraphs($scope.poolPath, $scope.proposalVersion, $scope.paragraphVersions)
+                    adhProposal.postProposalWithParagraphs($scope.poolPath, $scope.content, $scope.paragraphVersions)
                         .then((resp) => {
                             adhHttp.get(resp.path).then((respGet) => {
                                 $scope.onNewProposal(respGet);
@@ -213,7 +202,7 @@ export class SectionVersionDetail {
 
         return {
             restrict: "E",
-            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Resources/ISectionVersion/Detail.html",
+            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Section.html",
             compile: (element) => recursionHelper.compile(element),
             scope: {
                 ref: "=",
@@ -245,7 +234,7 @@ export class ParagraphVersionDetail {
 
         return {
             restrict: "E",
-            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Resources/IParagraphVersion/Detail.html",
+            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Paragraph.html",
             scope: {
                 ref: "=",
                 viewmode: "="
@@ -266,54 +255,6 @@ export class ParagraphVersionDetail {
                 // save working copy on 'commit' event from containing document.
                 $scope.$on("commit", commit);
             }]
-        };
-    }
-}
-
-export class DocumentSheetEdit {
-
-    public createDirective(adhHttp : AdhHttp.Service<any>, $q : ng.IQService, adhConfig : AdhConfig.Type) {
-        return {
-            restrict: "E",
-            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Sheets/IDocument/Edit.html",
-            scope: {
-                sheet: "="
-            },
-            controller: ["$scope", ($scope) => {
-                var versionPromises = $scope.sheet.elements.map((path) =>
-                    adhHttp.get(decodeURIComponent(path))
-                        .then((resp) => resp.data)
-                );
-
-                $q.all(versionPromises).then((versions) =>
-                    $scope.sectionVersions = versions
-                );
-            }]
-        };
-    }
-}
-
-export class DocumentSheetShow {
-
-    public createDirective (adhConfig : AdhConfig.Type) {
-        return {
-            restrict: "E",
-            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Sheets/IDocument/Show.html",
-            scope: {
-                sheet: "="
-            }
-        };
-    }
-}
-
-export class ParagraphSheetEdit {
-    public createDirective (adhConfig : AdhConfig.Type) {
-        return {
-            restrict: "E",
-            templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Sheets/IParagraph/Edit.html",
-            scope: {
-                sheet: "="
-            }
         };
     }
 }
