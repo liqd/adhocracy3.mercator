@@ -10,6 +10,7 @@ var _s : any = require("underscore.string");
 
 declare var process : any;
 
+import Base = require("./ResourcesBase");
 import Util = require("./mkResources/Util");
 import MetaApi = require("./Packages/MetaApi/MetaApi");
 
@@ -199,8 +200,101 @@ renderSheet = (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IM
     var sheetI : string = "";
     var hasSheetI : string = "";
 
-    sheetI += "export interface " + mkSheetName(sheet.nick) + " {\n";
-    sheetI += mkFieldSignatures(sheet.fields, "    ", ";\n") + "\n";
+    var mkGetMeta = () => {
+        var s = "";
+        s += "    public getMeta() : Base.ISheetMetaApi {\n";
+        s += "        return _meta;\n";
+        s += "    }\n";
+        return s;
+    };
+
+    var writables : MetaApi.ISheetField[] = [];
+    var nonWritables : MetaApi.ISheetField[] = [];
+
+    var sheetMetaApi : Base.ISheetMetaApi = {
+        readable: [],
+        editable: [],
+        creatable: [],
+        create_mandatory: [],
+        references: []
+    };
+
+    (() => {
+        for (var x in sheet.fields) {
+            if (sheet.fields.hasOwnProperty(x)) {
+                var field = sheet.fields[x];
+
+                if (field.editable || field.creatable || field.create_mandatory) {
+                    writables.push(field);
+
+                    if (field.valuetype === "adhocracy.schema.AbsolutePath") {
+                        sheetMetaApi.references.push(field.name);
+                    }
+                } else {
+                    nonWritables.push(field);
+                }
+
+                if (field.readable) {
+                    sheetMetaApi.readable.push(field.name);
+                }
+                if (field.editable) {
+                    sheetMetaApi.editable.push(field.name);
+                }
+                if (field.creatable) {
+                    sheetMetaApi.creatable.push(field.name);
+                }
+                if (field.create_mandatory) {
+                    sheetMetaApi.create_mandatory.push(field.name);
+                }
+            }
+        }
+    })();
+
+    var mkConstructor = () => {
+        var args : string[] = [];
+        var lines : string[] = [];
+
+        if (writables.length > 0) {
+            args.push("args : {");
+            args.push(mkFieldSignatures(writables, "        ", ";\n") + ";");
+            args.push("    }");
+
+            for (var x in writables) {
+                if (writables.hasOwnProperty(x)) {
+                    lines.push("        this." + writables[x].name + " = args." + writables[x].name + ";");
+                }
+            }
+        }
+
+        var s = "";
+        s += "    constructor(" + Util.intercalate(args, "\n") + ") {\n";
+        if (lines.length > 0) {
+            s += Util.intercalate(lines, "\n") + "\n";
+        }
+        s += "    }\n";
+        return s;
+    };
+
+    var showList = (elems : string[]) : string => {
+        if (elems.length === 0) {
+            return "[]";
+        } else {
+            return "[\"" + Util.intercalate(elems, "\", \"") + "\"]";
+        }
+    };
+
+    sheetI += "var _meta : Base.ISheetMetaApi = {\n";
+    sheetI += "    readable: " + showList(sheetMetaApi.readable) + ",\n";
+    sheetI += "    editable: " + showList(sheetMetaApi.editable) + ",\n";
+    sheetI += "    creatable: " + showList(sheetMetaApi.creatable) + ",\n";
+    sheetI += "    create_mandatory: " + showList(sheetMetaApi.create_mandatory) + ",\n";
+    sheetI += "    references: " + showList(sheetMetaApi.references) + "\n";
+    sheetI += "};\n\n";
+
+    sheetI += "export class " + mkSheetName(sheet.nick) + " implements Base.ISheet {\n";
+    sheetI += mkGetMeta() + "\n";
+    sheetI += mkConstructor() + "\n";
+    sheetI += mkFieldSignatures(sheet.fields, "    public ", ";\n") + "\n";
     sheetI += "}\n\n";
 
     sheetI += "export interface Has" + mkSheetName(sheet.nick) + " {\n";
@@ -220,12 +314,17 @@ mkFieldSignatures = (fields : MetaApi.ISheetField[], tab : string, separator : s
         tab, separator
     );
 
-mkFieldAssignments = (fields : MetaApi.ISheetField[], tab : string) : string =>
-    Util.mkThingList(
-        fields,
-        (field) => field.name + ": " + field.name,
-        tab, ",\n"
-    );
+mkFieldAssignments = (fields : MetaApi.ISheetField[], tab : string) : string => {
+    if (fields.length === 0) {
+        return "";
+    } else {
+        return Util.mkThingList(
+            fields,
+            (field) => field.name + ": " + field.name,
+            tab, ",\n"
+        );
+    }
+};
 
 enabledFields = (fields : MetaApi.ISheetField[], enableFlags ?: string) : MetaApi.ISheetField[] => {
     if (typeof enableFlags !== "string") {
@@ -333,7 +432,7 @@ renderResource = (modulePath : string, resource : MetaApi.IResource, modules : M
         lines.push("    }");
 
         // first_version_path is set to a preliminary name iff
-        // iversions sheet is present.
+        // IVersions sheet is present.
         if (resource.sheets.indexOf("adhocracy.sheets.versions.IVersions") !== -1) {
             lines.push("    _self.first_version_path = args.preliminaryNames.nextPreliminary();");
         } else {
@@ -348,7 +447,9 @@ renderResource = (modulePath : string, resource : MetaApi.IResource, modules : M
         if (resource.sheets.indexOf("adhocracy.sheets.name.IName") !== -1) {
             optArgs.name = "string";
             lines.push("    if (args.hasOwnProperty(\"name\")) {");
-            lines.push("        _self.data[\"adhocracy.sheets.name.IName\"] = { name: args.name };");
+            lines.push("        _self.data[\"adhocracy.sheets.name.IName\"] =");
+            lines.push("            new " + mkModuleName("adhocracy.sheets.name.IName", metaApi) + "." +
+                       mkSheetName("adhocracy.sheets.name.IName") + "({ name : args.name })");
             lines.push("    }");
         }
 

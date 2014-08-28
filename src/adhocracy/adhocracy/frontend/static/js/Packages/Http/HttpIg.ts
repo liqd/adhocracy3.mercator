@@ -8,6 +8,9 @@ import RIProposalVersion = require("../../Resources_/adhocracy_sample/resources/
 import RISection = require("../../Resources_/adhocracy_sample/resources/section/ISection");
 import RISectionVersion = require("../../Resources_/adhocracy_sample/resources/section/ISectionVersion");
 import RITag = require("../../Resources_/adhocracy/interfaces/ITag");
+import SIDocument = require("../../Resources_/adhocracy/sheets/document/IDocument");
+import SIVersionable = require("../../Resources_/adhocracy/sheets/versions/IVersionable");
+
 import AdhMetaApi = require("../MetaApi/MetaApi");
 import AdhHttp = require("./Http");
 import AdhPreliminaryNames = require("../PreliminaryNames/PreliminaryNames");
@@ -43,15 +46,16 @@ export var register = (angular, config, meta_api) => {
                 var sectionVersion : AdhHttp.ITransactionResult = transaction.post(section.path, sectionVersionResource);
 
                 var proposalVersionResource = new RIProposalVersion({preliminaryNames: adhPreliminaryNames});
-                proposalVersionResource.data["adhocracy.sheets.document.IDocument"] = {
-                    title: proposalName,
-                    description: "whoof",
-                    elements: [sectionVersion.path]
-                };
-                proposalVersionResource.data["adhocracy.sheets.versions.IVersionable"] = {
-                    follows: [proposal.first_version_path],
-                    followed_by: []
-                };
+                proposalVersionResource.data["adhocracy.sheets.document.IDocument"] =
+                    new SIDocument.AdhocracySheetsDocumentIDocument({
+                        title: proposalName,
+                        description: "whoof",
+                        elements: [sectionVersion.path]
+                    });
+                proposalVersionResource.data["adhocracy.sheets.versions.IVersionable"] =
+                    new SIVersionable.AdhocracySheetsVersionsIVersionable({
+                        follows: [proposal.first_version_path]
+                    });
                 transaction.post(proposal.path, proposalVersionResource);
 
                 return transaction.commit()
