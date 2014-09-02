@@ -1,10 +1,12 @@
 from pytest import fixture
+from pytest import mark
 
 from .shared import wait
 from .shared import get_column_listing
 from .shared import get_list_element
 from .shared import get_listing_create_form
 from .test_proposal import proposal
+from .test_user_login import user
 
 
 @fixture
@@ -46,6 +48,13 @@ def test_multi_edits(browser, comment):
     edit_comment(reply, 'somereply edited')
     edit_comment(parent, 'edited')
     assert parent.find_by_css('.comment-content').first.text == 'edited'
+
+
+@mark.xfail
+def test_author(browser, user, comment):
+    actual = comment.find_by_css("adh-user-meta").first.text
+    # the captialisation might be changed by CSS
+    assert actual.lower() == user.lower()
 
 
 def show_proposal_comments(proposal):

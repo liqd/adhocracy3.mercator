@@ -4,6 +4,13 @@ from .shared import fill_input
 from .shared import click_button
 
 
+@fixture
+def user(browser):
+    """Register a user and log them in."""
+    register(browser, 'user1', 'email1@example.com', 'password1')
+    return 'user1'
+
+
 class TestUserLogin:
 
     def test_login_username(self, browser):
