@@ -207,6 +207,18 @@ export class User {
         });
     }
 
+    public activate(path : string) {
+        var _self : User = this;
+
+        var success = (response) => {
+            // FIXME use websockets for updates
+            return _self.storeAndEnableToken(response.data.user_token, response.data.user_path);
+        };
+
+        return _self.adhHttp.postRaw("/activate_account", {path: path})
+            .then(success, AdhHttp.logBackendError);
+    }
+
     public can(permission : string) {
         var _self : User = this;
 
@@ -216,11 +228,34 @@ export class User {
 }
 
 
+export var activateController = (
+    adhUser : User,
+    adhTopLevelState : AdhTopLevelState.TopLevelState,
+    adhDone,
+    $route : ng.route.IRouteService
+) : void => {
+    var key = $route.current.params.key;
+    var path = "/activate/" + key;
+
+    var success = () => {
+        // FIXME show success message in UI
+        adhTopLevelState.redirectToCameFrom("/");
+    };
+
+    var error = (error) => {
+        // FIXME show error message in UI
+    };
+
+    adhUser.activate(path)
+        .then(success, error)
+        .then(adhDone);
+};
+
+
 export var loginController = (
     adhUser : User,
     adhTopLevelState : AdhTopLevelState.TopLevelState,
-    $scope : IScopeLogin,
-    $location : ng.ILocationService
+    $scope : IScopeLogin
 ) : void => {
     $scope.errors = [];
 
@@ -239,8 +274,7 @@ export var loginController = (
             $scope.credentials.nameOrEmail,
             $scope.credentials.password
         ).then(() => {
-            var returnToPage : string = adhTopLevelState.getCameFrom();
-            $location.url((typeof returnToPage === "string") ? returnToPage : "/");
+            adhTopLevelState.redirectToCameFrom("/");
         }, (errors) => {
             bindServerErrors($scope, errors);
             $scope.credentials.password = "";
@@ -254,7 +288,7 @@ export var loginDirective = (adhConfig : AdhConfig.Type) => {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Login.html",
         scope: {},
-        controller: ["adhUser", "adhTopLevelState", "$scope", "$location", loginController]
+        controller: ["adhUser", "adhTopLevelState", "$scope", loginController]
     };
 };
 
@@ -262,8 +296,7 @@ export var loginDirective = (adhConfig : AdhConfig.Type) => {
 export var registerController = (
     adhUser : User,
     adhTopLevelState : AdhTopLevelState.TopLevelState,
-    $scope : IScopeRegister,
-    $location : ng.ILocationService
+    $scope : IScopeRegister
 ) => {
     $scope.input = {
         username: "",
@@ -279,10 +312,7 @@ export var registerController = (
             .then((response) => {
                 $scope.errors = [];
                 return adhUser.logIn($scope.input.username, $scope.input.password).then(
-                    () => {
-                        var returnToPage : string = adhTopLevelState.getCameFrom();
-                        $location.path((typeof returnToPage === "string") ? returnToPage : "/");
-                    },
+                    () => adhTopLevelState.redirectToCameFrom("/"),
                     (errors) => bindServerErrors($scope, errors)
                 );
             }, (errors) => bindServerErrors($scope, errors));
@@ -295,7 +325,7 @@ export var registerDirective = (adhConfig : AdhConfig.Type) => {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Register.html",
         scope: {},
-        controller: ["adhUser", "adhTopLevelState", "$scope", "$location", registerController]
+        controller: ["adhUser", "adhTopLevelState", "$scope", registerController]
     };
 };
 

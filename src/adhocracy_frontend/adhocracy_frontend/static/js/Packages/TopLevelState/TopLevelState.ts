@@ -19,7 +19,10 @@ import AdhEventHandler = require("../EventHandler/EventHandler");
 export class TopLevelState {
     private eventHandler : AdhEventHandler.EventHandler;
 
-    constructor(adhEventHandlerClass : typeof AdhEventHandler.EventHandler) {
+    constructor(
+        adhEventHandlerClass : typeof AdhEventHandler.EventHandler,
+        private $location : ng.ILocationService
+    ) {
         this.eventHandler = new adhEventHandlerClass();
     }
 
@@ -57,6 +60,19 @@ export class TopLevelState {
 
     public getCameFrom() : string {
         return this.cameFrom;
+    }
+
+    public clearCameFrom() : void {
+        this.cameFrom = undefined;
+    }
+
+    public redirectToCameFrom(_default? : string) : void {
+        var cameFrom = this.getCameFrom();
+        if (typeof cameFrom !== "undefined") {
+            this.$location.url(cameFrom);
+        } else if (typeof _default !== "undefined") {
+            this.$location.url(_default);
+        }
     }
 }
 

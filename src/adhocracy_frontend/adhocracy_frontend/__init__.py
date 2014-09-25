@@ -51,6 +51,7 @@ def includeme(config):
     add_frontend_route(config, 'embed', 'embed/{directive}')
     add_frontend_route(config, 'register', 'register')
     add_frontend_route(config, 'login', 'login')
+    add_frontend_route(config, 'activate', 'activate/{key}')
     add_frontend_route(config, 'root', '')
 
 

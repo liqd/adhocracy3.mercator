@@ -8,12 +8,6 @@ import q = require("q");
 
 export var register = () => {
     describe("User", () => {
-        var locationMock;
-
-        beforeEach(() => {
-            locationMock = <any>jasmine.createSpyObj("locationMock", ["path", "url"]);
-        });
-
         describe("User", () => {
             var adhUser;
             var adhHttpMock;
@@ -302,9 +296,9 @@ export var register = () => {
                     $scopeMock = {};
                     adhUserMock = <any>jasmine.createSpyObj("adhUserMock", ["logIn"]);
                     adhUserMock.logIn.and.returnValue(q.when(undefined));
-                    adhTopLevelStateMock = <any>jasmine.createSpyObj("adhTopLevelStateMock", ["getCameFrom", "setCameFrom"]);
-                    controller = <any>(directive.controller[4]);
-                    controller(adhUserMock, adhTopLevelStateMock, $scopeMock, locationMock);
+                    adhTopLevelStateMock = <any>jasmine.createSpyObj("adhTopLevelStateMock", ["redirectToCameFrom"]);
+                    controller = <any>(directive.controller[3]);
+                    controller(adhUserMock, adhTopLevelStateMock, $scopeMock);
                 });
 
                 it("creates an empty credentials object in scope", () => {
@@ -334,17 +328,9 @@ export var register = () => {
                             done();
                         });
                     });
-                    it("redirects to TopLevelState.getCameFrom() if everything goes well", (done) => {
-                        var navigateToPath : string = "/osty";
-                        adhTopLevelStateMock.getCameFrom.and.returnValue(navigateToPath);
+                    it("redirects to cameFrom or / if everything goes well", (done) => {
                         $scopeMock.logIn().then(() => {
-                            expect(locationMock.url).toHaveBeenCalledWith(navigateToPath);
-                            done();
-                        });
-                    });
-                    it("redirects to '/' if everything goes well, but getCameFrom() is undefined", (done) => {
-                        $scopeMock.logIn().then(() => {
-                            expect(locationMock.url).toHaveBeenCalledWith("/");
+                            expect(adhTopLevelStateMock.redirectToCameFrom).toHaveBeenCalledWith("/");
                             done();
                         });
                     });
@@ -392,9 +378,9 @@ export var register = () => {
                     adhUserMock = <any>jasmine.createSpyObj("adhUserMock", ["register", "logIn"]);
                     adhUserMock.register.and.returnValue(q.when(undefined));
                     adhUserMock.logIn.and.returnValue(q.when(undefined));
-                    adhTopLevelStateMock = <any>jasmine.createSpyObj("adhTopLevelStateMock", ["getCameFrom", "setCameFrom"]);
-                    controller = <any>(directive.controller[4]);
-                    controller(adhUserMock, adhTopLevelStateMock, $scopeMock, locationMock);
+                    adhTopLevelStateMock = <any>jasmine.createSpyObj("adhTopLevelStateMock", ["redirectToCameFrom"]);
+                    controller = <any>(directive.controller[3]);
+                    controller(adhUserMock, adhTopLevelStateMock, $scopeMock);
                 });
 
                 it("creates an empty input object in scope", () => {
@@ -424,9 +410,9 @@ export var register = () => {
                             done();
                         });
                     });
-                    it("redirects to the root page after register ", (done) => {
+                    it("redirects came from or / page after register ", (done) => {
                         $scopeMock.register().then(() => {
-                            expect(locationMock.path).toHaveBeenCalledWith("/");
+                            expect(adhTopLevelStateMock.redirectToCameFrom).toHaveBeenCalledWith("/");
                             done();
                         });
                     });
@@ -444,11 +430,9 @@ export var register = () => {
                             done();
                         });
                     });
-                    it("navigates to TopLevelState.getCameFrom() after success", (done) => {
-                        var navigateToPath : string = "/osty";
-                        adhTopLevelStateMock.getCameFrom.and.returnValue(navigateToPath);
+                    it("navigates to cameFrom or / after success", (done) => {
                         $scopeMock.register().then(() => {
-                            expect(locationMock.path).toHaveBeenCalledWith(navigateToPath);
+                            expect(adhTopLevelStateMock.redirectToCameFrom).toHaveBeenCalledWith("/");
                             done();
                         });
                     });

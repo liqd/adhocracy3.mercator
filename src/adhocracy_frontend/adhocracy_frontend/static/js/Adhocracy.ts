@@ -79,6 +79,10 @@ export var init = (config, meta_api) => {
             .when("/register", {
                 templateUrl: "/static/js/templates/Register.html"
             })
+            .when("/activate/:key", {
+                controller: ["adhUser", "adhTopLevelState", "adhDone", "$route", AdhUser.activateController],
+                template: ""
+            })
             .when("/embed/:widget", {
                 template: "<adh-embed></adh-embed>"
             })
@@ -118,7 +122,7 @@ export var init = (config, meta_api) => {
     app.value("adhDone", AdhDone.done);
     app.value("adhEventHandlerClass", AdhEventHandler.EventHandler);
 
-    app.service("adhTopLevelState", AdhTopLevelState.TopLevelState);
+    app.service("adhTopLevelState", ["adhEventHandlerClass", "$location", AdhTopLevelState.TopLevelState]);
     app.directive("adhMovingColumns", ["adhTopLevelState", AdhTopLevelState.movingColumns]);
     app.directive("adhFocusSwitch", ["adhTopLevelState", AdhTopLevelState.adhFocusSwitch]);
 

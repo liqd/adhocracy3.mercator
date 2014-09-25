@@ -7,6 +7,7 @@ export var register = () => {
     describe("TopLevelState", () => {
         describe("TopLevelState", () => {
             var adhTopLevelState : AdhTopLevelState.TopLevelState;
+            var locationMock;
             var on;
             var off;
             var trigger;
@@ -15,6 +16,7 @@ export var register = () => {
                 on = jasmine.createSpy("on");
                 off = jasmine.createSpy("off");
                 trigger = jasmine.createSpy("trigger");
+                locationMock = jasmine.createSpyObj("locationMock", ["url"]);
 
                 var eventHandlerMockClass = <any>function() {
                     this.on = on;
@@ -22,7 +24,7 @@ export var register = () => {
                     this.trigger = trigger;
                 };
 
-                adhTopLevelState = new AdhTopLevelState.TopLevelState(eventHandlerMockClass);
+                adhTopLevelState = new AdhTopLevelState.TopLevelState(eventHandlerMockClass, locationMock);
             });
 
             it("dispatches calls to setFocus to eventHandler", () => {
@@ -46,33 +48,54 @@ export var register = () => {
                 adhTopLevelState.onSetContent2Url(callback);
                 expect(on).toHaveBeenCalledWith("setContent2Url", callback);
             });
-        });
 
-        // (This is technically part of the TopLevelState block above,
-        // but its functionality is not very well integrated with the
-        // rest.  See also FIXME above the implementations of
-        // {get,set}CameFrom.)
+            describe("cameFrom", () => {
+                it("getCameFrom reads what setCameFrom wrote", () => {
+                    var msg : string;
+                    msg = "wefoidsut";
+                    adhTopLevelState.setCameFrom(msg);
+                    expect(adhTopLevelState.getCameFrom()).toBe(msg);
+                    msg = ".3587";
+                    adhTopLevelState.setCameFrom(msg);
+                    expect(adhTopLevelState.getCameFrom()).toBe(msg);
+                    expect(adhTopLevelState.getCameFrom()).toBe(msg);
+                });
 
-        describe("{get,set}CameFrom", () => {
-            var adhTopLevelState : AdhTopLevelState.TopLevelState;
+                it("before first setCameFrom, getCameFrom reads 'undefined'", () => {
+                    expect(typeof adhTopLevelState.getCameFrom()).toBe("undefined");
+                });
 
-            beforeEach(() => {
-                adhTopLevelState = new AdhTopLevelState.TopLevelState(<any>(() => null));
-            });
+                it("clearCameFrom clears the stored value", () => {
+                    var msg : string;
+                    msg = "wefoidsut";
+                    adhTopLevelState.setCameFrom(msg);
+                    adhTopLevelState.clearCameFrom();
+                    expect(adhTopLevelState.getCameFrom()).not.toBeDefined();
+                });
 
-            it("getCameFrom reads what setCameFrom wrote", () => {
-                var msg : string;
-                msg = "wefoidsut";
-                adhTopLevelState.setCameFrom(msg);
-                expect(adhTopLevelState.getCameFrom()).toBe(msg);
-                msg = ".3587";
-                adhTopLevelState.setCameFrom(msg);
-                expect(adhTopLevelState.getCameFrom()).toBe(msg);
-                expect(adhTopLevelState.getCameFrom()).toBe(msg);
-            });
+                describe("redirectToCameFrom", () => {
+                    it("does nothing if neither cameFrom nor default are set", () => {
+                        adhTopLevelState.redirectToCameFrom();
+                        expect(locationMock.url).not.toHaveBeenCalled();
+                    });
 
-            it("before first setCameFrom, getCameFrom reads 'undefined'", () => {
-                expect(typeof adhTopLevelState.getCameFrom()).toBe("undefined");
+                    it("redirects to cameFrom if cameFrom is set and default is not", () => {
+                        adhTopLevelState.setCameFrom("foo");
+                        adhTopLevelState.redirectToCameFrom();
+                        expect(locationMock.url).toHaveBeenCalledWith("foo");
+                    });
+
+                    it("redirects to cameFrom both if cameFrom and default are set", () => {
+                        adhTopLevelState.setCameFrom("foo");
+                        adhTopLevelState.redirectToCameFrom("bar");
+                        expect(locationMock.url).toHaveBeenCalledWith("foo");
+                    });
+
+                    it("redirects to default if default is set but cameFrom not", () => {
+                        adhTopLevelState.redirectToCameFrom("bar");
+                        expect(locationMock.url).toHaveBeenCalledWith("bar");
+                    });
+                });
             });
         });
 
