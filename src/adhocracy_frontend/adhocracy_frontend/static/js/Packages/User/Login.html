@@ -1,5 +1,5 @@
 <div class="login">
-    <h1 class="title">Log in!</h1>
+    <h1 class="title">{{ "Log in!" | translate }}</h1>
     <div class="form-error" data-ng-repeat="error in errors track by $index">
         <p>{{error}}</p>
     </div>
@@ -7,27 +7,27 @@
         <input
             type="text"
             name="nameOrEmail"
-            placeholder="email or username"
+            placeholder="{{ 'email or username' | translate }}"
             required="required"
             data-ng-model="credentials.nameOrEmail" />
         <input
             type="password"
             name="password"
-            placeholder="password"
+            placeholder="{{ 'password' | translate }}"
             required="required"
             data-ng-model="credentials.password" />
-        <a>forgot password</a>
+        <a>{{ "forgot password" | translate }}</a>
         <input
             type="submit"
-            value="login"
+            value="{{ 'login' | translate }}"
             class="m-call-to-action"
             data-ng-click="logIn()"
             data-ng-disabled="loginForm.$invalid" />
     </form>
     <div class="login-description box-with-button">
         <div class="text-box m-unobtrusive">
-            <p>Description</p>
+            <p>{{ "Description" | translate }}</p>
         </div>
-        <a class="button" href="/register">register</a>
+        <a class="button" href="/register">{{ "register" | translate }}</a>
     </div>
 </div>

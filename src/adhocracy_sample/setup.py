@@ -6,11 +6,11 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 
 requires = [
-    'adhocracy',
+    'adhocracy_core',
     ]
 
 test_requires = [
-    'adhocracy[test]',
+    'adhocracy_core[test]',
     ]
 
 setup(name='adhocracy_sample',
@@ -34,8 +34,6 @@ setup(name='adhocracy_sample',
       extras_require={'test': test_requires},
       entry_points="""\
       [paste.app_factory]
-      main = adhocracy_sample:main
-      [pytest11]
-      adhocracy_sample = adhocracy_sample.testing
+      main = adhocracy_core:main
       """,
       )

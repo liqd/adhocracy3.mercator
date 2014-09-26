@@ -21,7 +21,7 @@ AdhocracyIg.ts: .dummy
 compile_tests_browser: AdhocracySpec.ts AdhocracyIg.ts
 	$(TSC) --module amd --sourcemap Adhocracy*.ts 2>&1 | $(FIX_TSC_ERROR_FORMAT)
 
-test_no_blanket: .dummy
+test-no-blanket: .dummy
 	cat ../test.html | perl -pe 's/(data-cover-flags=".*)(")$$/$$1 engineOnly$$2/' > ../test-no-blanket.html
 
 compile_tests_node: AdhocracySpec.ts

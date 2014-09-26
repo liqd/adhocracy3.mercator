@@ -10,7 +10,7 @@ import q = require("q");
 import Listing = require("./Listing");
 
 
-var config : Config.Type = {
+var config : Config.Type = <any>{
     pkg_path: "mock",
     rest_url: "mock",
     rest_platform_path: "mock",
@@ -49,7 +49,7 @@ export var register = () => {
                 container = <any>{
                     path: path,
                     data: {
-                        "adhocracy.sheets.pool.IPool": {
+                        "adhocracy_core.sheets.pool.IPool": {
                             elements: elements
                         }
                     }
@@ -58,7 +58,7 @@ export var register = () => {
             });
 
             describe("elemRefs", () => {
-                it("returns the elements from the adhocracy.sheets.pool.IPool sheet", () => {
+                it("returns the elements from the adhocracy_core.sheets.pool.IPool sheet", () => {
                     expect(adapter.elemRefs(container)).toEqual(elements);
                 });
             });
@@ -80,7 +80,7 @@ export var register = () => {
                 var poolPath = "pool/path";
                 var container = {
                     data: {
-                        "adhocracy.sheets.pool.IPool": {
+                        "adhocracy_core.sheets.pool.IPool": {
                             elements: elements
                         }
                     }

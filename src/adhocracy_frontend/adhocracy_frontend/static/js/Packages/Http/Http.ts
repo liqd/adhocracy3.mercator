@@ -3,6 +3,8 @@
 /// <reference path="../../../lib/DefinitelyTyped/angularjs/angular.d.ts"/>
 /// <reference path="../../../lib/DefinitelyTyped/lodash/lodash.d.ts"/>
 
+import _ = require("lodash");
+
 import Resources = require("../../Resources");
 import ResourcesBase = require("../../ResourcesBase");
 import Util = require("../Util/Util");
@@ -35,12 +37,13 @@ export class Service<Content extends Resources.Content<any>> {
     constructor(
         private $http : ng.IHttpService,
         private $q : ng.IQService,
+        private $timeout : ng.ITimeoutService,
         private adhMetaApi : MetaApi.MetaApiQuery,
         private adhPreliminaryNames : PreliminaryNames,
         private adhConfig : AdhConfig.Type
     ) {}
 
-    public getRaw(path : string) : ng.IHttpPromise<any> {
+    public getRaw(path : string, params ?: { [key : string] : string }) : ng.IHttpPromise<any> {
         if (this.adhPreliminaryNames.isPreliminary(path)) {
             throw "attempt to http-get preliminary path: " + path;
         }
@@ -48,11 +51,11 @@ export class Service<Content extends Resources.Content<any>> {
             path = this.adhConfig.rest_url + path;
         }
         return this.$http
-            .get(path);
+            .get(path, { params : params });
     }
 
-    public get(path : string) : ng.IPromise<Content> {
-        return this.getRaw(path)
+    public get(path : string, params ?: { [key : string] : string }) : ng.IPromise<Content> {
+        return this.getRaw(path, params)
             .then(
                 (response) => AdhConvert.importContent(<any>response, this.adhMetaApi, this.adhPreliminaryNames),
                 AdhError.logBackendError);
@@ -77,29 +80,42 @@ export class Service<Content extends Resources.Content<any>> {
     }
 
     public postRaw(path : string, obj : Content) : ng.IHttpPromise<any> {
-        if (this.adhPreliminaryNames.isPreliminary(path)) {
+        var _self = this;
+
+        if (_self.adhPreliminaryNames.isPreliminary(path)) {
             throw "attempt to http-post preliminary path: " + path;
         }
-        if (path.lastIndexOf("/", 0) === 0 && typeof this.adhConfig.rest_url !== "undefined") {
-            path = this.adhConfig.rest_url + path;
+        if (path.lastIndexOf("/", 0) === 0 && typeof _self.adhConfig.rest_url !== "undefined") {
+            path = _self.adhConfig.rest_url + path;
         }
-        return this.$http
-            .post(path, AdhConvert.exportContent(this.adhMetaApi, obj));
+        return _self.$http
+            .post(path, AdhConvert.exportContent(_self.adhMetaApi, obj));
     }
 
     public post(path : string, obj : Content) : ng.IPromise<Content> {
-        return this.postRaw(path, obj)
+        var _self = this;
+
+        return _self.postRaw(path, obj)
             .then(
-                (response) => AdhConvert.importContent(<any>response, this.adhMetaApi, this.adhPreliminaryNames),
+                (response) => AdhConvert.importContent(<any>response, _self.adhMetaApi, _self.adhPreliminaryNames),
                 AdhError.logBackendError);
     }
 
-    public getNewestVersionPath(path : string) : ng.IPromise<string> {
-        // FIXME: This works under the assumption that there is always only
-        // *one* latest version. This is not neccesserily true for multi-user
-        // scenarios.
+    /**
+     * For resources that do not support fork: Return the unique head
+     * version provided by the LAST tag.  If there is no or more than
+     * one version in LAST, throw an exception.
+     */
+    public getNewestVersionPathNoFork(path : string) : ng.IPromise<string> {
         return this.get(path + "/LAST")
-            .then((tag) => tag.data["adhocracy.sheets.tags.ITag"].elements[0]);
+            .then((tag) => {
+                var heads = tag.data["adhocracy_core.sheets.tags.ITag"].elements;
+                if (heads.length !== 1) {
+                    throw ("Cannot handle this LAST tag: " + heads.toString());
+                } else {
+                    return heads[0];
+                }
+            });
     }
 
     /**
@@ -146,16 +162,82 @@ export class Service<Content extends Resources.Content<any>> {
         });
     }
 
-    public postNewVersion(oldVersionPath : string, obj : Content, rootVersions? : string[]) : ng.IPromise<Content> {
+    /**
+     * For resources that do not support fork: Post a new version.  If
+     * the backend responds with a "no fork allowed" error, fetch LAST
+     * tag and try again.
+     *
+     * The return value is an object containing the resource from the
+     * response, plus a flag whether the post resulted in an implicit
+     * transplant (or change of parent).  If this flag is true, the
+     * caller may want to take further action, such as notifying the
+     * (two or more) users involved in the conflict.
+     *
+     * There is a max number of retries and a randomized and
+     * exponentially growing sleep period between retries hard-wired
+     * into the function.  If the max number of retries is exceeded,
+     * an exception is thrown.
+     */
+    public postNewVersionNoFork(
+        oldVersionPath : string,
+        obj : Content, rootVersions? : string[]
+    ) : ng.IPromise<{ value: Content; parentChanged: boolean; }> {
+        var _self = this;
+
+        var timeoutRounds : number = 5;
+        var waitms : number = 250;
+
         var dagPath = Util.parentPath(oldVersionPath);
-        var _obj = Util.deepcp(obj);
-        _obj.data["adhocracy.sheets.versions.IVersionable"] = {
-            follows: [oldVersionPath]
-        };
+        var _obj = _.cloneDeep(obj);
         if (typeof rootVersions !== "undefined") {
             _obj.root_versions = rootVersions;
         }
-        return this.post(dagPath, _obj);
+
+        var retry = (
+            nextOldVersionPath : string,
+            parentChanged : boolean,
+            roundsLeft : number
+        ) : ng.IPromise<{ value : Content; parentChanged : boolean; }> => {
+            if (roundsLeft === 0) {
+                throw "Tried to post new version of " + dagPath + " " + timeoutRounds.toString() + " times, giving up.";
+            }
+
+            _obj.data["adhocracy_core.sheets.versions.IVersionable"] = {
+                follows: [nextOldVersionPath]
+            };
+
+            var handleSuccess = (content) => {
+                return { value: content, parentChanged: parentChanged };
+            };
+
+            var handleConflict = (msg) => {
+                // re-throw all exception lists other than ["no-fork"].
+                if (msg.hasOwnProperty("length") &&
+                    msg.length === 1 &&
+                    msg[0].name === "data.adhocracy.sheets.versions.IVersionable.follows" &&
+                    msg[0].location === "body" &&
+                    msg[0].description === "No fork allowed"
+                   ) {
+                    // double waitms (fuzzed for avoiding network congestion).
+                    waitms *= 2 * (1 + (Math.random() / 2 - 0.25));
+
+                    // wait then retry
+                    return _self.$timeout(
+                        () => _self.getNewestVersionPathNoFork(dagPath)
+                            .then((nextOldVersionPath) => retry(nextOldVersionPath, true, roundsLeft - 1)),
+                        waitms,
+                        true);
+                } else {
+                    throw msg;
+                }
+            };
+
+            return _self
+                .post(dagPath, _obj)
+                .then(handleSuccess, <any>handleConflict);
+        };
+
+        return retry(oldVersionPath, false, timeoutRounds);
     }
 
     public postToPool(poolPath : string, obj : Content) : ng.IPromise<Content> {
@@ -220,7 +302,7 @@ export class Service<Content extends Resources.Content<any>> {
      *
      *             var version = {
      *                 data: {
-     *                     "adhocracy.sheets.versions.IVersionable": {
+     *                     "adhocracy_core.sheets.versions.IVersionable": {
      *                         follows: resourcePost.first_version_path
      *                     },
      *                     ...

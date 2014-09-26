@@ -5,16 +5,16 @@
             <a class="user-indicator-name">{{user.data.name}}</a>
         </div>
         <div class="user-indicator-secondary">
-            <a class="user-indicator-logout" href="" data-ng-click="logOut()">Logout</a>
+            <a class="user-indicator-logout" href="" data-ng-click="logOut()">{{ "Logout" | translate }}</a>
         </div>
     </div>
     <div ng-switch-default="">
         <img class="user-indicator-graphic" data-ng-src="{{pkgUrl}}/icon-inactive.png" alt="" />
         <div class="user-indicator-primary">
-            <a class="user-indicator-login" href="/login">LogIn</a>
+            <a class="user-indicator-login" href="/login">{{ "LogIn" | translate }}</a>
         </div>
         <div class="user-indicator-secondary">
-            or <a class="user-indicator-register" href="/register">Register</a>
+            or <a class="user-indicator-register" href="/register">{{ 'Register' | translate }}</a>
         </div>
     </div>
 </div>

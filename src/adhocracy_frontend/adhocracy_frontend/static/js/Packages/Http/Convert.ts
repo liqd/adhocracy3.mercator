@@ -37,8 +37,8 @@ export var importContent = <Content extends Resources.Content<any>>(
         throw ("unknown content_type: " + obj.content_type + " " + JSON.stringify(obj, null, 2));
     }
 
-    var _class = Resources_.resourceRegistry[obj.content_type];
-    var _obj = new _class({
+    var _rclass = Resources_.resourceRegistry[obj.content_type];
+    var _obj = new _rclass({
         preliminaryNames: preliminaryNames,
         path: obj.path
     });
@@ -53,23 +53,21 @@ export var importContent = <Content extends Resources.Content<any>>(
 
     // iterate over all delivered sheets and construct instances
 
-    (() => {
-        _.forOwn(obj.data, (jsonSheet, sheetName) => {
-            if (!Resources_.sheetRegistry.hasOwnProperty(sheetName)) {
-                throw ("unknown property sheet: " + sheetName + " " + JSON.stringify(obj, null, 2));
-            }
+    _.forOwn(obj.data, (jsonSheet, sheetName) => {
+        if (!Resources_.sheetRegistry.hasOwnProperty(sheetName)) {
+            throw ("unknown property sheet: " + sheetName + " " + JSON.stringify(obj, null, 2));
+        }
 
-            var _class = Resources_.sheetRegistry[sheetName];
-            _obj.data[sheetName] = new _class({});
-            _.forOwn(jsonSheet, (val, key) => {
-                _obj.data[sheetName][key] = val;
-            });
-
-            // the above four lines compile because we leave
-            // typescript in the dark about the actual type of _class.
-            // har!
+        var _sclass = Resources_.sheetRegistry[sheetName];
+        _obj.data[sheetName] = new _sclass({});
+        _.forOwn(jsonSheet, (val, key) => {
+            _obj.data[sheetName][key] = val;
         });
-    })();
+
+        // the above four lines compile because we leave
+        // typescript in the dark about the actual type of _class.
+        // har!
+    });
 
     // return
 

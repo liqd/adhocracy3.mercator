@@ -194,7 +194,7 @@ export var factory = (adhConfig : AdhConfig.Type, $window : Window, $rootScope, 
         var postMessageToParent = $window.parent.postMessage.bind($window.parent);
         return new Service(postMessageToParent, $window, $rootScope, adhConfig.trusted_domains, adhUser);
     } else {
-        console.log("Using dummy CrossWindowMassaging because we are not embedded.");
+        console.log("Using dummy CrossWindowMessaging because we are not embedded.");
         return new Dummy();
     }
 };

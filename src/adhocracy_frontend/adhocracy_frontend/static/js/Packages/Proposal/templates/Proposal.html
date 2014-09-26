@@ -2,34 +2,35 @@
     <div data-ng-switch="viewmode">
         <div data-ng-switch-when="list">
             <a href="" data-ng-click="display()" class="document_title">
-                {{content.data['adhocracy.sheets.document.IDocument'].title}}
+                {{content.data['adhocracy_core.sheets.document.IDocument'].title}}
             </a>
         </div>
         <div data-ng-switch-when="display">
             <div class="buttons_box">
-                <button type="button" class="edit_button" data-ng-click="edit()">edit</button>
-                <button type="button" class="close_button" data-ng-click="list()">close</button>
-                <button type="button" data-ng-click="showComments()">Show comments</a>
+                <button type="button" class="edit_button" data-ng-click="edit()">{{ "edit" | translate }}</button>
+                <button type="button" class="close_button" data-ng-click="list()">{{ "close" | translate }}</button>
+                <button type="button" data-ng-click="showComments()">{{ "Show comments" | translate }}</a>
             </div>
-            <h1>{{content.data['adhocracy.sheets.document.IDocument'].title}}</h1>
-            <p><em>{{content.data['adhocracy.sheets.document.IDocument'].description}}</em></p>
-            author: <adh-user-meta data-path="{{content.data['adhocracy.sheets.metadata.IMetadata'].creator}}"</adh-user-meta>
+            <h1>{{content.data['adhocracy_core.sheets.document.IDocument'].title}}</h1>
+            <p><em>{{content.data['adhocracy_core.sheets.document.IDocument'].description}}</em></p>
+            {{ "author" | translate }}:
+            <adh-user-meta data-path="{{content.data['adhocracy_core.sheets.metadata.IMetadata'].creator}}"</adh-user-meta>
         </div>
         <div data-ng-switch-when="edit">
-            <input type="text" name="title" class="m-title" data-ng-model="content.data['adhocracy.sheets.document.IDocument'].title" placeholder="title"></input>
-            <textarea name="description" data-ng-model="content.data['adhocracy.sheets.document.IDocument'].description" placeholder="description"></textarea>
+            <input type="text" name="title" class="m-title" data-ng-model="content.data['adhocracy_core.sheets.document.IDocument'].title" placeholder="{{ 'title' | translate }}"></input>
+            <textarea name="description" data-ng-model="content.data['adhocracy_core.sheets.document.IDocument'].description" placeholder="{{ 'description' | translate }}"></textarea>
         </div>
         <div data-ng-switch-default="">
-            internal error: unknown view mode: {{ viewmode }}
+            {{ "internal error: unknown view mode:" | translate }} {{ viewmode }}
         </div>
     </div>
     <adh-section-version-detail
-        data-ng-repeat="sectionRef in content.data['adhocracy.sheets.document.IDocument'].elements"
+        data-ng-repeat="sectionRef in content.data['adhocracy_core.sheets.document.IDocument'].elements"
         data-ref="sectionRef"
         data-viewmode="viewmode">
     </adh-section-version-detail>
     <div class="buttons_box" data-ng-if="viewmode == 'edit'">
-        <button type="button" class="save_button" data-ng-click="commit()">save</button>
-        <a href="" data-ng-click="onCancel()">cancel</a>
+        <button type="button" class="save_button" data-ng-click="commit()">{{ "save" | translate }}</button>
+        <a href="" data-ng-click="onCancel()">{{ "cancel" | translate }}</a>
     </div>
 </div>

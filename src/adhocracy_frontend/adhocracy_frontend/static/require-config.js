@@ -15,10 +15,12 @@ require.config({
         angular: "../lib/angular/angular",
         angularRoute: "../lib/angular-route/angular-route",
         angularAnimate: "../lib/angular-animate/angular-animate",
+        angularTranslate: "../lib/angular-translate/angular-translate",
+        angularTranslateLoader: "../lib/angular-translate-loader-static-files/angular-translate-loader-static-files",
         lodash: "../lib/lodash/dist/lodash",
         q: "../lib/q/q",
         modernizr: "../lib2/modernizr/modernizr-2.8.3.min",
-        moment: "../lib/moment/moment"
+        moment: "../lib/moment/min/moment-with-locales"
     },
     shim: {
         jquery: {
@@ -32,6 +34,12 @@ require.config({
         },
         angularAnimate: {
             deps: ["angular"]
+        },
+        angularTranslate: {
+            deps: ["angular"]
+        },
+        angularTranslateLoader: {
+            deps: ["angularTranslate"]
         },
         underscore: {
             exports: "_"

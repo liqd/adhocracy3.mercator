@@ -10,7 +10,7 @@ export var register = () => {
     // includes all *Spec.ts modules.
 
     describe("WebSocket", () => {
-        var config: Config.Type = {
+        var config: Config.Type = <any>{
             pkg_path: "mock",
             rest_url: "mock",
             rest_platform_path: "mock",

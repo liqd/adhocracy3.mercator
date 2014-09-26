@@ -3,15 +3,15 @@ branch = True
 omit =
     *test*py
     # indirectly tested via websocket fixture:
-    src/adhocracy/adhocracy/websockets/start_ws_server.py
+    src/adhocracy_core/adhocracy_core/websockets/start_ws_server.py
     # no unit test coverage
-    src/adhocracy/adhocracy/__init__.py
+    src/adhocracy_core/adhocracy_core/__init__.py
     src/adhocracy/adhocracy/scaffolds/__init__
     src/adhocracy_sample/adhocracy_sample/__init__.py
-    src/adhocracy/setup.py
+    src/adhocracy_core/setup.py
     src/adhocracy_sample/setup.py
 source =
-    src/adhocracy
+    src/adhocracy_core
     src/adhocracy_sample
 
 [report]

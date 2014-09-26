@@ -4,16 +4,16 @@
             <h1 data-ng-if="content.title">{{ content.title }}</h1>
         </div>
         <div data-ng-switch-when="edit">
-            <label>title: <input data-ng-model="content.title" /></label>
+            <label>{{ "title" | translate }}: <input data-ng-model="content.title" /></label>
         </div>
     </div>
     <adh-paragraph-version-detail
-        data-ng-repeat="paragraphRef in content.data['adhocracy.sheets.document.ISection'].elements"
+        data-ng-repeat="paragraphRef in content.data['adhocracy_core.sheets.document.ISection'].elements"
         data-ref="paragraphRef"
         data-viewmode="viewmode">
     </adh-paragraph-version-detail>
     <adh-section-version-detail
-        data-ng-repeat="sectionRef in content.data['adhocracy.sheets.document.ISection'].subsections"
+        data-ng-repeat="sectionRef in content.data['adhocracy_core.sheets.document.ISection'].subsections"
         data-ref="sectionRef"
         data-viewmode="viewmode">
     </adh-section-version-detail>

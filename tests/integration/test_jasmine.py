@@ -3,7 +3,7 @@
 The difference is that it runs igtest.html instead of test.html.
 also, it is located next to acceptance tests, because it has to
 be allowed to import components other than adhocracy, like
-adhocracy_sample.
+adhocracy_core.
 """
 
 from pytest import fixture
@@ -18,7 +18,7 @@ pytestmark = mark.jasmine
 
 
 @fixture
-def browser_igtest(browser, frontend, backend_sample, frontend_url) -> Browser:
+def browser_igtest(browser, frontend, backend, frontend_url) -> Browser:
     """Return test browser instance with url=igtest.html."""
     url = frontend_url + 'static/igtest.html'
     return browser_test_helper(browser, url)

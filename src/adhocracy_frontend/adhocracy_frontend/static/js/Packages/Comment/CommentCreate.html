@@ -3,6 +3,6 @@
         <p>{{error}}</p>
     </div>
     <textarea data-ng-model="data.content"></textarea>
-    <input type="submit" value="create" data-ng-click="submit()" />
-    <a href="" data-ng-click="cancel()">Cancel</a>
+    <input type="submit" value="{{ 'create' | translate }}" data-ng-click="submit()" />
+    <a href="" data-ng-click="cancel()">{{ "Cancel" | translate }}</a>
 </form>

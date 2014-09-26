@@ -25,6 +25,8 @@ export function isArrayMember(member : any, array : any[]) : boolean {
 
 
 /**
+ * FIXME: replace with _.cloneDeep and remove.
+ *
  * Do a deep copy on any javascript object.  The resuling object does
  * not share sub-structures as the original.  (I think instances of
  * classes other than Object, Array are not treated properly either.)
@@ -173,11 +175,19 @@ export function endsWith(str : string, suffix : string) {
 export function parentPath(url : string) : string {
     "use strict";
 
+    var result;
+
     if (endsWith(url, "/")) {
-        return url.substring(0, url.lastIndexOf("/", url.length - 2) + 1);
+        result = url.substring(0, url.lastIndexOf("/", url.length - 2) + 1);
     } else {
-        return url.substring(0, url.lastIndexOf("/"));
+        result = url.substring(0, url.lastIndexOf("/"));
     }
+
+    if (result === "") {
+        result = "/";
+    }
+
+    return result;
 };
 
 

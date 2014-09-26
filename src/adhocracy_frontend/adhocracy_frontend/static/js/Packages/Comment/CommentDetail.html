@@ -20,7 +20,10 @@
     <div class="comment-main">
         <div class="comment-title">
             <adh-user-meta data-path="{{data.creator}}"></adh-user-meta>
-            <adh-vote data-refers-to="{{path}}"></adh-vote>
+            <adh-rate data-refers-to="{{path}}"
+                      data-post-pool-sheet="adhocracy.sheets.rate.IRateable"
+                      data-post-pool-field="post_pool">
+            </adh-rate>
         </div>
         <div data-ng-switch-when="1">
             <div class="form-error" data-ng-repeat="error in errors">
@@ -35,10 +38,10 @@
             <adh-time data-datetime="{{data.modificationDate}}"></adh-time>
 
             <div class="comment-actions">
-                <a href="" class="comment-action" data-ng-switch-default="" data-ng-click="edit()">Edit</a>
-                <a href="" class="comment-action m-comment-reply" data-ng-switch-default="" data-ng-click="createComment()">Add Comment</a>
-                <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="submit()">Save</a>
-                <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="cancel()">Cancel</a>
+                <a href="" class="comment-action" data-ng-switch-default="" data-ng-click="edit()">{{ "Edit" | translate }}</a>
+                <a href="" class="comment-action m-comment-reply" data-ng-switch-default="" data-ng-click="createComment()">{{ "Add Comment" | translate }}</a>
+                <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="submit()">{{ "Save" | translate }}</a>
+                <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="cancel()">{{ "Cancel" | translate }}</a>
                 <span class="comment-count">
                     <i class="icon-speachbubble-outline"></i>
                     {{data.commentCount}}

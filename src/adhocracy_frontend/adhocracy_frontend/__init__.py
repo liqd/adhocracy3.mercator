@@ -18,8 +18,8 @@ def config_view(request):
     config['ws_url'] = public_ws_url
     config['rest_url'] = settings.get('adhocracy.frontend.rest_url',
                                       'http://localhost:6541')
-    config['rest_platform_path'] = '/' + settings.get('adhocracy.platform_id',
-                                                      'adhocracy')
+    platform_id = settings.get('adhocracy.platform_id', 'adhocracy')
+    config['rest_platform_path'] = '/{}/'.format(platform_id)
     config['pkg_path'] = settings.get('adhocracy.frontend.pkg_path',
                                       '/static/js/Packages')
     config['trusted_domains'] = aslist(

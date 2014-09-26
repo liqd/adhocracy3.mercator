@@ -29,7 +29,7 @@ export var register = () => {
                 adhHttpMock.post.and.returnValue(q.when({}));
                 adhHttpMock.get.and.returnValue(q.when({
                     data: {
-                        "adhocracy.sheets.user.IUserBasic": {}
+                        "adhocracy_core.sheets.user.IUserBasic": {}
                     }
                 }));
 
@@ -271,9 +271,9 @@ export var register = () => {
                 });
                 it("posts a valid user resource", () => {
                     var data = adhHttpMock.post.calls.mostRecent().args[1].data;
-                    expect(data["adhocracy.sheets.user.IUserBasic"].name).toBe("username");
-                    expect(data["adhocracy.sheets.user.IUserBasic"].email).toBe("email");
-                    expect(data["adhocracy.sheets.user.IPasswordAuthentication"].password).toBe("password");
+                    expect(data["adhocracy_core.sheets.user.IUserBasic"].name).toBe("username");
+                    expect(data["adhocracy_core.sheets.user.IUserBasic"].email).toBe("email");
+                    expect(data["adhocracy_core.sheets.user.IPasswordAuthentication"].password).toBe("password");
                 });
             });
         });

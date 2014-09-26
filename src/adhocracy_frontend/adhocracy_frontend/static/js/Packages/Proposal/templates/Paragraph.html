@@ -3,13 +3,13 @@
         <div data-ng-switch-when="list">
         </div>
         <div data-ng-switch-when="display">
-            <p>{{ content.data['adhocracy.sheets.document.IParagraph'].content }}</p>
+            <p>{{ content.data['adhocracy_core.sheets.document.IParagraph'].content }}</p>
         </div>
         <div data-ng-switch-when="edit">
-            <textarea data-ng-model="content.data['adhocracy.sheets.document.IParagraph'].content"></textarea>
+            <textarea data-ng-model="content.data['adhocracy_core.sheets.document.IParagraph'].content"></textarea>
         </div>
         <div data-ng-switch-default="">
-            internal error: unknown view mode: [{{ viewmode }}]
+            {{ "internal error: unknown view mode:" | translate }} [{{ viewmode }}]
         </div>
     </div>
 </div>

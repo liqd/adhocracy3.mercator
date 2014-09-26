@@ -13,6 +13,8 @@ import angularRoute = require("angularRoute");  if (angularRoute) { return; };
 // runtime effects.)
 
 import angularAnimate = require("angularAnimate");  if (angularAnimate) { return; };
+import angularTranslate = require("angularTranslate");  if (angularTranslate) { return; };
+import angularTranslateLoader = require("angularTranslateLoader");  if (angularTranslateLoader) { return; };
 
 import modernizr = require("modernizr");
 import moment = require("moment");
@@ -32,7 +34,8 @@ import AdhComment = require("./Packages/Comment/Comment");
 import AdhCommentAdapter = require("./Packages/Comment/Adapter");
 import AdhDateTime = require("./Packages/DateTime/DateTime");
 import AdhResourceWidgets = require("./Packages/ResourceWidgets/ResourceWidgets");
-import AdhVote = require("./Packages/Vote/Vote");
+import AdhRate = require("./Packages/Rate/Rate");
+import AdhRateAdapter = require("./Packages/Rate/Adapter");
 
 import Listing = require("./Packages/Listing/Listing");
 import DocumentWorkbench = require("./Packages/DocumentWorkbench/DocumentWorkbench");
@@ -56,9 +59,16 @@ export var init = (config, meta_api) => {
         window.document.body.className += " is-embedded";
     }
 
-    var app = angular.module("adhocracy3SampleFrontend", ["ngRoute", "ngAnimate"]);
+    // FIXME: The functionality to set the locale is not yet done
+    config.locale = "de";
 
-    app.config(["$routeProvider", "$locationProvider", ($routeProvider, $locationProvider) => {
+    var app = angular.module("adhocracy3SampleFrontend", ["pascalprecht.translate", "ngRoute", "ngAnimate"]);
+
+    app.config(["$translateProvider", "$routeProvider", "$locationProvider", (
+        $translateProvider,
+        $routeProvider,
+        $locationProvider
+    ) => {
         $routeProvider
             .when("/", {
                 templateUrl: "/static/js/templates/Wrapper.html"
@@ -82,6 +92,13 @@ export var init = (config, meta_api) => {
         // for conversion between history API and #!-URLs.  See
         // angular documentation for details.)
         $locationProvider.html5Mode(true);
+
+        $translateProvider.useStaticFilesLoader({
+            prefix: "/static/i18n/",
+            suffix: ".json"
+        });
+        $translateProvider.fallbackLanguage("en");
+        $translateProvider.preferredLanguage(config.locale);
     }]);
 
     app.value("angular", angular);
@@ -108,7 +125,7 @@ export var init = (config, meta_api) => {
     app.factory("recursionHelper", ["$compile", AdhRecursionHelper.factory]);
     app.directive("inject", AdhInject.factory);
     app.service("adhPreliminaryNames", AdhPreliminaryNames);
-    app.service("adhHttp", ["$http", "$q", "adhMetaApi", "adhPreliminaryNames", "adhConfig", AdhHttp.Service]);
+    app.service("adhHttp", ["$http", "$q", "$timeout", "adhMetaApi", "adhPreliminaryNames", "adhConfig", AdhHttp.Service]);
     app.factory("adhWebSocket", ["Modernizr", "adhConfig", AdhWebSocket.factory]);
 
     if (config.trustedDomains === []) {
@@ -166,9 +183,13 @@ export var init = (config, meta_api) => {
     app.directive("adhParagraphVersionDetail",
         ["adhConfig", (adhConfig) => new AdhProposal.ParagraphVersionDetail().createDirective(adhConfig)]);
 
-    app.directive("adhTime", ["moment", "$interval", AdhDateTime.createDirective]);
+    app.directive("adhTime", ["adhConfig", "moment", "$interval", AdhDateTime.createDirective]);
 
-    app.directive("adhVote", ["adhConfig", AdhVote.createDirective]);
+    app.directive("adhRate", ["$q", "adhConfig", "adhPreliminaryNames", ($q, adhConfig, adhPreliminaryNames) =>
+        AdhRate.createDirective(
+            new AdhRateAdapter.RateAdapter(),
+            adhConfig
+        )]);
 
     // get going
 

@@ -7,9 +7,9 @@ import json
 from pytest import fixture
 from splinter import Browser
 
-from adhocracy.testing import _get_settings
-from adhocracy.testing import _kill_pid_in_file
-from adhocracy.testing import _is_running
+from adhocracy_core.testing import _get_settings
+from adhocracy_core.testing import _kill_pid_in_file
+from adhocracy_core.testing import _is_running
 
 
 def pytest_addoption(parser):

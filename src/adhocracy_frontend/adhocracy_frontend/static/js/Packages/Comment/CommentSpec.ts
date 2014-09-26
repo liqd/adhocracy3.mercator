@@ -28,12 +28,12 @@ export var register = () => {
             adapterMock.createItem.and.returnValue(RESOURCE);
             adapterMock.derive.and.returnValue(RESOURCE);
 
-            adhHttpMock = <any>jasmine.createSpyObj("adhHttpMock", ["postToPool", "resolve", "postNewVersion", "getNewestVersionPath",
+            adhHttpMock = <any>jasmine.createSpyObj("adhHttpMock", ["postToPool", "resolve", "postNewVersion", "getNewestVersionPathNoFork",
                 "get"]);
             adhHttpMock.postToPool.and.returnValue(q.when(RESOURCE));
             adhHttpMock.resolve.and.returnValue(q.when(RESOURCE));
             adhHttpMock.postNewVersion.and.returnValue(q.when(RESOURCE));
-            adhHttpMock.getNewestVersionPath.and.returnValue(q.when("newestVersion"));
+            adhHttpMock.getNewestVersionPathNoFork.and.returnValue(q.when("newestVersion"));
             adhHttpMock.get.and.returnValue(q.when(RESOURCE));
         });
 

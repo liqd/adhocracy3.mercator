@@ -26,7 +26,7 @@ var renderBackendError = (errors : IBackendErrorItem[]) : void => {
 export var logBackendError = (response : ng.IHttpPromiseCallbackArg<IBackendError>) : void => {
     "use strict";
 
-    var errors = response.data.errors;
+    var errors : IBackendErrorItem[] = response.data.errors;
 
     console.log("http response with error status: " + response.status);
     console.log(response.config);
@@ -46,7 +46,12 @@ export var logBackendError = (response : ng.IHttpPromiseCallbackArg<IBackendErro
  *
  * NOTE: See documentation of `importBatchContent`.
  */
-export var logBackendBatchError = (response : ng.IHttpPromiseCallbackArg<IBackendError[]>) : void => {
+export var logBackendBatchError = (
+    response : ng.IHttpPromiseCallbackArg<{
+        code : number;
+        body : IBackendError;
+    }[]>
+) : void => {
     "use strict";
 
     console.log("http batch response with error status: " + response.status);
@@ -56,7 +61,7 @@ export var logBackendBatchError = (response : ng.IHttpPromiseCallbackArg<IBacken
         throw "no batch item responses!";
     }
 
-    var lastBatchItemResponse : IBackendError = (<any>(response.data[response.data.length - 1])).body;
+    var lastBatchItemResponse : IBackendError = response.data[response.data.length - 1].body;
     console.log(lastBatchItemResponse);
 
     var errors : IBackendErrorItem[] = lastBatchItemResponse.errors;

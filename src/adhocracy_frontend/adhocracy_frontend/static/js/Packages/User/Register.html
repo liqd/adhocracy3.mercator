@@ -1,5 +1,5 @@
 <form novalidate="novalidate" class="register" name="registerForm">
-    <h1 class="title">Register!</h1>
+    <h1 class="title">{{ "Register!" | translate }}</h1>
     <div class="form-error" ng-repeat="error in errors track by $index">
         <p>{{error}}</p>
     </div>
@@ -7,19 +7,19 @@
         <input
             type="text"
             name="username"
-            placeholder="username"
+            placeholder="{{ 'username' | translate }}"
             data-ng-model="input.username"
             required="required" />
         <input
             type="email"
             name="email"
-            placeholder="email"
+            placeholder="{{ 'email' | translate }}"
             data-ng-model="input.email"
             required="required" />
         <input
             type="password"
             name="password"
-            placeholder="password"
+            placeholder="{{ 'password' | translate }}"
             data-ng-model="input.password"
             required="required"
             data-ng-minlength="6"
@@ -27,27 +27,27 @@
         <input
             type="password"
             name="password_repeat"
-            placeholder="password repeat"
+            placeholder="{{ 'password repeat' | translate }}"
             data-ng-model="input.passwordRepeat"
             required="required" />
         <span class="input-error" data-ng-show="(!registerForm.password.$error.minlength) && (input.password !== input.passwordRepeat)">
-            Password fields do not match.
+            {{ "Password fields do not match." | translate }}
         </span>
         <span class="input-error" data-ng-show="registerForm.password.$error.minlength">
-            Password too short.
+            {{ "Password too short." | translate }}
         </span>
     </div>
     <div class="register-description box-with-button">
         <div class="textbox m-unobtrusive">
-            <p>Disclaimer</p>
+            <p>{{ "Disclaimer" | translate }}</p>
         </div>
         <input
             type="submit"
             name="register"
-            value="register"
+            value="{{ 'register' | translate }}"
             class="m-call-to-action"
             data-ng-click="register()"
             data-ng-disabled="registerForm.$invalid || input.password !== input.passwordRepeat" />
-        <a href="/login">LogIn instead</a>
+        <a href="/login">{{ "LogIn instead" | translate }}</a>
     </div>
 </form>

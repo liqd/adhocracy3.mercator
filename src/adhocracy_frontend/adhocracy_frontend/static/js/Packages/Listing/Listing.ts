@@ -9,7 +9,7 @@ import AdhConfig = require("../Config/Config");
 import AdhPreliminaryNames = require("../PreliminaryNames/PreliminaryNames");
 
 import Resources = require("../../Resources");
-import SIPool = require("../../Resources_/adhocracy/sheets/pool/IPool");
+import SIPool = require("../../Resources_/adhocracy_core/sheets/pool/IPool");
 
 var pkgLocation = "/Listing";
 
@@ -25,11 +25,11 @@ export interface IListingContainerAdapter {
 }
 
 export class ListingPoolAdapter implements IListingContainerAdapter {
-    public elemRefs(container : Resources.Content<SIPool.HasAdhocracySheetsPoolIPool>) {
-        return container.data["adhocracy.sheets.pool.IPool"].elements;
+    public elemRefs(container : Resources.Content<SIPool.HasAdhocracyCoreSheetsPoolIPool>) {
+        return container.data["adhocracy_core.sheets.pool.IPool"].elements;
     }
 
-    public poolPath(container : Resources.Content<SIPool.HasAdhocracySheetsPoolIPool>) {
+    public poolPath(container : Resources.Content<SIPool.HasAdhocracyCoreSheetsPoolIPool>) {
         return container.path;
     }
 }

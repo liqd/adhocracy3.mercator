@@ -10,6 +10,8 @@ declare module "angular" {
 declare module "angularRoute" {}
 
 declare module "angularAnimate" {}
+declare module "angularTranslate" {}
+declare module "angularTranslateLoader" {}
 
 declare module "modernizr" {
     export var Modernizr : ModernizrStatic;

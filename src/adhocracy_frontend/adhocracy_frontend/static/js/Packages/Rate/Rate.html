@@ -1,0 +1,18 @@
+<div class="rate">
+    <span class="rate-difference">
+        <a href="" data-ng-click="toggleShowDetails()">
+            {{rates.pro - rates.contra | signum}}
+        </a>
+    </span>
+    <a href="" class="rate-pro {{isActiveClass(1)}}" data-ng-click="cast(1)">{{ "pro" | translate }}: {{rates.pro}}</a>
+    <a href="" class="rate-contra {{isActiveClass(-1)}}" data-ng-click="cast(-1)">{{ "contra" | translate }}: {{rates.contra}}</a>
+    <a href="" class="rate-neutral {{isActiveClass(0)}}" data-ng-click="cast(0)">{{ "neutral" | translate }}: {{rates.neutral}}</a>
+</div>
+<div class="rate-details" data-ng-if="auditTrailVisible">
+    <table>
+        <tr data-ng-repeat="rate in auditTrail">
+            <td>{{rate.subject}}</td>
+            <td>{{rate.rate}}</td>
+        </tr>
+    </table>
+</div>

@@ -157,3 +157,12 @@ Create scaffold for extension packages
 
     bin/pcreate -s adocracy_extension adhocracy_XX
 
+Update Python packages
+----------------------
+
+Check whether new Python versions exist::
+
+    bin/checkversions -v -l 0 versions.cfg | grep was
+
+You may then update the pinned Python versions in `versions.cfg` if
+appropriate.

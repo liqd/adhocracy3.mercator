@@ -250,7 +250,7 @@ renderSheet = (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IM
                 if (field.editable || field.creatable || field.create_mandatory) {
                     writables.push(field);
 
-                    if (field.valuetype === "adhocracy.schema.AbsolutePath") {
+                    if (field.valuetype === "adhocracy_core.schema.AbsolutePath") {
                         sheetMetaApi.references.push(field.name);
                     }
                 } else {
@@ -457,7 +457,7 @@ renderResource = (modulePath : string, resource : MetaApi.IResource, modules : M
 
         // first_version_path is set to a preliminary name iff
         // IVersions sheet is present.
-        if (resource.sheets.indexOf("adhocracy.sheets.versions.IVersions") !== -1) {
+        if (resource.sheets.indexOf("adhocracy_core.sheets.versions.IVersions") !== -1) {
             lines.push("    _self.first_version_path = args.preliminaryNames.nextPreliminary();");
         } else {
             lines.push("    _self.first_version_path = undefined;");
@@ -468,12 +468,12 @@ renderResource = (modulePath : string, resource : MetaApi.IResource, modules : M
 
         // if IName sheet is present, allow to set name in
         // constructor (optional arg).
-        if (resource.sheets.indexOf("adhocracy.sheets.name.IName") !== -1) {
+        if (resource.sheets.indexOf("adhocracy_core.sheets.name.IName") !== -1) {
             optArgs.name = "string";
             lines.push("    if (args.hasOwnProperty(\"name\")) {");
-            lines.push("        _self.data[\"adhocracy.sheets.name.IName\"] =");
-            lines.push("            new " + mkModuleName("adhocracy.sheets.name.IName", metaApi) + "." +
-                       mkSheetName("adhocracy.sheets.name.IName") + "({ name : args.name })");
+            lines.push("        _self.data[\"adhocracy_core.sheets.name.IName\"] =");
+            lines.push("            new " + mkModuleName("adhocracy_core.sheets.name.IName", metaApi) + "." +
+                       mkSheetName("adhocracy_core.sheets.name.IName") + "({ name : args.name })");
             lines.push("    }");
         }
 
@@ -600,34 +600,40 @@ mkFieldType = (field : MetaApi.ISheetField) : string => {
     var result : string;
 
     switch (field.valuetype) {
-    case "adhocracy.schema.AbsolutePath":
+    case "adhocracy_core.schema.AbsolutePath":
         result = "string";
         break;
-    case "adhocracy.schema.Name":
+    case "adhocracy_core.schema.Name":
         result = "string";
         break;
-    case "adhocracy.schema.SingleLine":
+    case "adhocracy_core.schema.SingleLine":
         result = "string";
         break;
-    case "adhocracy.schema.Text":
+    case "adhocracy_core.schema.Text":
         result = "string";
         break;
-    case "adhocracy.schema.Email":
+    case "adhocracy_core.schema.Email":
         result = "string";
         break;
-    case "adhocracy.schema.Password":
+    case "adhocracy_core.schema.Password":
         result = "string";
         break;
-    case "adhocracy.schema.DateTime":
+    case "adhocracy_core.schema.DateTime":
         result = "string";
         break;
-    case "adhocracy.schema.TimeZoneName":
+    case "Integer":
+        result = "number";
+        break;
+    case "adhocracy_core.schema.Rate":
+        result = "number";
+        break;
+    case "adhocracy_core.schema.TimeZoneName":
         result = "string";
         break;
-    case "adhocracy.schema.Reference":
+    case "adhocracy_core.schema.Reference":
         result = "string";
         break;
-    case "adhocracy.schema.PostPool":
+    case "adhocracy_core.schema.PostPool":
         result = "string";
         break;
     default:

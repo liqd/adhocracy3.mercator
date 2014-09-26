@@ -7,11 +7,11 @@ README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = [
-    'adhocracy',
+    'adhocracy_core',
     ]
 
 test_requires = [
-    'adhocracy[test]',
+    'adhocracy_core[test]',
     ]
 
 setup(name='adhocracy_frontend',
@@ -27,7 +27,7 @@ setup(name='adhocracy_frontend',
       author='',
       author_email='',
       url='',
-      keywords='web pyramid pylons adocracy',
+      keywords='web pyramid pylons adhocracy',
       packages=find_packages(),
       include_package_data=True,
       zip_safe=False,

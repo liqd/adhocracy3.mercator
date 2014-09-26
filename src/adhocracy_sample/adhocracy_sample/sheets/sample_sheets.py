@@ -1,9 +1,9 @@
 """Name Sheet."""
 import colander
 
-from adhocracy.sheets import add_sheet_to_registry
-from adhocracy.sheets.name import name_metadata
-from adhocracy.sheets import GenericResourceSheet
+from adhocracy_core.sheets import add_sheet_to_registry
+from adhocracy_core.sheets.name import name_metadata
+from adhocracy_core.sheets import GenericResourceSheet
 
 
 class DummyNameSheet(GenericResourceSheet):

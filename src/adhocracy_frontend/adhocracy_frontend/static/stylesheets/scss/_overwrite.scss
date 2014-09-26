@@ -14,3 +14,7 @@ html, body {
     @include text-align(end);
     overflow: hidden;
 }
+
+.is-rate-button-active {
+    background: black;
+}

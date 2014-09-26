@@ -3,13 +3,13 @@
 /// <reference path="../../_all.d.ts"/>
 
 import Resources = require("../../Resources");
-import RIProposal = require("../../Resources_/adhocracy_sample/resources/proposal/IProposal");
-import RIProposalVersion = require("../../Resources_/adhocracy_sample/resources/proposal/IProposalVersion");
-import RISection = require("../../Resources_/adhocracy_sample/resources/section/ISection");
-import RISectionVersion = require("../../Resources_/adhocracy_sample/resources/section/ISectionVersion");
-import RITag = require("../../Resources_/adhocracy/interfaces/ITag");
-import SIDocument = require("../../Resources_/adhocracy/sheets/document/IDocument");
-import SIVersionable = require("../../Resources_/adhocracy/sheets/versions/IVersionable");
+import RIProposal = require("../../Resources_/adhocracy_core/resources/sample_proposal/IProposal");
+import RIProposalVersion = require("../../Resources_/adhocracy_core/resources/sample_proposal/IProposalVersion");
+import RISection = require("../../Resources_/adhocracy_core/resources/sample_section/ISection");
+import RISectionVersion = require("../../Resources_/adhocracy_core/resources/sample_section/ISectionVersion");
+import RITag = require("../../Resources_/adhocracy_core/interfaces/ITag");
+import SIDocument = require("../../Resources_/adhocracy_core/sheets/document/IDocument");
+import SIVersionable = require("../../Resources_/adhocracy_core/sheets/versions/IVersionable");
 
 import AdhMetaApi = require("../MetaApi/MetaApi");
 import AdhHttp = require("./Http");
@@ -20,10 +20,10 @@ export var register = (angular, config, meta_api) => {
 
     describe("withTransaction", () => {
         var adhHttp : AdhHttp.Service<any> = (() => {
-            var factory = ($http, $q) => {
-                return (new AdhHttp.Service($http, $q, new AdhMetaApi.MetaApiQuery(meta_api), new AdhPreliminaryNames, config));
+            var factory = ($http, $q, $timeout) => {
+                return (new AdhHttp.Service($http, $q, $timeout, new AdhMetaApi.MetaApiQuery(meta_api), new AdhPreliminaryNames, config));
             };
-            factory.$inject = ["$http", "$q"];
+            factory.$inject = ["$http", "$q", "$timeout"];
             return angular.injector(["ng"]).invoke(factory);
         })();
 
@@ -46,14 +46,14 @@ export var register = (angular, config, meta_api) => {
                 var sectionVersion : AdhHttp.ITransactionResult = transaction.post(section.path, sectionVersionResource);
 
                 var proposalVersionResource = new RIProposalVersion({preliminaryNames: adhPreliminaryNames});
-                proposalVersionResource.data["adhocracy.sheets.document.IDocument"] =
-                    new SIDocument.AdhocracySheetsDocumentIDocument({
+                proposalVersionResource.data["adhocracy_core.sheets.document.IDocument"] =
+                    new SIDocument.AdhocracyCoreSheetsDocumentIDocument({
                         title: proposalName,
                         description: "whoof",
                         elements: [sectionVersion.path]
                     });
-                proposalVersionResource.data["adhocracy.sheets.versions.IVersionable"] =
-                    new SIVersionable.AdhocracySheetsVersionsIVersionable({
+                proposalVersionResource.data["adhocracy_core.sheets.versions.IVersionable"] =
+                    new SIVersionable.AdhocracyCoreSheetsVersionsIVersionable({
                         follows: [proposal.first_version_path]
                     });
                 transaction.post(proposal.path, proposalVersionResource);
@@ -64,7 +64,7 @@ export var register = (angular, config, meta_api) => {
                         return adhHttp.get(lastTagPath);
                     })
                     .then((lastTag : RITag) => {
-                        var lastVersionPaths : string[] = lastTag.data["adhocracy.sheets.tags.ITag"].elements;
+                        var lastVersionPaths : string[] = lastTag.data["adhocracy_core.sheets.tags.ITag"].elements;
                         expect(lastVersionPaths.length).toBe(1);
                         expect(lastVersionPaths[0].substring(lastVersionPaths[0].length - 4)).toBe("001/");
                     })

@@ -4,7 +4,7 @@
         <div class="navbar-left listing-view placeholder">view</div>
         <a class="navbar-right button m-call-to-action"
             data-ng-click="showCreateForm()"
-            data-ng-disabled="show.createForm">Add</a>
+            data-ng-disabled="show.createForm">{{ "Add" | translate }}</a>
     </div>
     <div class="listing-create-form" data-ng-if="show.createForm">
         <inject data-transclusion-id="create-form-id"></inject>

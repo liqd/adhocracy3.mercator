@@ -11,16 +11,16 @@ import AdhPreliminaryNames = require("../../Packages/PreliminaryNames/Preliminar
 
 import Resources = require("../../Resources");
 
-import RIParagraph = require("../../Resources_/adhocracy_sample/resources/paragraph/IParagraph");
-import RIParagraphVersion = require("../../Resources_/adhocracy_sample/resources/paragraph/IParagraphVersion");
-import RIProposal = require("../../Resources_/adhocracy_sample/resources/proposal/IProposal");
-import RIProposalVersion = require("../../Resources_/adhocracy_sample/resources/proposal/IProposalVersion");
-import RISectionVersion = require("../../Resources_/adhocracy_sample/resources/section/ISectionVersion");
-import RISection = require("../../Resources_/adhocracy_sample/resources/section/ISection");
-import SIParagraph = require("../../Resources_/adhocracy/sheets/document/IParagraph");
-import SISection = require("../../Resources_/adhocracy/sheets/document/ISection");
-import SIDocument = require("../../Resources_/adhocracy/sheets/document/IDocument");
-import SIVersionable = require("../../Resources_/adhocracy/sheets/versions/IVersionable");
+import RIParagraph = require("../../Resources_/adhocracy_core/resources/sample_paragraph/IParagraph");
+import RIParagraphVersion = require("../../Resources_/adhocracy_core/resources/sample_paragraph/IParagraphVersion");
+import RIProposal = require("../../Resources_/adhocracy_core/resources/sample_proposal/IProposal");
+import RIProposalVersion = require("../../Resources_/adhocracy_core/resources/sample_proposal/IProposalVersion");
+import RISectionVersion = require("../../Resources_/adhocracy_core/resources/sample_section/ISectionVersion");
+import RISection = require("../../Resources_/adhocracy_core/resources/sample_section/ISection");
+import SIParagraph = require("../../Resources_/adhocracy_core/sheets/document/IParagraph");
+import SISection = require("../../Resources_/adhocracy_core/sheets/document/ISection");
+import SIDocument = require("../../Resources_/adhocracy_core/sheets/document/IDocument");
+import SIVersionable = require("../../Resources_/adhocracy_core/sheets/versions/IVersionable");
 
 var pkgLocation = "/Proposal";
 
@@ -58,7 +58,7 @@ export class ProposalDetail {
                 var wsHandle;
 
                 var fetchAndUpdateContent = (itemPath : string) : void => {
-                    adhHttp.getNewestVersionPath(itemPath)
+                    adhHttp.getNewestVersionPathNoFork(itemPath)
                         .then((versionPath) => adhHttp.get(versionPath))
                         .then((content) => {
                             $scope.content = content;
@@ -125,7 +125,7 @@ export class ProposalVersionDetail {
                 };
 
                 $scope.commit = () => {
-                    adhHttp.postNewVersion($scope.content.path, $scope.content);
+                    adhHttp.postNewVersionNoFork($scope.content.path, $scope.content);
 
                     $scope.$broadcast("commit");
                     $scope.viewmode = "display";
@@ -171,8 +171,8 @@ export class ProposalVersionNew {
                 $scope.viewmode = "edit";
 
                 $scope.content = new RIProposalVersion({preliminaryNames: adhPreliminaryNames});
-                $scope.content.data["adhocracy.sheets.document.IDocument"] =
-                    new SIDocument.AdhocracySheetsDocumentIDocument({
+                $scope.content.data["adhocracy_core.sheets.document.IDocument"] =
+                    new SIDocument.AdhocracyCoreSheetsDocumentIDocument({
                         title: "",
                         description: "",
                         elements: []
@@ -181,8 +181,8 @@ export class ProposalVersionNew {
 
                 $scope.addParagraphVersion = () => {
                     var pv = new RIParagraphVersion({preliminaryNames: adhPreliminaryNames});
-                    pv.data["adhocracy.sheets.document.IParagraph"] =
-                        new SIParagraph.AdhocracySheetsDocumentIParagraph({
+                    pv.data["adhocracy_core.sheets.document.IParagraph"] =
+                        new SIParagraph.AdhocracyCoreSheetsDocumentIParagraph({
                             content: ""
                         });
                     $scope.paragraphVersions.push(pv);
@@ -214,11 +214,11 @@ export class SectionVersionDetail {
                 viewmode: "="
             },
             controller: ["adhHttp", "$scope", (
-                adhHttp : AdhHttp.Service<Resources.Content<SISection.HasAdhocracySheetsDocumentISection>>,
-                $scope : DetailRefScope<SISection.HasAdhocracySheetsDocumentISection>
+                adhHttp : AdhHttp.Service<Resources.Content<SISection.HasAdhocracyCoreSheetsDocumentISection>>,
+                $scope : DetailRefScope<SISection.HasAdhocracyCoreSheetsDocumentISection>
             ) : void => {
                 var commit = (event, ...args) => {
-                    adhHttp.postNewVersion($scope.content.path, $scope.content);
+                    adhHttp.postNewVersionNoFork($scope.content.path, $scope.content);
                 };
 
                 // keep pristine copy in sync with cache.  FIXME: this should be done in one gulp with postNewVersion
@@ -245,11 +245,11 @@ export class ParagraphVersionDetail {
                 viewmode: "="
             },
             controller: ["adhHttp", "$scope", (
-                adhHttp : AdhHttp.Service<Resources.Content<SIParagraph.HasAdhocracySheetsDocumentIParagraph>>,
-                $scope : DetailRefScope<SIParagraph.HasAdhocracySheetsDocumentIParagraph>
+                adhHttp : AdhHttp.Service<Resources.Content<SIParagraph.HasAdhocracyCoreSheetsDocumentIParagraph>>,
+                $scope : DetailRefScope<SIParagraph.HasAdhocracyCoreSheetsDocumentIParagraph>
             ) : void => {
                 var commit = (event, ...args) => {
-                    adhHttp.postNewVersion($scope.content.path, $scope.content);
+                    adhHttp.postNewVersionNoFork($scope.content.path, $scope.content);
                 };
 
                 // keep pristine copy in sync with cache.  FIXME: this should be done in one gulp with postNewVersion
@@ -301,33 +301,33 @@ export class Service {
 
     private postVersion(path : string, data) : ng.IPromise<any> {
         var _self = this;
-        return _self.adhHttp.getNewestVersionPath(path)
-            .then((versionPath) => _self.adhHttp.postNewVersion(versionPath, data));
+        return _self.adhHttp.getNewestVersionPathNoFork(path)
+            .then((versionPath) => _self.adhHttp.postNewVersionNoFork(versionPath, data));
     }
 
     private postProposalVersion(proposal, data, sections, scope) : ng.IPromise<void> {
         var _self = this;
-        return _self.$q.all(sections.map((section) => _self.adhHttp.getNewestVersionPath(section.path)))
+        return _self.$q.all(sections.map((section) => _self.adhHttp.getNewestVersionPathNoFork(section.path)))
             .then((sectionVersionPaths) => {
                 var _data = Util.deepcp(data);
-                _data.data["adhocracy.sheets.document.IDocument"].elements = sectionVersionPaths;
+                _data.data["adhocracy_core.sheets.document.IDocument"].elements = sectionVersionPaths;
                 return _self.postVersion(proposal.path, _data);
             });
     }
 
     private postSectionVersion(section, data, paragraphs, scope) : ng.IPromise<void> {
         var _self = this;
-        return _self.$q.all(paragraphs.map((paragraph) => _self.adhHttp.getNewestVersionPath(paragraph.path)))
+        return _self.$q.all(paragraphs.map((paragraph) => _self.adhHttp.getNewestVersionPathNoFork(paragraph.path)))
             .then((paragraphVersionPaths) => {
                 var _data = Util.deepcp(data);
-                _data.data["adhocracy.sheets.document.ISection"].elements = paragraphVersionPaths;
+                _data.data["adhocracy_core.sheets.document.ISection"].elements = paragraphVersionPaths;
                 return _self.postVersion(section.path, _data);
             });
     }
 
     private postParagraphVersion(paragraph, data, scope : {proposal : any}) : ng.IPromise<void> {
         var _self = this;
-        return _self.adhHttp.getNewestVersionPath(scope.proposal.path)
+        return _self.adhHttp.getNewestVersionPathNoFork(scope.proposal.path)
             .then((proposalVersionPath) => {
                 var _data = Util.deepcp(data);
                 _data.root_versions = [proposalVersionPath];
@@ -356,14 +356,14 @@ export class Service {
         var _self = this;
 
         var sectionVersion : RISectionVersion = new RISectionVersion({preliminaryNames: _self.adhPreliminaryNames});
-        sectionVersion.data["adhocracy.sheets.document.ISection"] =
-            new SISection.AdhocracySheetsDocumentISection({
+        sectionVersion.data["adhocracy_core.sheets.document.ISection"] =
+            new SISection.AdhocracyCoreSheetsDocumentISection({
                 title : "single section",
                 elements : [],
                 subsections : []
             });
 
-        var name = proposalVersion.data["adhocracy.sheets.document.IDocument"].title;
+        var name = proposalVersion.data["adhocracy_core.sheets.document.IDocument"].title;
         name = Util.normalizeName(name);
 
         var scope : {proposal? : any; section? : any; paragraphs : {}} = {
@@ -400,7 +400,7 @@ export class Service {
             ))
 
             // return the latest proposal Version
-            .then(() => _self.adhHttp.getNewestVersionPath(scope.proposal.path))
+            .then(() => _self.adhHttp.getNewestVersionPathNoFork(scope.proposal.path))
             .then((proposalVersionPath) => _self.adhHttp.get(proposalVersionPath));
     }
 
@@ -412,14 +412,14 @@ export class Service {
         var _self = this;
 
         var sectionVersion : RISectionVersion = new RISectionVersion({preliminaryNames: _self.adhPreliminaryNames});
-        sectionVersion.data["adhocracy.sheets.document.ISection"] =
-            new SISection.AdhocracySheetsDocumentISection({
+        sectionVersion.data["adhocracy_core.sheets.document.ISection"] =
+            new SISection.AdhocracyCoreSheetsDocumentISection({
                 title : "single_section",
                 elements : [],
                 subsections : []
             });
 
-        var name = proposalVersion.data["adhocracy.sheets.document.IDocument"].title;
+        var name = proposalVersion.data["adhocracy_core.sheets.document.IDocument"].title;
         name = Util.normalizeName(name);
 
         // this is the batch-request logic.  it works a bit different
@@ -447,25 +447,25 @@ export class Service {
 
                 // versions
                 var postParagraphVersions = paragraphVersions.map((paragraphVersion, i) => {
-                    paragraphVersion.data["adhocracy.sheets.versions.IVersionable"] =
-                        new SIVersionable.AdhocracySheetsVersionsIVersionable({
+                    paragraphVersion.data["adhocracy_core.sheets.versions.IVersionable"] =
+                        new SIVersionable.AdhocracyCoreSheetsVersionsIVersionable({
                             follows: [postParagraphs[i].first_version_path]
                         });
                     return transaction.post(postParagraphs[i].path, paragraphVersion);
                 });
 
-                sectionVersion.data["adhocracy.sheets.versions.IVersionable"] =
-                    new SIVersionable.AdhocracySheetsVersionsIVersionable({
+                sectionVersion.data["adhocracy_core.sheets.versions.IVersionable"] =
+                    new SIVersionable.AdhocracyCoreSheetsVersionsIVersionable({
                         follows: [postSection.first_version_path]
                     });
-                sectionVersion.data["adhocracy.sheets.document.ISection"].elements = postParagraphVersions.map((p) => p.path);
+                sectionVersion.data["adhocracy_core.sheets.document.ISection"].elements = postParagraphVersions.map((p) => p.path);
                 var postSectionVersion = transaction.post(postSection.path, sectionVersion);
 
-                proposalVersion.data["adhocracy.sheets.versions.IVersionable"] =
-                    new SIVersionable.AdhocracySheetsVersionsIVersionable({
+                proposalVersion.data["adhocracy_core.sheets.versions.IVersionable"] =
+                    new SIVersionable.AdhocracyCoreSheetsVersionsIVersionable({
                         follows: [postProposal.first_version_path]
                     });
-                proposalVersion.data["adhocracy.sheets.document.IDocument"].elements = [postSectionVersion.path];
+                proposalVersion.data["adhocracy_core.sheets.document.IDocument"].elements = [postSectionVersion.path];
                 var postProposalVersion : AdhHttp.ITransactionResult = transaction.post(postProposal.path, proposalVersion);
 
                 return transaction.commit()

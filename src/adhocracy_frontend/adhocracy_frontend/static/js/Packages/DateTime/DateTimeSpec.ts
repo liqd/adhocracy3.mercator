@@ -6,6 +6,7 @@ export var register = () => {
     describe("DateTime", () => {
         describe("createDirective", () => {
             var dtMock;
+            var configMock;
             var momentMock;
             var $intervalMock;
             var scopeMock;
@@ -13,8 +14,10 @@ export var register = () => {
 
             beforeEach(() => {
                 dtMock = jasmine.createSpyObj("dt", ["format", "fromNow"]);
+                configMock = <any>{locale: "de"};
                 momentMock = jasmine.createSpy("moment")
                     .and.returnValue(dtMock);
+                momentMock.locale = jasmine.createSpy("moment.locale");
 
                 $intervalMock = jasmine.createSpy("$interval");
 
@@ -22,7 +25,7 @@ export var register = () => {
                     datetime: "1970-01-01T00:00:00.000Z"
                 };
 
-                directive = AdhDateTime.createDirective(momentMock, $intervalMock);
+                directive = AdhDateTime.createDirective(configMock, momentMock, $intervalMock);
             });
 
             it("uses moment.js to parse the input", () => {
@@ -55,6 +58,11 @@ export var register = () => {
                 expect(dtMock.fromNow.calls.count()).toBe(2);
 
                 expect(delay).toBe(5000);
+            });
+
+            it("sets moment locale", () => {
+                directive.link(scopeMock);
+                expect(momentMock.locale).toHaveBeenCalledWith(configMock.locale);
             });
         });
     });

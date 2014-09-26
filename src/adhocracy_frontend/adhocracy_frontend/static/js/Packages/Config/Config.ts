@@ -13,4 +13,5 @@ export interface Type {
     ws_url : string;
     embedded : boolean;
     trusted_domains : string[];
+    locale : string;
 }

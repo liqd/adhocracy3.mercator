@@ -6,15 +6,15 @@ from pyramid import testing
 
 @fixture
 def integration(config):
-    config.include('adhocracy.events')
-    config.include('adhocracy.sheets.metadata')
+    config.include('adhocracy_core.events')
+    config.include('adhocracy_core.sheets.metadata')
     config.include('adhocracy_sample.sheets.sample_sheets')
 
 
 @mark.usefixtures('integration')
 def test_create_namedummy_sheet(config):
-    from adhocracy.utils import get_sheet
-    from adhocracy.sheets.name import IName
+    from adhocracy_core.utils import get_sheet
+    from adhocracy_core.sheets.name import IName
     from adhocracy_sample.sheets.sample_sheets import DummyNameSheet
     context = testing.DummyResource(__provides__=IName)
     inst = get_sheet(context, IName)
@@ -23,7 +23,7 @@ def test_create_namedummy_sheet(config):
 
 @mark.usefixtures('integration')
 def test_create_extendendname_sheet(config):
-    from adhocracy.utils import get_sheet
+    from adhocracy_core.utils import get_sheet
     from adhocracy_sample.sheets.sample_sheets import IExtendedName
     context = testing.DummyResource(__provides__=IExtendedName)
     inst = get_sheet(context, IExtendedName)

@@ -160,7 +160,7 @@ export var register = () => {
             var config : Config.Type;
 
             beforeEach(() => {
-                config = {
+                config = <any>{
                     pkg_path: "mock",
                     rest_url: "mock",
                     rest_platform_path: "mock",

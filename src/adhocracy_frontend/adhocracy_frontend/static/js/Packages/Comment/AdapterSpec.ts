@@ -18,7 +18,7 @@ export var register = () => {
                 var generateResource = () => {
                     return {
                         data: {
-                            "adhocracy_sample.sheets.comment.ICommentable": {
+                            "adhocracy_core.sheets.comment.ICommentable": {
                                 comments: [
                                     "/asd/version2",
                                     "/asd/version3",
@@ -33,7 +33,7 @@ export var register = () => {
 
                 };
 
-                it("returns only the most recent versions from the adhocracy_sample.sheets.comment.ICommentable sheet", () => {
+                it("returns only the most recent versions from the adhocracy_core.sheets.comment.ICommentable sheet", () => {
                     jasmine.addMatchers(JasmineHelpers.customMatchers);
 
                     var resource = generateResource();
@@ -53,7 +53,7 @@ export var register = () => {
                     var resource = {
                         path: "some/path/parent",
                         data: {
-                            "adhocracy_sample.sheets.comment.ICommentable": {
+                            "adhocracy_core.sheets.comment.ICommentable": {
                                 post_pool: "some/path"
                             }
                         }
@@ -74,16 +74,16 @@ export var register = () => {
 
                 resource = {
                     data: {
-                        "adhocracy_sample.sheets.comment.IComment": {
+                        "adhocracy_core.sheets.comment.IComment": {
                             refers_to: "refersTo",
                             content: "content"
                         },
-                        "adhocracy.sheets.metadata.IMetadata": {
+                        "adhocracy_core.sheets.metadata.IMetadata": {
                             creator: "creator",
                             item_creation_date: "creationDate",
                             modification_date: "modificationDate"
                         },
-                        "adhocracy_sample.sheets.comment.ICommentable": {
+                        "adhocracy_core.sheets.comment.ICommentable": {
                             comments: ["foo/VERSION_0000001", "bar/VERSION_0000001"]
                         }
                     }
@@ -96,17 +96,17 @@ export var register = () => {
                     resource = adapter.create({preliminaryNames: adhPreliminaryNamesMock, follows: "@foo"});
                 });
 
-                it("returns an adhocracy_sample.resources.comment.ICommentVersion resource", () => {
-                    expect(resource.content_type).toBe("adhocracy_sample.resources.comment.ICommentVersion");
+                it("returns an adhocracy_core.resources.comment.ICommentVersion resource", () => {
+                    expect(resource.content_type).toBe("adhocracy_core.resources.comment.ICommentVersion");
                 });
 
-                it("creates an empty adhocracy_sample.sheets.comment.IComment sheet", () => {
-                    expect(resource.data["adhocracy_sample.sheets.comment.IComment"]).toBeDefined();
+                it("creates an empty adhocracy_core.sheets.comment.IComment sheet", () => {
+                    expect(resource.data["adhocracy_core.sheets.comment.IComment"]).toBeDefined();
                 });
 
-                it("creates an adhocracy.sheets.versions.IVersionable sheet with the right follows field", () => {
-                    expect(resource.data["adhocracy.sheets.versions.IVersionable"]).toBeDefined();
-                    expect(resource.data["adhocracy.sheets.versions.IVersionable"].follows).toBe("@foo");
+                it("creates an adhocracy_core.sheets.versions.IVersionable sheet with the right follows field", () => {
+                    expect(resource.data["adhocracy_core.sheets.versions.IVersionable"]).toBeDefined();
+                    expect(resource.data["adhocracy_core.sheets.versions.IVersionable"].follows).toBe("@foo");
                 });
             });
 
@@ -115,8 +115,8 @@ export var register = () => {
                     resource = adapter.createItem({preliminaryNames: adhPreliminaryNamesMock});
                 });
 
-                it("returns an adhocracy_sample.resources.comment.IComment resource", () => {
-                    expect(resource.content_type).toBe("adhocracy_sample.resources.comment.IComment");
+                it("returns an adhocracy_core.resources.comment.IComment resource", () => {
+                    expect(resource.content_type).toBe("adhocracy_core.resources.comment.IComment");
                 });
             });
 
@@ -148,62 +148,62 @@ export var register = () => {
                 });
 
                 it("creates a follos entry referencing the old version", () => {
-                    expect(resource.data["adhocracy.sheets.versions.IVersionable"].follows).toEqual(["/old/path"]);
+                    expect(resource.data["adhocracy_core.sheets.versions.IVersionable"].follows).toEqual(["/old/path"]);
                 });
             });
 
             describe("content", () => {
-                it("gets content from adhocracy_sample.sheets.comment.IComment", () => {
+                it("gets content from adhocracy_core.sheets.comment.IComment", () => {
                     expect(adapter.content(resource)).toBe("content");
                 });
-                it("sets content from adhocracy_sample.sheets.comment.IComment", () => {
+                it("sets content from adhocracy_core.sheets.comment.IComment", () => {
                     adapter.content(resource, "content2");
-                    expect(resource.data["adhocracy_sample.sheets.comment.IComment"].content).toBe("content2");
+                    expect(resource.data["adhocracy_core.sheets.comment.IComment"].content).toBe("content2");
                 });
                 it("returns resource when used as a setter", () => {
                     var result = adapter.content(resource, "content2");
-                    expect(result.data["adhocracy_sample.sheets.comment.IComment"].content).toBe("content2");
+                    expect(result.data["adhocracy_core.sheets.comment.IComment"].content).toBe("content2");
                 });
             });
 
             describe("refersTo", () => {
-                it("gets refers_to from adhocracy_sample.sheets.comment.IComment", () => {
+                it("gets refers_to from adhocracy_core.sheets.comment.IComment", () => {
                     expect(adapter.refersTo(resource)).toBe("refersTo");
                 });
-                it("sets refers_to from adhocracy_sample.sheets.comment.IComment", () => {
+                it("sets refers_to from adhocracy_core.sheets.comment.IComment", () => {
                     adapter.refersTo(resource, "refersTo2");
-                    expect(resource.data["adhocracy_sample.sheets.comment.IComment"].refers_to).toBe("refersTo2");
+                    expect(resource.data["adhocracy_core.sheets.comment.IComment"].refers_to).toBe("refersTo2");
                 });
                 it("returns resource when used as a setter", () => {
                     var result = adapter.refersTo(resource, "refersTo2");
-                    expect(result.data["adhocracy_sample.sheets.comment.IComment"].refers_to).toBe("refersTo2");
+                    expect(result.data["adhocracy_core.sheets.comment.IComment"].refers_to).toBe("refersTo2");
                 });
             });
 
             describe("creator", () => {
-                it("gets creator from adhocracy.sheets.metadata.IMetadata", () => {
+                it("gets creator from adhocracy_core.sheets.metadata.IMetadata", () => {
                     expect(adapter.creator(resource)).toBe("creator");
                 });
             });
 
             describe("creationDate", () => {
-                it("gets creationDate from adhocracy.sheets.metadata.IMetadata", () => {
+                it("gets creationDate from adhocracy_core.sheets.metadata.IMetadata", () => {
                     expect(adapter.creationDate(resource)).toBe("creationDate");
                 });
             });
 
             describe("modificationDate", () => {
-                it("gets modificationDate from adhocracy.sheets.metadata.IMetadata", () => {
+                it("gets modificationDate from adhocracy_core.sheets.metadata.IMetadata", () => {
                     expect(adapter.modificationDate(resource)).toBe("modificationDate");
                 });
             });
 
             describe("commentCount", () => {
-                it("gets commentCount from adhocracy_sample.sheets.comment.ICommentable", () => {
+                it("gets commentCount from adhocracy_core.sheets.comment.ICommentable", () => {
                     expect(adapter.commentCount(resource)).toBe(2);
                 });
                 it("does not count multiple versions of the same item", () => {
-                    resource.data["adhocracy_sample.sheets.comment.ICommentable"].comments = [
+                    resource.data["adhocracy_core.sheets.comment.ICommentable"].comments = [
                         "foo/VERSION_0000001",
                         "foo/VERSION_0000002"
                     ];

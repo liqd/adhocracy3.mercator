@@ -21,8 +21,23 @@ def pytest_runtest_setup(item):
         skip('You need to enable embed test with --run_embed_tests')
 
 
+@fixture(scope='class')
+def app(zeo, settings, websocket):
+    """Return the adhocracy wsgi application.
+
+    This overrides adhocracy_core.testing.app.
+    """
+    from pyramid.config import Configurator
+    import adhocracy
+    configurator = Configurator(settings=settings,
+                                root_factory=adhocracy.root_factory)
+    configurator.include(adhocracy)
+    app = configurator.make_wsgi_app()
+    return app
+
+
 @fixture
-def browser(browser, frontend, backend_sample, frontend_url) -> Browser:
+def browser(browser, frontend, backend, frontend_url) -> Browser:
     """Return test browser, start sample application and go to `root.html`.
 
     Add attribute `root_url` pointing to the adhocracy root.html page.
