@@ -309,7 +309,7 @@ export class Service {
         var _self = this;
         return _self.$q.all(sections.map((section) => _self.adhHttp.getNewestVersionPathNoFork(section.path)))
             .then((sectionVersionPaths) => {
-                var _data = Util.deepcp(data);
+                var _data = _.cloneDeep(data);
                 _data.data["adhocracy.sheets.document.IDocument"].elements = sectionVersionPaths;
                 return _self.postVersion(proposal.path, _data);
             });
@@ -319,7 +319,7 @@ export class Service {
         var _self = this;
         return _self.$q.all(paragraphs.map((paragraph) => _self.adhHttp.getNewestVersionPathNoFork(paragraph.path)))
             .then((paragraphVersionPaths) => {
-                var _data = Util.deepcp(data);
+                var _data = _.cloneDeep(data);
                 _data.data["adhocracy.sheets.document.ISection"].elements = paragraphVersionPaths;
                 return _self.postVersion(section.path, _data);
             });
@@ -329,7 +329,7 @@ export class Service {
         var _self = this;
         return _self.adhHttp.getNewestVersionPathNoFork(scope.proposal.path)
             .then((proposalVersionPath) => {
-                var _data = Util.deepcp(data);
+                var _data = _.cloneDeep(data);
                 _data.root_versions = [proposalVersionPath];
                 return _self.postVersion(paragraph.path, _data);
             });

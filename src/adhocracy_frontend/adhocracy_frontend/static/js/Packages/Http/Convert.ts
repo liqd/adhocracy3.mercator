@@ -1,6 +1,5 @@
 import _ = require("lodash");
 
-import Util = require("../Util/Util");
 import MetaApi = require("../MetaApi/MetaApi");
 import PreliminaryNames = require("../PreliminaryNames/PreliminaryNames");
 import Resources = require("../../Resources");
@@ -160,7 +159,7 @@ export var importBatchContent = <Content extends Resources.Content<any>>(
 export var exportContent = <Content extends Resources.Content<any>>(adhMetaApi : MetaApi.MetaApiQuery, obj : Content) : Content => {
     "use strict";
 
-    var newobj : Content = Util.deepcp(obj);
+    var newobj : Content = _.cloneDeep(obj);
 
     // remove some fields from newobj.data[*] and empty sheets from
     // newobj.data.

@@ -1,5 +1,7 @@
 /// <reference path="../../../lib/DefinitelyTyped/angularjs/angular.d.ts"/>
 
+import _ = require("lodash");
+
 /**
  * cut ranges out of an array - original by John Resig (MIT Licensed)
  */
@@ -21,125 +23,6 @@ export function cutArray(a : any[], from : number, to ?: number) : any[] {
 export function isArrayMember(member : any, array : any[]) : boolean {
     "use strict";
     return array.indexOf(member) > -1;
-}
-
-
-/**
- * FIXME: replace with _.cloneDeep and remove.
- *
- * Do a deep copy on any javascript object.  The resuling object does
- * not share sub-structures as the original.  (I think instances of
- * classes other than Object, Array are not treated properly either.)
- *
- * A competing (and possibly more sophisticated) implementation is
- * available as `cloneDeep` in <a href="http://lodash.com/">lo-dash</a>
- */
-export function deepcp(i) {
-    "use strict";
-
-    // base types
-    if (i === null || ["number", "boolean", "string"].indexOf(typeof(i)) > -1) {
-        return i;
-    }
-
-    if (typeof i === "undefined") {
-        return undefined;
-    }
-
-    // structured types
-    var o;
-    switch (Object.prototype.toString.call(i)) {
-        case "[object Object]":
-            o = new Object();
-            break;
-        case "[object Array]":
-            o = new Array();
-            break;
-        default:
-            throw "deepcp: unsupported object type!";
-    }
-
-    for (var x in i) {
-        if (i.hasOwnProperty(x)) {
-            o[x] = deepcp(i[x]);
-        }
-    }
-
-    return o;
-}
-
-
-/**
- * Do a deep copy of a javascript source object into a target object.
- * References to the target object are not severed; rather, all fields
- * in the target object are deleted, and all fields in the source
- * object are copied using deepcp().  Since this function only makes
- * sense on objects, and not on other types, it crashes if either
- * argument is not an object.
- */
-export function deepoverwrite(source, target) {
-    "use strict";
-
-    if (Object.prototype.toString.call(source) !== "[object Object]") {
-        throw "Util.deepoverwrite: source object " + source + " not of type 'object'!";
-    }
-    if (Object.prototype.toString.call(target) !== "[object Object]") {
-        throw "Util.deepoverwrite: target object " + target + " not of type 'object'!";
-    }
-
-    var k;
-    for (k in target) {
-        if (target.hasOwnProperty(k)) {
-            delete target[k];
-        }
-    }
-    for (k in source) {
-        if (source.hasOwnProperty(k)) {
-            target[k] = deepcp(source[k]);
-        }
-    }
-}
-
-
-/**
- * Compare two objects, and return a boolen that states whether they
- * are equal.  (This is likely to be an approximation, but it should
- * work at least for json objects.)
- */
-export function deepeq(a : any, b : any) : boolean {
-    "use strict";
-
-    if (Object.prototype.toString.call(a) !== Object.prototype.toString.call(b)) {
-        return false;
-    }
-
-    if (typeof(a) === "object") {
-        if (a === null) {
-            return (b === null);
-        }
-
-        for (var x in a) {
-            if (a.hasOwnProperty(x)) {
-                if (!(x in b)) {
-                    return false;
-                }
-                if (!deepeq(a[x], b[x])) {
-                    return false;
-                }
-            }
-        }
-
-        for (var y in b) {
-            if (b.hasOwnProperty(y)) {
-                if (!(y in a)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    } else {
-        return a === b;
-    }
 }
 
 
@@ -240,7 +123,7 @@ export function latestVersionsOnly(refs : string[]) : string[] {
     var latestVersions : string[] = [];
     var lastCommentPath : string = undefined;
 
-    deepcp(refs).sort().reverse().forEach((versionPath : string) => {
+    _.cloneDeep(refs).sort().reverse().forEach((versionPath : string) => {
         var commentPath = parentPath(versionPath);
         if (commentPath !== lastCommentPath) {
             latestVersions.push(versionPath);

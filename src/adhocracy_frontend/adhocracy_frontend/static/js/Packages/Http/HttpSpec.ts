@@ -2,7 +2,6 @@
 
 import q = require("q");
 
-import Util = require("../Util/Util");
 import AdhHttp = require("./Http");
 import Error = require("./Error");
 import AdhConvert = require("./Convert");
@@ -491,7 +490,7 @@ export var register = () => {
             it("deletes read-only properties", () => {
                 var x = AdhConvert.exportContent(adhMetaApiMock, adhMetaApiMock.objBefore);
                 var y = adhMetaApiMock.objAfter;
-                expect(Util.deepeq(x, y)).toBe(true);
+                expect(x).toEqual(y);  // (yes, this appears to do deep comparison of the entire structure.)
                 expect(adhMetaApiMock.field).toHaveBeenCalled();
             });
         });
