@@ -8,3 +8,4 @@ API
    login
    rest_api
    websockets
+   frontend-state
