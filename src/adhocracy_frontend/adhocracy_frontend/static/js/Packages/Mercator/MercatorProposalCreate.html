@@ -28,19 +28,270 @@
         <input type="text" data-ng-model="data.basic.organisation.address" name="basic-organisation-address" placeholder="{{ 'Address' | translate }}" required="required" />
         <input type="text" data-ng-model="data.basic.organisation.postcode" name="basic-organisation-postcode" placeholder="{{ 'Postcode' | translate }}" required="required" />
         <input type="text" data-ng-model="data.basic.organisation.city" name="basic-organisation-city" placeholder="{{ 'City' | translate }}" required="required" />
-        <input type="text" data-ng-model="data.basic.organisation.country" name="basic-organisation-country" placeholder="{{ 'Country' | translate }}" required="required" />
+        <select data-ng-model="data.basic.organisation.country" name="basic-organisation-country" required="required">
+            <option selected="selected">{{ "Country" | translate }}</option>
+            <option value="AF">{{ "Afghanistan" | translate }}</option>
+            <option value="AX">{{ "Åland Islands" | translate }}</option>
+            <option value="AL">{{ "Albania" | translate }}</option>
+            <option value="DZ">{{ "Algeria" | translate }}</option>
+            <option value="AS">{{ "American Samoa" | translate }}</option>
+            <option value="AD">{{ "Andorra" | translate }}</option>
+            <option value="AO">{{ "Angola" | translate }}</option>
+            <option value="AI">{{ "Anguilla" | translate }}</option>
+            <option value="AQ">{{ "Antarctica" | translate }}</option>
+            <option value="AG">{{ "Antigua and Barbuda" | translate }}</option>
+            <option value="AR">{{ "Argentina" | translate }}</option>
+            <option value="AM">{{ "Armenia" | translate }}</option>
+            <option value="AW">{{ "Aruba" | translate }}</option>
+            <option value="AU">{{ "Australia" | translate }}</option>
+            <option value="AT">{{ "Austria" | translate }}</option>
+            <option value="AZ">{{ "Azerbaijan" | translate }}</option>
+            <option value="BS">{{ "Bahamas" | translate }}</option>
+            <option value="BH">{{ "Bahrain" | translate }}</option>
+            <option value="BD">{{ "Bangladesh" | translate }}</option>
+            <option value="BB">{{ "Barbados" | translate }}</option>
+            <option value="BY">{{ "Belarus" | translate }}</option>
+            <option value="BE">{{ "Belgium" | translate }}</option>
+            <option value="BZ">{{ "Belize" | translate }}</option>
+            <option value="BJ">{{ "Benin" | translate }}</option>
+            <option value="BM">{{ "Bermuda" | translate }}</option>
+            <option value="BT">{{ "Bhutan" | translate }}</option>
+            <option value="BO">{{ "Bolivia, Plurinational State of" | translate }}</option>
+            <option value="BQ">{{ "Bonaire, Sint Eustatius and Saba" | translate }}</option>
+            <option value="BA">{{ "Bosnia and Herzegovina" | translate }}</option>
+            <option value="BW">{{ "Botswana" | translate }}</option>
+            <option value="BV">{{ "Bouvet Island" | translate }}</option>
+            <option value="BR">{{ "Brazil" | translate }}</option>
+            <option value="IO">{{ "British Indian Ocean Territory" | translate }}</option>
+            <option value="BN">{{ "Brunei Darussalam" | translate }}</option>
+            <option value="BG">{{ "Bulgaria" | translate }}</option>
+            <option value="BF">{{ "Burkina Faso" | translate }}</option>
+            <option value="BI">{{ "Burundi" | translate }}</option>
+            <option value="KH">{{ "Cambodia" | translate }}</option>
+            <option value="CM">{{ "Cameroon" | translate }}</option>
+            <option value="CA">{{ "Canada" | translate }}</option>
+            <option value="CV">{{ "Cape Verde" | translate }}</option>
+            <option value="KY">{{ "Cayman Islands" | translate }}</option>
+            <option value="CF">{{ "Central African Republic" | translate }}</option>
+            <option value="TD">{{ "Chad" | translate }}</option>
+            <option value="CL">{{ "Chile" | translate }}</option>
+            <option value="CN">{{ "China" | translate }}</option>
+            <option value="CX">{{ "Christmas Island" | translate }}</option>
+            <option value="CC">{{ "Cocos (Keeling) Islands" | translate }}</option>
+            <option value="CO">{{ "Colombia" | translate }}</option>
+            <option value="KM">{{ "Comoros" | translate }}</option>
+            <option value="CG">{{ "Congo" | translate }}</option>
+            <option value="CD">{{ "Congo, the Democratic Republic of the" | translate }}</option>
+            <option value="CK">{{ "Cook Islands" | translate }}</option>
+            <option value="CR">{{ "Costa Rica" | translate }}</option>
+            <option value="CI">{{ "Côte d'Ivoire" | translate }}</option>
+            <option value="HR">{{ "Croatia" | translate }}</option>
+            <option value="CU">{{ "Cuba" | translate }}</option>
+            <option value="CW">{{ "Curaçao" | translate }}</option>
+            <option value="CY">{{ "Cyprus" | translate }}</option>
+            <option value="CZ">{{ "Czech Republic" | translate }}</option>
+            <option value="DK">{{ "Denmark" | translate }}</option>
+            <option value="DJ">{{ "Djibouti" | translate }}</option>
+            <option value="DM">{{ "Dominica" | translate }}</option>
+            <option value="DO">{{ "Dominican Republic" | translate }}</option>
+            <option value="EC">{{ "Ecuador" | translate }}</option>
+            <option value="EG">{{ "Egypt" | translate }}</option>
+            <option value="SV">{{ "El Salvador" | translate }}</option>
+            <option value="GQ">{{ "Equatorial Guinea" | translate }}</option>
+            <option value="ER">{{ "Eritrea" | translate }}</option>
+            <option value="EE">{{ "Estonia" | translate }}</option>
+            <option value="ET">{{ "Ethiopia" | translate }}</option>
+            <option value="FK">{{ "Falkland Islands (Malvinas)" | translate }}</option>
+            <option value="FO">{{ "Faroe Islands" | translate }}</option>
+            <option value="FJ">{{ "Fiji" | translate }}</option>
+            <option value="FI">{{ "Finland" | translate }}</option>
+            <option value="FR">{{ "France" | translate }}</option>
+            <option value="GF">{{ "French Guiana" | translate }}</option>
+            <option value="PF">{{ "French Polynesia" | translate }}</option>
+            <option value="TF">{{ "French Southern Territories" | translate }}</option>
+            <option value="GA">{{ "Gabon" | translate }}</option>
+            <option value="GM">{{ "Gambia" | translate }}</option>
+            <option value="GE">{{ "Georgia" | translate }}</option>
+            <option value="DE">{{ "Germany" | translate }}</option>
+            <option value="GH">{{ "Ghana" | translate }}</option>
+            <option value="GI">{{ "Gibraltar" | translate }}</option>
+            <option value="GR">{{ "Greece" | translate }}</option>
+            <option value="GL">{{ "Greenland" | translate }}</option>
+            <option value="GD">{{ "Grenada" | translate }}</option>
+            <option value="GP">{{ "Guadeloupe" | translate }}</option>
+            <option value="GU">{{ "Guam" | translate }}</option>
+            <option value="GT">{{ "Guatemala" | translate }}</option>
+            <option value="GG">{{ "Guernsey" | translate }}</option>
+            <option value="GN">{{ "Guinea" | translate }}</option>
+            <option value="GW">{{ "Guinea-Bissau" | translate }}</option>
+            <option value="GY">{{ "Guyana" | translate }}</option>
+            <option value="HT">{{ "Haiti" | translate }}</option>
+            <option value="HM">{{ "Heard Island and McDonald Islands" | translate }}</option>
+            <option value="VA">{{ "Holy See (Vatican City State)" | translate }}</option>
+            <option value="HN">{{ "Honduras" | translate }}</option>
+            <option value="HK">{{ "Hong Kong" | translate }}</option>
+            <option value="HU">{{ "Hungary" | translate }}</option>
+            <option value="IS">{{ "Iceland" | translate }}</option>
+            <option value="IN">{{ "India" | translate }}</option>
+            <option value="ID">{{ "Indonesia" | translate }}</option>
+            <option value="IR">{{ "Iran, Islamic Republic of" | translate }}</option>
+            <option value="IQ">{{ "Iraq" | translate }}</option>
+            <option value="IE">{{ "Ireland" | translate }}</option>
+            <option value="IM">{{ "Isle of Man" | translate }}</option>
+            <option value="IL">{{ "Israel" | translate }}</option>
+            <option value="IT">{{ "Italy" | translate }}</option>
+            <option value="JM">{{ "Jamaica" | translate }}</option>
+            <option value="JP">{{ "Japan" | translate }}</option>
+            <option value="JE">{{ "Jersey" | translate }}</option>
+            <option value="JO">{{ "Jordan" | translate }}</option>
+            <option value="KZ">{{ "Kazakhstan" | translate }}</option>
+            <option value="KE">{{ "Kenya" | translate }}</option>
+            <option value="KI">{{ "Kiribati" | translate }}</option>
+            <option value="KP">{{ "Korea, Democratic People's Republic of" | translate }}</option>
+            <option value="KR">{{ "Korea, Republic of" | translate }}</option>
+            <option value="KW">{{ "Kuwait" | translate }}</option>
+            <option value="KG">{{ "Kyrgyzstan" | translate }}</option>
+            <option value="LA">{{ "Lao People's Democratic Republic" | translate }}</option>
+            <option value="LV">{{ "Latvia" | translate }}</option>
+            <option value="LB">{{ "Lebanon" | translate }}</option>
+            <option value="LS">{{ "Lesotho" | translate }}</option>
+            <option value="LR">{{ "Liberia" | translate }}</option>
+            <option value="LY">{{ "Libya" | translate }}</option>
+            <option value="LI">{{ "Liechtenstein" | translate }}</option>
+            <option value="LT">{{ "Lithuania" | translate }}</option>
+            <option value="LU">{{ "Luxembourg" | translate }}</option>
+            <option value="MO">{{ "Macao" | translate }}</option>
+            <option value="MK">{{ "Macedonia, the former Yugoslav Republic of" | translate }}</option>
+            <option value="MG">{{ "Madagascar" | translate }}</option>
+            <option value="MW">{{ "Malawi" | translate }}</option>
+            <option value="MY">{{ "Malaysia" | translate }}</option>
+            <option value="MV">{{ "Maldives" | translate }}</option>
+            <option value="ML">{{ "Mali" | translate }}</option>
+            <option value="MT">{{ "Malta" | translate }}</option>
+            <option value="MH">{{ "Marshall Islands" | translate }}</option>
+            <option value="MQ">{{ "Martinique" | translate }}</option>
+            <option value="MR">{{ "Mauritania" | translate }}</option>
+            <option value="MU">{{ "Mauritius" | translate }}</option>
+            <option value="YT">{{ "Mayotte" | translate }}</option>
+            <option value="MX">{{ "Mexico" | translate }}</option>
+            <option value="FM">{{ "Micronesia, Federated States of" | translate }}</option>
+            <option value="MD">{{ "Moldova, Republic of" | translate }}</option>
+            <option value="MC">{{ "Monaco" | translate }}</option>
+            <option value="MN">{{ "Mongolia" | translate }}</option>
+            <option value="ME">{{ "Montenegro" | translate }}</option>
+            <option value="MS">{{ "Montserrat" | translate }}</option>
+            <option value="MA">{{ "Morocco" | translate }}</option>
+            <option value="MZ">{{ "Mozambique" | translate }}</option>
+            <option value="MM">{{ "Myanmar" | translate }}</option>
+            <option value="NA">{{ "Namibia" | translate }}</option>
+            <option value="NR">{{ "Nauru" | translate }}</option>
+            <option value="NP">{{ "Nepal" | translate }}</option>
+            <option value="NL">{{ "Netherlands" | translate }}</option>
+            <option value="NC">{{ "New Caledonia" | translate }}</option>
+            <option value="NZ">{{ "New Zealand" | translate }}</option>
+            <option value="NI">{{ "Nicaragua" | translate }}</option>
+            <option value="NE">{{ "Niger" | translate }}</option>
+            <option value="NG">{{ "Nigeria" | translate }}</option>
+            <option value="NU">{{ "Niue" | translate }}</option>
+            <option value="NF">{{ "Norfolk Island" | translate }}</option>
+            <option value="MP">{{ "Northern Mariana Islands" | translate }}</option>
+            <option value="NO">{{ "Norway" | translate }}</option>
+            <option value="OM">{{ "Oman" | translate }}</option>
+            <option value="PK">{{ "Pakistan" | translate }}</option>
+            <option value="PW">{{ "Palau" | translate }}</option>
+            <option value="PS">{{ "Palestinian Territory, Occupied" | translate }}</option>
+            <option value="PA">{{ "Panama" | translate }}</option>
+            <option value="PG">{{ "Papua New Guinea" | translate }}</option>
+            <option value="PY">{{ "Paraguay" | translate }}</option>
+            <option value="PE">{{ "Peru" | translate }}</option>
+            <option value="PH">{{ "Philippines" | translate }}</option>
+            <option value="PN">{{ "Pitcairn" | translate }}</option>
+            <option value="PL">{{ "Poland" | translate }}</option>
+            <option value="PT">{{ "Portugal" | translate }}</option>
+            <option value="PR">{{ "Puerto Rico" | translate }}</option>
+            <option value="QA">{{ "Qatar" | translate }}</option>
+            <option value="RE">{{ "Réunion" | translate }}</option>
+            <option value="RO">{{ "Romania" | translate }}</option>
+            <option value="RU">{{ "Russian Federation" | translate }}</option>
+            <option value="RW">{{ "Rwanda" | translate }}</option>
+            <option value="BL">{{ "Saint Barthélemy" | translate }}</option>
+            <option value="SH">{{ "Saint Helena, Ascension and Tristan da Cunha" | translate }}</option>
+            <option value="KN">{{ "Saint Kitts and Nevis" | translate }}</option>
+            <option value="LC">{{ "Saint Lucia" | translate }}</option>
+            <option value="MF">{{ "Saint Martin (French part)" | translate }}</option>
+            <option value="PM">{{ "Saint Pierre and Miquelon" | translate }}</option>
+            <option value="VC">{{ "Saint Vincent and the Grenadines" | translate }}</option>
+            <option value="WS">{{ "Samoa" | translate }}</option>
+            <option value="SM">{{ "San Marino" | translate }}</option>
+            <option value="ST">{{ "Sao Tome and Principe" | translate }}</option>
+            <option value="SA">{{ "Saudi Arabia" | translate }}</option>
+            <option value="SN">{{ "Senegal" | translate }}</option>
+            <option value="RS">{{ "Serbia" | translate }}</option>
+            <option value="SC">{{ "Seychelles" | translate }}</option>
+            <option value="SL">{{ "Sierra Leone" | translate }}</option>
+            <option value="SG">{{ "Singapore" | translate }}</option>
+            <option value="SX">{{ "Sint Maarten (Dutch part)" | translate }}</option>
+            <option value="SK">{{ "Slovakia" | translate }}</option>
+            <option value="SI">{{ "Slovenia" | translate }}</option>
+            <option value="SB">{{ "Solomon Islands" | translate }}</option>
+            <option value="SO">{{ "Somalia" | translate }}</option>
+            <option value="ZA">{{ "South Africa" | translate }}</option>
+            <option value="GS">{{ "South Georgia and the South Sandwich Islands" | translate }}</option>
+            <option value="SS">{{ "South Sudan" | translate }}</option>
+            <option value="ES">{{ "Spain" | translate }}</option>
+            <option value="LK">{{ "Sri Lanka" | translate }}</option>
+            <option value="SD">{{ "Sudan" | translate }}</option>
+            <option value="SR">{{ "Suriname" | translate }}</option>
+            <option value="SJ">{{ "Svalbard and Jan Mayen" | translate }}</option>
+            <option value="SZ">{{ "Swaziland" | translate }}</option>
+            <option value="SE">{{ "Sweden" | translate }}</option>
+            <option value="CH">{{ "Switzerland" | translate }}</option>
+            <option value="SY">{{ "Syrian Arab Republic" | translate }}</option>
+            <option value="TW">{{ "Taiwan, Province of China" | translate }}</option>
+            <option value="TJ">{{ "Tajikistan" | translate }}</option>
+            <option value="TZ">{{ "Tanzania, United Republic of" | translate }}</option>
+            <option value="TH">{{ "Thailand" | translate }}</option>
+            <option value="TL">{{ "Timor-Leste" | translate }}</option>
+            <option value="TG">{{ "Togo" | translate }}</option>
+            <option value="TK">{{ "Tokelau" | translate }}</option>
+            <option value="TO">{{ "Tonga" | translate }}</option>
+            <option value="TT">{{ "Trinidad and Tobago" | translate }}</option>
+            <option value="TN">{{ "Tunisia" | translate }}</option>
+            <option value="TR">{{ "Turkey" | translate }}</option>
+            <option value="TM">{{ "Turkmenistan" | translate }}</option>
+            <option value="TC">{{ "Turks and Caicos Islands" | translate }}</option>
+            <option value="TV">{{ "Tuvalu" | translate }}</option>
+            <option value="UG">{{ "Uganda" | translate }}</option>
+            <option value="UA">{{ "Ukraine" | translate }}</option>
+            <option value="AE">{{ "United Arab Emirates" | translate }}</option>
+            <option value="GB">{{ "United Kingdom" | translate }}</option>
+            <option value="US">{{ "United States" | translate }}</option>
+            <option value="UM">{{ "United States Minor Outlying Islands" | translate }}</option>
+            <option value="UY">{{ "Uruguay" | translate }}</option>
+            <option value="UZ">{{ "Uzbekistan" | translate }}</option>
+            <option value="VU">{{ "Vanuatu" | translate }}</option>
+            <option value="VE">{{ "Venezuela, Bolivarian Republic of" | translate }}</option>
+            <option value="VN">{{ "Viet Nam" | translate }}</option>
+            <option value="VG">{{ "Virgin Islands, British" | translate }}</option>
+            <option value="VI">{{ "Virgin Islands, U.S." | translate }}</option>
+            <option value="WF">{{ "Wallis and Futuna" | translate }}</option>
+            <option value="EH">{{ "Western Sahara" | translate }}</option>
+            <option value="YE">{{ "Yemen" | translate }}</option>
+            <option value="ZM">{{ "Zambia" | translate }}</option>
+            <option value="ZW">{{ "Zimbabwe" | translate }}</option>
+        </select>
 
         {{ "Status:" | translate }}
         <label>
-            <input type="radio" data-ng-model="data.basic.organisation.status" name="basic-organisation-status" value="non-profit" required="required" />
+            <input type="radio" data-ng-model="data.basic.organisation.status" name="basic-organisation-status" value="registered_nonprofit" required="required" />
             {{ "We’re a registered non-profit, e.g. NGO" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.basic.organisation.status" name="basic-organisation-status" value="possible" required="required" />
+            <input type="radio" data-ng-model="data.basic.organisation.status" name="basic-organisation-status" value="planned_nonprofit" required="required" />
             {{ "A non-profit registration is planned or possible" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.basic.organisation.status" name="basic-organisation-status" value="support-needed" required="required" />
+            <input type="radio" data-ng-model="data.basic.organisation.status" name="basic-organisation-status" value="support_needed" required="required" />
             {{ "I’d like to try, but I’m gonna need some help / Support needed" | translate }}
         </label>
         <label>
@@ -61,8 +312,8 @@
             {{ "About the initiative or organisation:" | translate }}
             <textarea
                 data-msd-elastic=""
-                data-ng-model="data.basic.organisation.about"
-                name="basic-organisation-about"
+                data-ng-model="data.basic.organisation.description"
+                name="basic-organisation-description"
                 maxlength="750"
                 placeholder="750 c. Max."
                 required="required"></textarea>
@@ -73,23 +324,23 @@
 
         {{ "Size of organisation:" | translate }}
         <label>
-            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="0-5" required="required" />
+            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="0+" required="required" />
             {{ "0 - 5" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="5-10" required="required" />
+            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="5+" required="required" />
             {{ "5 - 10" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="10-20" required="required" />
+            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="10+" required="required" />
             {{ "10 - 20" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="20-50" required="required" />
+            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="20+" required="required" />
             {{ "20 - 50" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="gt50" required="required" />
+            <input type="radio" data-ng-model="data.basic.organisation.size" name="basic-organisation-size" value="50+" required="required" />
             {{ "&gt;50" | translate }}
         </label>
 
@@ -158,23 +409,23 @@
         </label>
 
         <label>
-            <input type="radio" data-ng-model="data.detail.location" name="detail-location" value="city" required="required" />
+            <input type="checkbox" data-ng-model="data.detail.location.city" name="detail-location-city" />
             {{ "City" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.detail.location" name="detail-location" value="country" required="required" />
+            <input type="checkbox" data-ng-model="data.detail.location.country" name="detail-location-country" />
             {{ "Country" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.detail.location" name="detail-location" value="town" required="required" />
+            <input type="checkbox" data-ng-model="data.detail.location.town" name="detail-location-town" />
             {{ "Town" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.detail.location" name="detail-location" value="online" required="required" />
+            <input type="checkbox" data-ng-model="data.detail.location.online" name="detail-location-online" />
             {{ "Online" | translate }}
         </label>
         <label>
-            <input type="radio" data-ng-model="data.detail.location" name="detail-location" value="ruhr" required="required" />
+            <input type="checkbox" data-ng-model="data.detail.location.ruhr" name="detail-location-ruhr" />
             {{ "Linkage to the Ruhr area" | translate }}
         </label>
 
@@ -200,8 +451,8 @@
             {{ "What would be a successful outcome of your project or initiative? What is the aim you want to reach?" | translate }}
             <textarea
                 data-msd-elastic=""
-                data-ng-model="data.motivation.success"
-                name="motivation-success"
+                data-ng-model="data.motivation.outcome"
+                name="motivation-outcome"
                 maxlength="800"
                 placeholder="{{ '800 c. Max.' | translate }}"
                 required="required"></textarea>
@@ -214,8 +465,8 @@
             {{ "How do you want to get there?" | translate }}
             <textarea
                 data-msd-elastic=""
-                data-ng-model="data.motivation.plan"
-                name="motivation-plan"
+                data-ng-model="data.motivation.steps"
+                name="motivation-steps"
                 maxlength="800"
                 placeholder="{{ '5 Bullet points or 800 c. Max.' | translate }}"
                 required="required"></textarea>
@@ -228,8 +479,8 @@
             {{ "Why does Europe need your idea?" | translate }}
             <textarea
                 data-msd-elastic=""
-                data-ng-model="data.motivation.relevance"
-                name="motivation-relevance"
+                data-ng-model="data.motivation.value"
+                name="motivation-value"
                 maxlength="800"
                 placeholder="{{ '800 c. Max.' | translate }}"
                 required="required"></textarea>

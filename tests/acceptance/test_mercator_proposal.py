@@ -61,9 +61,9 @@ def fill_all(browser):
     browser.find_by_name('basic-organisation-address').first.fill('address')
     browser.find_by_name('basic-organisation-postcode').first.fill('12345')
     browser.find_by_name('basic-organisation-city').first.fill('city')
-    browser.find_by_name('basic-organisation-country').first.fill('country')
+    browser.select('basic-organisation-country', 'DE')
     browser.find_by_name('basic-organisation-status').first.check()
-    browser.find_by_name('basic-organisation-about').first.fill('about')
+    browser.find_by_name('basic-organisation-description').first.fill('about')
     browser.find_by_name('basic-organisation-size').first.check()
     browser.find_by_name('basic-organisation-cooperation').last.check()
 
@@ -71,12 +71,13 @@ def fill_all(browser):
     browser.find_by_name('introduction-teaser').first.fill('teaser')
 
     browser.find_by_name('detail-description').first.fill('description')
-    browser.find_by_name('detail-location').first.check()
+    browser.find_by_name('detail-location-city').first.check()
+    browser.find_by_name('detail-location-ruhr').first.check()
     browser.find_by_name('detail-story').first.fill('story')
 
-    browser.find_by_name('motivation-success').first.fill('success')
-    browser.find_by_name('motivation-plan').first.fill('plan')
-    browser.find_by_name('motivation-relevance').first.fill('relevance')
+    browser.find_by_name('motivation-outcome').first.fill('success')
+    browser.find_by_name('motivation-steps').first.fill('plan')
+    browser.find_by_name('motivation-value').first.fill('relevance')
     browser.find_by_name('motivation-partners').first.fill('partners')
 
     browser.find_by_name('finance-budget').first.fill(1000)
