@@ -28,7 +28,7 @@
         <input type="text" data-ng-model="data.basic.organisation.address" name="basic-organisation-address" placeholder="{{ 'Address' | translate }}" required="required" />
         <input type="text" data-ng-model="data.basic.organisation.postcode" name="basic-organisation-postcode" placeholder="{{ 'Postcode' | translate }}" required="required" />
         <input type="text" data-ng-model="data.basic.organisation.city" name="basic-organisation-city" placeholder="{{ 'City' | translate }}" required="required" />
-        <select data-ng-model="data.basic.organisation.country" name="basic-organisation-country" required="required">
+        <ui-select data-ng-model="data.basic.organisation.country" name="basic-organisation-country" required="required">
             <option selected="selected">{{ "Country" | translate }}</option>
             <option value="AF">{{ "Afghanistan" | translate }}</option>
             <option value="AX">{{ "Åland Islands" | translate }}</option>
@@ -279,7 +279,7 @@
             <option value="YE">{{ "Yemen" | translate }}</option>
             <option value="ZM">{{ "Zambia" | translate }}</option>
             <option value="ZW">{{ "Zimbabwe" | translate }}</option>
-        </select>
+        </ui-select>
 
         {{ "Status:" | translate }}
         <label>

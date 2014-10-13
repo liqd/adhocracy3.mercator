@@ -18,6 +18,7 @@ require.config({
         angularTranslate: "../lib/angular-translate/angular-translate",
         angularTranslateLoader: "../lib/angular-translate-loader-static-files/angular-translate-loader-static-files",
         angularElastic: "../lib/angular-elastic/elastic",
+        angularUiSelect: "../lib/angular-ui-select/dist/select",
         lodash: "../lib/lodash/dist/lodash",
         q: "../lib/q/q",
         modernizr: "../lib2/modernizr/modernizr-2.8.3.min",
@@ -43,6 +44,9 @@ require.config({
             deps: ["angularTranslate"]
         },
         angularElastic: {
+            deps: ["angular"]
+        },
+        angularUiSelect: {
             deps: ["angular"]
         },
         underscore: {

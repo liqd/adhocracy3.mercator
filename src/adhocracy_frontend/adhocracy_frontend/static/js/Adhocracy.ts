@@ -16,6 +16,7 @@ import angularAnimate = require("angularAnimate");  if (angularAnimate) { return
 import angularTranslate = require("angularTranslate");  if (angularTranslate) { return; };
 import angularTranslateLoader = require("angularTranslateLoader");  if (angularTranslateLoader) { return; };
 import angularElastic = require("angularElastic");  if (angularElastic) { return; };
+import angularUiSelect = require("angularUiSelect");  if (angularUiSelect) { return; };
 
 import modernizr = require("modernizr");
 import moment = require("moment");
@@ -65,7 +66,7 @@ export var init = (config, meta_api) => {
     // FIXME: The functionality to set the locale is not yet done
     config.locale = "de";
 
-    var app = angular.module("adhocracy3SampleFrontend", ["monospaced.elastic", "pascalprecht.translate", "ngRoute", "ngAnimate"]);
+    var app = angular.module("adhocracy3SampleFrontend", ["monospaced.elastic", "pascalprecht.translate", "ngRoute", "ngAnimate", "ui.select"]);
 
     app.config(["$translateProvider", "$routeProvider", "$locationProvider", (
         $translateProvider,

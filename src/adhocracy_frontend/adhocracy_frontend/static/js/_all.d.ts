@@ -13,6 +13,7 @@ declare module "angularAnimate" {}
 declare module "angularTranslate" {}
 declare module "angularTranslateLoader" {}
 declare module "angularElastic" {}
+declare module "angularUiSelect" {}
 
 declare module "modernizr" {
     export var Modernizr : ModernizrStatic;
