@@ -1,8 +1,7 @@
 /// <reference path="../../../lib/DefinitelyTyped/jasmine/jasmine.d.ts"/>
 
 import AdhTopLevelState = require("./TopLevelState");
-
-var DEFAULT_FOCUS : number = 1;
+var state = AdhTopLevelState.ColumnState;
 
 export var register = () => {
 
@@ -10,8 +9,8 @@ export var register = () => {
         describe("Service", () => {
             var adhTopLevelState : AdhTopLevelState.Service;
             var eventHandlerMockClass;
-            var routeParamMock;
             var locationMock;
+            var rootScopeMock;
             var trigger;
             var off;
             var on;
@@ -21,7 +20,7 @@ export var register = () => {
                 off = jasmine.createSpy("off");
                 trigger = jasmine.createSpy("trigger");
                 locationMock = jasmine.createSpyObj("locationMock", ["url", "search"]);
-                routeParamMock = jasmine.createSpyObj("routeParamMock", ["focus"]);
+                rootScopeMock = jasmine.createSpyObj("rootScopeMock", ["$watch"]);
 
                 eventHandlerMockClass = <any>function() {
                     this.on = on;
@@ -29,62 +28,7 @@ export var register = () => {
                     this.trigger = trigger;
                 };
 
-                adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, routeParamMock);
-            });
-
-            describe("sets focus", () => {
-                it("to 0 if focus param is 0", () => {
-                    routeParamMock.focus = 0;
-                    var adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, routeParamMock);
-                    expect(adhTopLevelState.getFocus()).toEqual(0);
-                });
-
-                it("to 1 if focus param is 1", () => {
-                    routeParamMock.focus = 1;
-                    var adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, routeParamMock);
-                    expect(adhTopLevelState.getFocus()).toEqual(1);
-                });
-
-                it("to 2 if focus param is 2", () => {
-                    routeParamMock.focus = 2;
-                    var adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, routeParamMock);
-                    expect(adhTopLevelState.getFocus()).toEqual(2);
-                });
-
-                it("to default focus if focus param is not a number", () => {
-                    routeParamMock.focus = "a";
-                    var adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, routeParamMock);
-                    expect(adhTopLevelState.getFocus()).toEqual(DEFAULT_FOCUS);
-                });
-
-                it("to default focus if focus param is a long string that is not a number", () => {
-                    routeParamMock.focus = new Array(1000).join("a");
-                    var adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, routeParamMock);
-                    expect(adhTopLevelState.getFocus()).toEqual(DEFAULT_FOCUS);
-                });
-
-                it("to default focus if focus param is missing", () => {
-                    var routeParamMock = jasmine.createSpyObj("routeParamMock", [""]);
-                    var adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, routeParamMock);
-                    expect(adhTopLevelState.getFocus()).toEqual(DEFAULT_FOCUS);
-                });
-
-                it("to default focus if focus param is negative int", () => {
-                    routeParamMock.focus = "-1";
-                    var adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, routeParamMock);
-                    expect(adhTopLevelState.getFocus()).toEqual(DEFAULT_FOCUS);
-                });
-            });
-
-            it("dispatches calls to setFocus to eventHandler", () => {
-                adhTopLevelState.setFocus(1);
-                expect(trigger).toHaveBeenCalledWith("setFocus", 1);
-            });
-
-            it("dispatches calls to onSetFocus to eventHandler", () => {
-                var callback = (column) => undefined;
-                adhTopLevelState.onSetFocus(callback);
-                expect(on).toHaveBeenCalledWith("setFocus", callback);
+                adhTopLevelState = new AdhTopLevelState.Service(eventHandlerMockClass, locationMock, rootScopeMock);
             });
 
             it("dispatches calls to setContent2Url to eventHandler", () => {
@@ -153,7 +97,14 @@ export var register = () => {
             var topLevelStateMock;
 
             beforeEach(() => {
-                topLevelStateMock = <any>jasmine.createSpyObj("topLevelStateMock", ["onSetFocus", "onSetContent2Url", "getFocus"]);
+                topLevelStateMock = <any>jasmine.createSpyObj("topLevelStateMock",
+                               ["onSetContent2Url", "getMovingColumns", "onMovingColumns", "movingColumns"]);
+                topLevelStateMock.movingColumns = {
+                    "0": state.HIDE,
+                    "1": state.COLLAPS,
+                    "2": state.SHOW
+                };
+
                 directive = AdhTopLevelState.movingColumns(topLevelStateMock);
             });
 
@@ -169,42 +120,38 @@ export var register = () => {
                     link(scopeMock, elementMock);
                 });
 
-                describe("onSetFocus", () => {
+                describe("onMovingColumns", () => {
                     var callback;
 
                     beforeEach(() => {
-                        callback = topLevelStateMock.onSetFocus.calls.mostRecent().args[0];
+                        callback = topLevelStateMock.onMovingColumns.calls.mostRecent().args[0];
                     });
 
-                    it("adds class 'is-collapsed-show-show' if columns is 2", () => {
-                        callback(2);
+                    it("adds class 'is-collapsed-show-show' if state is collapsed-show-show", () => {
+                        callback({"0": state.COLLAPS, "1": state.SHOW, "2": state.SHOW});
                         expect(elementMock.addClass).toHaveBeenCalledWith("is-collapsed-show-show");
                     });
 
-                    it("removes class 'is-collapsed-show-show' if columns is 1", () => {
-                        callback(1);
+                    it("removes class 'is-collapsed-show-show' if columns is show-show-hide", () => {
+                        callback({"0": state.COLLAPS, "1": state.SHOW, "2": state.SHOW});
+                        callback({"0": state.SHOW, "1": state.SHOW, "2": state.HIDE});
                         expect(elementMock.removeClass).toHaveBeenCalledWith("is-collapsed-show-show");
                     });
 
-                    it("removes class 'is-collapsed-show-show' if columns is 0", () => {
-                        callback(0);
-                        expect(elementMock.removeClass).toHaveBeenCalledWith("is-collapsed-show-show");
+                    it("adds class 'is-show-show-hidden' if state is show-show-hide", () => {
+                        callback({"0": state.SHOW, "1": state.SHOW, "2": state.HIDE});
+                        expect(elementMock.addClass).toHaveBeenCalledWith("is-show-show-hidden");
                     });
 
-                    it("does not add or remove class if columns is negative", () => {
-                        callback(-1);
-                        expect(elementMock.addClass).not.toHaveBeenCalled();
-                        expect(elementMock.removeClass).not.toHaveBeenCalled();
-                    });
-
-                    it("does not add or remove class if columns is greater 2", () => {
-                        callback(3);
-                        expect(elementMock.addClass).not.toHaveBeenCalled();
-                        expect(elementMock.removeClass).not.toHaveBeenCalled();
+                    it("removes class 'is-show-show-hidden' if columns is show-show-hide", () => {
+                        callback({"0": state.SHOW, "1": state.SHOW, "2": state.HIDE});
+                        callback({"0": state.COLLAPS, "1": state.SHOW, "2": state.SHOW});
+                        expect(elementMock.removeClass).toHaveBeenCalledWith("is-show-show-hidden");
                     });
 
 
                 });
+
 
                 describe("onSetContent2Url", () => {
                     var callback;

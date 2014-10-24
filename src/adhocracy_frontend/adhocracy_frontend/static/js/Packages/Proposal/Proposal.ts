@@ -21,6 +21,7 @@ import SISection = require("../../Resources_/adhocracy_core/sheets/document/ISec
 import SIVersionable = require("../../Resources_/adhocracy_core/sheets/versions/IVersionable");
 
 var pkgLocation = "/Proposal";
+var state = AdhTopLevelState.ColumnState;
 
 /**
  * contents of the resource with view mode.
@@ -136,11 +137,15 @@ export class ProposalVersionDetail {
 
                 $scope.showComments = () => {
                     adhTopLevelState.setContent2Url($scope.content.path);
-                    adhTopLevelState.setFocus(2);
+                    adhTopLevelState.setMovingColumn("0", state.COLLAPS);
+                    adhTopLevelState.setMovingColumn("1", state.SHOW);
+                    adhTopLevelState.setMovingColumn("2", state.SHOW);
                 };
 
                 $scope.hideComments = () => {
-                    adhTopLevelState.setFocus(1);
+                    adhTopLevelState.setMovingColumn("0", state.COLLAPS);
+                    adhTopLevelState.setMovingColumn("1", state.SHOW);
+                    adhTopLevelState.setMovingColumn("2", state.SHOW);
                 };
             }]
         };

@@ -163,7 +163,7 @@ export var init = (config, meta_api) => {
     app.value("adhEventHandlerClass", AdhEventHandler.EventHandler);
 
     app.service("adhPermissions", ["adhHttp", "adhUser", AdhPermissions.Service]);
-    app.service("adhTopLevelState", ["adhEventHandlerClass", "$location", "$routeParams", AdhTopLevelState.Service]);
+    app.service("adhTopLevelState", ["adhEventHandlerClass", "$location", "$rootScope", AdhTopLevelState.Service]);
     app.directive("adhMovingColumns", ["adhTopLevelState", AdhTopLevelState.movingColumns]);
     app.directive("adhFocusSwitch", ["adhTopLevelState", AdhTopLevelState.adhFocusSwitch]);
 

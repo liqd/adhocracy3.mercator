@@ -17,55 +17,43 @@
 
 import AdhEventHandler = require("../EventHandler/EventHandler");
 
-// FIXME focus should be the first column. Since the first column (column
-// 0) might be removed, column 1 is default focus.
-var DEFAULT_FOCUS : number = 1;
+export class ColumnState {
+    static SHOW : string = "show";
+    static HIDE : string = "hidden";
+    static COLLAPS : string = "collapsed";
+}
 
 export class Service {
     private eventHandler : AdhEventHandler.EventHandler;
-    private focus : number;
+    private movingColumns : {
+        "0" : string;
+        "1" : string;
+        "2" : string;
+    };
 
     constructor(
         adhEventHandlerClass : typeof AdhEventHandler.EventHandler,
         private $location : ng.ILocationService,
-        private $routeParams: ng.route.IRouteParamsService
+        private $rootScope : ng.IScope
     ) {
+        var self = this;
+
         this.eventHandler = new adhEventHandlerClass();
-        this.focus = DEFAULT_FOCUS;
-
-        if (typeof this.$routeParams !== "undefined" &&
-            this.$routeParams.hasOwnProperty("focus")) {
-            var column = parseInt(this.$routeParams["focus"], 10);
-            if (!isNaN(column) && column >= 0) {
-                console.log("parsed focus successfully");
-                this.focus = column;
-            } else {
-                console.log("focus (" + column + ") is not a number");
-            };
-
-        } else {
-            console.log("no focus in routeParams");
+        this.movingColumns = {
+            "0": ColumnState.HIDE,
+            "1": ColumnState.COLLAPS,
+            "2": ColumnState.SHOW
         };
 
-    }
-
-    public getFocus() : number {
-        return this.focus;
-    }
-
-    public setFocus(column : number) : void {
-        console.log("setting focus, url=" + this.$location.url());
-        this.eventHandler.trigger("setFocus", column);
-        this.focus = column;
-        if (this.focus === DEFAULT_FOCUS) {
-            this.$location.search({focus: null});
-        } else {
-            this.$location.search({focus: this.focus});
-        };
-    }
-
-    public onSetFocus(fn : (column : number) => void) : void {
-        this.eventHandler.on("setFocus", fn);
+        this.$rootScope.$watch(() => self.$location.search()["mc0"], (state) => {
+            self.setMovingColumn("0", state);
+        });
+        this.$rootScope.$watch(() => self.$location.search()["mc1"], (state) => {
+            self.setMovingColumn("1", state);
+        });
+        this.$rootScope.$watch(() => self.$location.search()["mc2"], (state) => {
+            self.setMovingColumn("2", state);
+        });
     }
 
     public setContent2Url(url : string) : void {
@@ -108,36 +96,64 @@ export class Service {
             this.$location.url(_default);
         }
     }
-}
 
-var move = (column : number, element : JQuery) => {
-    // This is likely to change in the future.
-    // So do not spend too much time interpreting this.
-    if (column === 0 || column === 1) {
-        element.removeClass("is-collapsed-show-show");
-    } else if (column === 2) {
-        element.addClass("is-collapsed-show-show");
-    } else {
-        console.log("tried to focus illegal column(" + column + ")");
-    };
-};
+    public setMovingColumn(index : string, state : string) : void {
+        var defaultState = "show";
+
+        if (typeof state === "undefined") {
+            state = defaultState;
+        }
+
+        if (state === defaultState) {
+            this.$location.search("mc" + index, undefined);
+        } else {
+            this.$location.search("mc" + index, state);
+        }
+
+        this.movingColumns[index] = state;
+        this.eventHandler.trigger("setMovingColumns", this.movingColumns);
+    }
+
+    public onMovingColumns(fn : (state) => void) : void {
+        this.eventHandler.on("setMovingColumns", fn);
+    }
+
+    public getMovingColumns() {
+        return this.movingColumns;
+    }
+}
 
 export var movingColumns = (
     topLevelState : Service
 ) => {
+    var cls;
+
+    var stateToClass = (state) : string => {
+        return "is-" + state["0"] + "-" + state["1"] + "-" + state["2"];
+    };
 
     return {
         link: (scope, element) => {
+            var move = (state) => {
+                if (typeof state === "undefined") {
+                    return;
+                };
 
-            topLevelState.onSetFocus((column : number) : void => {
-                move(column, element);
-            });
+                var newCls = stateToClass(state);
+
+                if (newCls !== cls) {
+                    element.removeClass(cls);
+                    element.addClass(newCls);
+                    cls = newCls;
+                }
+            };
 
             topLevelState.onSetContent2Url((url : string) => {
                 scope.content2Url = url;
             });
 
-            move(topLevelState.getFocus(), element);
+            topLevelState.onMovingColumns(move);
+            move(topLevelState.getMovingColumns());
         }
     };
 };
@@ -152,8 +168,17 @@ export var adhFocusSwitch = (topLevelState : Service) => {
         template: "<a href=\"\" ng-click=\"switchFocus()\">X</a>",
         link: (scope) => {
             scope.switchFocus = () => {
-                var column = topLevelState.getFocus() === 1 ? 2 : 1;
-                topLevelState.setFocus(column);
+                var currentState = topLevelState.getMovingColumns();
+
+                if (currentState["0"] === ColumnState.SHOW) {
+                    topLevelState.setMovingColumn("0", ColumnState.COLLAPS);
+                    topLevelState.setMovingColumn("1", ColumnState.SHOW);
+                    topLevelState.setMovingColumn("2", ColumnState.SHOW);
+                } else {
+                    topLevelState.setMovingColumn("0", ColumnState.SHOW);
+                    topLevelState.setMovingColumn("1", ColumnState.SHOW);
+                    topLevelState.setMovingColumn("2", ColumnState.HIDE);
+                }
             };
         }
     };
