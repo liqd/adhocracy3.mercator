@@ -9,6 +9,7 @@ from adhocracy_frontend.tests.acceptance.shared import get_listing_create_form
 from adhocracy_frontend.tests.acceptance.shared import login_god
 
 
+@mark.skipif(True, reason='see src/mercator/static/js/Adhocracy.ts near "import AdhDocumentWorkbench"')
 class TestComment:
 
     def test_create(self, browser):

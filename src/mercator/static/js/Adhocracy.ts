@@ -19,6 +19,21 @@ import AdhConfig = require("./Packages/Config/Config");
 import AdhComment = require("./Packages/Comment/Comment");
 import AdhCrossWindowMessaging = require("./Packages/CrossWindowMessaging/CrossWindowMessaging");
 import AdhDateTime = require("./Packages/DateTime/DateTime");
+// import AdhDocumentWorkbench = require("./Packages/DocumentWorkbench/DocumentWorkbench");
+
+// FIXME: mercator replaces DocumentWorkbench with MercatorWorkbench,
+// which makes a lot of the acceptance tests of the core components
+// fail.  SUGGESTED FIX STRATEGY: find a way to test (combinations of)
+// components separately so that tests for the core components will
+// not see the mercator component.  this is the only way i can think
+// of off the top of my head that keeps core component tests from
+// having to anticipate all future customization components and
+// everything they change and overwrite in the core.
+//
+// (In order to run the tests right now, remove the '//' in front of
+// the lines in this file matching /document-?workbench/ and un-skip
+// the respective tests.)
+
 import AdhMercatorWorkbench = require("./Packages/MercatorWorkbench/MercatorWorkbench");
 import AdhDone = require("./Packages/Done/Done");
 import AdhEmbed = require("./Packages/Embed/Embed");
@@ -60,6 +75,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
         "pascalprecht.translate",
         "ngAnimate",
         AdhComment.moduleName,
+//        AdhDocumentWorkbench.moduleName,
         AdhMercatorWorkbench.moduleName,
         AdhDone.moduleName,
         AdhCrossWindowMessaging.moduleName,
@@ -90,6 +106,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
             });
 
         adhResourceAreaProvider.setTemplate(
+//            "<adh-page-wrapper><adh-document-workbench></adh-document-workbench></adh-page-wrapper>"
             "<adh-page-wrapper><adh-mercator-workbench></adh-mercator-workbench></adh-page-wrapper>"
         );
 
@@ -125,6 +142,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     AdhInject.register(angular);
     AdhListing.register(angular);
     AdhMercatorProposal.register(angular);
+//    AdhDocumentWorkbench.register(angular);
     AdhMercatorWorkbench.register(angular);
     AdhPermissions.register(angular);
     AdhPreliminaryNames.register(angular);
