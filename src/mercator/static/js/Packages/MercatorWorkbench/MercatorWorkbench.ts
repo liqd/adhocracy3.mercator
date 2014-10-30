@@ -5,19 +5,19 @@ import AdhConfig = require("../Config/Config");
 import AdhProposal = require("../Proposal/Proposal");
 import AdhUser = require("../User/User");
 
-import RIProposal = require("../../Resources_/adhocracy_core/resources/sample_proposal/IProposal");
+import RIProposal = require("../../Resources_/adhocracy_mercator/resources/mercator/IMercatorProposal");
 
-var pkgLocation = "/DocumentWorkbench";
+var pkgLocation = "/MercatorWorkbench";
 
-interface IDocumentWorkbenchScope extends ng.IScope {
+interface IMercatorWorkbenchScope extends ng.IScope {
     path : string;
     user : AdhUser.Service;
     websocketTestPaths : string;
     contentType : string;
 }
 
-export class DocumentWorkbench {
-    public static templateUrl : string = pkgLocation + "/DocumentWorkbench.html";
+export class MercatorWorkbench {
+    public static templateUrl : string = pkgLocation + "/MercatorWorkbench.html";
 
     public createDirective(adhConfig : AdhConfig.IService) {
         var _self = this;
@@ -28,7 +28,7 @@ export class DocumentWorkbench {
             templateUrl: adhConfig.pkg_path + _class.templateUrl,
             controller: ["adhUser", "$scope", (
                 adhUser : AdhUser.Service,
-                $scope : IDocumentWorkbenchScope
+                $scope : IMercatorWorkbenchScope
             ) : void => {
                 $scope.path = adhConfig.rest_url + adhConfig.rest_platform_path;
                 $scope.contentType = RIProposal.content_type;
@@ -40,7 +40,7 @@ export class DocumentWorkbench {
 }
 
 
-export var moduleName = "adhDocumentWorkbench";
+export var moduleName = "adhMercatorWorkbench";
 
 export var register = (angular) => {
     angular
@@ -49,6 +49,6 @@ export var register = (angular) => {
             AdhProposal.moduleName,
             AdhUser.moduleName
         ])
-        .directive("adhDocumentWorkbench", ["adhConfig", (adhConfig) =>
-            new DocumentWorkbench().createDirective(adhConfig)]);
+        .directive("adhMercatorWorkbench", ["adhConfig", (adhConfig) =>
+            new MercatorWorkbench().createDirective(adhConfig)]);
 };

@@ -13,6 +13,7 @@ export interface Dict {
 export class Provider implements ng.IServiceProvider {
     public $get;
     private data : {[resourceType : string]: Dict};
+    private template : string;
 
     constructor() {
         var self = this;
@@ -28,17 +29,30 @@ export class Provider implements ng.IServiceProvider {
     public get(resourceType : string) : Dict {
         return _.clone(this.data[resourceType]);
     }
+
+    public getTemplate() : string {
+        return this.template;
+    }
+
+    public setTemplate(template : string) : void {
+        this.template = template;
+    }
 }
 
 
 export class Service implements AdhTopLevelState.IAreaInput {
-    public template : string = "<adh-page-wrapper><adh-document-workbench></adh-document-workbench></adh-page-wrapper>";
+    public template : string;
 
     constructor(
         private provider : Provider,
         private adhHttp : AdhHttp.Service<any>,
         private adhConfig : AdhConfig.IService
-    ) {}
+    ) {
+        this.template = this.provider.getTemplate();
+        if (typeof this.template === "undefined") {
+            throw "please set a template for ResourceArea.";
+        }
+    }
 
     public route(path : string, search : Dict) : ng.IPromise<Dict> {
         var self : Service = this;

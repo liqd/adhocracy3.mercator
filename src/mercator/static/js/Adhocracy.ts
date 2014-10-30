@@ -19,7 +19,7 @@ import AdhConfig = require("./Packages/Config/Config");
 import AdhComment = require("./Packages/Comment/Comment");
 import AdhCrossWindowMessaging = require("./Packages/CrossWindowMessaging/CrossWindowMessaging");
 import AdhDateTime = require("./Packages/DateTime/DateTime");
-import AdhDocumentWorkbench = require("./Packages/DocumentWorkbench/DocumentWorkbench");
+import AdhMercatorWorkbench = require("./Packages/MercatorWorkbench/MercatorWorkbench");
 import AdhDone = require("./Packages/Done/Done");
 import AdhEmbed = require("./Packages/Embed/Embed");
 import AdhEventHandler = require("./Packages/EventHandler/EventHandler");
@@ -60,7 +60,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
         "pascalprecht.translate",
         "ngAnimate",
         AdhComment.moduleName,
-        AdhDocumentWorkbench.moduleName,
+        AdhMercatorWorkbench.moduleName,
         AdhDone.moduleName,
         AdhCrossWindowMessaging.moduleName,
         AdhEmbed.moduleName,
@@ -69,8 +69,9 @@ export var init = (config : AdhConfig.IService, meta_api) => {
         AdhProposal.moduleName
     ]);
 
-    app.config(["adhTopLevelStateProvider", "$translateProvider", "$locationProvider", (
+    app.config(["adhTopLevelStateProvider", "adhResourceAreaProvider", "$translateProvider", "$locationProvider", (
         adhTopLevelStateProvider : AdhTopLevelState.Provider,
+        adhResourceAreaProvider : AdhResourceArea.Provider,
         $translateProvider,
         $locationProvider
     ) => {
@@ -87,6 +88,10 @@ export var init = (config : AdhConfig.IService, meta_api) => {
                     template: "<adh-page-wrapper><h1>404 - Not Found</h1></adh-page-wrapper>"
                 };
             });
+
+        adhResourceAreaProvider.setTemplate(
+            "<adh-page-wrapper><adh-mercator-workbench></adh-mercator-workbench></adh-page-wrapper>"
+        );
 
         // Make sure HTML5 history API works.  (If support for older
         // browsers is required, we may have to study angular support
@@ -113,7 +118,6 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     AdhComment.register(angular);
     AdhCrossWindowMessaging.register(angular, config.trusted_domains === []);
     AdhDateTime.register(angular);
-    AdhDocumentWorkbench.register(angular);
     AdhDone.register(angular);
     AdhEmbed.register(angular);
     AdhEventHandler.register(angular);
@@ -121,6 +125,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     AdhInject.register(angular);
     AdhListing.register(angular);
     AdhMercatorProposal.register(angular);
+    AdhMercatorWorkbench.register(angular);
     AdhPermissions.register(angular);
     AdhPreliminaryNames.register(angular);
     AdhProposal.register(angular);
