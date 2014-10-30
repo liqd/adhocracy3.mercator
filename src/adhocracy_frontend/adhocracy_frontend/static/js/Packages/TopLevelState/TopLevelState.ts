@@ -153,8 +153,8 @@ export class Service {
             var areaInput : IAreaInput = this.$injector.invoke(fn);
             var area : IArea = {
                 prefix: prefix,
-                route: typeof areaInput.route !== "undefined" ? areaInput.route : defaultRoute,
-                reverse: typeof areaInput.reverse !== "undefined" ? areaInput.reverse : defaultReverse,
+                route: typeof areaInput.route !== "undefined" ? areaInput.route.bind(areaInput) : defaultRoute,
+                reverse: typeof areaInput.reverse !== "undefined" ? areaInput.reverse.bind(areaInput) : defaultReverse,
                 template: ""
             };
 

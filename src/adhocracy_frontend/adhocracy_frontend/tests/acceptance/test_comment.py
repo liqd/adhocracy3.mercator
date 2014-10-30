@@ -1,6 +1,6 @@
 from pytest import mark
 
-from adhocracy_core.testing import annotator_login
+from adhocracy_core.testing import god_login
 from adhocracy_frontend.tests.acceptance.test_proposal import create_proposal
 from adhocracy_frontend.tests.acceptance.shared import wait
 from adhocracy_frontend.tests.acceptance.shared import get_column_listing
@@ -16,41 +16,34 @@ class TestComment:
         comment = create_comment(browser, 'comment1')
         assert comment is not None
 
-    def test_reply(self, browser):
-        comment = get_column_listing(browser, 'content2').find_by_css('.comment')
-        reply = create_reply_comment(comment, 'somereply')
-        assert reply is not None
-
     def test_edit(self, browser):
-        comment = get_column_listing(browser, 'content2').find_by_css('.comment')
+        comment = get_column_listing(browser, 'content2').find_by_css('.comment').first
         edit_comment(comment, 'edited')
-        assert comment.find_by_css('.comment-content').text == 'edited'
+        assert comment.find_by_css('.comment-content').first.text == 'edited'
 
         browser.reload()
 
-        proposal = browser.find_by_css('.listing-element')
-        show_proposal_comments(proposal)
-        assert len(browser.find_by_css('.comment-content')) == 1
-        assert browser.find_by_css('.comment-content').text == 'edited'
+        assert wait(lambda: browser.find_by_css('.comment-content').first.text == 'edited')
 
+    def test_reply(self, browser):
+        comment = get_column_listing(browser, 'content2').find_by_css('.comment').first
+        reply = create_reply_comment(comment, 'somereply')
+        assert reply is not None
 
-    def _ignored_test_multi_edits(self, browser, comment):
-        # FIXME Test needs to be updated since the backend now throws a
-        # 'No fork allowed' error
-        parent = get_column_listing(browser, 'content2').find_by_css('.comment')
-        reply = create_reply_comment(parent, 'somereply')
+    @mark.skipif(True, reason='FIXME Test needs to be updated since the '
+                              'backend now throws a "No fork allowed" error')
+    def test_multi_edits(self, browser):
+        parent = get_column_listing(browser, 'content2').find_by_css('.comment').first
+        reply = parent.find_by_css('.comment').first
         edit_comment(reply, 'somereply edited')
         edit_comment(parent, 'edited')
         assert parent.find_by_css('.comment-content').first.text == 'edited'
 
-
-    @mark.skipif(True, reason='FIXME: this test passes on a single run, but not'
-                              'together with others')
     def test_author(self, browser):
-        comment = get_column_listing(browser, 'content2').find_by_css('.comment')
+        comment = get_column_listing(browser, 'content2').find_by_css('.comment').first
         actual = lambda element: element.find_by_css("adh-user-meta").first.text
         # the captialisation might be changed by CSS
-        assert wait(lambda: actual(comment).lower() == annotator_login.lower())
+        assert wait(lambda: actual(comment).lower() == god_login.lower())
 
 
 def create_comment(browser, name):

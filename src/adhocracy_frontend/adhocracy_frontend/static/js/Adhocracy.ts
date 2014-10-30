@@ -80,42 +80,6 @@ export var init = (config : AdhConfig.IService, meta_api) => {
                     template: ""
                 };
             }])
-            .when("login", () : AdhTopLevelState.IAreaInput => {
-                return {
-                    templateUrl: "/static/js/templates/Login.html"
-                };
-            })
-            .when("register", () : AdhTopLevelState.IAreaInput => {
-                return {
-                    templateUrl: "/static/js/templates/Register.html"
-                };
-            })
-            .when("activate", ["adhUser", "adhTopLevelState", "adhDone", "$location",
-                (adhUser, adhTopLevelState, adhDone, $location) : AdhTopLevelState.IAreaInput => {
-                    AdhUser.activateController(adhUser, adhTopLevelState, adhDone, $location);
-                    return {
-                        template: ""
-                    };
-                }
-            ])
-            .when("activation_error", ["adhConfig", "$rootScope", (adhConfig, $scope) : AdhTopLevelState.IAreaInput => {
-                $scope.translationData = {
-                    supportEmail: adhConfig.support_email
-                };
-                return {
-                    templateUrl: "/static/js/templates/ActivationError.html"
-                };
-            }])
-            .when("embed", ["$translate", "$location", ($translate, $location : ng.ILocationService) : AdhTopLevelState.IAreaInput => {
-                var params = $location.search();
-                if (params.hasOwnProperty("locale")) {
-                    $translate.use(params.locale);
-                }
-                return {
-                    template: "<adh-embed></adh-embed>"
-                };
-            }])
-            .when("r", ["adhHttp", "adhConfig", AdhResourceArea.resourceArea])
             .otherwise(() : AdhTopLevelState.IAreaInput => {
                 return {
                     template: "<adh-page-wrapper><h1>404 - Not Found</h1></adh-page-wrapper>"

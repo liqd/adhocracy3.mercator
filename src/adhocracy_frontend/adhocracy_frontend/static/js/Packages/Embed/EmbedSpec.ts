@@ -33,16 +33,5 @@ export var register = () => {
                 expect(() => AdhEmbed.location2template($locationMock)).toThrow();
             });
         });
-
-        describe("factory", () => {
-            it("calls $compile", () => {
-                var directive = AdhEmbed.factory($compileMock, $locationMock);
-                directive.link(undefined, {
-                    contents: () => undefined,
-                    html: () => undefined
-                });
-                expect($compileMock).toHaveBeenCalled();
-            });
-        });
     });
 };

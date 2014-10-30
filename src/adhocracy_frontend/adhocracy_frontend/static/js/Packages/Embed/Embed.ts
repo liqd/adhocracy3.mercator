@@ -2,6 +2,7 @@
 
 import _ = require("lodash");
 
+import AdhTopLevelState = require("../TopLevelState/TopLevelState");
 import AdhUtil = require("../Util/Util");
 
 /**
@@ -32,26 +33,28 @@ export var location2template = ($location : ng.ILocationService) => {
     return AdhUtil.formatString("<adh-{0} {1}></adh-{0}>", _.escape(widget), attrs.join(" "));
 };
 
-export var factory = ($compile : ng.ICompileService, $location : ng.ILocationService) => {
-    return {
-        restrict: "E",
-        scope: {},
-        link: (scope, element) => {
-            var template = "<header class=\"l-header main-header\">" +
-                "<adh-user-indicator></adh-user-indicator>" +
-                "</header>";
-            template += location2template($location);
-            element.html(template);
-            $compile(element.contents())(scope);
-        }
-    };
-};
-
 
 export var moduleName = "adhEmbed";
 
 export var register = (angular) => {
     angular
-        .module(moduleName, [])
-        .directive("adhEmbed", ["$compile", "$location", factory]);
+        .module(moduleName, [
+            AdhTopLevelState.moduleName
+        ])
+        .config(["adhTopLevelStateProvider", (adhTopLevelStateProvider : AdhTopLevelState.Provider) => {
+            adhTopLevelStateProvider
+                .when("embed", ["$translate", "$location", ($translate, $location : ng.ILocationService) : AdhTopLevelState.IAreaInput => {
+                    var params = $location.search();
+                    if (params.hasOwnProperty("locale")) {
+                        $translate.use(params.locale);
+                    }
+
+                    return {
+                        template:  "<header class=\"l-header main-header\">" +
+                        "<adh-user-indicator></adh-user-indicator>" +
+                        "</header>" +
+                        location2template($location)
+                    };
+                }]);
+        }]);
 };
