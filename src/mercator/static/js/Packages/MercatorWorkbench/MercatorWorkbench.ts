@@ -2,7 +2,7 @@
 
 import AdhComment = require("../Comment/Comment");
 import AdhConfig = require("../Config/Config");
-import AdhProposal = require("../Proposal/Proposal");
+import AdhMercatorProposal = require("../MercatorProposal/MercatorProposal");
 import AdhUser = require("../User/User");
 
 import RIProposal = require("../../Resources_/adhocracy_mercator/resources/mercator/IMercatorProposal");
@@ -46,7 +46,7 @@ export var register = (angular) => {
     angular
         .module(moduleName, [
             AdhComment.moduleName,
-            AdhProposal.moduleName,
+            AdhMercatorProposal.moduleName,
             AdhUser.moduleName
         ])
         .directive("adhMercatorWorkbench", ["adhConfig", (adhConfig) =>
