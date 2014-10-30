@@ -208,9 +208,6 @@ class OrganizationInfoSchema(colander.MappingSchema):
     """Custom description for status == other."""
     # FIXME status_other must be non-empty if status=other, otherwise it must
     # be empty or null
-    """Custom description for cooperation.
-    Setting this value also means 'cooperation' == True in the frontend form.
-    """
     website = URL()
     planned_date = SingleLine()  # FIXME: use datetime? "month/year"
     help_request = Text(validator=colander.Length(max=500))
