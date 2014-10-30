@@ -1,0 +1,29 @@
+<adh-spaces>
+    <div data-adh-moving-columns="" data-space="content" class="moving-columns" data-ng-class="{'hidden': currentSpace !== 'content'}">
+        <div class="moving-column-structure">
+            <adh-web-socket-test data-paths="{{websocketTestPaths}}"></adh-web-socket-test>
+        </div>
+        <div class="moving-column-content">
+            <adh-listing data-path="{{path}}" data-content-type="{{contentType}}" data-action-column="action-column">
+                <div data-ng-switch="transclusionId">
+                    <adh-proposal-version-new
+                        data-on-new-proposal="onCreate"
+                        data-on-cancel="hideCreateForm"
+                        data-pool-path="{{poolPath}}"
+                        data-ng-switch-when="create-form-id">
+                    </adh-proposal-version-new>
+                    <adh-proposal-detail
+                        data-path="element"
+                        data-ng-switch-when="element-id">
+                    </adh-proposal-detail>
+                </div>
+            </adh-listing>
+        </div>
+        <div class="moving-column-content2">
+            <adh-comment-listing data-path="{{content2Url}}">
+        </div>
+    </div>
+    <div data-ng-class="{'hidden': currentSpace !== 'user'}">
+        <h1>User</h1>
+    </div>
+</adh-spaces>
