@@ -6,11 +6,31 @@ def test_meractor_proposal_meta():
     from .mercator import mercator_proposal_meta
     from .mercator import IMercatorProposal
     from .mercator import IMercatorProposalVersion
+    from .mercator import IOrganizationInfo
+    from .mercator import IIntroduction
+    from .mercator import IDetails
+    from .mercator import IStory
+    from .mercator import IOutcome
+    from .mercator import ISteps
+    from .mercator import IValue
+    from .mercator import IPartners
+    from .mercator import IFinance
+    from .mercator import IExperience
     from adhocracy_core.resources.comment import add_commentsservice
     from adhocracy_core.resources.rate import add_ratesservice
     meta = mercator_proposal_meta
     assert meta.iresource == IMercatorProposal
     assert meta.element_types == [IMercatorProposalVersion,
+                                  IOrganizationInfo,
+                                  IIntroduction,
+                                  IDetails,
+                                  IStory,
+                                  IOutcome,
+                                  ISteps,
+                                  IValue,
+                                  IPartners,
+                                  IFinance,
+                                  IExperience,
                                   ]
     assert meta.is_implicit_addable
     assert meta.item_type == IMercatorProposalVersion

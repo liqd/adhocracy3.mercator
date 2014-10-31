@@ -698,6 +698,9 @@ mkFieldType = (field : MetaApi.ISheetField) : string => {
     case "adhocracy_core.schema.DateTime":
         result = "string";
         break;
+    case "adhocracy_core.schema.URL":
+        result = "string";
+        break;
     case "Integer":
         result = "number";
         break;
