@@ -8,6 +8,7 @@ from adhocracy_frontend.tests.acceptance.test_comment import create_comment
 from adhocracy_frontend.tests.acceptance.test_comment import create_top_level_comment
 
 
+@mark.skipif(True, reason='see src/mercator/static/js/Adhocracy.ts near "import AdhDocumentWorkbench"')
 class TestRate:
 
     def test_create(self, browser):

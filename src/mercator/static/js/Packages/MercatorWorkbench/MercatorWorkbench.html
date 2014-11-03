@@ -1,0 +1,31 @@
+<adh-spaces>
+    <div data-adh-moving-columns="" data-space="content" class="moving-columns" data-ng-class="{'hidden': currentSpace !== 'content'}">
+        <div class="moving-column-structure">
+            <adh-web-socket-test data-paths="{{websocketTestPaths}}"></adh-web-socket-test>
+        </div>
+        <div class="moving-column-content">
+            <adh-listing data-path="{{path}}" data-content-type="{{contentType}}" data-action-column="action-column">
+                <div data-ng-switch="transclusionId">
+                    <div data-ng-switch-when="create-form-id">
+                        [disabled. please go to http://localhost:6551/mercator for now.]
+                    </div>
+                    <adh-resource-wrapper>
+                        <adh-last-version data-item-path="{{element}}">
+                            <adh-mercator-proposal
+                                 data-ng-if="versionPath"
+                                 data-path="{{versionPath}}"
+                                 data-ng-switch-when="element-id">
+                            </adh-mercator-proposal>
+                        </adh-last-version>
+                    </adh-resource-wrapper>
+                </div>
+            </adh-listing>
+        </div>
+        <div class="moving-column-content2">
+            <adh-comment-listing data-path="{{content2Url}}">
+        </div>
+    </div>
+    <div data-ng-class="{'hidden': currentSpace !== 'user'}">
+        <h1>User</h1>
+    </div>
+</adh-spaces>
