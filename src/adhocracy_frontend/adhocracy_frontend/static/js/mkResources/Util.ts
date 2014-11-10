@@ -7,10 +7,11 @@ var _s : any = require("underscore.string");
 
 import _ = require("lodash");
 
+import UtilA = require("../Packages/Util/Util");
+
 export var mkThingList : <T>(things : T[], render : (T) => string, tab : string, separator : string) => string;
 export var dotAndUnderscoreToCaml : (string) => string;
 export var capitalizeHead : (string) => string;
-export var intercalate : (is : string[], separator : string) => string;
 
 export var injectNickDict : (dict : { [index : string] : any }) => void;
 export var mkNickDict : (dict : { [index : string] : any }) => { [index : string] : string };
@@ -33,7 +34,7 @@ mkThingList = <T>(things : T[], render : (T) => string, tab : string, separator 
             os.push(render(things[thing]));
         }
     }
-    return (tab + intercalate(os, separator + tab));
+    return (tab + UtilA.intercalate(os, separator + tab));
 };
 
 dotAndUnderscoreToCaml = (i : string) : string => {
@@ -42,19 +43,6 @@ dotAndUnderscoreToCaml = (i : string) : string => {
 
 capitalizeHead = (i : string) : string => {
     return i[0].toUpperCase() + i.substring(1);
-};
-
-intercalate = (is : string[], sep : string) : string => {
-    var o : string = "";
-    for (var x in is) {
-        if (is.hasOwnProperty(x)) {
-            o += is[x];
-            if (x < is.length - 1) {
-                o += sep;
-            }
-        }
-    }
-    return o;
 };
 
 
@@ -69,7 +57,7 @@ intercalate = (is : string[], sep : string) : string => {
  * | unpack = reverse . extercalate '.'
  * |
  * | pack :: [String] -> String
- * | pack = intercalate "." . reverse
+ * | pack = UtilA.intercalate "." . reverse
  * |
  * | switch :: [[String]] -> [[String]]
  * | switch [(unique:_)] = [[unique]]
@@ -121,7 +109,7 @@ mkNickDictFromNamesX = (fullNames : string[][]) : { [index : string] : string } 
     var flushClashes = () : void => {
         if (clashes.length === 1) {
             var nick = clashes[0][0];
-            var full = intercalate(_.cloneDeep(clashes[0]).reverse(), ".");
+            var full = UtilA.intercalate(_.cloneDeep(clashes[0]).reverse(), ".");
             nicksRec[full] = nick;
         } else {
             var chopOk : boolean = true;
@@ -145,7 +133,7 @@ mkNickDictFromNamesX = (fullNames : string[][]) : { [index : string] : string } 
                 }
             } else {
                 clashes.forEach((clash) => {
-                    var n = intercalate(_.cloneDeep(clash).reverse(), ".");
+                    var n = UtilA.intercalate(_.cloneDeep(clash).reverse(), ".");
                     nicksRec[n] = n;
                 });
             }

@@ -160,3 +160,22 @@ export function endsWith(str, suffix) {
 
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
+
+
+/**
+ * intercalate(["wef", "arg"], "/") === "wef/arg"
+ * intercalate(["", "wef", "arg"], "/") === "/wef/arg"
+ * intercalate([], "gabba") === ""
+ */
+export var intercalate = (is : string[], sep : string) : string => {
+    var o : string = "";
+    for (var x in is) {
+        if (is.hasOwnProperty(x)) {
+            o += is[x];
+            if (x < is.length - 1) {
+                o += sep;
+            }
+        }
+    }
+    return o;
+};
