@@ -3,6 +3,7 @@ import _ = require("lodash");
 import AdhConfig = require("../Config/Config");
 import AdhHttp = require("../Http/Http");
 import AdhTopLevelState = require("../TopLevelState/TopLevelState");
+import AdhUtil = require("../Util/Util");
 
 
 export interface Dict {
@@ -53,11 +54,25 @@ export class Service implements AdhTopLevelState.IAreaInput {
 
         return this.adhHttp.get(resourceUrl).then((resource) => {
             var data = self.provider.get(resource.content_type);
-            data["platform"] = path.split("/")[1];
+            var segs : string[] = path.replace(/\/+$/, "").split("/");
+
+            if (segs.length < 2 || segs[0] !== "") {
+                throw "bad path: " + path;
+            }
+
+            data["platform"] = segs[1];
 
             // if path contains more than just the platform
-            if (path.replace(/\/+$/, "").split("/").length > 2) {
-                data["content2Url"] = this.adhConfig.rest_url + path;
+            if (segs.length > 2) {
+                data["content2Url"] = this.adhConfig.rest_url;
+
+                // if path has a view segment
+                if (_.last(segs).match(/^@/)) {
+                    data["view"] = segs.pop().replace(/^@/, "");
+                    data["content2Url"] += AdhUtil.intercalate(segs, "/");
+                } else {
+                    data["content2Url"] += AdhUtil.intercalate(segs, "/");
+                }
             }
 
             for (var key in search) {
@@ -88,6 +103,10 @@ export class Service implements AdhTopLevelState.IAreaInput {
             path = data["content2Url"].replace(this.adhConfig.rest_url, "");
         } else {
             path = "/" + data["platform"];
+        }
+
+        if (data["view"]) {
+            path += "/@" + data["view"];
         }
 
         return {
