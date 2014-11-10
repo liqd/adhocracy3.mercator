@@ -40,6 +40,13 @@ export class Service implements AdhTopLevelState.IAreaInput {
         private adhConfig : AdhConfig.IService
     ) {}
 
+    /**
+     * Convert (ng) location to (a3 top-level) state: Take a path and
+     * a search query dictionary, and promise a state dictionary that
+     * can be sored stored in a 'TopLevelState'.
+     *
+     * This is the reverse of 'this.reverse'.
+     */
     public route(path : string, search : Dict) : ng.IPromise<Dict> {
         var self : Service = this;
         var resourceUrl = this.adhConfig.rest_url + path;
@@ -62,7 +69,14 @@ export class Service implements AdhTopLevelState.IAreaInput {
         });
     }
 
-    public reverse(data : Dict) {
+    /**
+     * Convert (a3 top-level) state to (ng) location: Take a
+     * 'TopLevelState' and return a path and a search query
+     * dictionary.
+     *
+     * This is the reverse of 'this.route'.
+     */
+    public reverse(data : Dict) : { path : string; search : Dict; } {
         var defaults = {
             space: "content",
             movingColumns: "is-show-show-hide"

@@ -516,7 +516,7 @@ export class CreateWidget<R extends ResourcesBase.Resource> extends Widget<R> {
     public _clear(instance : AdhResourceWidgets.IResourceWidgetInstance<R, IScope>) : void {
         super._clear(instance);
 
-        // FIXME: I do not whether both are needed.
+        // FIXME: I don't know whether both are needed.
         instance.scope.mercatorProposalForm.$setPristine();
         instance.scope.mercatorProposalForm.$setUntouched();
     }
