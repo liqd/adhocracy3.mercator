@@ -29,6 +29,10 @@ $columns: 6;
         left: 100% + $gutter * column-width(2) / column-width(4);
         padding: 0 0.5em;
     }
+
+    ng-form {
+        overflow: hidden;
+    }
 }
 
 .mercator-proposal-nav {
@@ -39,4 +43,10 @@ $columns: 6;
     left: $gutter;
     top: 0.5em;
     z-index: 1;
+
+    a {
+        &.active {
+            font-weight: bold;
+        }
+    }
 }

@@ -1,3 +1,7 @@
 *, *::after, *::before {
     @include box-sizing(border-box);
 }
+
+ng-form {
+    display: block;
+}
