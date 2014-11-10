@@ -37,14 +37,14 @@ export var register = () => {
                     });
                 });
 
-                it("does not set 'content2Url' if path consists of not more than the platform", (done) => {
+                it("does not set 'content2Url' if path consists ONLY of the platform", (done) => {
                     service.route("/platform", {}).then((data) => {
                         expect(data["content2Url"]).not.toBeDefined();
                         done();
                     });
                 });
 
-                it("does not set 'content2Url' if path consists of not more than the platform with trailing /", (done) => {
+                it("does not set 'content2Url' if path consists ONLY of the platform plus trailing '/'", (done) => {
                     service.route("/platform/", {}).then((data) => {
                         expect(data["content2Url"]).not.toBeDefined();
                         done();
