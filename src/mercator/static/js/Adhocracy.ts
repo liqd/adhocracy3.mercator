@@ -109,12 +109,12 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     // update hash when using anchor scroll
     app.run(($rootScope, $location) => {
         $rootScope.$on("duScrollspy:becameActive", ($event, $element) => {
-          // Automaticly update location
-          var hash = $element.prop("hash");
-          if (hash) {
-            $location.hash(hash.substr(1)).replace();
-            $rootScope.$apply();
-          }
+            // Automaticly update location
+            var hash = $element.prop("hash");
+            if (hash) {
+                $location.hash(hash.substr(1)).replace();
+                $rootScope.$apply();
+            }
         });
     });
 
