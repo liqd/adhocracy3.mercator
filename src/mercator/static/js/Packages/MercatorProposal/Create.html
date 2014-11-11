@@ -9,24 +9,14 @@
     </ol>
 </nav>
 
-<nav class="mercator-proposal-nav">
-    <ol>
-        <li><a href="#mercator-proposal-basic">{{ "Basic"}}</a></li>
-        <li><a href="#mercator-proposal-introduction">{{ "Introduction"}}</a></li>
-        <li><a href="#mercator-proposal-detail">{{ "In Detail"}}</a></li>
-        <li><a href="#mercator-proposal-motivation">{{ "Motivation"}}</a></li>
-        <li><a href="#mercator-proposal-finance">{{ "Finance"}}</a></li>
-        <li><a href="#mercator-proposal-extra">{{ "Extra"}}</a></li>
-    </ol>
-</nav>
-
 <form
         novalidate="novalidate"
         class="mercator-proposal-form"
         name="mercatorProposalForm"
         data-ng-submit="submit()">
-    <ng-form name="mercatorProposalBasicForm">
-        <h2 id="mercator-proposal-basic">{{ "1. Basic" | translate }}</h2>
+
+    <section data-ng-form="" name="mercatorProposalBasicForm" id="mercator-proposal-basic">
+        <h2>{{ "1. Basic" | translate }}</h2>
 
         <h3>{{ "User Info:" | translate }}</h3>
         <input type="text" data-ng-model="data.user_info.first_name" name="user_info-first_name" placeholder="{{ 'Name' | translate }}" required="required" />
@@ -67,10 +57,11 @@
             placeholder="500 c. Max."
             required="required"></textarea>
 
-    </ng-form>
+    </section>
 
-    <ng-form name="mercatorProposalIntroductionForm">
-        <h2 id="mercator-proposal-introduction">{{ "2. Introduction" | translate }}</h2>
+    <section data-ng-form="" name="mercatorProposalIntroductionForm" id="mercator-proposal-introduction">
+
+        <h2>{{ "2. Introduction" | translate }}</h2>
 
         <label>
             {{ "Title:" | translate }}
@@ -92,10 +83,11 @@
             {{ "Upload a Picture" | translate }}
             <input type="file" data-ng-model="data.introduction.picture" name="introduction-picture" />
         </label>
-    </ng-form>
 
-    <ng-form name="mercatorProposalDetailForm">
-        <h2 id="mercator-proposal-detail">{{ "3. In Detail" | translate }}</h2>
+    </section>
+
+    <section data-ng-form="" name="mercatorProposalDetailForm" id="mercator-proposal-detail">
+        <h2>{{ "3. In Detail" | translate }}</h2>
 
         <label>
             {{ "Description:" | translate }}
@@ -140,10 +132,10 @@
                 {{ "What triggers you to act? What drives you to want to make the change you propose? What’s the “big dream” behind your idea? Please also share specific examples of the target group." | translate }}
             </div>
         </label>
-    </ng-form>
+    </section>
 
-    <ng-form name="mercatorProposalMotivationForm">
-        <h2 id="mercator-proposal-motivation">{{ "4. Motivation" | translate }}</h2>
+    <section data-ng-form="" name="mercatorProposalMotivationForm" id="mercator-proposal-motivation">
+        <h2>{{ "4. Motivation" | translate }}</h2>
 
         <label>
             {{ "What would be a successful outcome of your project or initiative? What is the aim you want to reach?" | translate }}
@@ -200,10 +192,10 @@
                 {{ "How was the partnership established and does it involve organisations that have never been previously involved in a similar constellation? Describe relevant experiences of your team members." | translate }}
             </div>
         </label>
-    </ng-form>
+    </section>
 
-    <ng-form name="mercatorProposalFinanceForm">
-        <h2 id="mercator-proposal-finance">{{ "5. Finance" | translate }}</h2>
+    <section data-ng-form="" name="mercatorProposalFinanceForm" id="mercator-proposal-finance">
+        <h2>{{ "5. Finance" | translate }}</h2>
 
         <label>
             {{ "Budget:" | translate }}
@@ -234,10 +226,10 @@
             {{ "Upload Financial Plan Document" | translate }}
             <input type="file" data-ng-model="data.finance.document" name="finance-document" />
         </label>
-    </ng-form>
+    </section>
 
-    <ng-form name="mercatorProposalExtraForm">
-        <h2 id="mercator-proposal-extra">{{ "6. Extra" | translate }}</h2>
+    <section data-ng-form="" name="mercatorProposalExtraForm" id="mercator-proposal-extra">
+        <h2>{{ "6. Extra" | translate }}</h2>
 
         <label>
             {{ "Upload media files" | translate }}
@@ -282,7 +274,7 @@
             data-ng-model="data.hear_from.other_specify"
             name="heard_from-other_specify"
             required="required" />
-    </ng-form>
+    </section>
 
     <input
         type="submit"
