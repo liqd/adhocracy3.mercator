@@ -42,10 +42,16 @@ $columns: 6;
 
 .mercator-proposal-cover {
     @include clearfix;
+    border-bottom: 1px solid $color-structure-border;
 
     .proposal-meta {
+        padding-bottom: $gutter1;
+        padding-left: 0;
+
         .proposal-meta-column {
+            list-style-type: none;
             float: left;
+            padding-right: $gutter/2;
         }
     }
 }
@@ -60,6 +66,8 @@ $columns: 6;
 }
 
 .mercator-proposal-chapters {
+    border-left: 1px solid $color-structure-border;
     float: left;
+    padding-left: $gutter;
     width: column-width(4);
 }
