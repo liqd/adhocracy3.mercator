@@ -8,6 +8,8 @@ README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
 requires = ['adhocracy_core',
+            'pyramid_cachebust',
+            'pyramid_mako',
             ]
 
 test_requires = ['adhocracy_core[test]',

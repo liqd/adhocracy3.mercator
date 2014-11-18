@@ -1,10 +1,9 @@
 """Frontend view and simple pyramid app configurations."""
-import os
-
+from pyramid.renderers import render
 from pyramid.config import Configurator
 from pyramid.events import NewResponse
 from pyramid.request import Request
-from pyramid.response import FileResponse
+from pyramid.response import Response
 from pyramid.settings import aslist
 
 from adhocracy_core.rest.views import add_cors_headers_subscriber
@@ -38,11 +37,38 @@ def config_view(request):
     return config
 
 
+def require_config_view(request):
+    """Return the embeddee HTML."""
+    url = request.cachebusted_url('adhocracy_frontend:build/'
+                                  'stylesheets/a3.css')
+    query_params = url.split('?')[1]
+    result = render(
+        'adhocracy_frontend:build/require-config.js.mako',
+        {'url_args': query_params},
+        request=request)
+    response = Response(result)
+    return response
+
+
 def root_view(request):
     """Return the embeddee HTML."""
-    here = os.path.dirname(__file__)
-    path = os.path.join(here, 'static', 'root.html')
-    return FileResponse(path, request=request)
+    result = render(
+        'adhocracy_frontend:build/root.html.mako',
+        {'css': [request.cachebusted_url('adhocracy_frontend:build/'
+                                         'stylesheets/a3.css'),
+                 request.cachebusted_url('adhocracy_frontend:build/'
+                                         'stylesheets/adhocracy3-icons.css'),
+                 ],
+         'js': [request.cachebusted_url('adhocracy_frontend:build/'
+                                        'lib/requirejs/require.js'),
+                '/static/require-config.js',
+                request.cachebusted_url('adhocracy_frontend:build/'
+                                        'lib/jquery/dist/jquery.js'),
+                ]
+         },
+        request=request)
+    response = Response(result)
+    return response
 
 
 def _build_ws_url(request: Request) -> str:
@@ -54,11 +80,10 @@ def _build_ws_url(request: Request) -> str:
 
 def includeme(config):
     """Add routing and static view to deliver the frontend application."""
-    config.add_static_view('static', 'adhocracy_frontend:build/',
-                           cache_max_age=0)
+    config.include('pyramid_cachebust')
+    config.include('pyramid_mako')
     config.add_route('config_json', 'config.json')
-    config.add_view(config_view, route_name='config_json', renderer='json',
-                    http_cache=0)
+    config.add_view(config_view, route_name='config_json', renderer='json')
     add_frontend_route(config, 'embed', 'embed/{directive}')
     add_frontend_route(config, 'register', 'register')
     add_frontend_route(config, 'login', 'login')
@@ -66,13 +91,17 @@ def includeme(config):
     add_frontend_route(config, 'activation_error', 'activation_error')
     add_frontend_route(config, 'root', '')
     add_frontend_route(config, 'resource', 'r/*path')
+    config.add_route('require_config', 'static/require-config.js')
+    config.add_view(require_config_view, route_name='require_config')
+    config.add_static_view('static', 'adhocracy_frontend:build/',
+                           cache_max_age=36000)
     config.add_subscriber(add_cors_headers_subscriber, NewResponse)
 
 
 def add_frontend_route(config, name, pattern):
     """Add view and route to adhocracy frontend."""
     config.add_route(name, pattern)
-    config.add_view(root_view, route_name=name, renderer='html', http_cache=0)
+    config.add_view(root_view, route_name=name, renderer='html')
 
 
 def main(global_config, **settings):

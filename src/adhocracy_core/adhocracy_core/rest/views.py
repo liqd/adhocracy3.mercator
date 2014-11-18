@@ -215,7 +215,6 @@ class RESTView:
         @view_defaults(
             renderer='simplejson',
             context=IResource,
-            http_cache=0,
         )
         class MySubClass(RESTView):
             validation_GET = (MyColanderSchema, [my_extra_validation_function])
@@ -275,7 +274,6 @@ def _get_schema_and_validators(view_class, request: Request) -> tuple:
 @view_defaults(
     renderer='simplejson',
     context=IResource,
-    http_cache=0,
 )
 class ResourceRESTView(RESTView):
 
@@ -405,7 +403,6 @@ def _set_pool_sheet_elements_serialization_form(schema: MappingSchema,
 @view_defaults(
     renderer='simplejson',
     context=ISimple,
-    http_cache=0,
 )
 class SimpleRESTView(ResourceRESTView):
 
@@ -435,7 +432,6 @@ class SimpleRESTView(ResourceRESTView):
 @view_defaults(
     renderer='simplejson',
     context=IPool,
-    http_cache=0,
 )
 class PoolRESTView(SimpleRESTView):
 
@@ -496,7 +492,6 @@ class PoolRESTView(SimpleRESTView):
 @view_defaults(
     renderer='simplejson',
     context=IItem,
-    http_cache=0,
 )
 class ItemRESTView(PoolRESTView):
 
@@ -543,7 +538,6 @@ class ItemRESTView(PoolRESTView):
 @view_defaults(
     renderer='simplejson',
     context=IUsersService,
-    http_cache=0,
 )
 class UsersRESTView(PoolRESTView):
 
@@ -559,7 +553,6 @@ class UsersRESTView(PoolRESTView):
 @view_defaults(
     renderer='simplejson',
     context=IRootPool,
-    http_cache=0,
     name='meta_api'
 )
 class MetaApiView(RESTView):
@@ -775,7 +768,6 @@ def validate_account_active(context, request: Request):
 @view_defaults(
     renderer='simplejson',
     context=IRootPool,
-    http_cache=0,
     name='login_username',
 )
 class LoginUsernameView(RESTView):
@@ -814,7 +806,6 @@ def _login_user(request: Request) -> dict:
 @view_defaults(
     renderer='simplejson',
     context=IRootPool,
-    http_cache=0,
     name='login_email',
 )
 class LoginEmailView(RESTView):
@@ -880,7 +871,6 @@ def _activation_time_window_has_expired(user: IUser, registry) -> bool:
 @view_defaults(
     renderer='simplejson',
     context=IRootPool,
-    http_cache=0,
     name='activate_account',
 )
 class ActivateAccountView(RESTView):
@@ -905,7 +895,6 @@ class ActivateAccountView(RESTView):
 @view_defaults(
     renderer='string',
     context=IRootPool,
-    http_cache=0,
     name='report_abuse',
 )
 class ReportAbuseView(RESTView):

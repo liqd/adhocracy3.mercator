@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 @view_config(
     context=colander.Invalid,
     permission=NO_PERMISSION_REQUIRED,
-    http_cache=0,
 )
 def handle_error_400_colander_invalid(error, request):
     """Return 400 JSON error."""
@@ -33,7 +32,6 @@ def _build_error_dict(location, name, description):
 @view_config(
     context=Exception,
     permission=NO_PERMISSION_REQUIRED,
-    http_cache=0,
 )
 def handle_error_500_exception(error, request):
     """Return 500 JSON error."""

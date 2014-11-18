@@ -3,19 +3,21 @@
     <head>
         <title>adhocracy root page</title>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="/static/stylesheets/a3.css" />
-        <link rel="stylesheet" href="/static/stylesheets/adhocracy3-icons.css" />
+        % for url in css:
+            <link rel="stylesheet" href="${url}"/>
+        % endfor
         <base href="/" />
     </head>
     <body>
-        <adh-view></adh-view>
 
-        <script type="text/javascript"
-                src="/static/lib/requirejs/require.js"></script>
-        <script type="text/javascript"
-                src="/static/require-config.js"></script>
-        <script type="text/javascript"
-                src="/static/lib/jquery/dist/jquery.js"></script>  <!-- only needed for $(document in this html file) -->
+        <adh-view></adh-view>
+        % for url in css:
+            <link rel="stylesheet" href="${url}"/>
+        % endfor
+
+        % for url in js:
+            <script type="text/javascript" src="${url}"></script>
+        % endfor
 
         <script type="text/javascript">
             require(["text!/config.json"], function(config_string) {
