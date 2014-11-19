@@ -10,6 +10,7 @@ import AdhUser = require("../User/User");
 
 import RIBasicPool = require("../../Resources_/adhocracy_core/resources/pool/IBasicPool");
 import RIMercatorProposalVersion = require("../../Resources_/adhocracy_mercator/resources/mercator/IMercatorProposalVersion");
+import RICommentVersion = require("../../Resources_/adhocracy_core/resources/comment/ICommentVersion");
 
 var pkgLocation = "/MercatorWorkbench";
 
@@ -100,6 +101,10 @@ export var register = (angular) => {
         ])
         .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
             adhResourceAreaProvider
+                .when(RICommentVersion.content_type, {
+                    movingColumns: "is-collapse-show-show",
+                    space: "content"
+                })
                 .whenView(RIBasicPool.content_type, "create_proposal", {
                     movingColumns: "is-show-hide-hide"
                 });

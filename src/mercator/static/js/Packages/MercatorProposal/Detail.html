@@ -1,10 +1,10 @@
 <div class="mercator-proposal-detail-view proposal" id="mercator-detail-view-top">
     <div class="mercator-proposal-cover">
         <h2 class="chapter-header">{{ data.introduction.title }}
-            <span class="mercator-proposal-cover-show-comments">
+            <a class="mercator-proposal-cover-show-comments" href="{{ path | adhResourceUrl:'comments' }}">
                 <!-- FIXME: Dummy data -->
                 <i class="icon-speachbubble-outline"></i> 3
-            </span>
+            </a>
         </h2>
 
         <ul class="proposal-meta">
@@ -52,10 +52,10 @@
             <section class="commentable-section">
                 <h3>{{ "Pitch (Teaser)" | translate }}</h3>
                 <p>{{ data.introduction.teaser }}</p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=introduction">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <section class="commentable-section">
@@ -67,10 +67,10 @@
                     <li data-ng-if="data.details.location_specific_3">{{ data.details.location_specific_3 }}</li>
                     <li data-ng-if="details.location_is_linked_to_ruhr">{{ "Ruhr Gebiet, Germany" | translate }}</li>
                 </ul>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=details">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <section class="commentable-section">
@@ -83,10 +83,10 @@
                 <h4>{{ "Other sources of income" | translate }}</h4>
                 <p class="functional-introvert">{{ data.finance.other_sources }}</p>
 
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=finance">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <section class="commentable-section">
@@ -151,10 +151,10 @@
                         </div>
                     </div>
                 </div>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=organization_info">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <a href="#mercator-detail-view-top" data-du-smooth-scroll="">Back to top</a>
@@ -166,19 +166,19 @@
             <section class="commentable-section">
                 <h3>{{ "Description?" | translate }}</h3>
                 <p>{{ data.details.description }}</p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=details">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <section class="commentable-section">
                 <h3>{{ "Story behind the idea" | translate }}</h3>
                 <p>{{ data.story }}</p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=story">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <a href="#mercator-detail-view-top" data-du-smooth-scroll="">Back to top</a>
@@ -190,37 +190,37 @@
             <section class="commentable-section">
                 <h3>{{ "What would be a successful outcome of your project or initiative?" | translate }}</h3>
                 <p>{{ data.outcome }}</p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=outcome">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <section class="commentable-section">
                 <h3>{{ "How do you want to get there?" | translate }}</h3>
                 <p>{{ data.steps }}</p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=steps">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <section class="commentable-section">
                 <h3>{{ "Why does Europe need your idea?" | translate }}</h3>
                 <p>{{ data.value }}</p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=value">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <section class="commentable-section">
                 <h3>{{ "Partner organisations and members list" | translate }}</h3>
                 <p>{{ data.partners }}</p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=partners">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i> 3
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
 
             <a href="#mercator-detail-view-top" data-du-smooth-scroll="">Back to top</a>
@@ -231,13 +231,7 @@
             <section class="commentable-section">
                 <h3>{{ "Share your experience" | translate }}</h3>
                 <p>{{ data.experience }}</p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
-                </button>
-            </section><!-- /.commentable-section -->
 
-            <section class="commentable-section">
                 <h3>{{ "Where did you find out about Advocate Europe?" | translate }}</h3>
                 <!-- FIXME: This should only be displayed to mercator people. -->
                 <!-- FIXME: javascript data contains boolean fields that contain string
@@ -248,10 +242,11 @@
                 <span data-ng-if="data.heard_from.newsletter">newsletter</span>
                 <span data-ng-if="data.heard_from.facebook">facebook</span>
                 <span data-ng-if="data.heard_from.other">Other: {{ data.heard_from.other_specify }}</span></p>
-                <button class="commentable-section-show-comments" data-ng-click="showComments()">
+
+                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments'}}?section=experience">
                     <!-- FIXME: Dummy data -->
                     <i class="icon-speachbubble-outline"></i>
-                </button>
+                </a>
             </section><!-- /.commentable-section -->
         </section>
         <!-- FIXME: dummy -->

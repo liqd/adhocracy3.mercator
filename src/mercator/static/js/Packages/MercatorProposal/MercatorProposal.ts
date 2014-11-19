@@ -56,7 +56,6 @@ var pkgLocation = "/MercatorProposal";
 
 
 export interface IScope extends AdhResourceWidgets.IResourceWidgetScope {
-    showDetails : () => void;
     poolPath : string;
     mercatorProposalForm? : any;
     data : {
@@ -179,14 +178,6 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
         var directive = super.createDirective();
         directive.scope.poolPath = "@";
         return directive;
-    }
-
-    public link(scope, element, attrs, wrapper) {
-        var instance = super.link(scope, element, attrs, wrapper);
-        instance.scope.showDetails = () => {
-            this.adhTopLevelState.set("content2Url", instance.scope.path);
-        };
-        return instance;
     }
 
     public _handleDelete(
@@ -891,6 +882,9 @@ export var register = (angular) => {
                 })
                 .whenView(RIMercatorProposalVersion.content_type, "edit", {
                      movingColumns: "is-collapse-show-hide"
+                })
+                .whenView(RIMercatorProposalVersion.content_type, "comments", {
+                     movingColumns: "is-collapse-show-show"
                 });
         }])
         .config(["flowFactoryProvider", (flowFactoryProvider) => {

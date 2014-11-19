@@ -1,7 +1,7 @@
 <div class="mercator-proposal-list-item">
     <img src="" alt="" />
     <div class="body">
-        <h3><a href="" data-ng-click="showDetails()">{{ data.introduction.title }}</a></h3>
+        <h3><a href="{{ path | adhResourceUrl }}">{{ data.introduction.title }}</a></h3>
         <span>{{ data.user_info.first_name }} {{ data.user_info.last_name }}</span>
         <div class="meta">
             <span>when: {{ data.user_info.createtime }}</span>

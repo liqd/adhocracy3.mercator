@@ -44,11 +44,11 @@
                     <div class="moving-column-menu placeholder"></div>
                     <div class="moving-column-body" data-du-scroll-container="">
                         <adh-resource-wrapper
-                            data-on-submit="goToProposal(content2Url)"
-                            data-on-cancel="goToProposal(content2Url)">
+                            data-on-submit="goToProposal(proposalUrl)"
+                            data-on-cancel="goToProposal(proposalUrl)">
                             <adh-mercator-proposal-create
-                                data-ng-if="content2Url"
-                                data-path="{{content2Url}}"
+                                data-ng-if="proposalUrl"
+                                data-path="{{proposalUrl}}"
                                 data-mode="edit"
                                 data-pool-path="{{path}}">
                             </adh-mercator-proposal-create>
@@ -58,11 +58,11 @@
                 <div data-ng-switch-default="">
                     <div class="moving-column-menu">
                         <!-- FIXME: permission check -->
-                        <a href="{{ content2Url | adhResourceUrl:'edit' }}">{{ "edit" | translate }}</a>
+                        <a href="{{ proposalUrl | adhResourceUrl:'edit' }}">{{ "edit" | translate }}</a>
                     </div>
                     <div class="moving-column-body" data-du-scroll-container="">
                         <adh-resource-wrapper>
-                            <adh-mercator-proposal-detail-view data-ng-if="content2Url" data-path="{{content2Url}}"></adh-mercator-proposal-detail-view>
+                            <adh-mercator-proposal-detail-view data-ng-if="proposalUrl" data-path="{{proposalUrl}}"></adh-mercator-proposal-detail-view>
                         </adh-resource-wrapper>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
         <div class="moving-column moving-column-content2">
             <div class="moving-column-menu placeholder"></div>
             <div class="moving-column-body" data-du-scroll-container="">
-                <adh-comment-listing data-ng-if="content2Url" data-path="{{content2Url}}">
+                <adh-comment-listing data-ng-if="commentableUrl" data-path="{{commentableUrl}}">
             </div>
         </div>
     </div>
