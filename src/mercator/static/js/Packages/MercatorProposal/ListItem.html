@@ -1,13 +1,23 @@
-<div class="mercator-proposal-list-item">
-    <img src="" alt="" />
-    <div class="body">
+<div class="mercator-proposal-list-item" >
+    <!-- FIXME: ng-if refers to non-existant 'image' object -->
+    <div class="mercator-proposal-list-item-image" ng-if="image"><img src="" alt="" /></div>
+    <div class="mercator-proposal-list-item-body">
         <h3><a href="" data-ng-click="showDetails()">{{ data.introduction.title }}</a></h3>
-        <span>{{ data.user_info.first_name }} {{ data.user_info.last_name }}</span>
-        <div class="meta">
-            <span>when: {{ data.basic.createtime }}</span>
-            <span>budget: {{ data.finance.funding }} / {{ data.finance.budget }}</span>
-            <span>comments: [#comments]</span>
-            <span>votes: [#votes]</span>
-        </div>
+        <p class="proposal-username"><a href="#FIXME: link to user profile">{{ data.user_info.first_name }} {{ data.user_info.last_name }}</a>, {{data.organization_info.name}}</p>
+        <ul class="mercator-propsal-detail-meta">
+            <li class="mercator-propsal-detail-meta-column">
+                <!-- FIXME: Doesn't seem to work -->
+                {{ data.basic.createtime }}
+            </li>
+            <li class="mercator-propsal-detail-meta-column">
+                {{ data.finance.budget }} &euro;
+            </li>
+            <li class="mercator-propsal-detail-meta-column">
+            <!-- FIXME: Dummy data -->12
+            {{ "votes" | translate }}</li>
+            <li class="mercator-propsal-detail-meta-column">
+            <!-- FIXME: Dummy data -->33
+             {{ "comments" | translate }}</li>
+        </ul>
     </div>
 </div>

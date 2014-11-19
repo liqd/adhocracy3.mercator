@@ -121,6 +121,8 @@ export interface IScope extends AdhResourceWidgets.IResourceWidgetScope {
         };
 
         accept_disclaimer : string;
+
+        image : any;
     };
 }
 
