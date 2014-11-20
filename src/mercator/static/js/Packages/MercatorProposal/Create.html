@@ -299,16 +299,17 @@
                         data-ng-if="showError('mercatorProposalIntroductionForm.introduction-teaser', 'required')">
                         {{ "Please enter a teaser" | translate }}</span>
                 </label>
-
                 <label>
-                    <span data-ng-show="!$flow.files.length"></span>
-                    <span data-ng-show="$flow.files.length">$flow.files.length</span>
-                    <div data-flow-init="" name="introduction-picture-upload">
-                        <button data-flow-btn="">
+                    {{ "Upload an image" | translate }}
+                    <div
+                        data-flow-init=""
+                        flow-files-submitted="$flow.upload()"
+                        name="introduction-picture-upload">
+                        <button type="button">
                             <span data-ng-if="$flow.files.length">{{ "Change Image" | translate }}</span>
                             <span data-ng-if="!$flow.files.length">{{ "Choose Image" | translate }}</span>
                         </button>
-                        <button data-ng-show="$flow.files.length" data-ng-click="$flow.cancel()">{{ "Remove Image" | translate }}</button>
+                        <button type="button" data-ng-show="$flow.files.length" data-ng-click="$flow.cancel()">{{ "Remove Image" | translate }}</button>
                         <p data-ng-if="$flow.files.length" data-flow-directory=""></p>
                         <table>
                             <tr data-ng-repeat="file in $flow.files">
