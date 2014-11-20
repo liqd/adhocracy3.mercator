@@ -134,6 +134,7 @@ table {
         @include text-align(start);
         padding: 0.5em;
         border-top: 1px solid $color-structure-border;
+        vertical-align: top;
     }
 
     thead, tfoot {
