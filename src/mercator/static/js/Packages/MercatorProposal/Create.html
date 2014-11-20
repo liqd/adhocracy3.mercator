@@ -305,20 +305,15 @@
                         data-flow-init=""
                         flow-files-submitted="$flow.upload()"
                         name="introduction-picture-upload">
-                        <button type="button">
+                        <button type="button" data-flow-btn="">
                             <span data-ng-if="$flow.files.length">{{ "Change Image" | translate }}</span>
                             <span data-ng-if="!$flow.files.length">{{ "Choose Image" | translate }}</span>
                         </button>
                         <button type="button" data-ng-show="$flow.files.length" data-ng-click="$flow.cancel()">{{ "Remove Image" | translate }}</button>
                         <p data-ng-if="$flow.files.length" data-flow-directory=""></p>
-                        <table>
-                            <tr data-ng-repeat="file in $flow.files">
-                                <td>{{$index+1}}</td>
-                                <td>{{file.name}}</td>
-                                <td>{{file.msg}}</td>
-                                <td><img data-flow-img="file" height="120" /></td>
-                            </tr>
-                        </table>
+                        <div class="picture-upload-file" data-ng-repeat="file in $flow.files">
+                            <img data-flow-img="file" height="120" /><br/>{{file.name}}
+                        </div>
                     </div>
                 </label>
             </section>
