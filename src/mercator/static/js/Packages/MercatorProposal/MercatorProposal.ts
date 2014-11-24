@@ -1111,6 +1111,9 @@ export var register = (angular) => {
                             $scope.data.introduction.nickInstance++;
                             $scope.submitIfValid();
                         }
+                        if (error.length > 1) {
+                            container.scrollTopAnimated(0);
+                        }
                     });
                 } else {
                     var element = $element.find(".ng-invalid");
