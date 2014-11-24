@@ -88,6 +88,7 @@ export interface IScope extends AdhResourceWidgets.IResourceWidgetScope {
             title : string;
             teaser : string;
             imageUpload : Flow;
+            nickInstance : number;
             comment_count : number;
         };
 
@@ -140,6 +141,7 @@ export interface IScope extends AdhResourceWidgets.IResourceWidgetScope {
         accept_disclaimer : string;
 
         image : any;
+
     };
 }
 
@@ -476,7 +478,7 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
         var mercatorProposal = new RIMercatorProposal({preliminaryNames : this.adhPreliminaryNames});
         mercatorProposal.parent = instance.scope.poolPath;
         mercatorProposal.data[SIName.nick] = new SIName.Sheet({
-            name: AdhUtil.normalizeName(data.introduction.title)
+            name: AdhUtil.normalizeName(data.introduction.title + data.introduction.nickInstance)
         });
 
         var mercatorProposalVersion = new RIMercatorProposalVersion({preliminaryNames : this.adhPreliminaryNames});
@@ -1099,13 +1101,19 @@ export var register = (angular) => {
 
             $scope.submitIfValid = () => {
                 var container = $element.parents("[data-du-scroll-container]");
-
+                $scope.data.introduction.nickInstance = $scope.data.introduction.nickInstance ? $scope.data.introduction.nickInstance : 0;
                 if ($scope.mercatorProposalForm.$valid) {
                     // pluck flow object from file upload scope, and
                     // attach it to where ResourceWidgets can find it.
                     $scope.data.introduction.imageUpload = angular.element($("[name=introduction-picture-upload]")).scope().$flow;
-                    $scope.submit().catch(() => {
-                        container.scrollTopAnimated(0);
+                    $scope.submit().catch((error) => {
+                        if (_.every(error, { "name": "data.adhocracy_core.sheets.name.IName.name" })) {
+                            $scope.data.introduction.nickInstance++;
+                            $scope.submitIfValid();
+                        }
+                        if (error.length > 1) {
+                            container.scrollTopAnimated(0);
+                        }
                     });
                 } else {
                     var element = $element.find(".ng-invalid");
