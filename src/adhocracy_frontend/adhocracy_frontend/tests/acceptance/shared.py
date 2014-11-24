@@ -30,8 +30,8 @@ def login(browser, name_or_email, password,
     fill_input(browser, '.login [name="nameOrEmail"]', name_or_email)
     fill_input(browser, '.login [name="password"]', password)
     click_button(browser, '.login [type="submit"]')
-    if expect_success:
-        browser.wait_for_condition(is_logged_in, 20)
+    if expect_success and not browser.wait_for_condition(is_logged_in, 20):
+        raise Exception('login failed.')
     if visit_root:
         browser.visit(browser.root_url)
 

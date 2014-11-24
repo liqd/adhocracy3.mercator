@@ -2,8 +2,7 @@
     <div class="mercator-proposal-detail-cover">
         <h2 class="chapter-header">{{ data.introduction.title }}
             <a class="mercator-proposal-cover-show-comments" href="{{ path | adhResourceUrl:'comments' }}">
-                <!-- FIXME: Dummy data -->
-                <i class="icon-speachbubble-outline"></i> 3
+                <i class="icon-speachbubble-outline"></i> {{ data.commentCount }}
             </a>
         </h2>
 
@@ -24,7 +23,7 @@
             </li>
             <li class="mercator-propsal-detail-meta-item">
                 <!-- FIXME: Dummy data -->
-                <i class="icon-speachbubble-outline"></i> 33
+                <i class="icon-speachbubble-outline"></i> {{ data.commentCountTotal }}
             </li>
             <li class="mercator-propsal-detail-meta-item">
                 <!-- FIXME: Dummy data -->
@@ -41,10 +40,10 @@
 
     <nav class="mercator-proposal-detail-nav" data-adh-sticky="">
         <ol>
-            <li><a href="#mercator-detail-view-brief-proposal" data-du-smooth-scroll="">{{ "Brief Proposal" | translate }}</a></li>
-            <li><a href="#mercator-detail-view-detailed-proposal" data-du-smooth-scroll="">{{ "Detailed Proposal" | translate }}</a></li>
-            <li><a href="#mercator-detail-view-goals-and-vision" data-du-smooth-scroll="">{{ "Goals and Vision" | translate }}</a></li>
-            <li><a href="#mercator-detail-view-additional" data-du-smooth-scroll="">{{ "Additional" | translate }}</a></li>
+            <li><a href="#mercator-detail-view-brief-proposal" data-du-smooth-scroll="" data-du-scrollspy="">{{ "Brief Proposal" | translate }}</a></li>
+            <li><a href="#mercator-detail-view-detailed-proposal" data-du-smooth-scroll="" data-du-scrollspy="">{{ "Detailed Proposal" | translate }}</a></li>
+            <li><a href="#mercator-detail-view-goals-and-vision" data-du-smooth-scroll="" data-du-scrollspy="">{{ "Goals and Vision" | translate }}</a></li>
+            <li><a href="#mercator-detail-view-additional" data-du-smooth-scroll="" data-du-scrollspy="">{{ "Additional" | translate }}</a></li>
         </ol>
     </nav>
 
@@ -56,8 +55,7 @@
                 <h3>{{ "Pitch (Teaser)" | translate }}</h3>
                 <p>{{ data.introduction.teaser }}</p>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:introduction'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.introduction.commentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -71,8 +69,7 @@
                     <li data-ng-if="data.details.location_is_linked_to_ruhr">{{ "Ruhr Gebiet, Germany" | translate }}</li>
                 </ul>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:details'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.details.commentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -87,8 +84,7 @@
                 <p class="functional-introvert">{{ data.finance.other_sources }}</p>
 
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:finance'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.finance.commentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -155,8 +151,7 @@
                     </div>
                 </div>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:organization_info'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.organization_info.commentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -169,8 +164,7 @@
                 <h3>{{ "Description?" | translate }}</h3>
                 <p>{{ data.details.description }}</p>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:details'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.details.commentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -178,8 +172,7 @@
                 <h3>{{ "Story behind the idea" | translate }}</h3>
                 <p>{{ data.story }}</p>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:story'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.stepsCommentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -192,8 +185,7 @@
                 <h3>{{ "What would be a successful outcome of your project or initiative?" | translate }}</h3>
                 <p>{{ data.outcome }}</p>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:outcome'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.outcomeCommentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -201,8 +193,7 @@
                 <h3>{{ "How do you want to get there?" | translate }}</h3>
                 <p>{{ data.steps }}</p>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:steps'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.stepsCommentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -210,8 +201,7 @@
                 <h3>{{ "Why does Europe need your idea?" | translate }}</h3>
                 <p>{{ data.value }}</p>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:value'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.valueCommentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -219,8 +209,7 @@
                 <h3>{{ "Partner organisations and members list" | translate }}</h3>
                 <p>{{ data.partners }}</p>
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:partners'}}">
-                    <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i> 3
+                    <i class="icon-speachbubble-outline"></i> {{ data.partnersCommentCount }}
                 </a>
             </section><!-- /.commentable-section -->
 
@@ -245,7 +234,7 @@
 
                 <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:experience'}}">
                     <!-- FIXME: Dummy data -->
-                    <i class="icon-speachbubble-outline"></i>
+                    <i class="icon-speachbubble-outline"></i> {{ data.experienceCommentCount }}
                 </a>
             </section><!-- /.commentable-section -->
         </section>
