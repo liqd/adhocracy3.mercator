@@ -114,10 +114,18 @@ var config : IConfig = {
  * types
  */
 
+interface FieldType {
+    resultType : string;
+    constructorType : string;
+    parser? : string;
+}
+
+
 var compileAll : (metaApi: MetaApi.IMetaApi, outPath : string) => void;
 
 var renderSheet : (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IModuleDict, metaApi : MetaApi.IMetaApi) => void;
 var mkFieldSignatures : (fields : MetaApi.ISheetField[], tab : string, separator : string) => string;
+var mkFieldSignaturesSheetCons : (fields : MetaApi.ISheetField[], tab : string, separator : string) => string;
 var mkFieldAssignments : (fields : MetaApi.ISheetField[], tab : string) => string;
 var enabledFields : (fields : MetaApi.ISheetField[], enableFlags ?: string) => MetaApi.ISheetField[];
 var mkSheetSetter : (modulePath : string, fields : MetaApi.ISheetField[], _selfType : string) => string;
@@ -131,8 +139,10 @@ var mkResourceClassName : (resource : string) => string;
 var mkModuleName : (module : string, metaApi : MetaApi.IMetaApi) => string;
 var mkImportStatement : (modulePath : string, relativeRoot : string, metaApi : MetaApi.IMetaApi) => string;
 var mkNick : (modulePath : string, metaApi : MetaApi.IMetaApi) => string;
-var mkFieldType : (field : MetaApi.ISheetField) => string;
+var mkFieldType : (field : MetaApi.ISheetField) => FieldType;
 var mkFlags : (field : MetaApi.ISheetField, comment ?: boolean) => string;
+var isReadableField : (field : MetaApi.ISheetField) => boolean;
+var isWriteableField : (field : MetaApi.ISheetField) => boolean;
 
 var mkdirForFile : (file : string) => void;
 var pyModuleToTsModule : (module : string) => string;
@@ -302,9 +312,6 @@ renderSheet = (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IM
     var sheetI : string = "";
     var hasSheetI : string = "";
 
-    var writables : MetaApi.ISheetField[] = [];
-    var nonWritables : MetaApi.ISheetField[] = [];
-
     var sheetMetaApi : Base.ISheetMetaApi = {
         readable: [],
         editable: [],
@@ -318,16 +325,6 @@ renderSheet = (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IM
             if (sheet.fields.hasOwnProperty(x)) {
                 var field = sheet.fields[x];
 
-                if (field.editable || field.creatable || field.create_mandatory) {
-                    writables.push(field);
-
-                    if (field.valuetype === "adhocracy_core.schema.AbsolutePath") {
-                        sheetMetaApi.references.push(field.name);
-                    }
-                } else {
-                    nonWritables.push(field);
-                }
-
                 if (field.readable) {
                     sheetMetaApi.readable.push(field.name);
                 }
@@ -340,6 +337,9 @@ renderSheet = (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IM
                 if (field.create_mandatory) {
                     sheetMetaApi.create_mandatory.push(field.name);
                 }
+                if (field.valuetype === "adhocracy_core.schema.AbsolutePath") {
+                    sheetMetaApi.references.push(field.name);
+                }
             }
         }
     })();
@@ -348,14 +348,28 @@ renderSheet = (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IM
         var args : string[] = [];
         var lines : string[] = [];
 
-        if (writables.length > 0) {
+        if (sheet.fields.length > 0) {
             args.push("args : {");
-            args.push(mkFieldSignatures(writables, "        ", ";\n") + ";");
+            args.push(mkFieldSignaturesSheetCons(sheet.fields, "        ", ";\n") + ";");
             args.push("    }");
 
-            for (var x in writables) {
-                if (writables.hasOwnProperty(x)) {
-                    lines.push("        this." + writables[x].name + " = args." + writables[x].name + ";");
+            for (var x in sheet.fields) {
+                if (sheet.fields.hasOwnProperty(x)) {
+                    var codeLine : string;
+                    var fieldName : string = sheet.fields[x].name;
+                    var fieldParser : string = mkFieldType(sheet.fields[x]).parser;
+
+                    if (fieldParser) {
+                        codeLine = "this." + fieldName + " = (" + fieldParser + ")(args." + fieldName + ");";
+                    } else {
+                        codeLine = "this." + fieldName + " = args." + fieldName + ";";
+                    }
+
+                    if (!isWriteableField(sheet.fields[x])) {
+                        codeLine = "if (args.hasOwnProperty(\"" + fieldName + "\")) { " + codeLine + "}";
+                    }
+
+                    lines.push("        " + codeLine);
                 }
             }
         }
@@ -366,6 +380,18 @@ renderSheet = (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IM
         if (lines.length > 0) {
             s += lines.join("\n") + "\n";
         }
+
+        // FIXME: workaround for #261.  Remove if ticket is closed.
+        if (sheet.fields.length > 0) {
+            s += "\n";
+            s += "        // FIXME: workaround for #261.  Remove if ticket is closed.\n";
+            s += "        _.forOwn(args, (value, key) => {\n";
+            s += "            if (!_.contains(" + JSON.stringify(sheet.fields.map((fieldName) => fieldName.name)) + ", key)) {\n";
+            s += "                this[key] = value;\n";
+            s += "            }\n";
+            s += "        });\n";
+        }
+
         s += "    }\n";
         return s;
     };
@@ -407,7 +433,14 @@ renderSheet = (modulePath : string, sheet : MetaApi.ISheet, modules : MetaApi.IM
 mkFieldSignatures = (fields : MetaApi.ISheetField[], tab : string, separator : string) : string =>
     UtilR.mkThingList(
         fields,
-        (field) => field.name + " : " + mkFieldType(field),
+        (field) => field.name + " : " + mkFieldType(field).resultType,
+        tab, separator
+    );
+
+mkFieldSignaturesSheetCons = (fields : MetaApi.ISheetField[], tab : string, separator : string) : string =>
+    UtilR.mkThingList(
+        fields,
+        (field) => field.name + (isWriteableField(field) ? "" : "?") + " : " + mkFieldType(field).constructorType,
         tab, separator
     );
 
@@ -670,72 +703,82 @@ mkNick = (modulePath : string, metaApi : MetaApi.IMetaApi) : string => {
     }
 };
 
-mkFieldType = (field : MetaApi.ISheetField) : string => {
-    var result : string;
+mkFieldType = (field : MetaApi.ISheetField) : FieldType => {
+    var resultType : string;
+    var constructorType : string = "string";
+    var parser : string;
+
+    // parse dates
+    var stringToDate : string = "(field : string) => new Date(field)";
+
+    // let javascript's weak-dynamic type system figure it out.
+    var stringToAny : string = "(field : string) => <any>field";
 
     switch (field.valuetype) {
     case "adhocracy_core.schema.Boolean":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.AbsolutePath":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.Name":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.SingleLine":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.Text":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.Email":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.Password":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.DateTime":
-        result = "string";
+        resultType = "Date";
+        parser = stringToDate;
         break;
     case "adhocracy_core.schema.URL":
-        result = "string";
+        resultType = "string";
         break;
     case "Integer":
-        result = "number";
+        resultType = "number";
+        parser = stringToAny;
         break;
     case "adhocracy_core.schema.Integer":
-        result = "number";
+        resultType = "number";
+        parser = stringToAny;
         break;
     case "adhocracy_core.schema.Rate":
-        result = "number";
+        resultType = "number";
+        parser = stringToAny;
         break;
     case "adhocracy_core.schema.TimeZoneName":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.Reference":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.PostPool":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.Role":
-        result = "string";
-        break;
-    case "adhocracy_core.schema.Roles":
-        result = "string[]";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.CurrencyAmount":
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_core.schema.ISOCountryCode":
-        result = "number";
+        resultType = "number";
+        parser = stringToAny;
         break;
     case "adhocracy_mercator.sheets.mercator.StatusEnum":  // FIXME: this needs to go to the mercator package
-        result = "string";
+        resultType = "string";
         break;
     case "adhocracy_mercator.sheets.mercator.SizeEnum":  // FIXME: this needs to go to the mercator package
-        result = "string";
+        resultType = "string";
         break;
     default:
         throw "mkFieldType: unknown value " + field.valuetype;
@@ -744,16 +787,29 @@ mkFieldType = (field : MetaApi.ISheetField) : string => {
     if (field.hasOwnProperty("containertype")) {
         switch (field.containertype) {
         case "list":
-            result += "[]";
+            resultType += "[]";
+            constructorType += "[]";
+            if (parser) {
+                throw "not implemented: parsers for list fields.  email mf@zerobuzz.net to fix this.";
+
+                // FIXME: (this can be done.  we need to take the
+                // parser string and construct a string that maps the
+                // parser over a list.  it's just awkward, and we
+                // don't need it yet.)
+            }
             break;
         default:
             throw "mkFieldType: unknown container " + field.containertype;
         }
     }
 
-    result += mkFlags(field, true);
+    resultType += mkFlags(field, true);
 
-    return result;
+    return {
+        resultType: resultType,
+        constructorType: constructorType,
+        parser: parser
+    };
 };
 
 mkFlags = (field : MetaApi.ISheetField, comment ?: boolean) : string => {
@@ -771,12 +827,25 @@ mkFlags = (field : MetaApi.ISheetField, comment ?: boolean) : string => {
     if (field.hasOwnProperty("create_mandatory") && field.create_mandatory) {
         flags += "M";
     }
-    if (flags !== "" && comment) {
-        flags = " /* " + flags + " */";
+
+    var result : string;
+    if (comment) {
+        result = "/* " + field.valuetype;
+        if (field.containertype) {
+            result += " [" + field.containertype + "]";
+        }
+        if (flags !== "") {
+            result += " " + flags;
+        }
+        result += " */";
     }
 
-    return flags;
+    return result;
 };
+
+isReadableField = (field) => field.readable;
+
+isWriteableField = (field) => field.editable || field.creatable || field.create_mandatory;
 
 
 

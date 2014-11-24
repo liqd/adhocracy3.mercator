@@ -33,7 +33,7 @@ export class RateAdapter implements AdhRate.IRateAdapter<RIRateVersion> {
         }
 
         resource.data[SIRate.nick] =
-            new SIRate.Sheet({subject: args.subject, object: args.object, rate: args.rate });
+            new SIRate.Sheet({subject: args.subject, object: args.object, rate: <any>args.rate });
 
         resource.data[SIVersionable.nick] =
             new SIVersionable.Sheet({follows: [args.follows]});

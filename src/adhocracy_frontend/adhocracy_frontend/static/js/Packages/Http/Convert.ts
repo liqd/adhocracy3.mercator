@@ -64,14 +64,16 @@ export var importContent = <Content extends ResourcesBase.Resource>(
         }
 
         var _sclass = Resources_.sheetRegistry[sheetName];
-        _obj.data[sheetName] = new _sclass({});
-        _.forOwn(jsonSheet, (val, key) => {
-            _obj.data[sheetName][key] = val;
-        });
+        _obj.data[sheetName] = new _sclass(jsonSheet);
 
         // the above four lines compile because we leave
         // typescript in the dark about the actual type of _class.
         // har!
+        //
+        // NOTE: passing the json sheet to the constructor rather than
+        // iterating through it and assigning the values to the sheet
+        // manually is important.  the constructor has to parse some
+        // field types (e.g. Date).
     });
 
     // return

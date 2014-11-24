@@ -142,7 +142,7 @@ class TestOrganizationInfoSheet:
         wanted = {'country': 'DE',
                   'help_request': '',
                   'name': '',
-                  'planned_date': '',
+                  'planned_date': None,
                   'status': 'other',
                   'status_other': '',
                   'website': '',
@@ -183,7 +183,7 @@ class TestOrganizationInfoSchema:
         with raises(Invalid) as error:
             inst.deserialize(cstruct)
         assert error.value.asdict() == {'status_other':
-                                        'Required iff status == other'}
+                                        'Required if status == other'}
 
     def test_deserialize_without_name(self, inst, cstruct_required):
         from colander import Invalid

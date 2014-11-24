@@ -141,7 +141,7 @@ export var register = () => {
                 rateVersion.data["adhocracy_core.sheets.rate.IRate"] = new SIRate.Sheet({
                     subject: "sub",
                     object: "obj",
-                    rate: 1
+                    rate: <any>1
                 });
             });
 

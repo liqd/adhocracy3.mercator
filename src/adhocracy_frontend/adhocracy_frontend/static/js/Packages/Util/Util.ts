@@ -160,19 +160,3 @@ export function endsWith(str, suffix) {
 
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
-
-
-/**
- * javascript time and date parsing is, unsurprisingly, horrible.
- * this may require more thought in the future; for now, this function
- * helps turning a json date string into something of the form
- * "mm/dd/yyyy", which is expected by the form.
- *
- * FIXME: give this more thought.
- */
-export var formatDate = (iso : string) => {
-    var year = iso.substring(0, 4);
-    var month = iso.substring(5, 7);
-    var day = iso.substring(8, 10);
-    return month + "/" + day + "/" + year;
-};

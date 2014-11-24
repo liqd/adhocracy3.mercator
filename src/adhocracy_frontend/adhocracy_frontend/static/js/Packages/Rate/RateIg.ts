@@ -42,7 +42,7 @@ export var register = (angular, config, meta_api) => {
         var _commentVersion : RICommentVersion;
         var _rateVersion : RIRateVersion;
 
-        beforeEach((done) => {
+        beforeEach(() => {
             adhMetaApi = angular.injector(["ng"]).invoke(() => new AdhMetaApi.MetaApiQuery(meta_api));
             adhPreliminaryNames = angular.injector(["ng"]).invoke(() => new AdhPreliminaryNames.Service());
 
@@ -83,101 +83,116 @@ export var register = (angular, config, meta_api) => {
             })();
 
             adhUser.userPath = "/principals/users/0000000/";
+        });
 
-            var poolPath = "/adhocracy";
-            var proposalName = "Against_Curtains_" + Math.random();
+        describe("posting rates", () => {
+            it("works", (done) => {
+                var poolPath = "/adhocracy";
+                var proposalName = "Against_Curtains_" + Math.random();
                 // (we don't have a way yet to repeat this test
                 // without having to come up with new names every
                 // time, so we just randomise.)
 
-            var cb = (transaction : any) : ng.IPromise<void> => {
-                // post items
-                var proposal : AdhHttp.ITransactionResult =
-                    transaction.post(poolPath, new RIProposal({preliminaryNames: adhPreliminaryNames, name: proposalName}));
-                var section : AdhHttp.ITransactionResult =
-                    transaction.post(proposal.path, new RISection({preliminaryNames: adhPreliminaryNames, name : "motivation"}));
+                var proposalVersionProper;
+                var commentVersionProper;
 
-                // post section version
-                var sectionVersionResource = new RISectionVersion({preliminaryNames: adhPreliminaryNames});
-                var sectionVersion : AdhHttp.ITransactionResult = transaction.post(section.path, sectionVersionResource);
+                var postProposal = (transaction : any) : ng.IPromise<void> => {
+                    var proposal : AdhHttp.ITransactionResult =
+                        transaction.post(poolPath, new RIProposal({preliminaryNames: adhPreliminaryNames, name: proposalName}));
+                    var section : AdhHttp.ITransactionResult =
+                        transaction.post(proposal.path, new RISection({preliminaryNames: adhPreliminaryNames, name : "motivation"}));
 
-                // post proposal version
-                var proposalVersionResource = new RIProposalVersion({preliminaryNames: adhPreliminaryNames});
-                proposalVersionResource.data["adhocracy_core.sheets.document.IDocument"] =
-                    new SIDocument.Sheet({
-                        title: proposalName,
-                        description: "whoof",
-                        elements: [sectionVersion.path]
-                    });
-                proposalVersionResource.data["adhocracy_core.sheets.versions.IVersionable"] =
-                    new SIVersionable.Sheet({
-                        follows: [proposal.first_version_path]
-                    });
-                var proposalVersion : AdhHttp.ITransactionResult = transaction.post(proposal.path, proposalVersionResource);
+                    var sectionVersionResource = new RISectionVersion({preliminaryNames: adhPreliminaryNames});
+                    var sectionVersion : AdhHttp.ITransactionResult = transaction.post(section.path, sectionVersionResource);
 
-                var proposalVersionProper = transaction.get(proposalVersion.path);
-
-                return transaction.commit().then((responses) : ng.IPromise<void> => {
-                    _proposalVersion = responses[proposalVersionProper.index];
-
-                    return adhHttp.withTransaction((transaction) => {
-
-                        var commentPostPool = _proposalVersion.data[SICommentable.nick].post_pool;
-                        var comment : AdhHttp.ITransactionResult =
-                            transaction.post(commentPostPool, new RIComment({preliminaryNames: adhPreliminaryNames, name : "comment"}));
-
-                        // post comment version
-                        var commentVersionResource = new RICommentVersion({preliminaryNames: adhPreliminaryNames});
-                        commentVersionResource.data[SIComment.nick] = new SIComment.Sheet({
-                            refers_to: _proposalVersion.path,
-                            content: "this is my two cents"
+                    var proposalVersionResource = new RIProposalVersion({preliminaryNames: adhPreliminaryNames});
+                    proposalVersionResource.data[SIDocument.nick] =
+                        new SIDocument.Sheet({
+                            title: proposalName,
+                            description: "whoof",
+                            elements: [sectionVersion.path]
                         });
-                        var commentVersion : AdhHttp.ITransactionResult = transaction.post(comment.path, commentVersionResource);
-                        var commentVersionProper = transaction.get(commentVersion.path);
-
-                        return transaction.commit().then((responses) : ng.IPromise<void> => {
-                            _commentVersion = <any>(responses[commentVersionProper.index]);
-
-                            return adhHttp.withTransaction((transaction) => {
-
-                                // post rate item
-                                var ratePostPool = _commentVersion.data[SIRateable.nick].post_pool;
-                                console.log(ratePostPool);
-                                var rate : AdhHttp.ITransactionResult =
-                                    transaction.post(ratePostPool, new RIRate({
-                                        preliminaryNames: adhPreliminaryNames,
-                                        name : "rate"
-                                    }));
-
-                                // post rate version
-                                var rateVersionResource = new RIRateVersion({preliminaryNames: adhPreliminaryNames});
-                                rateVersionResource.data[SIRate.nick] = new SIRate.Sheet({
-                                    subject: adhUser.userPath,
-                                    object: _commentVersion.path,
-                                    rate: 1
-                                });
-                                rateVersionResource.data[SIVersionable.nick] = new SIVersionable.Sheet({
-                                    follows: [rate.first_version_path]
-                                });
-                                var rateVersion : AdhHttp.ITransactionResult = transaction.post(rate.path, rateVersionResource);
-                                var rateVersionProper = transaction.get(rateVersion.path);
-
-                                return transaction.commit()
-                                    .then((responses) : void => {
-                                        _rateVersion = <any>(responses[rateVersionProper.index]);
-                                        done();
-                                    });
-                            });
+                    proposalVersionResource.data[SIVersionable.nick] =
+                        new SIVersionable.Sheet({
+                            follows: [proposal.first_version_path]
                         });
-                    });
-                })
-                .catch((error) : void => {
-                    console.log(error);
-                    done();
-                });
-            };
+                    var proposalVersion : AdhHttp.ITransactionResult = transaction.post(proposal.path, proposalVersionResource);
+                    proposalVersionProper = transaction.get(proposalVersion.path);
 
-            adhHttp.withTransaction(cb);
+                    return transaction.commit();
+                };
+
+                var postComment = (proposalResponses : any, transaction : any) : ng.IPromise<void> => {
+                    _proposalVersion = proposalResponses[proposalVersionProper.index];
+
+                    var commentPostPool = _proposalVersion.data[SICommentable.nick].post_pool;
+                    var comment : AdhHttp.ITransactionResult =
+                        transaction.post(commentPostPool, new RIComment({preliminaryNames: adhPreliminaryNames, name : "comment"}));
+
+                    var commentVersionResource = new RICommentVersion({preliminaryNames: adhPreliminaryNames});
+                    commentVersionResource.data[SIComment.nick] = new SIComment.Sheet({
+                        refers_to: _proposalVersion.path,
+                        content: "this is my two cents"
+                    });
+                    var commentVersion : AdhHttp.ITransactionResult = transaction.post(comment.path, commentVersionResource);
+                    commentVersionProper = transaction.get(commentVersion.path);
+
+                    return transaction.commit();
+                };
+
+                var postRate = (commentResponses : any, transaction : any) : ng.IPromise<void> => {
+                    _commentVersion = <any>(commentResponses[commentVersionProper.index]);
+
+                    var ratePostPool = _commentVersion.data[SIRateable.nick].post_pool;
+                    console.log(ratePostPool);
+                    var rate : AdhHttp.ITransactionResult =
+                        transaction.post(ratePostPool, new RIRate({
+                            preliminaryNames: adhPreliminaryNames,
+                            name : "rate"
+                        }));
+
+                    var rateVersionResource = new RIRateVersion({preliminaryNames: adhPreliminaryNames});
+                    rateVersionResource.data[SIRate.nick] = new SIRate.Sheet({
+                        subject: adhUser.userPath,
+                        object: _commentVersion.path,
+                        rate: <any>1
+                    });
+                    rateVersionResource.data[SIVersionable.nick] = new SIVersionable.Sheet({
+                        follows: [rate.first_version_path]
+                    });
+                    var rateVersion : AdhHttp.ITransactionResult = transaction.post(rate.path, rateVersionResource);
+                    var rateVersionProper = transaction.get(rateVersion.path);
+
+                    return transaction.commit()
+                        .then((responses) : void => {
+                            _rateVersion = <any>(responses[rateVersionProper.index]);
+                        });
+                };
+
+                adhHttp.withTransaction(postProposal)
+                    .then((proposalResponses) => adhHttp.withTransaction((transaction) => {
+                        try {
+                            return postComment(proposalResponses, transaction);
+                        } catch (e) {
+                            expect(e).toBe(false);
+                        }
+                    }))
+                    .then((commentResponses) => adhHttp.withTransaction((transaction) => {
+                        try {
+                            return postRate(commentResponses, transaction);
+                        } catch (e) {
+                            expect(e).toBe(false);
+                        }
+                    }))
+                    .then(() => {
+                        expect(true).toBe(true);
+                    })
+
+                    .then(done).catch((error) => {
+                        expect(error).toBe(false);
+                        done();
+                    });
+            });
         });
 
         describe("filter pools", () => {
@@ -243,10 +258,15 @@ export var register = (angular, config, meta_api) => {
                 adhHttp.get(ratePostPoolPath, query)
                     .then(
                         (poolRsp) => {
-                            var rspCounts = poolRsp.data[SIPool.nick].aggregateby;
-                            expect(rspCounts.hasOwnProperty(aggrkey)).toBe(true);
-                            expect(rspCounts[aggrkey]).toEqual({"1": 1});  // 0-counts are omitted
-                            done();
+                            try {
+                                var rspCounts = poolRsp.data[SIPool.nick].aggregateby;
+                                expect(rspCounts.hasOwnProperty(aggrkey)).toBe(true);
+                                expect(rspCounts[aggrkey]).toEqual({"1": 1});  // 0-counts are omitted
+                                done();
+                            } catch (e) {
+                                expect(e).toBe(false);
+                                done();
+                            }
                         },
                         (msg) => {
                             expect(msg).toBe(false);
