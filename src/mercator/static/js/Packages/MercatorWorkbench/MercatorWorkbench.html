@@ -75,7 +75,36 @@
             </div>
         </div>
     </div>
-    <div data-ng-show="currentSpace === 'user'">
-        <h1>User</h1>
+    <div data-adh-moving-columns="" data-space="content" class="moving-columns" data-ng-show="currentSpace === 'user'">
+        <div class="moving-column moving-column-structure">
+            <div class="moving-column-menu placeholder"></div>
+            <div class="moving-column-body" data-du-scroll-container="">
+                <adh-list-users></adh-list-users>
+            </div>
+        </div>
+        <div class="moving-column moving-column-content">
+            <div class="moving-column-menu placeholder"></div>
+            <div class="moving-column-body" data-du-scroll-container="">
+                <adh-recompile-on-change
+                    data-key="userUrl"
+                    data-value="{{userUrl}}">
+                    <adh-user-profile
+                        data-path="{{userUrl}}">
+                    </adh-user-profile>
+                    <section class="mercator-user-profile-proposal-list" ng-if="user.loggedIn || userBasic">
+                        <h3>{{userBasic.name}}{{ "'s" | translate }} {{ "proposals" | translate }}</h3>
+                        <!-- FIXME: Filter only show selected users proposals -->
+                        <adh-mercator-proposal-listing
+                            data-path="{{path}}"
+                            data-content-type="{{contentType}}"
+                            data-update="proposalListingData.update"
+                            data-facets="proposalListingData.facets"
+                            data-sort="name"
+                        >
+                        </adh-mercator-proposal-listing>
+                    </section>
+                </adh-recompile-on-change>
+            </div>
+        </div>
     </div>
 </adh-spaces>

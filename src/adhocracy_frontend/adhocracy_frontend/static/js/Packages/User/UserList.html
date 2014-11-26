@@ -1,0 +1,13 @@
+<div class="user-list-me" ng-if="user.loggedIn">
+    <strong>{{user.data.name}}</strong>
+    <a class="button user-profile-button" href="{{user.userPath | adhResourceUrl}}">PROFILE</a>
+</div>
+<!-- FIXME: Remove own user from this list -->
+<section class="user-list">
+    <adh-listing
+        data-path="/principals/users/"
+        data-no-create-form="true">
+        <adh-user-list-item
+            data-path="{{element}}"></adh-user-list-item>
+    </adh-listing>
+</section>

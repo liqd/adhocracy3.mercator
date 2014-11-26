@@ -63,8 +63,6 @@
 
 .mercator-proposal-list-item {
     @include container;
-    border-bottom: 1px solid $color-structure-border;
-
     .mercator-proposal-list-item-image {
         @include span(3 of 12 first);
     }

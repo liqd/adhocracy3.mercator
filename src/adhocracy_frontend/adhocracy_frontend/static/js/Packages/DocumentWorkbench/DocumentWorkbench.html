@@ -31,7 +31,19 @@
             </div>
         </div>
     </div>
-    <div data-ng-show="currentSpace === 'user'">
-        <h1>User</h1>
+    <div data-adh-moving-columns="" data-space="content" class="moving-columns" data-ng-show="currentSpace === 'user'">
+        <div class="moving-column moving-column-structure">
+            <div class="moving-column-menu placeholder"></div>
+            <div class="moving-column-body" data-du-scroll-container="">
+                <p>User list</p>
+            </div>
+        </div>
+        <div class="moving-column moving-column-content">
+            <div class="moving-column-menu placeholder"></div>
+            <div class="moving-column-body" data-du-scroll-container="" adh-user-profile>
+                <h1>{{user.data.name}}</h1>
+                <p><a href="mailto:{{user.data.email}}">{{user.data.email}}</a></p>
+            </div>
+        </div>
     </div>
 </adh-spaces>

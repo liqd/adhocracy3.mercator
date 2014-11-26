@@ -7,7 +7,6 @@ import AdhTopLevelState = require("../TopLevelState/TopLevelState");
 import SIPasswordAuthentication = require("../../Resources_/adhocracy_core/sheets/principal/IPasswordAuthentication");
 import SIUserBasic = require("../../Resources_/adhocracy_core/sheets/principal/IUserBasic");
 
-
 var pkgLocation = "/User";
 
 export interface IUserBasic {
@@ -378,6 +377,51 @@ export var metaDirective = (adhConfig : AdhConfig.IService) => {
     };
 };
 
+export var userListDirective = (adhConfig : AdhConfig.IService) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/UserList.html"
+    };
+};
+
+export var userListItemDirective = (adhConfig : AdhConfig.IService) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/UserListItem.html",
+        scope: {
+            path: "@"
+        },
+        controller: ["adhHttp", "$scope", (adhHttp : AdhHttp.Service<any>, $scope) => {
+            if ($scope.path) {
+                adhHttp.resolve($scope.path)
+                    .then((res) => {
+                        $scope.userBasic = res.data[SIUserBasic.nick];
+                    });
+            }
+        }]
+    };
+};
+
+export var userProfileDirective = (adhConfig : AdhConfig.IService) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/UserProfile.html",
+        scope: {
+            path: "@"
+        },
+        controller: ["adhHttp", "adhUser", "$scope", "$rootScope", (adhHttp : AdhHttp.Service<any>, adhUser, $scope, $rootScope) => {
+            if ($scope.path) {
+                adhHttp.resolve($scope.path)
+                    .then((res) => {
+                        $scope.userBasic = $rootScope.userBasic = res.data[SIUserBasic.nick];
+                    });
+            } else {
+                $scope.userBasic = $rootScope.userBasic = adhUser.data;
+            }
+        }]
+    };
+};
+
 
 export var moduleName = "adhUser";
 
@@ -417,6 +461,9 @@ export var register = (angular) => {
                 }]);
         }])
         .service("adhUser", ["adhHttp", "$q", "$http", "$rootScope", "$window", "angular", "Modernizr", Service])
+        .directive("adhListUsers", ["adhConfig", userListDirective])
+        .directive("adhUserListItem", ["adhConfig", userListItemDirective])
+        .directive("adhUserProfile", ["adhConfig", userProfileDirective])
         .directive("adhLogin", ["adhConfig", loginDirective])
         .directive("adhRegister", ["adhConfig", registerDirective])
         .directive("adhUserIndicator", ["adhConfig", indicatorDirective])

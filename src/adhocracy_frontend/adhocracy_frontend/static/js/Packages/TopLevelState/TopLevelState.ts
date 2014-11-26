@@ -332,6 +332,9 @@ export var movingColumns = (
             topLevelState.on("commentableUrl", (url : string) => {
                 scope.commentableUrl = url;
             });
+            topLevelState.on("userUrl", (url : string) => {
+                scope.userUrl = url;
+            });
 
             topLevelState.on("movingColumns", move);
         }

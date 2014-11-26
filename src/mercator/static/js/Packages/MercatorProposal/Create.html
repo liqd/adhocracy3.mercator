@@ -305,6 +305,7 @@
                     <div
                         data-flow-init=""
                         data-flow-files-submitted="$flow.upload()"
+                        data-flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
                         name="introduction-picture-upload">
                         <button type="button" data-flow-btn="">
                             <span data-ng-if="$flow.files.length">{{ "Change Image" | translate }}</span>

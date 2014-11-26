@@ -141,7 +141,7 @@ export class Service implements AdhTopLevelState.IAreaInput {
                 var defaults : Dict = self.getDefaults(resource.content_type, view);
 
                 var meta : Dict = {
-                    platform: segs[1],
+                    platform: segs[1] === "principals" ? "mercator" : segs[1],
                     contentType: resource.content_type,
                     resourceUrl: resourceUrl,
                     view: view

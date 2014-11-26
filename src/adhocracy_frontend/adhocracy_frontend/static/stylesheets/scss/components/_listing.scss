@@ -24,6 +24,7 @@ a form for creating new elements. This form is then always visible.
 ```
 */
 .listing-elements {
+    border-top: 1px solid $color-structure-border;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -31,6 +32,9 @@ a form for creating new elements. This form is then always visible.
 
 // starting animations
 .listing-element {
+    border-bottom: 1px solid $color-structure-border;
+    padding: 10px;
+
     &.ng-enter {
         @include transition(all 3s);
         background: greenyellow;
