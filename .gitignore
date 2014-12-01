@@ -62,3 +62,4 @@ etc/tslint.json
 lib64/
 src/rubygemsrecipe/
 src/substanced/
+src/mercator/build
