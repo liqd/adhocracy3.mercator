@@ -177,7 +177,7 @@ export class Service implements AdhTopLevelState.IAreaInput {
 
 
 export var resourceUrl = (adhConfig : AdhConfig.IService) => {
-    return (path : string, view? : string) => {
+    return (path : string, view? : string, search? : {[key : string]: any}) => {
         if (typeof path !== "undefined") {
             var url = "/r" + path.replace(adhConfig.rest_url, "");
             if (url.substr(-1) !== "/") {
@@ -185,6 +185,11 @@ export var resourceUrl = (adhConfig : AdhConfig.IService) => {
             }
             if (typeof view !== "undefined") {
                 url += "@" + view;
+            }
+            if (typeof search !== "undefined") {
+                url += "?" + _.map(search, (value, key : string) => {
+                    return encodeURIComponent(key) + "=" + encodeURIComponent(value);
+                }).join("&");
             }
             return url;
         }

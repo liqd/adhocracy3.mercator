@@ -19,6 +19,9 @@
                 <div class="moving-column-menu">
                     <a href="" data-ng-click="proposalListingData.showFacets = !proposalListingData.showFacets">{{ "filters" | translate }}</a>
                 </div>
+                <div class="moving-column-collapsed">
+                    <a href="{{ platformUrl | adhResourceUrl:undefined:{proposalUrl: proposalUrl, movingColumns: 'is-show-show-hide'} }}">O</a>
+                </div>
                 <div
                     class="moving-column-sidebar"
                     data-ng-class="{'is-visible': proposalListingData.showFacets}"
@@ -63,6 +66,9 @@
                     <!-- FIXME: permission check -->
                     <a href="{{ proposalUrl | adhResourceUrl:'edit' }}">{{ "edit" | translate }}</a>
                     <a href="{{ platformUrl | adhResourceUrl }}" title="{{ 'close' | translate }}">X</a>
+                </div>
+                <div class="moving-column-collapsed">
+                    <a href="{{ proposalUrl | adhResourceUrl }}">O</a>
                 </div>
                 <div class="moving-column-body" data-du-scroll-container="">
                     <adh-recompile-on-change data-value="{{proposalUrl}}" data-key="proposalUrl">

@@ -110,6 +110,10 @@ The menu should always have the same state as its columns.
     // look
     border-right: 1px solid $color-structure-border;
 
+    .moving-column-collapsed {
+        display: none;
+    }
+
     &.is-collapse, &.is-hide {
         background-color: $color-structure-surface;
 
@@ -117,6 +121,10 @@ The menu should always have the same state as its columns.
         .moving-column-menu,
         .moving-column-sidebar {
             display: none;
+        }
+
+        .moving-column-collapsed {
+            display: block;
         }
     }
 }
