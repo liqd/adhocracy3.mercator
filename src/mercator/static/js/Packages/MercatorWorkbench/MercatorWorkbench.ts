@@ -39,7 +39,6 @@ interface IMercatorWorkbenchScope extends ng.IScope {
 
 interface IMercatorWorkbenchRootScope extends ng.IScope {
     mercatorProposalPostPoolOptions : AdhHttp.IOptions;
-    addMercatorProposal : () => void;
 }
 
 export class MercatorWorkbench {
@@ -91,15 +90,6 @@ export class MercatorWorkbench {
                 };
 
                 $rootScope.mercatorProposalPostPoolOptions = AdhHttp.emptyOptions;
-                $rootScope.addMercatorProposal = () => {
-                    if ($rootScope.mercatorProposalPostPoolOptions.POST) {
-                        $location.url("/r/mercator/@create_proposal");
-                    } else {
-                        adhTopLevelState.setCameFrom("/r/mercator/@create_proposal");
-                        $location.url("/login");
-                    }
-                };
-
                 adhPermissions.bindScope($rootScope, $scope.path, "mercatorProposalPostPoolOptions");
 
                 adhTopLevelState.on("view", (value : string) => {

@@ -237,11 +237,28 @@ export class Service {
 
                 this.blockTemplate = false;
             })
-            .catch((error) => {
-                console.log(error);
-                throw error;
-            });
+            .catch(this.handleRoutingError);
         }
+    }
+
+    /**
+     * take action on 'benevolent' routing errors like "not logged
+     * in".  this method alwasy re-throws, so return type is void.
+     */
+    private handleRoutingError(error) : void {
+        var notLoggedIn = () => {
+            this.setCameFrom(this.$location.path());
+            this.$location.path("/login");
+        };
+
+        if (typeof error === "string") {
+            switch (error) {
+                case "NotLoggedIn": notLoggedIn(); throw error;
+            }
+        }
+
+        console.log(error);
+        throw error;
     }
 
     private toLocation() : void {

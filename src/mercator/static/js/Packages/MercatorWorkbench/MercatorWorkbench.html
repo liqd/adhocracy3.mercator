@@ -63,7 +63,6 @@
             </div>
             <div data-ng-if="view !== 'edit'">
                 <div class="moving-column-menu">
-                    <!-- FIXME: permission check -->
                     <a href="{{ proposalUrl | adhResourceUrl:'edit' }}">{{ "edit" | translate }}</a>
                     <a href="{{ platformUrl | adhResourceUrl }}" title="{{ 'close' | translate }}">X</a>
                 </div>
@@ -110,6 +109,17 @@
                             </adh-mercator-user-proposal-listing>
                         </section>
                     </adh-user-profile>
+                    <section class="mercator-user-profile-proposal-list" ng-if="user.loggedIn || userBasic">
+                        <h3>{{userBasic.name}}{{ "'s" | translate }} {{ "proposals" | translate }}</h3>
+                        <adh-mercator-proposal-listing
+                            data-path="{{path}}"
+                            data-content-type="{{contentType}}"
+                            data-update="proposalListingData.update"
+                            data-facets="proposalListingData.facets"
+                            data-sort="name"
+                        >
+                        </adh-mercator-proposal-listing>
+                    </section>
                 </adh-recompile-on-change>
             </div>
         </div>
