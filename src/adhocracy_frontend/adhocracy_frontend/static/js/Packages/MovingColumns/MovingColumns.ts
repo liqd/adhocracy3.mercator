@@ -131,28 +131,6 @@ export var movingColumns = (
 };
 
 
-/**
- * A simple focus switcher that can be used until we have a proper widget for this.
- */
-export var adhFocusSwitch = (adhTopLevelState : AdhTopLevelState.Service) => {
-    return {
-        restrict: "E",
-        template: "<a href=\"\" ng-click=\"switchFocus()\">X</a>",
-        link: (scope) => {
-            scope.switchFocus = () => {
-                var currentState = adhTopLevelState.get("movingColumns");
-
-                if (currentState.split("-")[1] === "show") {
-                    adhTopLevelState.set("movingColumns", "is-collapse-show-show");
-                } else {
-                    adhTopLevelState.set("movingColumns", "is-show-show-hide");
-                }
-            };
-        }
-    };
-};
-
-
 export var moduleName = "adhMovingColumns";
 
 export var register = (angular) => {
@@ -160,6 +138,5 @@ export var register = (angular) => {
         .module(moduleName, [
             AdhTopLevelState.moduleName
         ])
-        .directive("adhMovingColumns", ["adhTopLevelState", "$timeout", "$window", movingColumns])
-        .directive("adhFocusSwitch", ["adhTopLevelState", adhFocusSwitch]);
+        .directive("adhMovingColumns", ["adhTopLevelState", "$timeout", "$window", movingColumns]);
 };
