@@ -63,10 +63,8 @@
             </div>
             <div data-ng-if="view !== 'edit'">
                 <div class="moving-column-menu">
-                    <a data-ng-if="proposalItemOptions.POST" href="{{ proposalUrl | adhResourceUrl:'edit' }}">{{ "edit" | translate }}</a>
-                    <div class="moving-column-menu-nav">
-                        <a href="{{ platformUrl | adhResourceUrl }}" title="{{ 'close' | translate }}">X</a>
-                    </div>
+                    <a data-ng-if="proposalItemOptions.POST" href="{{ proposalUrl | adhResourceUrl:'edit' }}" title="{{ "edit" | translate }}"><i class="icon-document"?></i></a>
+                        <a href="{{ platformUrl | adhResourceUrl }}" title="{{ 'close' | translate }}"><i class="icon-minus"></i></a>
                 </div>
                 <div class="moving-column-collapsed">
                     <a href="{{ proposalUrl | adhResourceUrl }}">O</a>

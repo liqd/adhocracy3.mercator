@@ -187,18 +187,19 @@ States:
 
     &, a {
         height: $moving-column-menu-height;
+        line-height: $moving-column-menu-height;
     }
 
     a {
+        @include inline-block;
         color: $color-secondary-extrovert;
-        display: block;
         text-decoration: none;
 
         i {
             font-size: 1.25em;
             line-height: 1.25em;
             margin-right: $padding-medium;
-            vertical-align: middle;
+            vertical-align: baseline;
         }
 
         &:hover {
