@@ -11,6 +11,7 @@ import AdhResourceArea = require("../ResourceArea/ResourceArea");
 import AdhTopLevelState = require("../TopLevelState/TopLevelState");
 import AdhUser = require("../User/User");
 import AdhUtil = require("../Util/Util");
+import AdhVisible = require("../Visible/Visible");
 
 import RIBasicPool = require("../../Resources_/adhocracy_core/resources/pool/IBasicPool");
 import RICommentVersion = require("../../Resources_/adhocracy_core/resources/comment/ICommentVersion");
@@ -115,7 +116,8 @@ export var register = (angular) => {
             AdhPermissions.moduleName,
             AdhResourceArea.moduleName,
             AdhTopLevelState.moduleName,
-            AdhUser.moduleName
+            AdhUser.moduleName,
+            AdhVisible.moduleName
         ])
         .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
             adhResourceAreaProvider

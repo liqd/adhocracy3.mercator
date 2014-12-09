@@ -42,6 +42,7 @@ import AdhResourceWidgets = require("./Packages/ResourceWidgets/ResourceWidgets"
 import AdhSticky = require("./Packages/Sticky/Sticky");
 import AdhTopLevelState = require("./Packages/TopLevelState/TopLevelState");
 import AdhUser = require("./Packages/User/User");
+import AdhVisible = require("./Packages/Visible/Visible");
 import AdhWebSocket = require("./Packages/WebSocket/WebSocket");
 
 
@@ -155,6 +156,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     AdhSticky.register(angular);
     AdhTopLevelState.register(angular);
     AdhUser.register(angular);
+    AdhVisible.register(angular);
     AdhWebSocket.register(angular);
 
     // force-load some services

@@ -1,5 +1,5 @@
 <adh-spaces>
-    <div data-adh-moving-columns="" class="moving-columns" data-ng-show="currentSpace === 'content'" data-ng-if="isSpaceInitialized('content')">
+    <div data-adh-moving-columns="" class="moving-columns" data-adh-visible="currentSpace === 'content'" data-ng-if="isSpaceInitialized('content')">
         <div class="moving-column moving-column-structure">
             <div data-ng-if="view === 'create_proposal'">
                 <div class="moving-column-menu">
@@ -92,7 +92,7 @@
         </div>
     </div>
 
-    <div data-adh-moving-columns="" class="moving-columns" data-ng-show="currentSpace === 'user'" data-ng-if="isSpaceInitialized('user')">
+    <div data-adh-moving-columns="" class="moving-columns" data-adh-visible="currentSpace === 'user'" data-ng-if="isSpaceInitialized('user')">
         <div class="moving-column moving-column-structure">
             <div class="moving-column-menu placeholder"></div>
             <div class="moving-column-body" data-du-scroll-container="">
@@ -119,7 +119,7 @@
         </div>
     </div>
 
-    <div data-ng-show="currentSpace === 'error'" data-ng-if="isSpaceInitialized('error')">
+    <div data-adh-visible="currentSpace === 'error'" data-ng-if="isSpaceInitialized('error')">
         <adh-routing-error></adh-routing-error>
     </div>
 </adh-spaces>
