@@ -72,7 +72,7 @@ export var movingColumns = (
                         case "show":
                             child.addClass("is-show");
                             child.attr("aria-visible", "true");
-                            child.innerWidth(showWidth);
+                            child.outerWidth(showWidth);
                             offset += showWidth;
                             break;
                         case "collapse":
