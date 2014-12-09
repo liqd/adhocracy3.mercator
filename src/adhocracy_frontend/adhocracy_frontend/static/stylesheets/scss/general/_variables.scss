@@ -3,18 +3,18 @@
 $color-prime-normal: #575756;
 $color-prime-extrovert: #1c1c1b;
 $color-secondary-extrovert: #9d9c9c;
-$color-secondary-introvert: #dadad9;
+$color-secondary-introvert: #e6e6e6;
 $color-highlight-normal: #009ee3;
 $color-highlight-introvert: #3eb7ea;
-$color-highlight-extrovert: #0088b9;
+$color-highlight-extrovert: #808080;
 $color-highlight-reverse: white;
 $color-highlight-valid: #2eac66;
 $color-highlight-invalid: #e6332a;
 $color-background: white;
-$color-structure-surface: #dadad9;
+$color-structure-surface: #e6e6e6;
 $color-structure-active: #f5f5f5;
 $color-structure-border: #9d9c9c;
-$color-structure-border-introvert: #dadad9;
+$color-structure-border-introvert: #e6e6e6;
 $color-structure-border-extrovert: #575756;
 
 
@@ -27,9 +27,11 @@ $font-size-plus: 16px;
 $font-size-large: 21px;
 $font-size-huge: 40px;
 
-$moving-column-separation: 0.3em;
+$moving-column-separation: 0.2857em; //~4px
+$moving-column-menu-height: 2em; //~25px
+$moving-column-border-width: 0.4166em; //~5px
 
-$l-header-height: 3.5em;
+$l-header-height: 2.8571em; //~40px
 
 $padding-medium: 1em;
 

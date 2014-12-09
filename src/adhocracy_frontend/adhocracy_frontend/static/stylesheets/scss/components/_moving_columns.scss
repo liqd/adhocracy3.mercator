@@ -1,5 +1,3 @@
-$moving-column-menu-height: 2.5em;
-
 /*doc
 ---
 title: Moving Columns
@@ -108,7 +106,8 @@ The menu should always have the same state as its columns.
     @include transition(width 0.5s, right 0.5s);
 
     // look
-    border-right: 1px solid $color-structure-border;
+    border: 0 solid $color-secondary-introvert;
+    border-width: 0 0 $moving-column-border-width $moving-column-border-width;
 
     .moving-column-collapsed {
         display: none;
@@ -120,6 +119,7 @@ The menu should always have the same state as its columns.
 
     &.is-collapse, &.is-hide {
         background-color: $color-structure-surface;
+        border: 0;
         padding-left: 0;
 
         .moving-column-body,
@@ -181,9 +181,31 @@ States:
 */
 .moving-column-menu {
     @include clearfix;
-    background: $color-prime-normal;
-    padding: 0 0 0 0.5em;
+    background: $color-secondary-introvert;
+    font-size: $font-size-small;
+    padding: 0 0 0 $moving-column-border-width;
     line-height: $moving-column-menu-height / 1em;
+
+    &, a {
+        height: $moving-column-menu-height;
+    }
+
+    a {
+        color: $color-secondary-extrovert;
+        display: block;
+        text-decoration: none;
+
+        i {
+            font-size: 1.25em;
+            line-height: 1.25em;
+            margin-right: $padding-medium;
+            vertical-align: middle;
+        }
+
+        &:hover {
+            color: $color-prime-normal;
+        }
+    }
 }
 
 .moving-column-menu-nav {
