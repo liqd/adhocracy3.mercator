@@ -182,7 +182,7 @@ States:
     @include clearfix;
     background: $color-secondary-introvert;
     font-size: $font-size-small;
-    padding: 0 0 0 $moving-column-border-width;
+    padding: 0 0 0 $padding-small;
     line-height: $moving-column-menu-height / 1em;
 
     &, a {
