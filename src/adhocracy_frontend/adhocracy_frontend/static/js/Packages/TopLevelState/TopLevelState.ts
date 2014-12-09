@@ -455,13 +455,16 @@ export var spaces = (
 
 
 export var spaceSwitch = (
-    topLevelState : Service
+    topLevelState : Service,
+    adhConfig  : AdhConfig.IService
 ) => {
     return {
         restrict: "E",
-        template: "<a href=\"\" data-ng-click=\"setSpace('content')\">Content</a>" +
-            "<a href=\"\" data-ng-click=\"setSpace('user')\">User</a>",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/" + "SpaceSwitch.html",
         link: (scope) => {
+            topLevelState.on("space", (space) => {
+                 scope.currentSpace = space;
+            });
             scope.setSpace = (space : string) => {
                 topLevelState.set("space", space);
             };
@@ -521,6 +524,6 @@ export var register = (angular) => {
         .directive("adhPageWrapper", ["adhConfig", pageWrapperDirective])
         .directive("adhRoutingError", ["adhConfig", routingErrorDirective])
         .directive("adhSpaces", ["adhTopLevelState", spaces])
-        .directive("adhSpaceSwitch", ["adhTopLevelState", spaceSwitch])
+        .directive("adhSpaceSwitch", ["adhTopLevelState", "adhConfig", spaceSwitch])
         .directive("adhView", ["adhTopLevelState", "$compile", viewFactory]);
 };

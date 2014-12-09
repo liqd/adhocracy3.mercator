@@ -1,7 +1,21 @@
-$l-header-height: 3.5em;
-
 .l-header {
     height: $l-header-height;
+    padding-top: $l-header-padding-top;
+}
+
+.l-header-wrapper {
+    @extend %moving-column-single-width;
+    margin: 0 auto;
+}
+
+.l-header-left,
+.l-header-right {
+    float: left;
+}
+
+.l-header-right {
+    @include text-align(right);
+    float: right;
 }
 
 .l-content {

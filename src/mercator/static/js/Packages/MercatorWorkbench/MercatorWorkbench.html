@@ -17,7 +17,7 @@
             </div>
             <div data-ng-if="view !== 'create_proposal'">
                 <div class="moving-column-menu">
-                    <a href="" data-ng-click="proposalListingData.showFacets = !proposalListingData.showFacets">{{ "filters" | translate }}</a>
+                    <a href="" data-ng-click="proposalListingData.showFacets = !proposalListingData.showFacets"><i class="icon-list"></i> {{ "filters" | translate }}</a>
                 </div>
                 <div class="moving-column-collapsed">
                     <a href="{{ platformUrl | adhResourceUrl:undefined:{proposalUrl: proposalUrl, movingColumns: 'is-show-show-hide'} }}">O</a>

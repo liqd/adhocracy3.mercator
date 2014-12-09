@@ -22,16 +22,11 @@ Currently, they are adjusted to 0.5em padding on all sides.
 */
 
 .user-indicator {
-    @include text-align(right);
-}
-
-.user-indicator-primary,
-.user-indicator-secondary {
-    display: block;
-}
-
-.user-indicator-primary {
-    font-size: 130% * ($l-header-height - 1em) / 2.5em;
+    @include inline-block;
+    font-size: $font-size-small;
+    font-weight: 300;
+    vertical-align: bottom;
+    white-space: nowrap;
 }
 
 .user-indicator-primary,
@@ -39,10 +34,6 @@ Currently, they are adjusted to 0.5em padding on all sides.
     line-height: 1.1;
     color: $color-prime-normal;
     text-decoration: none;
-}
-
-.user-indicator-secondary {
-    font-size: 100% * ($l-header-height - 1em) / 2.5em;
 }
 
 .user-indicator-secondary,
@@ -54,6 +45,5 @@ Currently, they are adjusted to 0.5em padding on all sides.
 
 .user-indicator-graphic {
     float: right;
-    height: $l-header-height - 1em;
     margin-left: 0.5em;
 }

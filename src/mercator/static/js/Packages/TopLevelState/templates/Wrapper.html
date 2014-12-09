@@ -1,9 +1,13 @@
 <header class="l-header main-header">
-    <a class="button" href="/r/mercator/@create_proposal">
-        {{ "Add Proposal" | translate }}
-    </a>
-    <adh-space-switch></adh-space-switch>
-    <adh-user-indicator></adh-user-indicator>
+    <div class="l-header-wrapper">
+        <div class="l-header-left">
+            <a class="call-to-action m-add" href="/r/mercator/@create_proposal">{{ "Add Proposal" | translate }}</a>
+        </div>
+        <div class="l-header-right">
+            <adh-space-switch></adh-space-switch>
+            <adh-user-indicator></adh-user-indicator>
+        </div>
+    </div>
 </header>
 
 <div class="l-content" data-ng-transclude="">

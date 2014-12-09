@@ -1,0 +1,22 @@
+.set-space {
+    margin-right: $padding-medium;
+    outline: 0;
+    text-decoration: none;
+
+    i {
+        color: $color-secondary-extrovert;
+        font-size: $icon-size;
+    }
+
+    &.active {
+        i {
+            color: $color-highlight-normal;
+        }
+    }
+
+    &:last-child {
+        border-left: 2px solid $color-secondary-extrovert;
+        padding-left: $padding-medium;
+    }
+
+}

@@ -20,18 +20,6 @@ body {
     padding: 1px 0;
 }
 
-.main-header {
-    padding: 0.5em;
-    background: $color-structure-surface;
-    @include text-align(end);
-    overflow: hidden;
-
-    .user-indicator {
-        float: right;
-        min-width: 12em;
-    }
-}
-
 .rate-button.is-rate-button-active {
     background: black;
 }

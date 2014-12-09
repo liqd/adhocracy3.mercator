@@ -58,7 +58,7 @@ export var movingColumns = (
 
                 var collapseCount : number = parts.filter((v) => v === "collapse").length;
                 var showCount : number = parts.filter((v) => v === "show").length;
-                var totalWidth : number = element.width();
+                var totalWidth : number = element.outerWidth();
                 var showWidth : number = (totalWidth - collapseCount * collapseWidth) / showCount;
                 showWidth = Math.min(showWidth, maxShowWidth);
 
@@ -72,7 +72,7 @@ export var movingColumns = (
                         case "show":
                             child.addClass("is-show");
                             child.attr("aria-visible", "true");
-                            child.width(showWidth);
+                            child.innerWidth(showWidth);
                             offset += showWidth;
                             break;
                         case "collapse":
