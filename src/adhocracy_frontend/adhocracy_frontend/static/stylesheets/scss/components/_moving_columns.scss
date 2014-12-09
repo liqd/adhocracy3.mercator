@@ -105,16 +105,12 @@ The menu should always have the same state as its columns.
     overflow: hidden;
     @include transition(width 0.5s, right 0.5s);
 
-    // look
-    border: 0 solid $color-secondary-introvert;
-    border-width: 0 0 $moving-column-border-width $moving-column-border-width;
-
     .moving-column-collapsed {
         display: none;
     }
 
     + .moving-column {
-        padding-left: $moving-column-separation;
+        border-left: $moving-column-separation solid transparent;
     }
 
     &.is-collapse, &.is-hide {
@@ -149,6 +145,9 @@ The menu should always have the same state as its columns.
     overflow-y: auto;
 
     // look
+    border: 0 solid $color-secondary-introvert;
+    border-width: 0 0 $moving-column-border-width $moving-column-border-width;
+    font-size: $font-size-small;
     padding: 0.5em;
 }
 
