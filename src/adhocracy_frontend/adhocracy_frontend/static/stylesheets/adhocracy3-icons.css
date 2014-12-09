@@ -24,6 +24,7 @@
 
 [data-icon]:before,
 .icon-documents:before,
+.icon-list:before,
 .icon-speachbubble:before,
 .icon-speachbubble-outline:before,
 .icon-user:before {
@@ -42,6 +43,7 @@
 }
 
 .icon-documents:before { content: "\f103"; }
+.icon-list:before { content: "\f104"; }
 .icon-speachbubble:before { content: "\f100"; }
 .icon-speachbubble-outline:before { content: "\f101"; }
 .icon-user:before { content: "\f102"; }
