@@ -23,10 +23,14 @@
 [data-icon]:before { content: attr(data-icon); }
 
 [data-icon]:before,
+.icon-document:before,
 .icon-documents:before,
+.icon-list:before,
+.icon-minus:before,
 .icon-speachbubble:before,
 .icon-speachbubble-outline:before,
-.icon-user:before {
+.icon-user:before,
+.icon-x:before {
   display: inline-block;
   font-family: "adhocracy3-icons";
   font-style: normal;
@@ -41,7 +45,11 @@
   font-smoothing: antialiased;
 }
 
+.icon-document:before { content: "\f105"; }
 .icon-documents:before { content: "\f103"; }
+.icon-list:before { content: "\f104"; }
+.icon-minus:before { content: "\f106"; }
 .icon-speachbubble:before { content: "\f100"; }
 .icon-speachbubble-outline:before { content: "\f101"; }
 .icon-user:before { content: "\f102"; }
+.icon-x:before { content: "\f107"; }

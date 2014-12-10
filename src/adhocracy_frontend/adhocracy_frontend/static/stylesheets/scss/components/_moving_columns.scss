@@ -1,5 +1,3 @@
-$moving-column-menu-height: 2.5em;
-
 /*doc
 ---
 title: Moving Columns
@@ -107,19 +105,17 @@ The menu should always have the same state as its columns.
     overflow: hidden;
     @include transition(width 0.5s, right 0.5s);
 
-    // look
-    border-right: 1px solid $color-structure-border;
-
     .moving-column-collapsed {
         display: none;
     }
 
     + .moving-column {
-        padding-left: $moving-column-separation;
+        border-left: $moving-column-separation solid transparent;
     }
 
     &.is-collapse, &.is-hide {
         background-color: $color-structure-surface;
+        border: 0;
         padding-left: 0;
 
         .moving-column-body,
@@ -149,6 +145,9 @@ The menu should always have the same state as its columns.
     overflow-y: auto;
 
     // look
+    border: 0 solid $color-secondary-introvert;
+    border-width: 0 0 $moving-column-border-width $moving-column-border-width;
+    font-size: $font-size-small;
     padding: 0.5em;
 }
 
@@ -181,9 +180,51 @@ States:
 */
 .moving-column-menu {
     @include clearfix;
-    background: $color-prime-normal;
-    padding: 0 0 0 0.5em;
-    line-height: $moving-column-menu-height / 1em;
+    background: $color-secondary-introvert;
+    font-size: $font-size-small;
+    line-height: $moving-column-menu-height;
+    padding: 0 0 0 $padding-small;
+
+    &, a {
+        height: $moving-column-menu-height;
+    }
+
+    a {
+        @include inline-block;
+        color: $color-secondary-extrovert;
+        float: left;
+        text-decoration: none;
+
+        a, i {
+            line-height: 1.8em;
+        }
+
+        i {
+            font-size: 1.8em;
+            line-height: 1em;
+            margin-right: $padding-medium;
+            vertical-align: middle;
+        }
+
+        &:hover {
+            color: $color-prime-normal;
+        }
+
+        &.moving-column-action-collapse {
+            background-color: $color-structure-surface;
+            color: #fff;
+            float: right;
+
+            &:hover {
+                background-color: darken($color-structure-surface, 10%);
+            }
+
+            i {
+                margin: 0;
+                padding: 0 0.7em;
+            }
+        }
+    }
 }
 
 .moving-column-menu-nav {
