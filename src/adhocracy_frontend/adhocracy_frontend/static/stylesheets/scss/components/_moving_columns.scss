@@ -182,28 +182,47 @@ States:
     @include clearfix;
     background: $color-secondary-introvert;
     font-size: $font-size-small;
+    line-height: $moving-column-menu-height;
     padding: 0 0 0 $padding-small;
-    line-height: $moving-column-menu-height / 1em;
 
     &, a {
         height: $moving-column-menu-height;
-        line-height: $moving-column-menu-height;
     }
 
     a {
         @include inline-block;
         color: $color-secondary-extrovert;
+        float: left;
         text-decoration: none;
 
+        a, i {
+            line-height: 1.8em;
+        }
+
         i {
-            font-size: 1.25em;
-            line-height: 1.25em;
+            font-size: 1.8em;
+            line-height: 1em;
             margin-right: $padding-medium;
-            vertical-align: baseline;
+            vertical-align: middle;
         }
 
         &:hover {
             color: $color-prime-normal;
+        }
+
+        &.moving-column-action-collapse {
+            background-color: $color-structure-surface;
+            color: #fff;
+            float: right;
+
+            &:hover {
+                background-color: darken($color-structure-surface, 10%);
+            }
+
+            i {
+                margin: 0;
+                padding: 0 0.7em;
+            }
         }
     }
 }
