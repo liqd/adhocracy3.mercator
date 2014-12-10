@@ -1,6 +1,7 @@
 """Public py.test fixtures: http://pytest.org/latest/fixture.html. """
 from unittest.mock import Mock
 from configparser import ConfigParser
+from shutil import rmtree
 import json
 import os
 import subprocess
@@ -11,9 +12,13 @@ from cornice.errors import Errors
 from pyramid.config import Configurator
 from pyramid import testing
 from pyramid.traversal import resource_path_tuple
+from pyramid.util import DottedNameResolver
 from pytest import fixture
 from substanced.objectmap import ObjectMap
 from substanced.objectmap import find_objectmap
+from ZODB import FileStorage
+from webtest import TestApp
+from webtest import TestResponse
 from zope.interface.interfaces import IInterface
 import colander
 
@@ -586,11 +591,15 @@ def includeme_root_with_test_users(config):
 @fixture(scope='class')
 def app(app_settings):
     """Return the adhocracy test wsgi application."""
+    return _make_app(app_settings)
+
+
+def _make_app(app_config):
     import adhocracy_core
     import adhocracy_core.resources.sample_paragraph
     import adhocracy_core.resources.sample_section
     import adhocracy_core.resources.sample_proposal
-    configurator = Configurator(settings=app_settings,
+    configurator = Configurator(settings=app_config,
                                 root_factory=adhocracy_core.root_factory)
     configurator.include(adhocracy_core)
     configurator.include(adhocracy_core.resources.sample_paragraph)
@@ -602,6 +611,26 @@ def app(app_settings):
     configurator.include(includeme_root_with_test_users)
     app = configurator.make_wsgi_app()
     return app
+
+
+@fixture(scope='class')
+def app_with_filestorage(app_settings: dict):
+    """
+    Return the adhocracy test wsgi application using a DB with file storage.
+
+    Any DB contents are cleared by this fixture.
+    """
+    db_file = 'var/test_zeodata/Data.fs'
+    blob_dir = 'var/test_zeodata/blobs'
+    # Delete old content
+    storage = FileStorage.FileStorage(db_file, blob_dir=blob_dir)
+    storage.cleanup()
+    # This doesn't seem to clear the blob_dir, hence we do so manually
+    rmtree(blob_dir, ignore_errors=True)
+    our_settings = app_settings.copy()
+    our_settings['zodbconn.uri'] = 'file://{}?blobstorage_dir={}'.format(
+        db_file, blob_dir)
+    return _make_app(our_settings)
 
 
 @fixture(scope='class')
@@ -652,3 +681,90 @@ def backend_with_ws(request, zeo, websocket, supervisor):
     request.addfinalizer(fin)
 
     return output
+
+
+class AppUser:
+
+    """:class:`webtest.TestApp` wrapper for backend functional testing."""
+
+    def __init__(self, app,
+                 rest_url: str='http://localhost',
+                 base_path: str='/',
+                 header: dict=None):
+        self.app = TestApp(app)
+        """:class:`webtest.TestApp`to send requests to the backend server."""
+        self.rest_url = rest_url
+        """backend server url to generate request urls."""
+        self.base_path = base_path
+        """path prefix to generate request urls."""
+        self.header = header or {}
+        """default header for requests, mostly for authentication."""
+        self._resolver = DottedNameResolver()
+
+    def post(self,
+             path: str, iresource: IInterface, cstruct: dict) -> TestResponse:
+        """Build and post request to the backend rest server."""
+        url = self.rest_url + self.base_path + path
+        props = self._build_post_body(iresource, cstruct)
+        resp = self.app.post_json(url, props, headers=self.header)
+        return resp
+
+    def _build_post_body(self, iresource: IInterface, cstruct: dict) -> dict:
+        return {'content_type': iresource.__identifier__,
+                'data': cstruct}
+
+    def get(self, path: str) -> TestResponse:
+        """Send get request to the backend rest server."""
+        url = self.rest_url + self.base_path + path
+        resp = self.app.get(url, headers=self.header)
+        return resp
+
+    def options(self, path: str) -> TestResponse:
+        """Send options request to the backend rest server."""
+        url = self.rest_url + self.base_path + path
+        resp = self.app.options(url, headers=self.header)
+        return resp
+
+    def get_postable_types(self, path: str) -> []:
+        """Send options request and return the postable content types."""
+        resp = self.options(path)
+        post_request_body = resp.json['POST']['request_body']
+        type_names = sorted([r['content_type'] for r in post_request_body])
+        iresources = [self._resolver.resolve(t) for t in type_names]
+        return iresources
+
+
+@fixture(scope='class')
+def app_reader(app) -> TestApp:
+    """Return backend test app wrapper with reader authentication."""
+    return AppUser(app, base_path='/adhocracy', header=reader_header)
+
+
+@fixture(scope='class')
+def app_annotator(app):
+    """Return backend test app wrapper with annotator authentication."""
+    return AppUser(app, base_path='/adhocracy', header=annotator_header)
+
+
+@fixture(scope='class')
+def app_contributor(app):
+    """Return backend test app wrapper with contributor authentication."""
+    return AppUser(app, base_path='/adhocracy', header=contributor_header)
+
+
+@fixture(scope='class')
+def app_editor(app):
+    """Return backend test app wrapper with editor authentication."""
+    return AppUser(app, base_path='/adhocracy', header=editor_header)
+
+
+@fixture(scope='class')
+def app_admin(app):
+    """Return backend test app wrapper with admin authentication."""
+    return AppUser(app, base_path='/adhocracy', header=admin_header)
+
+
+@fixture(scope='class')
+def app_god(app):
+    """Return backend test app wrapper with god authentication."""
+    return AppUser(app, base_path='/adhocracy', header=god_header)

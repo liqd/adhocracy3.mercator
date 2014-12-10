@@ -57,6 +57,20 @@ def get_isheets(context) -> [IInterface]:
     return [i for i in ifaces if i.isOrExtends(ISheet)]
 
 
+def get_matching_isheet(context, isheet: IInterface) -> IInterface:
+    """
+    Get `isheet` or a subclass of it if `context` provides it.
+
+    If `context` provides neither `isheet` nor any of its subclasses, None
+    is returned.
+    """
+    ifaces = list(providedBy(context))
+    for iface in ifaces:
+        if iface.isOrExtends(isheet):
+            return iface
+    return None
+
+
 def get_sheet(context, isheet: IInterface, registry: Registry=None)\
         -> IResourceSheet:
     """Get sheet adapter for the `isheet` interface.
@@ -244,6 +258,24 @@ def normalize_to_tuple(context) -> tuple:
         return context,
 
 
+def nested_dict_set(d: dict, keys: list, value: object):
+    """
+    Set a nested key in a dictionary.
+
+    The following two expressions are equivalent, if ``d['key']['subkey']``
+    already exists::
+
+        nested_dict_set(d, ['key', 'subkey', 'subsubkey'], value)
+        d['key']['subkey']['subsubkey'] = value
+
+    If parent elements such as ``d['key']['subkey']`` or ``d['key']`` don't
+    yet exist, this function will initialize them as dictionaries.
+    """
+    for key in keys[:-1]:
+        d = d.setdefault(key, {})
+    d[keys[-1]] = value
+
+
 def get_sheet_field(resource, isheet: ISheet, field_name: str,
                     registry: Registry=None) -> object:
     """Return value of `isheet` field `field_name` for `resource`.
@@ -255,3 +287,12 @@ def get_sheet_field(resource, isheet: ISheet, field_name: str,
     sheet = get_sheet(resource, isheet, registry=registry)
     field = sheet.get()[field_name]
     return field
+
+
+def unflatten_multipart_request(request: Request) -> dict:
+    """Convert a multipart/form-data request into the usual dict structure."""
+    result = {}
+    for key, value in request.POST.items():
+        keyparts = key.split(':')
+        nested_dict_set(result, keyparts, value)
+    return result

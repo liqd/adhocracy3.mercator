@@ -4,9 +4,6 @@ Assets and Images
 Introduction
 ------------
 
-FIXME All of this still needs to be implemented. This document will be
-revised and turned into a doctest along with the implementation.
-
 *Assets* are files of arbitrary type that can be uploaded to and downloaded
 from the backend. From the viewpoint of the backend, they are just "blobs"
 -- binary objects without any specific semantic.
@@ -15,8 +12,7 @@ from the backend. From the viewpoint of the backend, they are just "blobs"
 different target formats.
 
 To manage assets, the backend has the `adhocracy_core.resources.asset.IAsset`
-resource type, which is a special kind of *Pool.* (FIXME Or possibly it's a
-*Simple*? In any case, it's not versionable.)
+resource type, which is a special kind of *Pool.*
 
 Assets can be uploaded to an *asset pool.* Resources that provide an asset
 pool implement the `adhocracy_core.sheets.asset.IHasAssetPool` sheet, which
@@ -29,18 +25,22 @@ sheets:
 
 * `adhocracy_core.sheets.metadata.IMetadata`: provided by all resources,
   automatically created and updated by the backend
-* `adhocracy_core.sheets.asset.IAssetMetadata` with the fields:
+* `adhocracy_core.sheets.asset.IAssetMetadata` with only one read-write field:
 
   :mime_type: the MIME type of the asset; must be specified by the frontend,
       but the backend will sanity-check the posted data and reject the asset
       in case of an detectable mismatch (e.g. if the frontend posts a Word file
       but gives "image/jpeg" as MIME type). Not all mismatches will be
       detectable, e.g. different "text/" subtypes can be hard to distinguish.
+
+  All other following fields are read-only, they are automatically created and
+  updated by the backend:
+
   :size: the size of the asset (in bytes)
   :filename: the name of the file uploaded by the frontend (in the backend,
       the asset will have a different, auto-generated path)
   :attached_to: a list of backreferences pointing to resources that refer
-      to the asset; this attribute is read-only and managed by the backend
+      to the asset
 
 * `adhocracy_core.sheets.asset.IAssetData` with a single field:
 
@@ -49,67 +49,61 @@ sheets:
   This sheet is POST/PUT-only, see below on how to download/view the binary
   data.
 
-Asset Subtypes and MIME Type Validators
----------------------------------------
+For testing, we import the needed stuff and start the Adhocracy testapp::
+
+    >>> from pprint import pprint
+    >>> from adhocracy_core.testing import god_header
+    >>> from webtest import TestApp
+    >>> app = getfixture('app_with_filestorage')
+    >>> testapp = TestApp(app)
+    >>> rest_url = 'http://localhost'
+
+We need a pool with an asset pool::
+
+    >>> data = {'content_type': 'adhocracy_core.resources.asset.IPoolWithAssets',
+    ...        'data': {'adhocracy_core.sheets.name.IName': {
+    ...                     'name':  'ProposalPool'}}}
+    >>> resp_data = testapp.post_json(rest_url + '/adhocracy', data,
+    ...                               headers=god_header).json
+    >>> proposal_pool_path = resp_data['path']
+    >>> proposal_pool_path
+    'http://localhost/adhocracy/ProposalPool/'
+
+We can ask the pool for the location of the asset pool::
+
+    >>> resp_data = testapp.get(proposal_pool_path).json
+    >>> asset_pool_path = resp_data['data'][
+    ...         'adhocracy_core.sheets.asset.IHasAssetPool']['asset_pool']
+    >>> asset_pool_path
+    'http://localhost/adhocracy/ProposalPool/assets/'
+
+
+Asset Subtypes, MIME Type Validators, and Images Size Mappers
+-------------------------------------------------------------
 
 Note: this section is mostly backend-specific.
 
 The generic `adhocracy_core.sheets.asset.IAssetMetadata` sheet doesn't limit
 the MIME type of assets. Since this is rarely desirable, it is considered
 abstract and cannot be instantiated -- only subclasses that provide a *MIME
-Type Validator* can. To do so, create a subclass of the sheet (empty marker
-interface) and register a `adhocracy_core.interfaces.IMimeTypeValidator`
-implementation for that subclass (same as with `IRateValidator` for rates).
+Type Validator* can. Check out the `adhocracy_core.sheets.sample_image` module
+for an example of how to do that.
 
-E.g. to create a spreadsheet asset type that only accepts OpenDocument and
-Excel spreadsheets::
+To prevent confusing the frontend, you should also define a subclass of the
+`adhocracy_core.resources.asset.IAsset` resource type that uses the subclassed
+sheet instead of the generic one. See `adhocracy_core.resources.sample_image`
+for an example.
 
-    class ISpreadsheetAsset(IAssetMetadata):
-        """Empty marker interface for spreadsheet assets."""
-
-    @implementer(IMimeTypeValidator)
-    class SpreadsheetMimeTypeValidator:
-
-        def validate(self, mime_type: str) -> bool:
-            return mime_type in (
-                'application/vnd.oasis.opendocument.spreadsheet',
-                'application/vnd.ms-excel')
-
-    config.registry.registerAdapter(SpreadsheetMimeTypeValidator,
-                                    (ISpreadsheetAsset,),
-                                    IMimeTypeValidator)
-
-FIXME Maybe we'll extend the SheetMetadata instead of using an adapter
-(likewise for Size Mappers).
-
-Images and Size Mappers
------------------------
-
-Note: this section is mostly backend-specific.
-
-A predefined IAssetMetadata subtype is
-`adhocracy_core.resources.asset.IImageMetadata`. Its adapter allows MIME
-types that start with 'image/', i.e., arbitrary image files (subtypes of
-IImage can restrict that further, if desired).
+In the examples that follow, we will use the subclassed example resource type
+and sheet.
 
 The backend can resize and crop images to different target formats. To do
-this, define an IImageMetadata subtype and register a
-`adhocracy_core.interfaces.ImageSizeMapper` implementation for that
-subtype::
+this, add an `image_sizes` field to the metadata of your subclassed sheet.
+`adhocracy_core.sheets.sample_image` shows how to do that too. For example,
+if we have::
 
-    class IProposalIntroImage(IImageMetadata):
-        """Empty marker interface."""
-
-    @implementer(ImageSizeMapper)
-    class IProposalIntroImageSizeMapper:
-
-        def sizemap -> dict:
-            return {
-                'thumbnail': Dimensions(width=160, height=120),
-                'detail': Dimensions(width=600, height=300),
-            }
-
-    # register adapter as above
+    image_sizes={'thumbnail': Dimensions(width=100, height=50),
+                 'detail': Dimensions(width=500, height=250)},
 
 This means that the image will be made available in 'thumbnail' and in
 'detail' size, each with the specified dimensions, as well as in its original
@@ -118,10 +112,11 @@ This means that the image will be made available in 'thumbnail' and in
 The image will be automatically resized to all of the specified sizes. If
 the target aspect ratio is different from the original aspect ratio, the size
 that is wider/higher is cropped so that only the middle part of it remains.
-For example, if the original image has 1600x600 pixel and the target size is
-600x300 ('detail' size in the above example), it will be scaled to 50%
-(800x300 pixel) and then 100 pixel to the left and 100 to the right will be
+For example, if the original image has 1500x500 pixel and the target size is
+500x250 ('detail' size in the above example), it will be scaled to 50%
+(750x250 pixel) and then 125 pixel to the left and 125 to the right will be
 cropped to reach the target size.
+
 
 Uploading Assets
 ----------------
@@ -129,49 +124,55 @@ Uploading Assets
 Assets are uploaded (POST) and updated (PUT) in a special way. Instead of
 sending a JSON document, the field names and values are flattened into
 key/value pairs that are sent as a "multipart/form-data" request. Hence, the
-request will typically have the following keys:
+request will have keys similar to the following:
 
 :content_type: the type of the resource that shall be created, e.g.
-    "adhocracy_core.resources.sample_proposal.IProposalIntroImage"
-:data.adhocracy_core.sheets.asset.IAssetMetadata.mime_type: the MIME type of
+    "adhocracy_core.resources.sample_image.ISampleImage"
+:data\:adhocracy_core.sheets.asset.IAssetMetadata\:mime_type: the MIME type of
     the uploaded file, e.g. "image/jpeg"
-:data.adhocracy_core.sheets.asset.IAssetMetadata.size: the size of the file
-:data.adhocracy_core.sheets.asset.IAssetMetadata.filename: the original name
-    of the file
-:data.adhocracy_core.sheets.asset.IAssetData.data: the binary data of the
+:data\:adhocracy_core.sheets.asset.IAssetData\:data: the binary data of the
     uploaded file, as per the HTML `<input type="file" name="asset">` tag.
+
+But note that a concrete subsheet must be used instead of the generic
+IAssetMetadata sheet, matching the given resource type.
+
+For example, lets upload a little picture and create a proposal version that
+references it. But first we have to create a proposal::
+
+    >>> prop_data = {'content_type': 'adhocracy_core.resources.sample_proposal.IProposal',
+    ...              'data': {
+    ...                  'adhocracy_core.sheets.name.IName': {
+    ...                      'name': 'kommunismus'}
+    ...                      }
+    ...             }
+    >>> resp = testapp.post_json(proposal_pool_path, prop_data, headers=god_header)
+    >>> prop_path = resp.json["path"]
+    >>> prop_path
+    'http://localhost/adhocracy/ProposalPool/kommunismus/'
+    >>> prop_v0_path = resp.json['first_version_path']
+    >>> prop_v0_path
+    'http://localhost/adhocracy/ProposalPool/kommunismus/VERSION_0000000/'
+
+Now we can upload a sample picture::
+
+    >>> upload_files = [('data:adhocracy_core.sheets.asset.IAssetData:data',
+    ...     'python.jpg', open('docs/source/_static/python.jpg', 'rb').read())]
+    >>> request_body = {
+    ...    'content_type': 'adhocracy_core.resources.sample_image.ISampleImage',
+    ...    'data:adhocracy_core.sheets.sample_image.ISampleImageMetadata:mime_type':
+    ...        'image/jpeg'}
+    >>> resp_data = testapp.post(asset_pool_path, request_body,
+    ...             headers=god_header, upload_files=upload_files).json
 
 In response, the backend sends a JSON document with the resource type and
 path of the new resource (just as with other resource types)::
 
-    {"content_type": "adhocracy_core.resources.sample_proposal.IProposalIntroImage",
-     "path": "http://localhost/adhocracy/proposals/myfirstproposal/assets/0000000"}
+    >>> resp_data["content_type"]
+    'adhocracy_core.resources.sample_image.ISampleImage'
+    >>> pic_path = resp_data["path"]
+    >>> pic_path
+    'http://localhost/adhocracy/ProposalPool/assets/0000000/'
 
-Updating Assets
----------------
-
-To upload a new version of an asset, the frontend sends a PUT request with
-enctype="multipart/form-data" to the asset URL. The PUT request may contain
-the same keys as a POST request used to create a new asset,
-but all of them are optional -- if a field isn't change by the update,
-there is no need to include the key.
-
-If the `content_type` key is given, is *must* be identical to the current
-content type of the asset (changing the type of resources is generally not
-allowed).
-
-Typically, the PUT request will be used to replace the binary data of the
-asset, hence it will contain the
-`data.adhocracy_core.sheets.asset.IAssetData.data` key. But it's also
-allowed to omit that key and only change the
-`data.adhocracy_core.sheets.asset.IAssetMetadata.filename`, for example.
-
-Only those who have *editor* rights for an asset can PUT a replacement asset.
-If an image is replaced, all its cropped sizes will be automatically
-updated as well.
-
-Since assets aren't versioned, the old binary "blob" will be physically and
-irreversibly discarded once a replacement blob is uploaded.
 
 Downloading Assets
 ------------------
@@ -186,56 +187,45 @@ Assets can be downloaded in different ways:
 The frontend can retrieve the JSON metadata by GETting the resource path of
 the asset::
 
-    >> resp_data = testapp.get(
-    ...    'http://localhost/adhocracy/proposals/myfirstproposal/assets/0000000').json
-    >> pprint(resp_data)
-    {'content_type': 'adhocracy_core.resources.sample_proposal.IProposalIntroImage',
-     'data': {
-         'adhocracy_core.sheets.metadata.IMetadata': {
-             'creation_date': '...',
-             'creator': '...',
-             'deleted': 'false',
-             'hidden': 'false',
-             'modification_date': '...',
-             'modified_by': '...'},
-         'adhocracy_core.sheets.asset.IAssetMetadata': {
-             'attached_to': [
-                 'http://localhost/adhocracy/proposals/myfirstproposal/VERSION_0000001'
-              ],
-             'mime_type': 'image/jpeg'},
-             'filename': 'greatpicture.jpg',
-             'size': '1906117'},
-     'path': '"http://localhost/adhocracy/proposals/myfirstproposal/assets/0000000"'}
+    >>> resp_data = testapp.get(pic_path).json
+    >>> resp_data['content_type']
+    'adhocracy_core.resources.sample_image.ISampleImage'
+    >>> resp_data['data']['adhocracy_core.sheets.metadata.IMetadata']['modification_date']
+    '20...'
+    >>> pprint(resp_data['data']['adhocracy_core.sheets.sample_image.ISampleImageMetadata'])
+    {'attached_to': [],
+     'filename': 'python.jpg',
+     'mime_type': 'image/jpeg',
+     'size': '159041'}
 
-It can retrieve the raw uploaded data by GETting its `raw` child::
+The actual binary data is *not* part of that JSON document::
 
-    >> resp_data = testapp.get(
-    ...    'http://localhost/adhocracy/proposals/myfirstproposal/assets/0000000/raw').json
-    >> resp_data["content_type"]
+    >>> 'adhocracy_core.sheets.asset.IAssetData' in resp_data['data']
+    False
+
+To retrieve the raw uploaded data, the frontend must instead GET the `raw`
+child of the asset::
+
+    >>> resp_data = testapp.get(pic_path + 'raw')
+    >>> resp_data.content_type
     'image/jpeg'
+    >>> original_size = len(resp_data.body)
+    >>> original_size
+    159041
 
 In case of images, it can retrieve the image in one of the predefined
 cropped sizes by asking for one of the keys defined by the ImageSizeMapper as
 child element::
 
-    >> resp_data = testapp.get(
-    ...    'http://localhost/adhocracy/proposals/myfirstproposal/assets/0000000/thumbnail').json
-    >> resp_data["content_type"]
+    >>> resp_data = testapp.get(pic_path + 'detail')
+    >>> resp_data.content_type
     'image/jpeg'
+    >>> detail_size = len(resp_data.body)
+    >>> detail_size > 10000
+    True
+    >>> detail_size < original_size
+    True
 
-Deleting and Hiding Assets
---------------------------
-
-Assets can be deleted or censored ("hidden") in the usual way, see
-:ref:`deletion`. In contrast to deletion or hiding of normal resource,
-asset deletion/hiding will however physically discard the binary "blob",
-so it's not really reversible.
-
-It is possible to undelete or unhide a deleted/hidden asset,
-but the "raw" view and any alternative sizes defined for images will be empty
-until a replacement blob is uploaded.
-
-FIXME Settle with product owner whether this is the desired behavior.
 
 Referring to Assets
 -------------------
@@ -244,4 +234,91 @@ Sheets can have fields that refer to assets of a specific type. This is done
 in the usual way be setting the type of the field to `Reference` (to refer
 to a single asset) or `UniqueReferences` (to refer to a list of assets) and
 defining a suitable `reftype` (e.g. with `target_isheet =
-IProposalIntroImage`).
+ISampleImageMetadata`).
+
+Lets post a new proposal version that refers to the image::
+
+    >>> vers_data = {'content_type': 'adhocracy_core.resources.sample_proposal.IProposalVersion',
+    ...              'data': {'adhocracy_core.sheets.document.IDocument': {
+    ...                     'title': 'We need more pics!',
+    ...                     'description': 'Or maybe just nicer ones?',
+    ...                     'picture': pic_path,
+    ...                     'elements': []},
+    ...                  'adhocracy_core.sheets.versions.IVersionable': {
+    ...                     'follows': [prop_v0_path]}},
+    ...          'root_versions': [prop_v0_path]}
+    >>> resp = testapp.post_json(prop_path, vers_data, headers=god_header)
+    >>> prop_v1_path = resp.json["path"]
+    >>> prop_v1_path
+    'http://localhost/adhocracy/ProposalPool/kommunismus/VERSION_0000001/'
+
+If we re-download the image metadata, we see that it is now attached to the
+proposal version::
+
+    >>> resp_data = testapp.get(pic_path).json
+    >>> resp_data['data']['adhocracy_core.sheets.sample_image.ISampleImageMetadata']['attached_to']
+    ['http://localhost/adhocracy/ProposalPool/kommunismus/VERSION_0000001/']
+
+
+Replacing Assets
+----------------
+
+To upload a new version of an asset, the frontend sends a PUT request with
+enctype="multipart/form-data" to the asset URL. The PUT request may contain
+the same keys as a POST request used to create a new asset.
+
+The `data:adhocracy_core.sheets.asset.IAssetData:data` key is required,
+since the only use case for a PUT request is uploading a new version of the
+binary data (everything else is just metadata).
+
+The `data:adhocracy_core.sheets.asset.IAssetMetadata:mime_type` may be
+omitted if the new MIME type is the same as the old one.
+
+If the `content_type` key is given, is *must* be identical to the current
+content type of the asset (changing the type of resources is generally not
+allowed).
+
+Only those who have *editor* rights for an asset can PUT a replacement asset.
+If an image is replaced, all its cropped sizes will be automatically
+updated as well.
+
+Since assets aren't versioned, the old binary "blob" will be physically and
+irreversibly discarded once a replacement blob is uploaded.
+
+Lets replace the uploaded python with another one::
+
+    >>> upload_files = [('data:adhocracy_core.sheets.asset.IAssetData:data',
+    ...     'python2.jpg', open('docs/source/_static/python2.jpg', 'rb').read())]
+    >>> request_body = {
+    ...    'content_type': 'adhocracy_core.resources.sample_image.ISampleImage',
+    ...    'data:adhocracy_core.sheets.sample_image.ISampleImageMetadata:mime_type':
+    ...        'image/jpeg'}
+    >>> resp_data = testapp.put(pic_path, request_body,
+    ...             headers=god_header, upload_files=upload_files).json
+
+If we download the image metadata again, we see that filename and size have
+changed accordingly::
+
+    >>> resp_data = testapp.get(pic_path).json
+    >>> pprint(resp_data['data']['adhocracy_core.sheets.sample_image.ISampleImageMetadata'])
+    {'attached_to': ['http://localhost/adhocracy/ProposalPool/kommunismus/VERSION_0000001/'],
+     'filename': 'python2.jpg',
+     'mime_type': 'image/jpeg',
+     'size': '112107'}
+
+Predefined scaled+cropped views are automatically updated as well::
+
+    >>> resp_data = testapp.get(pic_path + 'detail')
+    >>> len(resp_data.body) > 10000
+    True
+    >>> len(resp_data.body) == detail_size
+    False
+
+
+Deleting and Hiding Assets
+--------------------------
+
+Assets can be deleted or censored ("hidden") in the usual way, see
+:ref:`deletion`.
+
+TODO Add example testing this using delete (also for children).

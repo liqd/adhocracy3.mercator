@@ -781,6 +781,9 @@ mkFieldType = (field : MetaApi.ISheetField) : FieldType => {
     case "adhocracy_mercator.sheets.mercator.SizeEnum":  // FIXME: this needs to go to the mercator package
         resultType = "string";
         break;
+    case "adhocracy_core.schema.FileStore":  // FIXME: this may be inappropriate, but it's a write-only field anyway
+        resultType = "string";
+        break;
     default:
         throw "mkFieldType: unknown value " + field.valuetype;
     }

@@ -26,6 +26,10 @@ from adhocracy_core.interfaces import IItemVersion
 from adhocracy_core.interfaces import ISimple
 from adhocracy_core.interfaces import IPool
 from adhocracy_core.interfaces import ILocation
+from adhocracy_core.resources.asset import IAsset
+from adhocracy_core.resources.asset import IAssetView
+from adhocracy_core.resources.asset import IAssetsService
+from adhocracy_core.resources.asset import validate_and_complete_asset
 from adhocracy_core.resources.principal import IUser
 from adhocracy_core.resources.principal import IUsersService
 from adhocracy_core.rest.schemas import BlockExplanationResponseSchema
@@ -45,12 +49,14 @@ from adhocracy_core.rest.schemas import options_resource_response_data_dict
 from adhocracy_core.rest.schemas import add_get_pool_request_extra_fields
 from adhocracy_core.schema import AbsolutePath
 from adhocracy_core.schema import References
+from adhocracy_core.sheets.asset import retrieve_asset_file
 from adhocracy_core.sheets.metadata import IMetadata
 from adhocracy_core.sheets.metadata import view_blocked_by_metadata
-from adhocracy_core.utils import strip_optional_prefix
-from adhocracy_core.utils import to_dotted_name
 from adhocracy_core.utils import get_sheet
 from adhocracy_core.utils import get_user
+from adhocracy_core.utils import strip_optional_prefix
+from adhocracy_core.utils import to_dotted_name
+from adhocracy_core.utils import unflatten_multipart_request
 from adhocracy_core.resources.root import IRootPool
 from adhocracy_core.sheets.principal import IPasswordAuthentication
 import adhocracy_core.sheets.pool
@@ -99,6 +105,8 @@ def validate_request_data(context: ILocation, request: Request,
     schema_with_binding = schema.bind(context=context, request=request,
                                       parent_pool=parent)
     qs, headers, body, path = extract_request_data(request)
+    if request.content_type == 'multipart/form-data':
+        body = unflatten_multipart_request(request)
     validate_body_or_querystring(body, qs, schema_with_binding, context,
                                  request)
     _validate_extra_validators(extra_validators, context, request)
@@ -198,11 +206,24 @@ def _raise_if_errors(request: Request):
     if not request.errors:
         return
     logger.warning('Found %i validation errors in request: <%s>',
-                   len(request.errors), request.body)
+                   len(request.errors), _show_request_body(request))
     for error in request.errors:
         logger.warning('  %s', error)
     request.validated = {}
     raise json_error(request.errors)
+
+
+def _show_request_body(request: Request) -> str:
+    """
+    Show the request body.
+
+    In case of multipart/form-data requests (file upload), only the 120
+    first characters of the body are shown.
+    """
+    result = request.body
+    if request.content_type == 'multipart/form-data' and len(result) > 120:
+        result = '{}...'.format(result[:120])
+    return result
 
 
 class RESTView:
@@ -554,6 +575,70 @@ class UsersRESTView(PoolRESTView):
                  content_type='application/json')
     def post(self):
         return super().post()
+
+
+@view_defaults(
+    renderer='simplejson',
+    context=IAssetsService,
+    http_cache=0,
+)
+class AssetsServiceRESTView(PoolRESTView):
+
+    """View allowing multipart requests for asset upload."""
+
+    @view_config(request_method='POST',
+                 permission='add_asset',
+                 content_type='multipart/form-data')
+    def post(self):
+        return super().post()
+
+
+@view_defaults(
+    renderer='simplejson',
+    context=IAsset,
+    http_cache=0,
+)
+class AssetRESTView(SimpleRESTView):
+
+    """View for assets, allows PUTting new versions via multipart."""
+
+    @view_config(request_method='PUT',
+                 permission='add_asset',
+                 content_type='multipart/form-data')
+    def put(self) -> dict:
+        result = super().put()
+        validate_and_complete_asset(self.context, self.request.registry)
+        return result
+
+
+@view_defaults(
+    renderer='simplejson',
+    context=IAssetView,
+    http_cache=3600,  # FIXME how long should assets be cached?
+)
+class AssetViewRESTView(SimpleRESTView):
+
+    """
+    View for downloading assets as binary blobs.
+
+    Allows GET, but no POST or PUT.
+    """
+
+    @view_config(request_method='GET',
+                 permission='view')
+    def get(self) -> dict:
+        """Get asset data (unless deleted or hidden)."""
+        response_if_blocked = self.respond_if_blocked()
+        if response_if_blocked is not None:
+            return response_if_blocked
+        file = retrieve_asset_file(self.context, self.request.registry)
+        return file.get_response(self.context, self.request.registry)
+
+    def put(self) -> dict:
+        raise HTTPMethodNotAllowed()
+
+    def post(self) -> dict:
+        raise HTTPMethodNotAllowed()
 
 
 @view_defaults(

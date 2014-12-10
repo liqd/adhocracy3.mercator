@@ -1,4 +1,3 @@
-from pyramid import testing
 from pytest import fixture
 from pytest import mark
 

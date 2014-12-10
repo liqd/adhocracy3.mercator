@@ -1,6 +1,5 @@
 from webtest import TestApp
 from pytest import fixture
-import time
 
 from mercator.tests.fixtures.fixturesMercatorProposals1 import create_proposals
 from adhocracy_frontend.tests.acceptance.shared import api_login_god

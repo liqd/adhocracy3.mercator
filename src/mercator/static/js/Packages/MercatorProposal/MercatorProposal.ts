@@ -466,7 +466,8 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
             case RIMercatorIntroductionVersion.content_type:
                 resource.data[SIMercatorIntroduction.nick] = new SIMercatorIntroduction.Sheet({
                     title: data.introduction.title,
-                    teaser: data.introduction.teaser
+                    teaser: data.introduction.teaser,
+                    picture: undefined
                 });
                 break;
             case RIMercatorDescriptionVersion.content_type:

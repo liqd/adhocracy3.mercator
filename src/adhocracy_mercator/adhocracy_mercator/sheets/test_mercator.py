@@ -244,7 +244,7 @@ class TestIntroductionSheet:
 
     def test_get_empty(self, meta, context):
         inst = meta.sheet_class(meta, context)
-        wanted = {'teaser': '', 'title': ''}
+        wanted = {'picture': '', 'teaser': '', 'title': ''}
         assert inst.get() == wanted
 
 

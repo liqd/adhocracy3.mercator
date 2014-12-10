@@ -21,6 +21,7 @@ requires = [
     'colander',
     'autobahn',
     'websocket-client',
+    'Pillow',
 ]
 
 if sys.version_info < (3, 4):

@@ -20,7 +20,8 @@ class TestDocumentSheet:
 
     def test_get_empty(self, meta, context):
         inst = meta.sheet_class(meta, context)
-        assert inst.get() == {'title': '', 'description': '', 'elements': []}
+        assert inst.get() == {'title': '', 'description': '', 'picture': '',
+                              'elements': []}
 
 
 def test_includeme_register_document_sheet(config):

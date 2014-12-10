@@ -87,6 +87,7 @@ export var register = (angular, config, meta_api) => {
                     new SIDocument.Sheet({
                         title: proposalName,
                         description: "whoof",
+                        picture: undefined,
                         elements: [sectionVersion.path]
                     });
                 proposalVersionResource.data[SIVersionable.nick] =
@@ -138,6 +139,7 @@ export var register = (angular, config, meta_api) => {
             proposalVersionResource.data[SIDocument.nick] = new SIDocument.Sheet({
                 title: proposalName,
                 description: "whoof",
+                picture: undefined,
                 elements: []
             });
 

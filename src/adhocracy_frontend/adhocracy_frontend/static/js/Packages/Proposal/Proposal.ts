@@ -182,6 +182,7 @@ export class ProposalVersionNew {
                     new SIDocument.Sheet({
                         title: "",
                         description: "",
+                        picture: undefined,
                         elements: []
                     });
                 $scope.paragraphVersions = [];

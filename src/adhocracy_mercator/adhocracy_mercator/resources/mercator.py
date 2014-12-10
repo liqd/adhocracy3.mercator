@@ -2,10 +2,13 @@
 from adhocracy_core.interfaces import IItemVersion
 from adhocracy_core.interfaces import IItem
 from adhocracy_core.resources import add_resource_type_to_registry
+from adhocracy_core.resources.asset import asset_meta
+from adhocracy_core.resources.asset import IAsset
 from adhocracy_core.resources.itemversion import itemversion_metadata
 from adhocracy_core.resources.item import item_metadata
 from adhocracy_core.resources.comment import add_commentsservice
 from adhocracy_core.resources.rate import add_ratesservice
+from adhocracy_core.sheets.asset import IAssetMetadata
 from adhocracy_core.sheets.rate import ILikeable
 from adhocracy_core.sheets.comment import ICommentable
 import adhocracy_mercator.sheets.mercator
@@ -39,6 +42,22 @@ organization_info_meta = item_metadata._replace(
         add_commentsservice,
     ],
     item_type=IOrganizationInfoVersion,
+)
+
+
+class IIntroImage(IAsset):
+
+    """Image attached to the introduction of a proposal."""
+
+
+intro_image_meta = asset_meta._replace(
+    content_name='IIntroImage',
+    iresource=IIntroImage,
+    is_implicit_addable=True,
+    # replace IAssetMetadata sheet by IIntroImageMetadata
+    basic_sheets=list(
+        set(asset_meta.basic_sheets) - {IAssetMetadata, }
+        | {adhocracy_mercator.sheets.mercator.IIntroImageMetadata, }),
 )
 
 
@@ -404,6 +423,7 @@ def includeme(config):
     add_resource_type_to_registry(mercator_proposal_version_meta, config)
     add_resource_type_to_registry(organization_info_meta, config)
     add_resource_type_to_registry(organization_info_version_meta, config)
+    add_resource_type_to_registry(intro_image_meta, config)
     add_resource_type_to_registry(introduction_meta, config)
     add_resource_type_to_registry(introduction_version_meta, config)
     add_resource_type_to_registry(description_meta, config)

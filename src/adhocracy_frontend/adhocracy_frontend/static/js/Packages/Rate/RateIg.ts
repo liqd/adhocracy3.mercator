@@ -107,6 +107,7 @@ export var register = (angular, config, meta_api) => {
                     new SIDocument.Sheet({
                         title: proposalName,
                         description: "whoof",
+                        picture: undefined,
                         elements: [sectionVersion.path]
                     });
                 proposalVersionResource.data["adhocracy_core.sheets.versions.IVersionable"] =

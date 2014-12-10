@@ -3,6 +3,7 @@ from collections import Sequence
 from collections import OrderedDict
 from datetime import datetime
 import decimal
+import os
 import re
 
 from pyramid.path import DottedNameResolver
@@ -10,6 +11,8 @@ from pyramid.traversal import find_resource
 from pyramid.traversal import resource_path
 from pytz import UTC
 from pyramid.traversal import find_interface
+from substanced.file import File
+from substanced.file import USE_MAGIC
 from substanced.util import get_dotted_name
 from substanced.util import find_service
 from zope.interface.interfaces import IInterface
@@ -757,4 +760,39 @@ class Integer(AdhocracySchemaNode):
 
     schema_type = colander.Integer
     default = 0
+    missing = colander.drop
+
+
+class FileStoreType(colander.SchemaType):
+
+    """Accepts raw file data as per as 'multipart/form-data' upload."""
+
+    def serialize(self, node, value):
+        """Serialization is not supported."""
+        raise colander.Invalid(node,
+                               msg='Cannot serialize FileStore',
+                               value=value)
+
+    def deserialize(self, node, value):
+        """Deserialize into a File."""
+        if value == colander.null:
+            return None
+        try:
+            result = File(stream=value.file,
+                          mimetype=USE_MAGIC,
+                          title=value.filename)
+            # We add the size as an extra attribute since get_size() doesn't
+            # work before the transaction has been committed
+            result.size = os.fstat(value.file.fileno()).st_size
+            return result
+        except Exception as err:
+            raise colander.Invalid(node, msg=str(err), value=value)
+
+
+class FileStore(AdhocracySchemaNode):
+
+    """SchemaNode wrapping :class:`FileStoreType`."""
+
+    schema_type = FileStoreType
+    default = None
     missing = colander.drop

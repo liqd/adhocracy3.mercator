@@ -43,6 +43,7 @@ def warm_up_database(app):
 def _create_dummy_request(app):
     request = testing.DummyRequest()
     request.registry = app.registry
+    request.content_type = 'application/json'
     request.validated = {}
     request.errors = []
     return request

@@ -1,5 +1,6 @@
 """Cornice colander schemas und validators to validate request data."""
 from hypatia.interfaces import IIndexSort
+from pyramid.request import Request
 from pyramid.util import DottedNameResolver
 from substanced.util import find_catalog
 import colander
@@ -22,6 +23,7 @@ from adhocracy_core.schema import SingleLine
 from adhocracy_core.schema import Text
 from adhocracy_core.schema import URL
 from adhocracy_core.utils import raise_colander_style_error
+from adhocracy_core.utils import unflatten_multipart_request
 
 
 resolver = DottedNameResolver()
@@ -56,7 +58,11 @@ def add_put_data_subschemas(node: colander.MappingSchema, kw: dict):
     context = kw.get('context', None)
     request = kw.get('request', None)
     sheets = request.registry.content.get_sheets_edit(context, request)
-    data = request.json_body.get('data', {})
+    if request.content_type == 'multipart/form-data':
+        body = unflatten_multipart_request(request)
+    else:
+        body = request.json_body
+    data = body.get('data', {})
     for sheet in sheets:
         name = sheet.meta.isheet.__identifier__
         if name not in data:
@@ -90,9 +96,9 @@ def add_post_data_subschemas(node: colander.MappingSchema, kw: dict):
     """Add the resource sheet colander schemas that are 'creatable'."""
     context = kw['context']
     request = kw['request']
-    content_typ = request.json_body.get('content_type')
+    content_type = _get_resource_type_based_on_request_type(request)
     try:
-        iresource = ContentType().deserialize(content_typ)
+        iresource = ContentType().deserialize(content_type)
     except colander.Invalid:
         return  # the content type is validated later, so we just ignore errors
     registry = request.registry.content
@@ -103,6 +109,16 @@ def add_post_data_subschemas(node: colander.MappingSchema, kw: dict):
         missing = colander.required if is_mandatory else colander.drop
         schema = sheet.meta.schema_class(name=name, missing=missing)
         node.add(schema.bind(**kw))
+
+
+def _get_resource_type_based_on_request_type(request: Request):
+    if request.content_type == 'application/json':
+        return request.json_body.get('content_type')
+    elif request.content_type == 'multipart/form-data':
+        return request.POST['content_type']
+    else:
+        raise RuntimeError('Unsupported request content_type: {}'.format(
+            request.content_type))
 
 
 @colander.deferred

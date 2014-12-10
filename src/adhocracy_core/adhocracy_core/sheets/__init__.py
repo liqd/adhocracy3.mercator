@@ -1,4 +1,5 @@
 """Adhocracy sheets."""
+from itertools import chain
 from logging import getLogger
 
 from persistent.mapping import PersistentMapping
@@ -129,13 +130,17 @@ class GenericResourceSheet(PropertySheet):
                 yield(key, node_backrefs)
 
     def _get_backrefs(self, node: Reference) -> dict:
-            if not self._graph:
-                return {}
-            isheet = node.reftype.getTaggedValue('source_isheet')
-            backrefs = self._graph.get_back_references_for_isheet(self.context,
-                                                                  isheet)
-            field = node.reftype.getTaggedValue('source_isheet_field')
+        if not self._graph:
+            return {}
+        isheet = node.reftype.getTaggedValue('source_isheet')
+        backrefs = self._graph.get_back_references_for_isheet(self.context,
+                                                              isheet)
+        field = node.reftype.getTaggedValue('source_isheet_field')
+        if field:
             return backrefs.get(field, None)
+        else:
+            # return all backrefs regardless of field name
+            return list(chain(*backrefs.values()))
 
     @reify
     def _back_reference_nodes(self) -> dict:
@@ -182,7 +187,9 @@ class GenericResourceSheet(PropertySheet):
         return [n.name for n in self.schema if getattr(n, 'readonly', False)]
 
     def _store_data(self, appstruct):
-        self._data.update(appstruct)
+        for key in self._data_keys:
+            if key in appstruct:
+                self._data[key] = appstruct[key]
 
     def _store_references(self, appstruct, registry):
         if self._graph:
@@ -270,6 +277,8 @@ def includeme(config):  # pragma: no cover
     config.include('.metadata')
     config.include('.comment')
     config.include('.rate')
+    config.include('.asset')
+    config.include('.sample_image')
 
 
 class AttributeStorageSheet(GenericResourceSheet):

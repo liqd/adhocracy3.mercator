@@ -1,12 +1,15 @@
 """Sheets for Mercator proposals."""
 import colander
 
+from adhocracy_core.interfaces import Dimensions
 from adhocracy_core.interfaces import ISheet
 from adhocracy_core.interfaces import IResource
 from adhocracy_core.interfaces import ISheetReferenceAutoUpdateMarker
 from adhocracy_core.interfaces import SheetToSheet
 from adhocracy_core.sheets import add_sheet_to_registry
 from adhocracy_core.sheets import sheet_metadata_defaults
+from adhocracy_core.sheets.asset import IAssetMetadata
+from adhocracy_core.sheets.asset import asset_metadata_meta
 from adhocracy_core.schema import AdhocracySchemaNode
 from adhocracy_core.schema import Boolean
 from adhocracy_core.schema import CurrencyAmount
@@ -252,13 +255,39 @@ organizationinfo_meta = sheet_metadata_defaults._replace(
     isheet=IOrganizationInfo, schema_class=OrganizationInfoSchema)
 
 
+class IIntroImageMetadata(IAssetMetadata):
+
+    """Marker interface for intro images."""
+
+
+def _intro_image_mime_type_validator(mime_type: str) -> bool:
+    return mime_type in ('image/gif', 'image/jpeg', 'image/png')
+
+
+intro_image_metadata_meta = asset_metadata_meta._replace(
+    isheet=IIntroImageMetadata,
+    mime_type_validator=_intro_image_mime_type_validator,
+    image_sizes={'thumbnail': Dimensions(width=100, height=50),
+                 'detail': Dimensions(width=500, height=250)},
+)
+
+
+class IntroImageReference(SheetToSheet):
+
+    """Reference to an intro image."""
+
+    source_isheet = IIntroduction
+    source_isheet_field = 'picture'
+    target_isheet = IIntroImageMetadata
+
+
 class IntroductionSchema(colander.MappingSchema):
 
     """Data structure for the proposal introduction."""
 
     title = SingleLine(validator=colander.Length(min=1, max=100))
     teaser = Text(validator=colander.Length(min=1, max=300))
-    # picture = AssetPath()
+    picture = Reference(reftype=IntroImageReference)
 
 
 introduction_meta = sheet_metadata_defaults._replace(
@@ -430,6 +459,7 @@ def includeme(config):
     add_sheet_to_registry(finance_meta, config.registry)
     add_sheet_to_registry(experience_meta, config.registry)
     add_sheet_to_registry(heardfrom_meta, config.registry)
+    add_sheet_to_registry(intro_image_metadata_meta, config.registry)
     config.add_indexview(index_location,
                          catalog_name='adhocracy',
                          index_name='mercator_location',

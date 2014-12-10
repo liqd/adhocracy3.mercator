@@ -22,6 +22,10 @@ class ISheet(Interface):
     """Marker interface for resources to enable a specific sheet type."""
 
 
+Dimensions = namedtuple('Dimensions', ['width', 'height'])
+"""Dimensions of a two-dimensional object (e.g. image)."""
+
+
 SHEET_METADATA = {'isheet': None,
                   'sheet_class': None,
                   'schema_class': None,
@@ -32,6 +36,8 @@ SHEET_METADATA = {'isheet': None,
                   'editable': True,
                   'creatable': True,
                   'create_mandatory': False,
+                  'mime_type_validator': None,
+                  'image_sizes': None,
                   }
 
 
@@ -39,8 +45,8 @@ class SheetMetadata(namedtuple('SheetMetadata', SHEET_METADATA.keys())):
 
     """Metadata to register a sheet type to set/get resource data.
 
-    Fields:
-    -------
+    Generic fields:
+    ---------------
 
     isheet:
         Marker interface for this sheet type, a subtype of :class:`ISheet`.
@@ -64,6 +70,16 @@ class SheetMetadata(namedtuple('SheetMetadata', SHEET_METADATA.keys())):
         The sheet data can be set if you create (post) a new resource
     create_mandatory:
         This Sheet must be set if you create (post) a new resource
+
+    IAsset-related fields:
+    ----------------------
+
+    mime_type_validator:
+        callable that takes an string and returns a bool, checking whether
+        the MIME type of the asset is valid
+    image_sizes:
+        optional dictionary from names to :class:`Dimensions`, e.g.
+        ``{ 'thumbnail': Dimensions(width=100, height=50) }``
     """
 
 
@@ -189,7 +205,6 @@ class ResourceMetadata(namedtuple('ResourceMetadata',
 
     item_type:
         Set addable content types, class heritage is honored
-
     """
 
 

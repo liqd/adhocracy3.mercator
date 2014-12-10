@@ -27,6 +27,9 @@ Requirements (Tested on Debian\Ubuntu,  64-Bit is mandatory):
 3. build-essential libssl-dev libbz2-dev libyaml-dev libncurses5-dev
 4. graphviz
 5. ruby-dev
+If you don't use the custom compiled python (see below) you need some
+some basic dependencies to build PIL (python image library):
+6. libjepg-dev libzlib-dev (http://pillow.readthedocs.org/en/latest/installation.html)
 
 create SSH key and upload to github ::
 
@@ -38,7 +41,7 @@ checkout source code ::
     cd adhocracy3
     git submodule update --init
 
-compile python 3 and PIL ::
+compile python 3.4 and PIL ::
 
     cd python
     python ./bootstrap.py
@@ -48,7 +51,7 @@ compile python 3 and PIL ::
 
 install adhocracy ::
 
-    ./bin/python3.4 ./bootstrap.py
+    ./bin/python ./bootstrap.py
     ./bin/buildout
 
 update your shell environment::
