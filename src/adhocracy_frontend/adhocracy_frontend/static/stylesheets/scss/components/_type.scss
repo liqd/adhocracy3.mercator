@@ -70,6 +70,10 @@ A hyperlink. It may have the following states:
 */
 a {
     color: $color-highlight-normal;
+
+    &:hover {
+        color: $color-highlight-introvert;
+    }
 }
 
 /*doc
@@ -186,7 +190,7 @@ category: Type
 
 /*doc
 ---
-title: Ordered List
+title: Ordered List2014-12-cc-link-hover
 name: ol
 parent: lists
 ---
