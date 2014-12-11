@@ -11,21 +11,13 @@ It is usually used in the header bar.
 
 .user-indicator {
     @include inline-block;
-    font-size: $font-size-small;
-    vertical-align: bottom;
+    @include text(introvert);
+    vertical-align: middle;
     white-space: nowrap;
+
+    a {
+        display: inline;
+        text-decoration: none;
+    }
 }
 
-.user-indicator-primary,
-.user-indicator-primary a {
-    display: inline;
-    color: $color-prime-normal;
-    text-decoration: none;
-}
-
-.user-indicator-secondary,
-.user-indicator-secondary a {
-    display: inline;
-    color: $color-secondary-extrovert;
-    text-decoration: none;
-}

@@ -38,6 +38,10 @@ selected. If no proposal is selected, no state is applied.
     list-style: none;
 
     @include container;
+    @include text(functional-introvert);
+}
+
+.mercator-proposal-detail-meta {
     margin-bottom: gutter(12);
 }
 
@@ -47,6 +51,23 @@ selected. If no proposal is selected, no state is applied.
 
 .mercator-propsal-list-item-meta-item {
     @include gallery(3 of 12);
+    @include text(functional-introvert);
+    i {
+        line-height: 1;
+        margin-right: 0.1666em;
+
+        &.icon-speech-bubbles {
+            color: $color-brand-accent1;
+            font-size: 140%;
+            vertical-align: middle;
+        }
+
+        &.icon-pointy-rectangle-left {
+            color: $color-brand-accent2;
+            font-size: 200%;
+            vertical-align: text-top;
+        }
+    }
 }
 
 .mercator-proposal-detail-cover {
@@ -69,14 +90,47 @@ selected. If no proposal is selected, no state is applied.
 
 .mercator-proposal-list-item {
     @include container;
-    border-bottom: 1px solid $color-structure-border;
+    border-bottom: 0.1666em solid $color-secondary-introvert;
+    padding: 1.2em;
 
     .mercator-proposal-list-item-image {
         @include span(3 of 12 first);
+        img {
+            float: left;
+            max-width: 100%;
+        }
     }
 
     .m-has-image {
         @include span(9 of 12 last);
+    }
+
+    .mercator-proposal-list-item-username,
+    .mercator-proposal-list-item-title {
+        margin: 0;
+    }
+
+    .mercator-proposal-list-item-username {
+        @include text(functional-introvert);
+        padding-bottom: 0.1em;
+
+        a {
+            text-decoration: none;
+        }
+    }
+
+    .mercator-proposal-list-item-title {
+        @include text(functional);
+        padding-bottom: 0.5em;
+
+        a {
+            color: $color-prime-extrovert;
+            text-decoration: none;
+
+            &:hover {
+                color: $color-highlight-normal;
+            }
+        }
     }
 }
 

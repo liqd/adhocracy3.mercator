@@ -143,8 +143,7 @@ The menu should always have the same state as its columns.
     // look
     border: 0 solid $color-secondary-introvert;
     border-width: 0 0 $moving-column-border-width $moving-column-border-width;
-    font-size: $font-size-small;
-    padding: 0.5em;
+    font-size: $font-size-normal;
 }
 
 /*doc
@@ -177,7 +176,6 @@ States:
 .moving-column-menu {
     @include clearfix;
     background: $color-secondary-introvert;
-    font-size: $font-size-small;
     line-height: $moving-column-menu-height /1em;
     padding: 0 0 0 $padding-small;
 

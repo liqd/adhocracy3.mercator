@@ -28,7 +28,7 @@ Switch the space (content/user)
         text-decoration: none;
 
         i {
-            color: $color-secondary-extrovert;
+            color: $color-structure-border-extrovert;
             font-size: 130%;
         }
 
@@ -41,6 +41,6 @@ Switch the space (content/user)
 
     .separator {
         margin: 0 1em;
-        border-left: 2px solid $color-secondary-extrovert;
+        border-left: 2px solid $color-structure-border-extrovert;
     }
 }

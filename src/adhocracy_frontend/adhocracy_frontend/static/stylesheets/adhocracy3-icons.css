@@ -27,8 +27,11 @@
 .icon-documents:before,
 .icon-list:before,
 .icon-minus:before,
+.icon-pointy-rectangle-left:before,
+.icon-pointy-rectangle-right:before,
 .icon-speachbubble:before,
 .icon-speachbubble-outline:before,
+.icon-speech-bubbles:before,
 .icon-user:before,
 .icon-x:before {
   display: inline-block;
@@ -49,7 +52,10 @@
 .icon-documents:before { content: "\f103"; }
 .icon-list:before { content: "\f104"; }
 .icon-minus:before { content: "\f106"; }
+.icon-pointy-rectangle-left:before { content: "\f10a"; }
+.icon-pointy-rectangle-right:before { content: "\f10b"; }
 .icon-speachbubble:before { content: "\f100"; }
 .icon-speachbubble-outline:before { content: "\f101"; }
+.icon-speech-bubbles:before { content: "\f109"; }
 .icon-user:before { content: "\f102"; }
 .icon-x:before { content: "\f107"; }
