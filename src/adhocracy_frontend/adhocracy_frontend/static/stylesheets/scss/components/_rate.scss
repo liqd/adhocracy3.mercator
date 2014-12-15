@@ -26,9 +26,12 @@ The button has the is-rate-button-active state.
     position: relative;
     @include inline-block;
     margin-left: $arrow-width;
-    padding: 0 0.5em;
+    padding: 0 0.6em;
     line-height: 2;
-    background-color: yellow;
+    background-color: $color-brand-accent2;
+    color: white;
+    text-decoration: none;
+    text-transform: uppercase;
 
     &:before {
         content: "";
@@ -38,15 +41,13 @@ The button has the is-rate-button-active state.
         height: 0;
         border-top: 1em solid transparent;
         border-bottom: 1em solid transparent;
-        border-right: $arrow-width solid yellow;
+        border-right: $arrow-width solid $color-brand-accent2;
         border-left: 0;
     }
 
-    &.is-rate-button-active {
-        background-color: green;
-
-        &:before {
-            border-right-color: green;
-        }
+    &.is-rate-button-active,
+    &:hover {
+        @include opacity(0.6);
+        color: white;
     }
 }

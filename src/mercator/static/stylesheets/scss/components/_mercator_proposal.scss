@@ -41,27 +41,20 @@ selected. If no proposal is selected, no state is applied.
     @include text(functional-introvert);
 }
 
-.mercator-proposal-detail-meta {
-    margin-bottom: gutter(12);
-}
-
+.mercator-propsal-list-item-meta-item,
 .mercator-propsal-detail-meta-item {
-    @include gallery(2 of 12);
-}
-
-.mercator-propsal-list-item-meta-item {
     @include text(functional-introvert);
     float: left;
     margin-right: 2em;
 
     i {
+        font-size: 140%;
         line-height: 1;
         margin-right: 0.1666em;
+        vertical-align: middle;
 
-        &.icon-speech-bubbles {
+        &.icon-speechbubbles {
             color: $color-brand-accent1;
-            font-size: 140%;
-            vertical-align: middle;
         }
 
         &.icon-pointy-rectangle-left {
@@ -69,31 +62,82 @@ selected. If no proposal is selected, no state is applied.
             font-size: 200%;
             vertical-align: text-top;
         }
+
+        &.icon-pig {
+            font-size: 160%;
+        }
+    }
+
+    &:last-child {
+        float: right;
+        margin-right: 0;
     }
 
     &.mercator-propsal-list-item-meta-item-budget {
-        float: right;
         font-size: $font-size-plus;
-        margin-right: 0;
+    }
+}
+
+.mercator-proposal-detail-meta {
+    padding-bottom: 1em;
+
+    i.icon-speechbubbles {
+        color: $color-highlight-extrovert;
     }
 }
 
 .mercator-proposal-detail-cover {
     @include span(full);
-    border-bottom: 1px solid $color-structure-border;
+    border-bottom: 0.1666em solid $color-secondary-introvert;
+    padding: 1.2em 1.2em 1em;
+
+    .chapter-header {
+        margin: 0;
+        font-size: $font-size-large;
+    }
 }
 
 .mercator-proposal-cover-show-comments {
+    @include disguised-link;
     float: right;
 }
 
+.mercator-proposal-detail-container {
+    background-color: $color-structure-active;
+    clear: left;
+    overflow: hidden;
+}
+
 .mercator-proposal-detail-nav {
-    @include span(first 2 of 12);
+    @include span(1 of 12 inside);
     @extend .jump-navigation;
+    text-align: center;
+
+    a {
+        padding: 0 0 1em;
+    }
 }
 
 .mercator-proposal-chapters {
-    @include span(last 10 of 12);
+    @include span(11 of 12 inside);
+    background-color: white;
+    border-left: 0.1666em solid $color-secondary-introvert;
+
+    .chapter-header {
+        background: transparent;
+        font-size: $font-size-normal;
+        margin: 0;
+        padding: 0;
+    }
+
+    h3 {
+        margin-top: 0;
+    }
+}
+
+.mercator-proposal-detail-nav,
+.mercator-proposal-chapters {
+    padding-top: 1em;
 }
 
 .mercator-proposal-list-item {
