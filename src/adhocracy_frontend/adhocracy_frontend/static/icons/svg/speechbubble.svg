@@ -1,58 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   x="0px"
-   y="0px"
-   viewBox="0 0 20 20"
-   enable-background="new 0 0 20 20"
-   xml:space="preserve"
-   id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   width="100%"
-   height="100%"
-   sodipodi:docname="speachbubble-outline.svg"><metadata
-   id="metadata13"><rdf:RDF><cc:Work
-       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-   id="defs11">
-	
-</defs><sodipodi:namedview
-   pagecolor="#ffffff"
-   bordercolor="#666666"
-   borderopacity="1"
-   objecttolerance="10"
-   gridtolerance="10"
-   guidetolerance="10"
-   inkscape:pageopacity="0"
-   inkscape:pageshadow="2"
-   inkscape:window-width="1440"
-   inkscape:window-height="880"
-   id="namedview9"
-   showgrid="false"
-   inkscape:zoom="33.37544"
-   inkscape:cx="16.086604"
-   inkscape:cy="10.042638"
-   inkscape:window-x="0"
-   inkscape:window-y="20"
-   inkscape:window-maximized="1"
-   inkscape:current-layer="svg2" />
-<path
-   style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans"
-   d="M 10.3125 2.09375 C 7.7842687 2.09375 5.4943558 2.689514 3.8125 3.65625 C 2.1306442 4.622986 1 6.0030093 1 7.59375 C 1 9.0207819 1.8944947 10.191385 3.15625 11.125 C 3.1559849 11.124049 3.1571683 11.15593 3.15625 11.15625 C 3.16078 11.17767 3.181001 11.19627 3.1875 11.25 C 3.204498 11.390514 3.211938 11.611589 3.21875 11.875 C 3.232375 12.401823 3.237378 13.117039 3.21875 13.8125 C 3.181493 15.203422 3.09375 16.5625 3.09375 16.5625 L 3 18.40625 L 4.03125 16.875 C 4.03125 16.875 4.7186002 15.801817 5.5625 14.75 C 5.9844499 14.224091 6.4529663 13.695885 6.84375 13.34375 C 7.0391419 13.167683 7.2126548 13.04061 7.34375 12.96875 C 7.4748452 12.89689 7.5402525 12.91357 7.5 12.90625 L 7.53125 12.90625 C 8.3363386 13.006886 9.250463 13.09375 10.1875 13.09375 C 12.715731 13.09375 15.005644 12.497986 16.6875 11.53125 C 18.369356 10.564514 19.5 9.1844907 19.5 7.59375 C 19.5 6.0091821 18.407999 4.6245213 16.75 3.65625 C 15.092001 2.6879787 12.840731 2.09375 10.3125 2.09375 z "
-   id="path5" />
-<g
-   id="Ebene_2">
-</g>
-<g
-   id="Ebene_3">
-</g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="15px" height="15px" viewBox="0 0 15 15" enable-background="new 0 0 15 15" xml:space="preserve">
+<path fill="#818181" d="M7.5,0C3.478,0,0,3.362,0,6.818c0,1.834,1.264,3.628,2.727,4.772L1.364,15l4.772-2.046
+	c0.615,0.017,0.864,0,1.364,0c4.021,0,7.5-2.68,7.5-6.136C15,3.362,11.521,0,7.5,0"/>
 </svg>

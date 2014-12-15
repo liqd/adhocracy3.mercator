@@ -16,13 +16,13 @@ displayed as a button in a second column.
 ```
 */
 .commentable-section {
-    border-bottom: 1px solid $color-secondary-introvert;
     margin-bottom: 1em;
     padding-bottom: 1em;
     padding-right: 30%;
     position: relative;
 
     .commentable-section-show-comments {
+        @include disguised-link;
         max-width: 30%;
         position: absolute;
         right: 0;

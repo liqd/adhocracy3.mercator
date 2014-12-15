@@ -23,15 +23,18 @@
 [data-icon]:before { content: attr(data-icon); }
 
 [data-icon]:before,
+.icon-calendar:before,
 .icon-document:before,
 .icon-documents:before,
 .icon-list:before,
 .icon-minus:before,
+.icon-pig:before,
 .icon-pointy-rectangle-left:before,
 .icon-pointy-rectangle-right:before,
-.icon-speech-bubbles:before,
 .icon-speechbubble:before,
+.icon-speechbubble-document:before,
 .icon-speechbubble-outline:before,
+.icon-speechbubbles:before,
 .icon-user:before,
 .icon-x:before {
   display: inline-block;
@@ -48,14 +51,17 @@
   font-smoothing: antialiased;
 }
 
-.icon-document:before { content: "\f100"; }
-.icon-documents:before { content: "\f101"; }
-.icon-list:before { content: "\f102"; }
-.icon-minus:before { content: "\f103"; }
-.icon-pointy-rectangle-left:before { content: "\f108"; }
-.icon-pointy-rectangle-right:before { content: "\f109"; }
-.icon-speech-bubbles:before { content: "\f10a"; }
-.icon-speechbubble:before { content: "\f104"; }
-.icon-speechbubble-outline:before { content: "\f105"; }
-.icon-user:before { content: "\f106"; }
+.icon-calendar:before { content: "\f10c"; }
+.icon-document:before { content: "\f105"; }
+.icon-documents:before { content: "\f103"; }
+.icon-list:before { content: "\f104"; }
+.icon-minus:before { content: "\f106"; }
+.icon-pig:before { content: "\f10d"; }
+.icon-pointy-rectangle-left:before { content: "\f10a"; }
+.icon-pointy-rectangle-right:before { content: "\f10b"; }
+.icon-speechbubble:before { content: "\f111"; }
+.icon-speechbubble-document:before { content: "\f10f"; }
+.icon-speechbubble-outline:before { content: "\f112"; }
+.icon-speechbubbles:before { content: "\f110"; }
+.icon-user:before { content: "\f102"; }
 .icon-x:before { content: "\f107"; }

@@ -1,259 +1,270 @@
 <div class="mercator-proposal-detail-view proposal" id="mercator-detail-view-top">
+    <!-- FIXME: DUMMY IMG ! -->
+    <img class="mercator-proposal-detail-view-image" src="http://jasonlefkowitz.net/wp-content/uploads/2013/07/cats-16140154-1920-1080.jpg" style="width: 100%; height: 203px"/>
     <div class="mercator-proposal-detail-cover">
-        <div class="mercator-proposal-detail-image"><img src="{{ data.introduction.picture }}/detail"></div>
-        <h2 class="chapter-header">{{ data.introduction.title }}
-            <a class="mercator-proposal-cover-show-comments" href="{{ path | adhResourceUrl:'comments' }}">
-                <i class="icon-speechbubble-outline"></i> {{ data.commentCount }}
-            </a>
-        </h2>
-
         <ul class="mercator-proposal-detail-meta">
             <li class="mercator-propsal-detail-meta-item">
-                <strong>{{data.finance.requested_funding}} &euro;</strong> requested
+                <i class="icon-speechbubbles"></i>
+                {{ data.commentCountTotal }} {{ "Total Comments" | translate }}
             </li>
             <li class="mercator-propsal-detail-meta-item">
-                <adh-user-meta
-                    data-ng-if="data.user_info"
-                    data-path="{{data.user_info.path}}"
-                    data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
-                </adh-user-meta>
+                <i class="icon-calendar"></i>
+                {{ data.user_info.createtime | date :'d/M/yyyy' }}
             </li>
             <li class="mercator-propsal-detail-meta-item">
-                {{ data.user_info.createtime }} {{ "published" | translate }}
+                <i class="icon-pig"></i>
+                {{data.finance.requested_funding | number}} &euro;
             </li>
             <li class="mercator-propsal-detail-meta-item">
-                <i class="icon-speechbubble-outline"></i> {{ data.commentCountTotal }}
-            </li>
-            <li class="mercator-propsal-detail-meta-item">
-                {{ data.supporterCount }} {{ "supporters" | translate }}
-            </li>
-            <li class="mercator-propsal-detail-meta-item">
+                <!-- FIXME: Caroline not sure how this relates to next number{{ data.supporterCount }} -->
                 <adh-like data-refers-to="{{path}}"
                     data-post-pool-sheet="adhocracy.sheets.rate.ILikeable"
                     data-post-pool-field="post_pool">
                 </adh-like>
             </li>
         </ul>
+        <h2 class="chapter-header">{{ data.introduction.title }}
+            <a class="mercator-proposal-cover-show-comments" href="{{ path | adhResourceUrl:'comments' }}">
+                <i class="icon-speechbubble-document"></i> {{ data.commentCount }}
+            </a>
+        </h2>
     </div><!-- /.cover -->
 
-    <nav class="mercator-proposal-detail-nav" data-adh-sticky="">
-        <ol>
-            <li><a href="#mercator-detail-view-brief-proposal" data-du-smooth-scroll="" data-du-scrollspy="">{{ "Brief Proposal" | translate }}</a></li>
-            <li><a href="#mercator-detail-view-detailed-proposal" data-du-smooth-scroll="" data-du-scrollspy="">{{ "Detailed Proposal" | translate }}</a></li>
-            <li><a href="#mercator-detail-view-goals-and-vision" data-du-smooth-scroll="" data-du-scrollspy="">{{ "Goals and Vision" | translate }}</a></li>
-            <li><a href="#mercator-detail-view-additional" data-du-smooth-scroll="" data-du-scrollspy="">{{ "Additional" | translate }}</a></li>
-        </ol>
-    </nav>
+    <div class="mercator-proposal-detail-container">
 
-    <div class="mercator-proposal-chapters">
-        <section class="chapter" id="mercator-detail-view-brief-proposal">
-            <h2 class="chapter-header">{{ "Brief Proposal" | translate }}</h2>
+        <nav class="mercator-proposal-detail-nav" data-adh-sticky="">
+            <ol>
+                <li><a
+                    href="#mercator-detail-view-brief-proposal"
+                    data-du-smooth-scroll=""
+                    data-du-scrollspy=""
+                    title='{{ "Brief Proposal" | translate }}'>1.</a></li>
+                <li><a
+                    href="#mercator-detail-view-detailed-proposal"
+                    data-du-smooth-scroll=""
+                    data-du-scrollspy=""
+                    title='{{ "Detailed Proposal" | translate }}'>2.</a></li>
+                <li><a
+                    href="#mercator-detail-view-goals-and-vision"
+                    data-du-smooth-scroll=""
+                    data-du-scrollspy=""
+                    title='{{ "Goals and Vision" | translate }}'>3.</a></li>
+                <li><a
+                    href="#mercator-detail-view-additional"
+                    data-du-smooth-scroll=""
+                    data-du-scrollspy=""
+                    title='{{ "Additional" | translate }}'>4.</a></li>
+            </ol>
+        </nav>
 
-            <section class="commentable-section">
-                <h3>{{ "Pitch (Teaser)" | translate }}</h3>
-                <p>{{ data.introduction.teaser }}</p>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:introduction'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.introduction.commentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+        <div class="mercator-proposal-chapters">
+            <section class="chapter" id="mercator-detail-view-brief-proposal">
+                <section class="commentable-section">
+                    <h3>{{ "Proposal pitch" | translate }}</h3>
+                    <p>{{ data.introduction.teaser }}</p>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:introduction'}}">
+                        <i class="icon-speechbubble"></i> {{ data.introduction.commentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-            <section class="commentable-section">
-                <h3>{{ "Where will this project take place?" | translate }}</h3>
-                <ul>
-                    <li data-ng-if="data.location.location_is_online">{{ "ONLINE" | translate }}</li>
-                    <li data-ng-if="data.location.location_specific_1">{{ data.location.location_specific_1 }}</li>
-                    <li data-ng-if="data.location.location_specific_2">{{ data.location.location_specific_2 }}</li>
-                    <li data-ng-if="data.location.location_specific_3">{{ data.location.location_specific_3 }}</li>
-                    <li data-ng-if="data.location.location_is_linked_to_ruhr">{{ "Ruhr Gebiet, Germany" | translate }}</li>
-                </ul>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:location'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.location.commentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+                <section class="commentable-section">
+                    <div class="mercator-proposal-budget-col">
+                        <strong>{{ data.finance.requested_funding | number }} &euro;</strong>
+                        {{ "requested" | translate }}
+                    </div>
+                    <div class="mercator-proposal-budget-col budget">
+                        <strong>{{ data.finance.budget | number }} &euro;</strong>
+                        {{ "budget" | translate }}
+                    </div>
+                    <p data-ng-if="data.finance.granted"><strong class="color-highlight-valid">{{ "project is granted" | translate }}</strong></p>
 
-            <section class="commentable-section">
-                <h3>{{ "Finance" | translate }}</h3>
+                    <div data-ng-if="data.finance.other_sources" class="mercator-proposal-other-sources">
+                        <h4>{{ "Other sources of income" | translate }}</h4>
+                        <p class="functional-introvert">{{ data.finance.other_sources }}</p>
+                    </div>
 
-                <p class="text-functional"><strong>{{ data.finance.budget }} &euro;</strong> {{ "total project budget" | translate }}</p>
-                <p class="text-functional"><strong>{{ data.finance.requested_funding }} &euro;</strong> {{ "requested" | translate }}</p>
-                <p data-ng-if="data.finance.granted"><strong class="color-highlight-valid">{{ "project is granted" | translate }}</strong></p>
+                    <ul class="inline-boxes">
+                        <li data-ng-if="data.location.location_is_online">{{ "ONLINE" | translate }}</li>
+                        <li data-ng-if="data.location.location_specific_1">{{ data.location.location_specific_1 }}</li>
+                        <li data-ng-if="data.location.location_specific_2">{{ data.location.location_specific_2 }}</li>
+                        <li data-ng-if="data.location.location_specific_3">{{ data.location.location_specific_3 }}</li>
+                        <li data-ng-if="data.location.location_is_linked_to_ruhr">{{ "Ruhr Gebiet, Germany" | translate }}</li>
+                    </ul>
 
-                <h4>{{ "Other sources of income" | translate }}</h4>
-                <p class="functional-introvert">{{ data.finance.other_sources }}</p>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:finance'}}">
+                        <i class="icon-speechbubble"></i> {{ data.finance.commentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:finance'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.finance.commentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
-
-            <section class="commentable-section">
-                <h3>{{ "Who is behind it?" | translate }}</h3>
-                <div data-ng-switch="data.organization_info.status_enum">
-                    <div data-ng-switch-when="registered_nonprofit">
-                        <div>
-                            <adh-user-meta
-                                 data-ng-if="data.user_info"
-                                 data-path="{{data.user_info.path}}"
-                                 data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
-                            </adh-user-meta>
-                        </div>
-                        <div>
+                <section class="commentable-section">
+                    <h3>{{ "Who is behind it?" | translate }}</h3>
+                    <div data-ng-switch="data.organization_info.status_enum">
+                        <div data-ng-switch-when="registered_nonprofit">
                             <div>
-                                <p>{{ data.organisation_info.name }}</p>
-                                <p>{{ data.organisation_info.website }}</p>
-                                <p>{{ "We are a registered non-profil" | translate }}</p>
+                                <adh-user-meta
+                                     data-ng-if="data.user_info"
+                                     data-path="{{data.user_info.path}}"
+                                     data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
+                                </adh-user-meta>
                             </div>
                             <div>
-                                {{ data.organisation_info.country }}
+                                <div>
+                                    <p>{{ data.organisation_info.name }}</p>
+                                    <p>{{ data.organisation_info.website }}</p>
+                                    <p>{{ "We are a registered non-profil" | translate }}</p>
+                                </div>
+                                <div>
+                                    {{ data.organisation_info.country }}
+                                </div>
+                            </div>
+                        </div>
+                        <div data-ng-switch-when="planned_nonprofit">
+                            <div>
+                                <adh-user-meta
+                                     data-ng-if="data.user_info"
+                                     data-path="{{data.user_info.path}}"
+                                     data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
+                                </adh-user-meta>
+                            </div>
+                            <div>
+                                <div>
+                                    <p>{{ data.organisation_info.name }}</p>
+                                    <p>{{ data.organisation_info.website }}</p>
+                                    <p>
+                                        {{ "NGO registration is planned or in process " | translate }}
+                                        {{ data.organisation_info.date_of_foreseen_registration }}
+                                    </p>
+                                </div>
+                                <div>
+                                    {{ data.organisation_info.country }}
+                                </div>
+                            </div>
+                        </div>
+                        <div data-ng-switch-when="support_needed">
+                            <div>
+                                <adh-user-meta
+                                     data-ng-if="data.user_info"
+                                     data-path="{{data.user_info.path}}"
+                                     data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
+                                </adh-user-meta>
+                            </div>
+                            <div>
+                                <div>
+                                    <p>{{ data.organisation_info.name }}</p>
+                                    <p>{{ data.organisation_info.website }}</p>
+                                    <p>{{ "We’d like to try to realise the idea, but will need help with registering a non-profit." | translate }}</p>
+                                    <p>{{ data.organisation_info.how_can_we_help_you }}</p>
+                                </div>
+                                <div>
+                                    {{ data.organisation_info.country }}
+                                </div>
+                            </div>
+                        </div>
+                        <div data-ng-switch-when="other">
+                            <div>
+                                <adh-user-meta
+                                     data-ng-if="data.user_info"
+                                     data-path="{{data.user_info.path}}"
+                                     data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
+                                </adh-user-meta>
+                            </div>
+                            <div>
+                                <p>{{ data.organisation_info.status_other }}</p>
                             </div>
                         </div>
                     </div>
-                    <div data-ng-switch-when="planned_nonprofit">
-                        <div>
-                            <adh-user-meta
-                                 data-ng-if="data.user_info"
-                                 data-path="{{data.user_info.path}}"
-                                 data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
-                            </adh-user-meta>
-                        </div>
-                        <div>
-                            <div>
-                                <p>{{ data.organisation_info.name }}</p>
-                                <p>{{ data.organisation_info.website }}</p>
-                                <p>
-                                    {{ "NGO registration is planned or in process " | translate }}
-                                    {{ data.organisation_info.date_of_foreseen_registration }}
-                                </p>
-                            </div>
-                            <div>
-                                {{ data.organisation_info.country }}
-                            </div>
-                        </div>
-                    </div>
-                    <div data-ng-switch-when="support_needed">
-                        <div>
-                            <adh-user-meta
-                                 data-ng-if="data.user_info"
-                                 data-path="{{data.user_info.path}}"
-                                 data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
-                            </adh-user-meta>
-                        </div>
-                        <div>
-                            <div>
-                                <p>{{ data.organisation_info.name }}</p>
-                                <p>{{ data.organisation_info.website }}</p>
-                                <p>{{ "We’d like to try to realise the idea, but will need help with registering a non-profit." | translate }}</p>
-                                <p>{{ data.organisation_info.how_can_we_help_you }}</p>
-                            </div>
-                            <div>
-                                {{ data.organisation_info.country }}
-                            </div>
-                        </div>
-                    </div>
-                    <div data-ng-switch-when="other">
-                        <div>
-                            <adh-user-meta
-                                 data-ng-if="data.user_info"
-                                 data-path="{{data.user_info.path}}"
-                                 data-name="{{data.user_info.first_name}} {{data.user_info.last_name}}">
-                            </adh-user-meta>
-                        </div>
-                        <div>
-                            <p>{{ data.organisation_info.status_other }}</p>
-                        </div>
-                    </div>
-                </div>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:organization_info'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.organization_info.commentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:organization_info'}}">
+                        <i class="icon-speechbubble"></i> {{ data.organization_info.commentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-        </section><!-- /chapter -->
+            </section><!-- /chapter -->
 
-        <section class="chapter" id="mercator-detail-view-detailed-proposal">
-            <h2 class="chapter-header">{{ "Detailed Proposal" | translate }}</h2>
+            <section class="chapter" id="mercator-detail-view-detailed-proposal">
+                <h2 class="chapter-header">{{ "Detailed Proposal" | translate }}</h2>
 
-            <section class="commentable-section">
-                <h3>{{ "Description?" | translate }}</h3>
-                <p>{{ data.description.description }}</p>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:description'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.description.commentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+                <section class="commentable-section">
+                    <h3>{{ "Description?" | translate }}</h3>
+                    <p>{{ data.description.description }}</p>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:description'}}">
+                        <i class="icon-speechbubble"></i> {{ data.description.commentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-            <section class="commentable-section">
-                <h3>{{ "Story behind the idea" | translate }}</h3>
-                <p>{{ data.story }}</p>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:story'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.stepsCommentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+                <section class="commentable-section">
+                    <h3>{{ "Story behind the idea" | translate }}</h3>
+                    <p>{{ data.story }}</p>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:story'}}">
+                        <i class="icon-speechbubble"></i> {{ data.stepsCommentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-        </section><!-- /chapter -->
+            </section><!-- /chapter -->
 
-        <section class="chapter" id="mercator-detail-view-goals-and-vision">
-            <h2 class="chapter-header">{{ "Goals and Vision" | translate }}</h2>
+            <section class="chapter" id="mercator-detail-view-goals-and-vision">
+                <h2 class="chapter-header">{{ "Goals and Vision" | translate }}</h2>
 
-            <section class="commentable-section">
-                <h3>{{ "What would be a successful outcome of your project or initiative?" | translate }}</h3>
-                <p>{{ data.outcome }}</p>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:outcome'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.outcomeCommentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+                <section class="commentable-section">
+                    <h3>{{ "What would be a successful outcome of your project or initiative?" | translate }}</h3>
+                    <p>{{ data.outcome }}</p>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:outcome'}}">
+                        <i class="icon-speechbubble"></i> {{ data.outcomeCommentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-            <section class="commentable-section">
-                <h3>{{ "How do you want to get there?" | translate }}</h3>
-                <p>{{ data.steps }}</p>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:steps'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.stepsCommentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+                <section class="commentable-section">
+                    <h3>{{ "How do you want to get there?" | translate }}</h3>
+                    <p>{{ data.steps }}</p>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:steps'}}">
+                        <i class="icon-speechbubble"></i> {{ data.stepsCommentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-            <section class="commentable-section">
-                <h3>{{ "Why does Europe need your idea?" | translate }}</h3>
-                <p>{{ data.value }}</p>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:value'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.valueCommentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+                <section class="commentable-section">
+                    <h3>{{ "Why does Europe need your idea?" | translate }}</h3>
+                    <p>{{ data.value }}</p>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:value'}}">
+                        <i class="icon-speechbubble"></i> {{ data.valueCommentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-            <section class="commentable-section">
-                <h3>{{ "Partner organisations and members list" | translate }}</h3>
-                <p>{{ data.partners }}</p>
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:partners'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.partnersCommentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
+                <section class="commentable-section">
+                    <h3>{{ "Partner organisations and members list" | translate }}</h3>
+                    <p>{{ data.partners }}</p>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:partners'}}">
+                        <i class="icon-speechbubble"></i> {{ data.partnersCommentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
 
-        </section>
+            </section>
 
-        <section class="chapter" id="mercator-detail-view-additional">
-            <h2 class="chapter-header">{{ "Additional" | translate }}</h2>
-            <section class="commentable-section">
-                <h3>{{ "Share your experience" | translate }}</h3>
-                <p>{{ data.experience }}</p>
+            <section class="chapter" id="mercator-detail-view-additional">
+                <h2 class="chapter-header">{{ "Additional" | translate }}</h2>
+                <section class="commentable-section">
+                    <h3>{{ "Share your experience" | translate }}</h3>
+                    <p>{{ data.experience }}</p>
 
-                <div data-ng-if="data.heard_from">
-                    <h3>{{ "Where did you find out about Advocate Europe?" | translate }}</h3>
-                    <p>
-                        <span data-ng-if="data.heard_from.colleague">colleague</span>
-                        <span data-ng-if="data.heard_from.website">website</span>
-                        <span data-ng-if="data.heard_from.newsletter">newsletter</span>
-                        <span data-ng-if="data.heard_from.facebook">facebook</span>
-                        <span data-ng-if="data.heard_from.other">Other: {{ data.heard_from.other_specify }}</span>
-                    </p>
-                </div><!-- /.if=data.heard_from -->
+                    <div data-ng-if="data.heard_from">
+                        <h3>{{ "Where did you find out about Advocate Europe?" | translate }}</h3>
+                        <p>
+                            <span data-ng-if="data.heard_from.colleague">colleague</span>
+                            <span data-ng-if="data.heard_from.website">website</span>
+                            <span data-ng-if="data.heard_from.newsletter">newsletter</span>
+                            <span data-ng-if="data.heard_from.facebook">facebook</span>
+                            <span data-ng-if="data.heard_from.other">Other: {{ data.heard_from.other_specify }}</span>
+                        </p>
+                    </div><!-- /.if=data.heard_from -->
 
-                <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:experience'}}">
-                    <i class="icon-speechbubble-outline"></i> {{ data.experienceCommentCount }}
-                </a>
-            </section><!-- /.commentable-section -->
-        </section>
-        <!-- FIXME: dummy [here you should see a second manifestation of the
-        support butten in the cover section.  obviously, if one of
-        them is clicked, the other should change automatically.] -->
-        <button type="button">Support</button>
+                    <a class="commentable-section-show-comments" href="{{ path | adhResourceUrl:'comments:experience'}}">
+                        <i class="icon-speechbubble"></i> {{ data.experienceCommentCount }}
+                    </a>
+                </section><!-- /.commentable-section -->
+            </section>
+            <!-- FIXME: dummy [here you should see a second manifestation of the
+            support butten in the cover section.  obviously, if one of
+            them is clicked, the other should change automatically.] -->
+            <button type="button">Support</button>
 
-    </div><!-- /.mercator-detail-body -->
+        </div><!-- /.mercator-detail-body -->
+    </div><!-- .mercator-proposal-detail-container -->
 </div><!-- /.mercator-proposal-detail-view -->

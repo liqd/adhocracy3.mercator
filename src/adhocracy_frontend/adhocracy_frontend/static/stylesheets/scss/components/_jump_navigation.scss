@@ -28,8 +28,9 @@ A navigation list containing hash tag links
 
     a {
         display: block;
+        font-size: $font-size-small;
         padding: 0.5em;
-        line-height: 1;
+        line-height: 1.333;
         color: $color-secondary-extrovert;
         text-decoration: none;
 

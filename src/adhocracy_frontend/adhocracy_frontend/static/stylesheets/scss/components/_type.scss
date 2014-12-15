@@ -155,6 +155,44 @@ section {
 
 /*doc
 ---
+title: Inline boxes mixin
+name: inline-box
+category: Type
+---
+
+```html_example
+<span class="inline-box">Inline box 1</span>
+<span class="inline-box">Inline box 2</span>
+
+<ul class="inline-boxes">
+    <li>Inline box 1</li>
+    <li>Inline box 2</li>
+</ul>
+```
+*/
+
+@mixin inline-box {
+    @include inline-block;
+    color: $color-highlight-extrovert;
+    border: 1px solid $color-highlight-extrovert;
+    font-size: $font-size-small;
+    padding: 0 1em;
+}
+
+.inline-box {
+    @include inline-box;
+}
+
+.inline-boxes {
+    padding: 0;
+
+    li {
+        @include inline-box;
+    }
+}
+
+/*doc
+---
 title: Table
 name: table
 category: Type
