@@ -206,15 +206,30 @@ about it.
     }
 
     .discussion-header-creator,
-    .discussion-header-date {
+    .discussion-header-date,
+    .discussion-header-links,
+    .rate {
         a, a:hover, a:focus, a:active {
-            color: inherit;
-            text-decoration: inherit;
+            @include disguised-link;
         }
     }
 
-    .discussion-header-column2 {
-        font-size: 200%;
+    .discussion-header-creator {
+        &:after {
+            content: "|";
+        }
+
+        a {
+            color: $color-highlight-normal;
+        }
+    }
+
+    .discussion-header-links {
+        padding-right: 2em;
+
+        a {
+            padding-left: 1em;
+        }
     }
 
     .discussion-header-column1,
@@ -222,6 +237,14 @@ about it.
         float: right;
         @include text-align(right);
         margin-left: 0.5em;
+    }
+
+    .discussion-header-column1 {
+        float: left;
+    }
+
+    .rate {
+        @include inline-block;
     }
 }
 
