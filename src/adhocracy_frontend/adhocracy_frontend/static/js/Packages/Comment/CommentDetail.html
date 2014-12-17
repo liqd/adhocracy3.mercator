@@ -10,8 +10,17 @@
         </div>
         <div class="discussion-header-column2">
             <span class="discussion-header-links">
+                <a href=""
+                       data-ng-if="poolOptions.POST"
+                       class="comment-action m-comment-reply"
+                       data-ng-click="createComment()">
+                        {{ "Reply" | translate }}</a>
+                <a href=""
+                       data-ng-if="poolOptions.POST"
+                       class="comment-action"
+                       data-ng-click="edit()">
+                        {{ "Edit" | translate }}</a>
                 <!-- #FIXME: Dummy -->
-                <a href="#">{{ "Reply" | translate }}</a>
                 <a href="#">{{ "Report" | translate }}</a>
             </span>
             <adh-rate data-refers-to="{{data.path}}"
@@ -36,16 +45,8 @@
 
             <div class="comment-actions">
                 <span data-ng-switch-default="">
-                    <a href=""
-                       data-ng-if="poolOptions.POST"
-                       class="comment-action"
-                       data-ng-click="edit()">
-                        {{ "Edit" | translate }}</a>
-                    <a href=""
-                       data-ng-if="poolOptions.POST"
-                       class="comment-action m-comment-reply"
-                       data-ng-click="createComment()">
-                        {{ "Add Comment" | translate }}</a>
+
+
                 </span>
                 <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="submit()">{{ "Save" | translate }}</a>
                 <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="cancel()">{{ "Cancel" | translate }}</a>

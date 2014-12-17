@@ -78,7 +78,7 @@ $padding-medium: 1em;
         font-weight: $font-weight-introvert;
         font-size: $font-size-normal;
         @include font-tracking(narrow);
-        line-height: 1.5;
+        line-height: 1.2;
         color: $color-secondary-extrovert;
     } @else if $value == header {
         font-family: $font-family-normal;

@@ -58,7 +58,7 @@ is selected, no state is applied.
 .comment-children {
     margin-top: 2em;
     margin-left: 3em;
-    border-left: 2px solid $color-structure-border;
+    border-left: 0.0833em solid $color-brand-accent2;
 
     .discussion-header {
         display: none;
@@ -71,21 +71,11 @@ is selected, no state is applied.
 
 .comment {
     margin-bottom: 2em;
-    border-left: 2px solid $color-structure-border;
-
-    &:hover {
-        border-color: $color-highlight-normal;
-    }
+    padding: 0 0.9em;
 
     &:last-child {
         margin-bottom: 0;
     }
-}
-
-.comment-main,
-.comment-children-create-form {
-    margin-top: 1em;
-    padding-left: 0.5em;
 }
 
 /*doc
@@ -115,10 +105,6 @@ parent: comment
 </div>
 ```
 */
-.comment-content {
-    margin: 0.5em 0;
-}
-
 .comment-title,
 .comment-meta {
     @include text(meta);
@@ -189,11 +175,8 @@ about it.
 ```
 */
 .discussion-header {
-    background: $color-structure-surface;
-    margin-bottom: 1em;
-    padding: 0.5em;
     @include clearfix;
-    @include text(meta);
+    @include text(introvert);
 
     .discussion-header-icon {
         float: left;
@@ -236,7 +219,6 @@ about it.
     .discussion-header-column2 {
         float: right;
         @include text-align(right);
-        margin-left: 0.5em;
     }
 
     .discussion-header-column1 {
@@ -247,7 +229,6 @@ about it.
         @include inline-block;
     }
 }
-
 
 /*doc
 ---
