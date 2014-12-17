@@ -60,12 +60,15 @@ is selected, no state is applied.
     margin-left: 3em;
     border-left: 0.0833em solid $color-brand-accent2;
 
-    .discussion-header {
-        display: none;
-    }
-
     .comment {
+        position: relative;
         margin-left: -2px;
+
+        &:before {
+            content: " ";
+            border-right: 1.0833em solid $color-brand-accent2;
+            border-top: 1.0833em solid $color-brand-accent2;
+        }
     }
 }
 
@@ -75,6 +78,10 @@ is selected, no state is applied.
 
     &:last-child {
         margin-bottom: 0;
+    }
+
+    .comment-create-form-text {
+        background: $color-structure-border-introvert;
     }
 }
 
@@ -177,6 +184,7 @@ about it.
 .discussion-header {
     @include clearfix;
     @include text(introvert);
+    margin-bottom: 0.3em;
 
     .discussion-header-icon {
         float: left;
@@ -228,6 +236,10 @@ about it.
     .rate {
         @include inline-block;
     }
+}
+
+.comment-create-form-text {
+    margin-bottom: 0.45em;
 }
 
 /*doc
