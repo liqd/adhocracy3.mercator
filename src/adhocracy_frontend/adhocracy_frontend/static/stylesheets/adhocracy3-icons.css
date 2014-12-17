@@ -35,6 +35,8 @@
 .icon-speechbubble-document:before,
 .icon-speechbubble-outline:before,
 .icon-speechbubbles:before,
+.icon-triangle-inverse-down:before,
+.icon-triangle-inverse-up:before,
 .icon-user:before,
 .icon-x:before {
   display: inline-block;
@@ -63,5 +65,7 @@
 .icon-speechbubble-document:before { content: "\f109"; }
 .icon-speechbubble-outline:before { content: "\f10a"; }
 .icon-speechbubbles:before { content: "\f10b"; }
+.icon-triangle-inverse-down:before { content: "\f10e"; }
+.icon-triangle-inverse-up:before { content: "\f10f"; }
 .icon-user:before { content: "\f10c"; }
 .icon-x:before { content: "\f10d"; }
