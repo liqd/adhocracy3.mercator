@@ -1,6 +1,8 @@
 """Sheets for :term:`principal`s."""
 import colander
 from cryptacular.bcrypt import BCRYPTPasswordManager
+from pyramid.traversal import resource_path
+from pyramid.traversal import find_resource
 
 from adhocracy_core.interfaces import ISheet
 from substanced.interfaces import IUserLocator
@@ -15,7 +17,6 @@ from adhocracy_core.schema import SingleLine
 from adhocracy_core.schema import TimeZoneName
 from adhocracy_core.schema import UniqueReferences
 from adhocracy_core.schema import Roles
-from adhocracy_core.utils import get_sheet
 
 
 class IGroup(ISheet):
@@ -139,15 +140,10 @@ def deferred_roles_and_group_roles(node: colander.SchemaNode, kw: dict)\
     :return: list of :term:`roles` or [].
     """
     context = kw.get('context', None)
-    request = kw.get('request', None)
-    # FIXME Getting the request binding is just a HACK to prevent circle
-    # in adhocracy_core.sheets.GenericResourceSheet.__init__ schema binding.
-    if not IPermissions.providedBy(context) or request is None:
+    if context is None:
         return []
     roles_and_group_roles = set(context.roles)
-    permissions_sheet = get_sheet(context, IPermissions,
-                                  registry=request.registry)
-    groups = permissions_sheet.get()['groups']
+    groups = [find_resource(context, gid) for gid in context.group_ids]
     for group in groups:
         roles_and_group_roles.update(group.roles)
     return sorted(list(roles_and_group_roles))
@@ -166,12 +162,24 @@ class PermissionsSchema(colander.MappingSchema):
                                   default=deferred_roles_and_group_roles)
 
 
+class PermissionsAttributeStorageSheet(AttributeStorageSheet):
+
+    """Store the groups field references also as object attribute."""
+
+    def _store_references(self, appstruct, registry):
+        super()._store_references(appstruct, registry)
+        if 'groups' in appstruct:
+            groups = appstruct['groups']
+            group_ids = [resource_path(g) for g in groups]
+            self.context.group_ids = group_ids
+
+
 permissions_metadata = sheet_metadata_defaults._replace(
     isheet=IPermissions,
     schema_class=PermissionsSchema,
     permission_create='manage_principals',
     permission_edit='manage_principals',
-    sheet_class=AttributeStorageSheet,
+    sheet_class=PermissionsAttributeStorageSheet,
 )
 
 

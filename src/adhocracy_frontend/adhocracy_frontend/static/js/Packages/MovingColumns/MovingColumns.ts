@@ -122,21 +122,11 @@ export var movingColumns = (
             };
 
             // FIXME: these do not really belong here
-            adhTopLevelState.on("content2Url", (url : string) => {
-                scope.content2Url = url;
-            });
-            adhTopLevelState.on("platformUrl", (url : string) => {
-                scope.platformUrl = url;
-            });
-            adhTopLevelState.on("proposalUrl", (url : string) => {
-                scope.proposalUrl = url;
-            });
-            adhTopLevelState.on("commentableUrl", (url : string) => {
-                scope.commentableUrl = url;
-            });
-            adhTopLevelState.on("userUrl", (url : string) => {
-                scope.userUrl = url;
-            });
+            adhTopLevelState.bind("content2Url", scope);
+            adhTopLevelState.bind("platformUrl", scope);
+            adhTopLevelState.bind("proposalUrl", scope);
+            adhTopLevelState.bind("commentableUrl", scope);
+            adhTopLevelState.bind("userUrl", scope);
             adhPermissions.bindScope(scope, () => scope.proposalUrl && AdhUtil.parentPath(scope.proposalUrl), "proposalItemOptions");
 
             adhTopLevelState.on("movingColumns", move);

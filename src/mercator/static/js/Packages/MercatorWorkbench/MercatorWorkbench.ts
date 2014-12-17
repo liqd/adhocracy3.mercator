@@ -87,9 +87,7 @@ export class MercatorWorkbench {
                     sort: "-rates"
                 };
 
-                adhTopLevelState.on("view", (value : string) => {
-                    $scope.view = value;
-                });
+                adhTopLevelState.bind("view", $scope);
                 $scope.goToListing = () => {
                     $location.url("/r/mercator");
                 };

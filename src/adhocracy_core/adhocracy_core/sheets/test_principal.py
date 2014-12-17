@@ -257,11 +257,10 @@ class TestPermissionsSchemaSchema:
                                       'roles': [],
                                       'roles_and_group_roles': []}
 
-    def test_serialize_with_groups_and_roles(self, context, group, request,
-                                             permissions_sheet):
+    def test_serialize_with_groups_and_roles(self, context, group, request):
         context.roles = ['view']
+        context.group_ids = ['/group']
         group.roles = ['admin']
-        permissions_sheet.get.return_value = {'groups': [group]}
         appstruct = {'groups': [group], 'roles': ['view']}
         inst = self.make_one().bind(context=context, request=request)
         assert inst.serialize(appstruct) == \
@@ -270,7 +269,14 @@ class TestPermissionsSchemaSchema:
              'roles_and_group_roles': ['admin', 'view']}
 
 
+
 class TestPermissionsSheet:
+
+    @fixture
+    def context(self, context):
+        context.roles = []
+        context.group_ids = []
+        return context
 
     @fixture
     def meta(self):
@@ -280,9 +286,10 @@ class TestPermissionsSheet:
     def test_create(self, meta, context):
         from adhocracy_core.sheets.principal import IPermissions
         from adhocracy_core.sheets.principal import PermissionsSchema
-        from adhocracy_core.sheets import GenericResourceSheet
+        from adhocracy_core.sheets.principal import \
+            PermissionsAttributeStorageSheet
         inst = meta.sheet_class(meta, context)
-        assert isinstance(inst, GenericResourceSheet)
+        assert isinstance(inst, PermissionsAttributeStorageSheet)
         assert inst.meta.isheet == IPermissions
         assert inst.meta.schema_class == PermissionsSchema
         assert inst.meta.permission_create == 'manage_principals'
@@ -295,6 +302,13 @@ class TestPermissionsSheet:
                               'roles': [],
                               'roles_and_group_roles': [],
                               }
+
+    def test_set_groups(self, meta, context):
+        group = testing.DummyResource()
+        context['group'] = group
+        inst = meta.sheet_class(meta, context)
+        inst.set({'groups': [group]})
+        assert context.group_ids == ['/group']
 
 
 def test_includeme_register_permissions_sheet(config):

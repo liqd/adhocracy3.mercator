@@ -80,6 +80,7 @@ class IUser(IPool):
     activation_path = Attribute(
         'Activation path for not-yet-activated accounts (str)')
     roles = Attribute('List of :term:`role`s')
+    group_ids = Attribute('List of :term:`group_id`s')
 
 
 @implementer(IUser)
@@ -101,6 +102,8 @@ class User(Pool):
     def __init__(self, data=None, family=None):
         super().__init__(data, family)
         self.roles = []
+        self.group_ids = []
+        """Readonly :term:`group_id`s for this user."""
 
 
 def send_registration_mail(context: IUser,

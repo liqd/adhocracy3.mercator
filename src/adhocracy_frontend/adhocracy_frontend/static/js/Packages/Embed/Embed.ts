@@ -68,14 +68,13 @@ export var isInternalUrl = (url : string, $location : ng.ILocationService) => {
 };
 
 
-export var hrefDirective = (adhConfig : AdhConfig.IService, $location, $rootScope, $timeout) => {
+export var hrefDirective = (adhConfig : AdhConfig.IService, $location, $rootScope) => {
     return {
         restrict: "A",
         link: (scope, element, attrs) => {
             if (element[0].nodeName === "A" && adhConfig.canonical_url) {
-                $timeout(() => {
-                    var orig = element.attr("href");
-                    if (orig) {
+                scope.$watch(() => attrs.href, (orig) => {
+                    if (orig && orig[0] !== "#") {
                         orig = normalizeInternalUrl(orig, $location);
 
                         if (isInternalUrl(orig, $location)) {
@@ -83,7 +82,7 @@ export var hrefDirective = (adhConfig : AdhConfig.IService, $location, $rootScop
                             element.attr("href", adhConfig.canonical_url + orig);
                             element.click((event) => {
                                 _.defer(() => $rootScope.$apply(() => {
-                                    $location.path(orig);
+                                    $location.url(orig);
                                 }));
                                 event.preventDefault();
                             });
@@ -133,5 +132,5 @@ export var register = (angular) => {
                 $translate.use(params.locale);
             }
         }])
-        .directive("href", ["adhConfig", "$location", "$rootScope", "$timeout", hrefDirective]);
+        .directive("href", ["adhConfig", "$location", "$rootScope", hrefDirective]);
 };

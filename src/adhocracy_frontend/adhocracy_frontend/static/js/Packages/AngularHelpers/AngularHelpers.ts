@@ -121,6 +121,32 @@ export var recompileOnChange = ($compile : ng.ICompileService) => {
 };
 
 
+/**
+ * Like ngIf, but does not remove the directive when
+ * the condition switches back to false.
+ *
+ * NOTE: for simplicity, this can currently only used
+ * as a wrapper element (not as attibute).
+ */
+export var waitForCondition = () => {
+    return {
+        restrict: "E",
+        scope: {
+            condition: "="
+        },
+        transclude: true,
+        template: "<ng-transclude data-ng-if=\"wasTrueOnce\"></ng-transclude>",
+        link: (scope, element, attrs) => {
+            scope.$watch("condition", (value) => {
+                if (value) {
+                    scope.wasTrueOnce = true;
+                }
+            });
+        }
+    };
+};
+
+
 export var moduleName = "adhAngularHelpers";
 
 export var register = (angular) => {
@@ -130,5 +156,6 @@ export var register = (angular) => {
         ])
         .factory("adhRecursionHelper", ["$compile", recursionHelper])
         .directive("adhRecompileOnChange", ["$compile", recompileOnChange])
-        .directive("adhLastVersion", ["$compile", "adhHttp", lastVersion]);
+        .directive("adhLastVersion", ["$compile", "adhHttp", lastVersion])
+        .directive("adhWait", waitForCondition);
 };

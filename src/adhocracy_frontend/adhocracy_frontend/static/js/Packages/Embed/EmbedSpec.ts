@@ -58,6 +58,11 @@ export var register = () => {
                 var actual = AdhEmbed.normalizeInternalUrl(url, $locationMock);
                 expect(actual).toEqual(url);
             });
+            it("preserves query arguments on relative URLs", () => {
+                var url = "/foo/bar?foo=1&bar=baz";
+                var actual = AdhEmbed.normalizeInternalUrl(url, $locationMock);
+                expect(actual).toEqual(url);
+            });
             it("removes the host from absolute URLs", () => {
                 var url = "http://example.com/foo/bar";
                 var actual = AdhEmbed.normalizeInternalUrl(url, $locationMock);

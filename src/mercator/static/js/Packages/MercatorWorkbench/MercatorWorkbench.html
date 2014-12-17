@@ -1,128 +1,134 @@
 <adh-spaces>
-    <div data-adh-moving-columns="" class="moving-columns" data-ng-show="currentSpace === 'content'" data-ng-if="isSpaceInitialized('content')">
-        <div class="moving-column moving-column-structure">
-            <div data-ng-if="view === 'create_proposal'">
-                <div class="moving-column-menu">
-                    <a href="{{ platformUrl | adhResourceUrl }}">{{ "Cancel" | translate }}</a>
+    <adh-wait data-condition="currentSpace === 'content'">
+        <div data-adh-moving-columns="" class="moving-columns" data-ng-show="currentSpace === 'content'">
+            <div class="moving-column moving-column-structure">
+                <div data-ng-if="view === 'create_proposal'">
+                    <div class="moving-column-menu">
+                        <a href="{{ platformUrl | adhResourceUrl }}">{{ "Cancel" | translate }}</a>
+                    </div>
+                    <div class="moving-column-body" data-du-scroll-container="">
+                        <adh-resource-wrapper data-on-submit="goToListing()" data-on-cancel="goToListing()">
+                            <adh-mercator-proposal-create
+                                data-path="@preliminary"
+                                data-mode="edit"
+                                data-pool-path="{{path}}">
+                            <adh-mercator-proposal-create>
+                        </adh-resource-wrapper>
+                    </div>
                 </div>
-                <div class="moving-column-body" data-du-scroll-container="">
-                    <adh-resource-wrapper data-on-submit="goToListing()" data-on-cancel="goToListing()">
-                        <adh-mercator-proposal-create
-                            data-path="@preliminary"
-                            data-mode="edit"
-                            data-pool-path="{{path}}">
-                        <adh-mercator-proposal-create>
-                    </adh-resource-wrapper>
+                <div data-ng-if="view !== 'create_proposal'">
+                    <div class="moving-column-menu">
+                        <i class="icon-list moving-column-icon"></i>
+                        <a href="" data-ng-click="proposalListingData.showFacets = !proposalListingData.showFacets">{{ "filters" | translate }}</a>
+                    </div>
+                    <div class="moving-column-collapsed">
+                        <a href="{{ platformUrl | adhResourceUrl:undefined:{proposalUrl: proposalUrl, movingColumns: 'is-show-show-hide'} }}">O</a>
+                    </div>
+                    <div
+                        class="moving-column-sidebar"
+                        data-ng-class="{'is-visible': proposalListingData.showFacets}"
+                        aria-visible="{{proposalListingData.showFacets}}">
+                        <adh-facets
+                            data-update="proposalListingData.update"
+                            data-facets="proposalListingData.facets">
+                        </adh-facets>
+                    </div>
+                    <div class="moving-column-body" data-du-scroll-container="">
+                        <adh-mercator-proposal-listing
+                            data-path="{{path}}"
+                            data-content-type="{{contentType}}"
+                            data-update="proposalListingData.update"
+                            data-facets="proposalListingData.facets"
+                            data-sort="proposalListingData.sort"
+                        >
+                        </adh-mercator-proposal-listing>
+                    </div>
                 </div>
             </div>
-            <div data-ng-if="view !== 'create_proposal'">
+            <div class="moving-column moving-column-content">
+                <div data-ng-if="view === 'edit'">
+                    <div class="moving-column-menu">
+                        <a href="{{ proposalUrl | adhResourceUrl }}">{{ 'cancel' | translate }}</a>
+                    </div>
+                    <div class="moving-column-body" data-du-scroll-container="">
+                        <adh-resource-wrapper
+                            data-on-submit="goToProposal(proposalUrl)"
+                            data-on-cancel="goToProposal(proposalUrl)">
+                            <adh-mercator-proposal-create
+                                data-ng-if="proposalUrl"
+                                data-path="{{proposalUrl}}"
+                                data-mode="edit"
+                                data-pool-path="{{path}}">
+                            </adh-mercator-proposal-create>
+                        </adh-resource-wrapper>
+                    </div>
+                </div>
+                <div data-ng-if="view !== 'edit'">
+                    <div class="moving-column-menu">
+                        <i class="icon-document moving-column-icon"></i>
+                        <a data-ng-if="proposalItemOptions.POST" href="{{ proposalUrl | adhResourceUrl:'edit' }}">{{ 'edit' | translate }}</a>
+
+                        <div class="moving-column-menu-nav">
+                            <a href="{{ platformUrl | adhResourceUrl }}" title="{{ 'close' | translate }}"><i class="icon-x"></i></a>
+                        </div>
+                    </div>
+                    <div class="moving-column-collapsed">
+                        <a href="{{ proposalUrl | adhResourceUrl }}">O</a>
+                    </div>
+                    <div class="moving-column-body" data-du-scroll-container="">
+                        <adh-recompile-on-change data-value="{{proposalUrl}}" data-key="proposalUrl">
+                            <adh-resource-wrapper>
+                                <adh-mercator-proposal-detail-view data-ng-if="proposalUrl" data-path="{{proposalUrl}}"></adh-mercator-proposal-detail-view>
+                            </adh-resource-wrapper>
+                        </adh-recompile-on-change>
+                    </div>
+                </div>
+            </div>
+            <div class="moving-column moving-column-content2">
                 <div class="moving-column-menu">
-                    <i class="icon-list moving-column-icon"></i>
-                    <a href="" data-ng-click="proposalListingData.showFacets = !proposalListingData.showFacets">{{ "filters" | translate }}</a>
-                </div>
-                <div class="moving-column-collapsed">
-                    <a href="{{ platformUrl | adhResourceUrl:undefined:{proposalUrl: proposalUrl, movingColumns: 'is-show-show-hide'} }}">O</a>
-                </div>
-                <div
-                    class="moving-column-sidebar"
-                    data-ng-class="{'is-visible': proposalListingData.showFacets}"
-                    aria-visible="{{proposalListingData.showFacets}}">
-                    <adh-facets
-                        data-update="proposalListingData.update"
-                        data-facets="proposalListingData.facets">
-                    </adh-facets>
+                    <div class="moving-column-menu-nav">
+                        <a href="{{ proposalUrl | adhResourceUrl }}" title="{{ 'close' | translate }}"><i class="icon-x"></i></a>
+                    </div>
                 </div>
                 <div class="moving-column-body" data-du-scroll-container="">
-                    <adh-mercator-proposal-listing
-                        data-path="{{path}}"
-                        data-content-type="{{contentType}}"
-                        data-update="proposalListingData.update"
-                        data-facets="proposalListingData.facets"
-                        data-sort="proposalListingData.sort"
-                    >
-                    </adh-mercator-proposal-listing>
+                    <adh-comment-listing data-ng-if="commentableUrl" data-path="{{commentableUrl}}">
                 </div>
             </div>
         </div>
-        <div class="moving-column moving-column-content">
-            <div data-ng-if="view === 'edit'">
-                <div class="moving-column-menu">
-                    <a href="{{ proposalUrl | adhResourceUrl }}">{{ 'cancel' | translate }}</a>
-                </div>
+    </adh-wait>
+
+    <adh-wait data-condition="currentSpace === 'user'">
+        <div data-adh-moving-columns="" class="moving-columns" data-ng-show="currentSpace === 'user'">
+            <div class="moving-column moving-column-structure">
+                <div class="moving-column-menu placeholder"></div>
                 <div class="moving-column-body" data-du-scroll-container="">
-                    <adh-resource-wrapper
-                        data-on-submit="goToProposal(proposalUrl)"
-                        data-on-cancel="goToProposal(proposalUrl)">
-                        <adh-mercator-proposal-create
-                            data-ng-if="proposalUrl"
-                            data-path="{{proposalUrl}}"
-                            data-mode="edit"
-                            data-pool-path="{{path}}">
-                        </adh-mercator-proposal-create>
-                    </adh-resource-wrapper>
+                    <adh-list-users></adh-list-users>
                 </div>
             </div>
-            <div data-ng-if="view !== 'edit'">
-                <div class="moving-column-menu">
-                    <i class="icon-document moving-column-icon"></i>
-                    <a data-ng-if="proposalItemOptions.POST" href="{{ proposalUrl | adhResourceUrl:'edit' }}">{{ 'edit' | translate }}</a>
-
-                    <div class="moving-column-menu-nav">
-                        <a href="{{ platformUrl | adhResourceUrl }}" title="{{ 'close' | translate }}"><i class="icon-x"></i></a>
-                    </div>
-                </div>
-                <div class="moving-column-collapsed">
-                    <a href="{{ proposalUrl | adhResourceUrl }}">O</a>
-                </div>
+            <div class="moving-column moving-column-content">
+                <div class="moving-column-menu placeholder"></div>
                 <div class="moving-column-body" data-du-scroll-container="">
-                    <adh-recompile-on-change data-value="{{proposalUrl}}" data-key="proposalUrl">
-                        <adh-resource-wrapper>
-                            <adh-mercator-proposal-detail-view data-ng-if="proposalUrl" data-path="{{proposalUrl}}"></adh-mercator-proposal-detail-view>
-                        </adh-resource-wrapper>
+                    <adh-recompile-on-change
+                        data-key="userUrl"
+                        data-value="{{userUrl}}">
+                        <adh-user-profile
+                            data-path="{{userUrl}}">
+                            <section class="mercator-user-profile-proposal-list">
+                                <h3>{{ "USERS_PROPOSALS" | translate:userBasic }}</h3>
+                                <adh-mercator-user-proposal-listing
+                                    data-path="{{path}}">
+                                </adh-mercator-user-proposal-listing>
+                            </section>
+                        </adh-user-profile>
                     </adh-recompile-on-change>
                 </div>
             </div>
         </div>
-        <div class="moving-column moving-column-content2">
-            <div class="moving-column-menu">
-                <div class="moving-column-menu-nav">
-                    <a href="{{ proposalUrl | adhResourceUrl }}" title="{{ 'close' | translate }}"><i class="icon-x"></i></a>
-                </div>
-            </div>
-            <div class="moving-column-body" data-du-scroll-container="">
-                <adh-comment-listing data-ng-if="commentableUrl" data-path="{{commentableUrl}}">
-            </div>
-        </div>
-    </div>
+    </adh-wait>
 
-    <div data-adh-moving-columns="" class="moving-columns" data-ng-show="currentSpace === 'user'" data-ng-if="isSpaceInitialized('user')">
-        <div class="moving-column moving-column-structure">
-            <div class="moving-column-menu placeholder"></div>
-            <div class="moving-column-body" data-du-scroll-container="">
-                <adh-list-users></adh-list-users>
-            </div>
+    <adh-wait data-condition="currentSpace === 'error'">
+        <div data-ng-show="currentSpace === 'error'">
+            <adh-routing-error></adh-routing-error>
         </div>
-        <div class="moving-column moving-column-content">
-            <div class="moving-column-menu placeholder"></div>
-            <div class="moving-column-body" data-du-scroll-container="">
-                <adh-recompile-on-change
-                    data-key="userUrl"
-                    data-value="{{userUrl}}">
-                    <adh-user-profile
-                        data-path="{{userUrl}}">
-                        <section class="mercator-user-profile-proposal-list">
-                            <h3>{{ "USERS_PROPOSALS" | translate:userBasic }}</h3>
-                            <adh-mercator-user-proposal-listing
-                                data-path="{{path}}">
-                            </adh-mercator-user-proposal-listing>
-                        </section>
-                    </adh-user-profile>
-                </adh-recompile-on-change>
-            </div>
-        </div>
-    </div>
-
-    <div data-ng-show="currentSpace === 'error'" data-ng-if="isSpaceInitialized('error')">
-        <adh-routing-error></adh-routing-error>
-    </div>
+    </adh-wait>
 </adh-spaces>
