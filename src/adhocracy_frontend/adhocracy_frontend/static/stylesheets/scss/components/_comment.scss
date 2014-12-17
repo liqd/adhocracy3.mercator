@@ -56,36 +56,25 @@ is selected, no state is applied.
 ```
 */
 .comment-children {
-    margin-top: 2em;
-    margin-left: 3em;
-    border-left: 2px solid $color-structure-border;
-
-    .discussion-header {
-        display: none;
-    }
+    margin-top: 0.6em;
+    border-left: 0.0833em solid $color-brand-accent2;
 
     .comment {
-        margin-left: -2px;
+        @include triangle-tl;
     }
 }
 
 .comment {
     margin-bottom: 2em;
-    border-left: 2px solid $color-structure-border;
-
-    &:hover {
-        border-color: $color-highlight-normal;
-    }
+    padding-left: 0.95em;
 
     &:last-child {
         margin-bottom: 0;
     }
-}
 
-.comment-main,
-.comment-children-create-form {
-    margin-top: 1em;
-    padding-left: 0.5em;
+    .comment-create-form-text {
+        background: $color-structure-border-introvert;
+    }
 }
 
 /*doc
@@ -115,10 +104,6 @@ parent: comment
 </div>
 ```
 */
-.comment-content {
-    margin: 0.5em 0;
-}
-
 .comment-title,
 .comment-meta {
     @include text(meta);
@@ -189,11 +174,9 @@ about it.
 ```
 */
 .discussion-header {
-    background: $color-structure-surface;
-    margin-bottom: 1em;
-    padding: 0.5em;
     @include clearfix;
-    @include text(meta);
+    @include text(introvert);
+    margin-bottom: 0.3em;
 
     .discussion-header-icon {
         float: left;
@@ -206,25 +189,50 @@ about it.
     }
 
     .discussion-header-creator,
-    .discussion-header-date {
+    .discussion-header-date,
+    .discussion-header-links,
+    .rate {
         a, a:hover, a:focus, a:active {
-            color: inherit;
-            text-decoration: inherit;
+            @include disguised-link;
         }
     }
 
-    .discussion-header-column2 {
-        font-size: 200%;
+    .discussion-header-creator {
+        &:after {
+            content: "|";
+        }
+
+        a {
+            color: $color-highlight-normal;
+        }
+    }
+
+    .discussion-header-links {
+        padding-right: 2em;
+
+        a {
+            padding-left: 1em;
+        }
     }
 
     .discussion-header-column1,
     .discussion-header-column2 {
         float: right;
         @include text-align(right);
-        margin-left: 0.5em;
+    }
+
+    .discussion-header-column1 {
+        float: left;
+    }
+
+    .rate {
+        @include inline-block;
     }
 }
 
+.comment-create-form-text {
+    margin-bottom: 0.45em;
+}
 
 /*doc
 ---

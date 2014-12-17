@@ -51,3 +51,48 @@ The button has the is-rate-button-active state.
         color: white;
     }
 }
+
+/*doc
+---
+title: Rate
+name: rate
+category: Widgets
+---
+
+Rate up or down with counter
+
+The button has the is-rate-button-active state.
+rate-difference has the is-positive state. Can be is-negative.
+
+```html_example
+<div class="rate">
+    <span class="rate-difference is-positive">
+        1
+    </span>
+    <a href="" class="rate-pro is-rate-button-active" data-ng-click="cast(1)"><i class="icon-triangle-inverse-up" title='{{"Vote up" | translate}}'></i></a>
+    <a href="" class="rate-contra" data-ng-click="cast(-1)"><i class="icon-triangle-inverse-down" title='{{"Vote down" | translate}}'></i></a>
+</div>
+```
+*/
+
+.rate {
+    a {
+        &.is-rate-button-active,
+        &:hover,
+        &:focus {
+            color: $color-highlight-normal;
+        }
+    }
+
+    .rate-difference {
+        &.is-positive {
+            color: $color-highlight-valid;
+        }
+
+        &.is-negative {
+            color: $color-highlight-invalid;
+        }
+    }
+}
+
+
