@@ -41,19 +41,10 @@
             <div data-ng-switch-default="">{{data.content}}</div>
         </div>
         <div class="comment-meta">
-            <adh-time data-datetime="{{data.modificationDate}}"></adh-time>
-
             <div class="comment-actions">
-                <span data-ng-switch-default="">
-
-
-                </span>
+                <span data-ng-switch-default=""></span>
                 <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="submit()">{{ "Save" | translate }}</a>
                 <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="cancel()">{{ "Cancel" | translate }}</a>
-                <span class="comment-count">
-                    <i class="icon-speechbubble-outline"></i>
-                    {{data.commentCount}}
-                </span>
             </div>
         </div>
     </div>

@@ -61,14 +61,7 @@ is selected, no state is applied.
     border-left: 0.0833em solid $color-brand-accent2;
 
     .comment {
-        position: relative;
-        margin-left: -2px;
-
-        &:before {
-            content: " ";
-            border-right: 1.0833em solid $color-brand-accent2;
-            border-top: 1.0833em solid $color-brand-accent2;
-        }
+        @include triangle-tl;
     }
 }
 
