@@ -95,8 +95,8 @@ select,
 textarea {
     display: block;
     width: 100%;
-    margin-bottom: 0.5em;
-    padding: 0.5em $font-size-normal * 0.5;
+    margin-bottom: 1.75em;
+    padding: 0.25em $font-size-normal;
     border: 1px solid $color-structure-border;
     color: $color-prime-normal;
     background-color: $color-background;
@@ -144,6 +144,11 @@ textarea {
     textarea {
         &.ng-invalid, &:invalid, &.is-invalid {
             @extend .error-state;
+            margin-bottom: 0;
+
+            + .input-error {
+                padding-bottom: 0.85em;
+            }
         }
     }
 }
@@ -314,6 +319,6 @@ This error concerns a single input.
 ```
 */
 .input-error {
+    @include inline-block;
     font-size: $font-size-small;
-    padding-left: 1em;
 }

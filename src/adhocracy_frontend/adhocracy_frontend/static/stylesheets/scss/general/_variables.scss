@@ -64,7 +64,7 @@ $padding-medium: 1em;
         font-weight: $font-weight-normal;
         font-size: $font-size-plus;
         @include font-tracking(normal);
-        line-height: 1.5;
+        line-height: 1.2;
         color: $color-prime-normal;
     } @else if $value == functional-introvert {
         font-family: $font-family-normal;
