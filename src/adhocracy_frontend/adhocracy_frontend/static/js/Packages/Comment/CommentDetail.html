@@ -1,30 +1,36 @@
 <div class="comment {{ selectedState }}" data-ng-switch="mode" data-ng-if="data">
     <div class="discussion-header">
-        <span class="discussion-header-icon">
-            <i class="icon-speechbubble-outline"></i>
-        </span>
-        <div class="discussion-header-column2">
-            <i class="icon-speechbubble-outline"></i>
-            {{data.commentCount}}
-        </div>
         <div class="discussion-header-column1">
-            <div class="discussion-header-creator">
+            <span class="discussion-header-creator">
                 <adh-user-meta data-path="{{data.creator}}"></adh-user-meta>
-            </div>
-            <div class="discussion-header-date">
+            </span>
+            <span class="discussion-header-date">
                 <adh-time data-datetime="{{data.modificationDate}}"></adh-time>
-            </div>
+            </span>
         </div>
-    </div>
-
-    <div class="comment-main">
-        <div class="comment-title">
-            <adh-user-meta data-path="{{data.creator}}"></adh-user-meta>
+        <div class="discussion-header-column2">
+            <span class="discussion-header-links">
+                <a href=""
+                    data-ng-if="poolOptions.POST"
+                    data-ng-click="createComment()">
+                    <i class="icon-reply"></i>
+                    {{ "Reply" | translate }}</a>
+                <a href=""
+                    data-ng-if="poolOptions.POST"
+                    data-ng-click="edit()">
+                    {{ "Edit" | translate }}</a>
+                <!-- #FIXME: Dummy -->
+                <a href="#"><i class="icon-ban-circle"></i>
+                        {{ "Report" | translate }}</a>
+            </span>
             <adh-rate data-refers-to="{{data.path}}"
                       data-post-pool-sheet="adhocracy.sheets.rate.IRateable"
                       data-post-pool-field="post_pool">
             </adh-rate>
         </div>
+    </div>
+
+    <div class="comment-main">
         <div data-ng-switch-when="1">
             <div class="form-error" data-ng-repeat="error in errors">
                 <p>{{ error | translate }}</p>
@@ -35,27 +41,10 @@
             <div data-ng-switch-default="">{{data.content}}</div>
         </div>
         <div class="comment-meta">
-            <adh-time data-datetime="{{data.modificationDate}}"></adh-time>
-
             <div class="comment-actions">
-                <span data-ng-switch-default="">
-                    <a href=""
-                       data-ng-if="poolOptions.POST"
-                       class="comment-action"
-                       data-ng-click="edit()">
-                        {{ "Edit" | translate }}</a>
-                    <a href=""
-                       data-ng-if="poolOptions.POST"
-                       class="comment-action m-comment-reply"
-                       data-ng-click="createComment()">
-                        {{ "Add Comment" | translate }}</a>
-                </span>
+                <span data-ng-switch-default=""></span>
                 <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="submit()">{{ "Save" | translate }}</a>
                 <a href="" class="comment-action" data-ng-switch-when="1" data-ng-click="cancel()">{{ "Cancel" | translate }}</a>
-                <span class="comment-count">
-                    <i class="icon-speechbubble-outline"></i>
-                    {{data.commentCount}}
-                </span>
             </div>
         </div>
     </div>
@@ -72,7 +61,6 @@
             </adh-comment-create>
         </adh-resource-wrapper>
     </div>
-
     <div class="comment-children">
         <adh-resource-wrapper
             data-ng-repeat="comment in data.comments">

@@ -23,6 +23,7 @@
 [data-icon]:before { content: attr(data-icon); }
 
 [data-icon]:before,
+.icon-ban-circle:before,
 .icon-calendar:before,
 .icon-document:before,
 .icon-documents:before,
@@ -31,6 +32,7 @@
 .icon-pig:before,
 .icon-pointy-rectangle-left:before,
 .icon-pointy-rectangle-right:before,
+.icon-reply:before,
 .icon-speechbubble:before,
 .icon-speechbubble-document:before,
 .icon-speechbubble-outline:before,
@@ -53,6 +55,7 @@
   font-smoothing: antialiased;
 }
 
+.icon-ban-circle:before { content: "\f110"; }
 .icon-calendar:before { content: "\f100"; }
 .icon-document:before { content: "\f101"; }
 .icon-documents:before { content: "\f102"; }
@@ -61,6 +64,7 @@
 .icon-pig:before { content: "\f105"; }
 .icon-pointy-rectangle-left:before { content: "\f106"; }
 .icon-pointy-rectangle-right:before { content: "\f107"; }
+.icon-reply:before { content: "\f111"; }
 .icon-speechbubble:before { content: "\f108"; }
 .icon-speechbubble-document:before { content: "\f109"; }
 .icon-speechbubble-outline:before { content: "\f10a"; }

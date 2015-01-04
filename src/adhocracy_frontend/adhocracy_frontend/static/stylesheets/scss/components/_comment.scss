@@ -56,36 +56,25 @@ is selected, no state is applied.
 ```
 */
 .comment-children {
-    margin-top: 2em;
-    margin-left: 3em;
-    border-left: 2px solid $color-structure-border;
-
-    .discussion-header {
-        display: none;
-    }
+    margin-top: 0.6em;
+    border-left: 0.0833em solid $color-brand-accent2;
 
     .comment {
-        margin-left: -2px;
+        @include triangle-tl;
     }
 }
 
 .comment {
     margin-bottom: 2em;
-    border-left: 2px solid $color-structure-border;
-
-    &:hover {
-        border-color: $color-highlight-normal;
-    }
+    padding-left: 0.95em;
 
     &:last-child {
         margin-bottom: 0;
     }
-}
 
-.comment-main,
-.comment-children-create-form {
-    margin-top: 1em;
-    padding-left: 0.5em;
+    .comment-create-form-text {
+        background: $color-structure-border-introvert;
+    }
 }
 
 /*doc
@@ -97,28 +86,13 @@ parent: comment
 
 ```html_example
 <div class="comment-main">
-    <div class="comment-title">Willy Wonka</div>
     <div class="comment-content">
-        I like chocolate. I want more chocolate. Chocolate.
-    </div>
-    <div class="comment-meta">
-        5 minutes ago
-        <div class="comment-actions">
-            <a href="" class="comment-action">Delete</a>
-            <a href="" class="comment-action">Edit</a>
-            <a href="" class="comment-action m-comment-reply">Add Comment</a>
-            <span class="comment-count">
-                <i class="icon-speechbubble-outline"></i> 3
-            </span>
-        </div>
+        Nam commodo suscipit quam. Sed libero. Suspendisse potenti. Quisque id mi.
+        In auctor lobortis lacus.
     </div>
 </div>
 ```
 */
-.comment-content {
-    margin: 0.5em 0;
-}
-
 .comment-title,
 .comment-meta {
     @include text(meta);
@@ -133,25 +107,6 @@ parent: comment
 
 .comment-meta {
     @include clearfix;
-}
-
-.comment-action {
-    color: $color-secondary-extrovert;
-    font-weight: bold;
-    text-transform: lowercase;
-    text-decoration: none;
-
-    &:hover, &:focus, &:active {
-        color: darken($color-secondary-extrovert, 10%);
-    }
-
-    &.m-comment-reply {
-        text-transform: uppercase;
-
-        &:hover, &:focus, &:active {
-            color: $color-highlight-extrovert;
-        }
-    }
 }
 
 .comment-action,
@@ -175,25 +130,37 @@ about it.
 
 ```html_example
 <div class="discussion-header">
-    <span class="discussion-header-icon">
-        <i class="icon-speechbubble-outline"></i>
-    </span>
-    <div class="discussion-header-column2">
-        <i class="icon-speechbubble-outline"></i> 4
-    </div>
     <div class="discussion-header-column1">
-        <div class="discussion-header-creator">guest</div>
-        <div class="discussion-header-date">5 minutes ago</div>
+        <span class="discussion-header-creator">
+            <a href="#">Mr. User</a>
+        </span>
+        <span class="discussion-header-date">
+            5 minutes ago
+        </span>
+    </div>
+    <div class="discussion-header-column2">
+        <span class="discussion-header-links">
+            <a href="#"><i class="icon-reply"></i> Reply</a>
+            <a href="#">Bearbeiten</a>
+            <a href="#"><i class="icon-ban-circle"></i> Report</a>
+        </span>
+        <div class="rate">
+            <span class="rate-difference is-positive">
+                <a href="#">+1</a>
+            </span>
+            <a href="#" class="rate-pro is-rate-button-active">
+                <i class="icon-triangle-inverse-up" title="Vote up"></i>
+            </a>
+            <a href="#" class="rate-contra"><i class="icon-triangle-inverse-down" title="Vote down"></i></a>
+        </div>
     </div>
 </div>
 ```
 */
 .discussion-header {
-    background: $color-structure-surface;
-    margin-bottom: 1em;
-    padding: 0.5em;
     @include clearfix;
-    @include text(meta);
+    @include text(introvert);
+    margin-bottom: 0.3em;
 
     .discussion-header-icon {
         float: left;
@@ -206,25 +173,54 @@ about it.
     }
 
     .discussion-header-creator,
-    .discussion-header-date {
+    .discussion-header-date,
+    .discussion-header-links,
+    .rate {
         a, a:hover, a:focus, a:active {
-            color: inherit;
-            text-decoration: inherit;
+            @include disguised-link;
         }
     }
 
-    .discussion-header-column2 {
-        font-size: 200%;
+    .discussion-header-creator {
+        &:after {
+            content: "|";
+        }
+
+        a {
+            color: $color-highlight-normal;
+        }
+    }
+
+    .discussion-header-links {
+        padding-right: 2em;
+
+        a {
+            padding-left: 1em;
+        }
     }
 
     .discussion-header-column1,
     .discussion-header-column2 {
         float: right;
         @include text-align(right);
-        margin-left: 0.5em;
+    }
+
+    .discussion-header-column1 {
+        float: left;
+    }
+
+    .rate {
+        @include inline-block;
     }
 }
 
+.comment-create-form {
+    @include clearfix;
+}
+
+.comment-create-form-text {
+    margin-bottom: 0.45em;
+}
 
 /*doc
 ---
@@ -236,7 +232,7 @@ parent: comment
 ```html_example
 <form class="comment-create-form">
     <textarea></textarea>
-    <input type="submit" value="create" />
+    <input type="submit" value="create" class="comment-create-form-button-submit" />
     <a href="">Cancel</a>
 </form>
 ```
