@@ -3,6 +3,7 @@
 $color-prime-normal: #575756;
 $color-prime-extrovert: #1c1c1b;
 $color-secondary-extrovert: #4d4d4d;
+$color-secondary-normal: #333;
 $color-secondary-introvert: #e6e6e6;
 $color-highlight-normal: #00aae5;
 $color-highlight-introvert: #3eb7ea;
@@ -30,7 +31,7 @@ $font-size-plus: 16px;
 $font-size-large: 21px;
 $font-size-huge: 40px;
 
-$moving-column-menu-height: 2em;
+$moving-column-menu-height: 24px/$font-size-small * 1em;
 $moving-column-border-width: 0.4166em;
 $l-header-height: 2.8571em;
 $annotation-width: 34%;

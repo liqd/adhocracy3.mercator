@@ -1,6 +1,8 @@
 <div class="moving-column-menu">
     <i class="icon-list moving-column-icon"></i>
-    <a href="" data-ng-click="data.showFacets = !data.showFacets">{{ "filters" | translate }}</a>
+    <a href=""
+        data-ng-click="data.showFacets = !data.showFacets"
+        data-ng-class="{'is-active': data.showFacets}">{{ "filters" | translate }}</a>
 </div>
 <div class="moving-column-collapsed">
     <a href="{{ platformUrl | adhResourceUrl:undefined:{proposalUrl: proposalUrl, movingColumns: 'is-show-show-hide'} }}">O</a>

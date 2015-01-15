@@ -134,7 +134,7 @@ The menu should always have the same state as its columns.
 .moving-column-body {
     // layout
     position: absolute;
-    top: $moving-column-menu-height;
+    top: $moving-column-menu-height * ($font-size-small/$font-size-normal);
     bottom: 0;
     left: 0;
     width: 100%;
@@ -176,30 +176,37 @@ States:
 .moving-column-menu {
     @include clearfix;
     background: $color-secondary-introvert;
-    line-height: $moving-column-menu-height /1em;
+    font-size: $font-size-small;
+    height: $moving-column-menu-height;
     padding: 0 0 0 $padding-small;
 
     &, a {
-        height: $moving-column-menu-height;
+        line-height: $moving-column-menu-height;
     }
 
     a {
         @include inline-block;
-        color: $color-secondary-extrovert;
+        color: $color-highlight-extrovert;
+        font-size: $font-size-small;
+        font-weight: $font-weight-introvert;
         float: left;
+        margin-left: 2.5em;
         text-decoration: none;
 
-        &:hover {
-            color: $color-prime-normal;
+        &:hover, &:focus {
+            color: $color-secondary-normal;
         }
+
+        &:active, &.is-active {
+            color: $color-highlight-normal;
+         }
     }
 }
 
 .moving-column-icon {
     float: left;
-    font-size: 150%;
-    line-height: 1.4;
-    margin-right: $padding-medium;
+    font-size: 166.5%;
+    line-height: 1.2;
     vertical-align: middle;
 }
 
@@ -208,6 +215,7 @@ States:
 
     a {
         @include inline-block;
+        font-weight: $font-weight-extrovert;
         min-width: 3.5em;
         padding: 0 0.5em;
         text-align: center;
@@ -217,8 +225,24 @@ States:
         background-color: $color-structure-surface;
 
         &:hover, &:focus {
-            color: $color-background;
-            background-color: darken($color-structure-surface, 10%);
+            color: $color-brand-accent1;
+        }
+
+        &:active {
+            color: $color-secondary-normal;
+        }
+
+        .moving-column-menu-nav-icon {
+            font-size: 145%;
+            line-height: (2 * 0.145);
+        }
+
+        .moving-column-menu-nav-icon, .moving-column-menu-nav-icon:before {
+            @include inline-block;
+        }
+
+        .moving-column-menu-nav-icon:before {
+            line-height: 1.45;
         }
     }
 }
