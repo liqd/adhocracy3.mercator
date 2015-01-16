@@ -1,5 +1,3 @@
-import fustyFlowFactory = require("fustyFlowFactory");
-
 import AdhAngularHelpers = require("../AngularHelpers/AngularHelpers");
 import AdhConfig = require("../Config/Config");
 import AdhHttp = require("../Http/Http");
@@ -163,6 +161,7 @@ export interface IScope extends AdhResourceWidgets.IResourceWidgetScope {
     mercatorProposalForm? : any;
     data : IScopeData;
     selectedState : string;
+    flowSupported : boolean;
 }
 
 export interface IControllerScope extends IScope {
@@ -229,15 +228,19 @@ export var uploadImageFile = (
 
 
 export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets.ResourceWidget<R, IScope> {
+    private flow;
+
     constructor(
         public adhConfig : AdhConfig.IService,
         adhHttp : AdhHttp.Service<any>,
         adhPreliminaryNames : AdhPreliminaryNames.Service,
         private adhTopLevelState : AdhTopLevelState.Service,
+        private flowFactory,
         $q : ng.IQService
     ) {
         super(adhHttp, adhPreliminaryNames, $q);
         this.templateUrl = adhConfig.pkg_path + pkgLocation + "/ListItem.html";
+        this.flow = flowFactory.create();
     }
 
     public createDirective() : ng.IDirective {
@@ -255,6 +258,12 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
             });
         }];
         return directive;
+    }
+
+    public link(scope, element, attrs, wrapper) {
+        var instance = super.link(scope, element, attrs, wrapper);
+        instance.scope.flowSupported = this.flow.support;
+        return instance;
     }
 
     public _handleDelete(
@@ -401,7 +410,7 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
 
                         scope.title = res.title;
                         scope.teaser = res.teaser;
-                        scope.picture = res.picture;
+                        scope.picture = res.picture ? res.picture : "/static/fallback.png#";  // FIXME: find a better way to handle /detail
                         scope.commentCount = subResource.data[SICommentable.nick].comments.length;
                         this.countComments(subResource).then((c) => { scope.commentCount = c; data.commentCountTotal += c; });
                     })();
@@ -585,7 +594,13 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
     // NOTE: see _update.
     public _create(instance : AdhResourceWidgets.IResourceWidgetInstance<R, IScope>) : ng.IPromise<R[]> {
         var data : IScopeData = this.initializeScope(instance.scope);
-        var imagePathPromise : ng.IPromise<string> = uploadImageFile(this.adhHttp, "/mercator", data.imageUpload);
+
+        var imagePathPromise : ng.IPromise<any>;
+        if (this.flow.support) {
+            imagePathPromise = uploadImageFile(this.adhHttp, "/mercator", data.imageUpload);
+        } else {
+            imagePathPromise = this.$q.when();
+        }
 
         var mercatorProposal = new RIMercatorProposal({preliminaryNames : this.adhPreliminaryNames});
         mercatorProposal.parent = instance.scope.poolPath;
@@ -656,6 +671,8 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
         var postProposal = (imagePath? : string) : ng.IPromise<R[]> => {
             if (typeof imagePath !== "undefined") {
                 data.introduction.picture = imagePath;
+            } else if (typeof data.introduction.picture === "undefined") {
+                delete data.introduction.picture;
             }
 
             var mercatorProposalVersion = AdhResourceUtil.derive(old, {preliminaryNames : this.adhPreliminaryNames});
@@ -669,15 +686,16 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
                         subresource.parent = AdhUtil.parentPath(oldSubresource.path);
                         self.fill(data, subresource);
                         mercatorProposalVersion.data[SIMercatorSubResources.nick][key] = subresource.path;
-                    return subresource;
+                        return subresource;
                     });
                 }))
                 .then((subresources) => _.flatten([mercatorProposalVersion, subresources]));
 
         };
 
-        if (data.imageUpload.files.length > 0) {
-            return uploadImageFile(this.adhHttp, "/mercator", data.imageUpload).then((imagePath) => postProposal(imagePath));
+        if (this.flow.support && data.imageUpload.files.length > 0) {
+            return uploadImageFile(this.adhHttp, "/mercator", data.imageUpload)
+                .then(postProposal);
         } else {
             return postProposal();
         }
@@ -695,9 +713,10 @@ export class CreateWidget<R extends ResourcesBase.Resource> extends Widget<R> {
         adhHttp : AdhHttp.Service<any>,
         adhPreliminaryNames : AdhPreliminaryNames.Service,
         adhTopLevelState : AdhTopLevelState.Service,
+        flowFactory,
         $q : ng.IQService
     ) {
-        super(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, $q);
+        super(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, flowFactory, $q);
         this.templateUrl = adhConfig.pkg_path + pkgLocation + "/Create.html";
     }
 
@@ -723,9 +742,10 @@ export class DetailWidget<R extends ResourcesBase.Resource> extends Widget<R> {
         adhHttp : AdhHttp.Service<any>,
         adhPreliminaryNames : AdhPreliminaryNames.Service,
         adhTopLevelState : AdhTopLevelState.Service,
+        flowFactory,
         $q : ng.IQService
     ) {
-        super(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, $q);
+        super(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, flowFactory, $q);
         this.templateUrl = adhConfig.pkg_path + pkgLocation + "/Detail.html";
     }
 }
@@ -843,7 +863,6 @@ export var register = (angular) => {
             if (typeof flowFactoryProvider.defaults === "undefined") {
                 flowFactoryProvider.defaults = {};
             }
-            flowFactoryProvider.factory = fustyFlowFactory;
             flowFactoryProvider.defaults = {
                 singleFile : true,
                 maxChunkRetries : 1,
@@ -861,19 +880,19 @@ export var register = (angular) => {
                 ]  // correspond to exact mime types EG image/png
             };
         }])
-        .directive("adhMercatorProposal", ["adhConfig", "adhHttp", "adhPreliminaryNames", "adhTopLevelState", "$q",
-            (adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, $q) => {
-                var widget = new Widget(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, $q);
+        .directive("adhMercatorProposal", ["adhConfig", "adhHttp", "adhPreliminaryNames", "adhTopLevelState", "flowFactory", "$q",
+            (adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, flowFactory, $q) => {
+                var widget = new Widget(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, flowFactory, $q);
                 return widget.createDirective();
             }])
-        .directive("adhMercatorProposalDetailView", ["adhConfig", "adhHttp", "adhPreliminaryNames", "adhTopLevelState", "$q",
-            (adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, $q) => {
-                var widget = new DetailWidget(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, $q);
+        .directive("adhMercatorProposalDetailView", ["adhConfig", "adhHttp", "adhPreliminaryNames", "adhTopLevelState", "flowFactory", "$q",
+            (adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, flowFactory, $q) => {
+                var widget = new DetailWidget(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, flowFactory, $q);
                 return widget.createDirective();
             }])
-        .directive("adhMercatorProposalCreate", ["adhConfig", "adhHttp", "adhPreliminaryNames", "adhTopLevelState", "$q",
-            (adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, $q) => {
-                var widget = new CreateWidget(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, $q);
+        .directive("adhMercatorProposalCreate", ["adhConfig", "adhHttp", "adhPreliminaryNames", "adhTopLevelState", "flowFactory", "$q",
+            (adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, flowFactory, $q) => {
+                var widget = new CreateWidget(adhConfig, adhHttp, adhPreliminaryNames, adhTopLevelState, flowFactory, $q);
                 return widget.createDirective();
             }])
         .directive("adhMercatorProposalListing", ["adhConfig", listing])
@@ -927,62 +946,73 @@ export var register = (angular) => {
                 return showCheckboxGroupError($scope.mercatorProposalDetailForm, locationCheckboxes);
             };
 
-            var imgUploadElement = $element.find("[name=introduction-picture-upload]");
-
             var imageExists = () => {
-                return ($scope.data.introduction && $scope.data.introduction.picture) || $scope.currentUpload.files.length > 0;
+                if ($scope.flowSupported) {
+                    return ($scope.data.introduction && $scope.data.introduction.picture) || $scope.currentUpload.files.length > 0;
+                } else {
+                    return false;
+                }
             };
 
-            $scope.$watch(() => imgUploadElement.scope().$flow, (flow) => {
-                var imgUploadController = $scope.mercatorProposalIntroductionForm["introduction-picture-upload"];
+            if ($scope.flowSupported) {
 
-                $scope.currentUpload = flow;
+                var imgUploadElement = $element.find("[name=introduction-picture-upload]");
 
-                // validate image upload
-                flow.on("fileAdded", (file, event) => {
-                    // We can only check some constraints after the image has
-                    // been loaded asynchronously.  So we always return false in
-                    // order to keep flow.js from adding the image and then add
-                    // it manually after successful validation.
+                $scope.$watch(() => imgUploadElement.scope().$flow, (flow) => {
+                    var imgUploadController = $scope.mercatorProposalIntroductionForm["introduction-picture-upload"];
 
-                    // FIXME: possible compatibility issue
-                    var _URL = $window.URL || $window.webkitURL;
+                    $scope.currentUpload = flow;
 
-                    var img = new Image();
-                    img.src = _URL.createObjectURL(file.file);
-                    img.onload = () => {
-                        imgUploadController.$setDirty();
-                        imgUploadController.$setValidity("required", true);
-                        imgUploadController.$setValidity("tooBig", file.size <= flow.opts.maximumByteSize);
-                        imgUploadController.$setValidity("wrongType", flow.opts.acceptedFileTypes.indexOf(file.getType()) !== -1);
-                        imgUploadController.$setValidity("tooWide", img.width <= flow.opts.maximumWidth);
-                        imgUploadController.$setValidity("tooNarrow", img.width >= flow.opts.minimumWidth);
+                    // validate image upload
+                    flow.on("fileAdded", (file, event) => {
+                        // We can only check some constraints after the image has
+                        // been loaded asynchronously.  So we always return false in
+                        // order to keep flow.js from adding the image and then add
+                        // it manually after successful validation.
 
-                        if (imgUploadController.$valid) {
-                            flow.files[0] = file;
-                        } else {
-                            flow.cancel();
-                            imgUploadController.$setValidity("required", imageExists());
-                        }
+                        // FIXME: possible compatibility issue
+                        var _URL = $window.URL || $window.webkitURL;
+
+                        var img = new Image();
+                        img.src = _URL.createObjectURL(file.file);
+                        img.onload = () => {
+                            imgUploadController.$setDirty();
+                            imgUploadController.$setValidity("required", true);
+                            imgUploadController.$setValidity("tooBig", file.size <= flow.opts.maximumByteSize);
+                            imgUploadController.$setValidity("wrongType", flow.opts.acceptedFileTypes.indexOf(file.getType()) !== -1);
+                            imgUploadController.$setValidity("tooWide", img.width <= flow.opts.maximumWidth);
+                            imgUploadController.$setValidity("tooNarrow", img.width >= flow.opts.minimumWidth);
+
+                            if (imgUploadController.$valid) {
+                                flow.files[0] = file;
+                            } else {
+                                flow.cancel();
+                                imgUploadController.$setValidity("required", imageExists());
+                            }
+
+                            $scope.$apply();
+                        };
 
                         $scope.$apply();
-                    };
-
-                    $scope.$apply();
-                    return false;
+                        return false;
+                    });
                 });
-            });
+            }
 
             $scope.submitIfValid = () => {
                 var container = $element.parents("[data-du-scroll-container]");
 
-                var imgUploadController = $scope.mercatorProposalIntroductionForm["introduction-picture-upload"];
-                imgUploadController.$setValidity("required", imageExists());
+                if ($scope.flowSupported) {
+                    var imgUploadController = $scope.mercatorProposalIntroductionForm["introduction-picture-upload"];
+                    imgUploadController.$setValidity("required", imageExists());
+                }
 
                 if ($scope.mercatorProposalForm.$valid) {
-                    // pluck flow object from file upload scope, and
-                    // attach it to where ResourceWidgets can find it.
-                    $scope.data.imageUpload = imgUploadElement.scope().$flow;
+                    if ($scope.flowSupported) {
+                        // pluck flow object from file upload scope, and
+                        // attach it to where ResourceWidgets can find it.
+                        $scope.data.imageUpload = imgUploadElement.scope().$flow;
+                    }
 
                     // append a random number to the nick to allow duplicate titles
                     $scope.data.introduction.nickInstance = $scope.data.introduction.nickInstance  ||

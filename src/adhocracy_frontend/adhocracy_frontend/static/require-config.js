@@ -22,8 +22,6 @@ require.config({
         angularFlow: "../lib/ng-flow/dist/ng-flow",
         angularMessages: "../lib/angular-messages/angular-messages.min",
         flow: "../lib/flow.js/dist/flow",
-        fustyFlow: "../lib/fusty-flow.js/src/fusty-flow",
-        fustyFlowFactory: "../lib/fusty-flow.js/src/fusty-flow-factory",
         lodash: "../lib/lodash/dist/lodash",
         q: "../lib/q/q",
         modernizr: "../lib2/modernizr/modernizr-2.8.3.min",
@@ -60,14 +58,7 @@ require.config({
             deps: ["angular"]
         },
         angularFlow: {
-            deps: ["angular", "fustyFlowFactory"]
-        },
-        fustyFlowFactory: {
-            exports: "fustyFlowFactory",
-            deps: ["fustyFlow"]
-        },
-        fustyFlow: {
-            deps: ["flow"]
+            deps: ["angular", "flow"]
         },
         modernizr: {
             exports: "Modernizr"
