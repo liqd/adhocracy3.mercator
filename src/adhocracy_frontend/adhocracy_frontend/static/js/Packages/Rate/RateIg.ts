@@ -47,13 +47,13 @@ export var register = (angular, config, meta_api) => {
             adhPreliminaryNames = angular.injector(["ng"]).invoke(() => new AdhPreliminaryNames.Service());
 
             adhHttp = (() => {
-                var factory = ($http, $q, $timeout) => {
+                var factory = ($http, $cacheFactory, $q, $timeout) => {
                     $http.defaults.headers.common["X-User-Token"] = "SECRET_GOD";
                     $http.defaults.headers.common["X-User-Path"] = "/principals/users/0000000/";
 
-                    return (new AdhHttp.Service($http, $q, $timeout, adhMetaApi, adhPreliminaryNames, config));
+                    return (new AdhHttp.Service($http, $cacheFactory, $q, $timeout, adhMetaApi, adhPreliminaryNames, config));
                 };
-                factory.$inject = ["$http", "$q", "$timeout"];
+                factory.$inject = ["$http", "$cacheFactory", "$q", "$timeout"];
                 return angular.injector(["ng"]).invoke(factory);
             })();
 

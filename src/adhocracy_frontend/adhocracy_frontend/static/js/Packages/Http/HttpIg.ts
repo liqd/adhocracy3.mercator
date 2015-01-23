@@ -18,20 +18,27 @@ import SIVersionable = require("../../Resources_/adhocracy_core/sheets/versions/
 import AdhHttp = require("./Http");
 import AdhMetaApi = require("./MetaApi");
 
+var mkAdhHttp = (angular, config, meta_api) => {
+    var factory = ($http, $cacheFactory, $q, $timeout) => {
+        $http.defaults.headers.common["X-User-Token"] = "SECRET_GOD";
+        $http.defaults.headers.common["X-User-Path"] = "/principals/users/0000000";
+
+        var preliminaryNames = new AdhPreliminaryNames.Service();
+        return (new AdhHttp.Service(
+            $http, $cacheFactory, $q, $timeout,
+            new AdhMetaApi.MetaApiQuery(meta_api),
+            preliminaryNames,
+            config
+        ));
+    };
+    factory.$inject = ["$http", "$cacheFactory", "$q", "$timeout"];
+    return angular.injector(["ng"]).invoke(factory);
+};
+
 export var register = (angular, config, meta_api) => {
 
     describe("$http.get and AdhHttp.getRaw", () => {
-        var adhHttp : AdhHttp.Service<any> = (() => {
-            var factory = ($http, $q, $timeout) => {
-                $http.defaults.headers.common["X-User-Token"] = "SECRET_GOD";
-                $http.defaults.headers.common["X-User-Path"] = "/principals/users/0000000";
-
-                var preliminaryNames = new AdhPreliminaryNames.Service();
-                return (new AdhHttp.Service($http, $q, $timeout, new AdhMetaApi.MetaApiQuery(meta_api), preliminaryNames, config));
-            };
-            factory.$inject = ["$http", "$q", "$timeout"];
-            return angular.injector(["ng"]).invoke(factory);
-        })();
+        var adhHttp : AdhHttp.Service<any> = mkAdhHttp(angular, config, meta_api);
 
         // FIXME: there is a work-around for this problem in Error.ts
         // in function logBackendError.  if this test is re-enabled
@@ -57,18 +64,7 @@ export var register = (angular, config, meta_api) => {
         // randomise.)
 
     describe("withTransaction", () => {
-        var adhHttp : AdhHttp.Service<any> = (() => {
-            var factory = ($http, $q, $timeout) => {
-                $http.defaults.headers.common["X-User-Token"] = "SECRET_GOD";
-                $http.defaults.headers.common["X-User-Path"] = "/principals/users/0000000";
-
-                var preliminaryNames = new AdhPreliminaryNames.Service();
-                return (new AdhHttp.Service($http, $q, $timeout, new AdhMetaApi.MetaApiQuery(meta_api), preliminaryNames, config));
-            };
-            factory.$inject = ["$http", "$q", "$timeout"];
-            return angular.injector(["ng"]).invoke(factory);
-        })();
-
+        var adhHttp : AdhHttp.Service<any> = mkAdhHttp(angular, config, meta_api);
         var adhPreliminaryNames = new AdhPreliminaryNames.Service();
 
         it("Deep-rewrites preliminary resource paths.", (done) => {
@@ -119,18 +115,7 @@ export var register = (angular, config, meta_api) => {
     });
 
     describe("postNewVersionNoFork", () => {
-        var adhHttp : AdhHttp.Service<any> = (() => {
-            var factory = ($http, $q, $timeout) => {
-                $http.defaults.headers.common["X-User-Token"] = "SECRET_GOD";
-                $http.defaults.headers.common["X-User-Path"] = "/principals/users/0000000";
-
-                var preliminaryNames = new AdhPreliminaryNames.Service();
-                return (new AdhHttp.Service($http, $q, $timeout, new AdhMetaApi.MetaApiQuery(meta_api), preliminaryNames, config));
-            };
-            factory.$inject = ["$http", "$q", "$timeout"];
-            return angular.injector(["ng"]).invoke(factory);
-        })();
-
+        var adhHttp : AdhHttp.Service<any> = mkAdhHttp(angular, config, meta_api);
         var adhPreliminaryNames = new AdhPreliminaryNames.Service();
 
         it("Identifies backend 'no fork allowed' error message properly.", (done) => {

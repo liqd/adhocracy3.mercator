@@ -23,6 +23,9 @@ var mkHttpMock = (adhPreliminaryNames : AdhPreliminaryNames.Service) => {
     (<any>mock).post = jasmine.createSpy("$httpMock.post").and.returnValue(q.when({ data: response }));
     (<any>mock).put = jasmine.createSpy("$httpMock.put").and.returnValue(q.when({ data: response }));
 
+    (<any>mock).defaults = {};
+    (<any>mock).invalidate = () => undefined;
+
     return mock;
 };
 
@@ -85,6 +88,7 @@ export var register = () => {
         describe("Service", () => {
             var adhPreliminaryNames;
             var $httpMock;
+            var $cacheFactoryMock;
             var $timeoutMock;
             var adhMetaApiMock;
             var adhConfigMock;
@@ -93,10 +97,12 @@ export var register = () => {
             beforeEach(() => {
                 adhPreliminaryNames = new AdhPreliminaryNames.Service();
                 $httpMock = mkHttpMock(adhPreliminaryNames);
+                $cacheFactoryMock = null;
                 $timeoutMock = mkTimeoutMock();
                 adhMetaApiMock = mkAdhMetaApiMock();
                 adhConfigMock = { rest_url: "" };
-                adhHttp = new AdhHttp.Service($httpMock, <any>q, $timeoutMock, adhMetaApiMock, adhPreliminaryNames, adhConfigMock);
+                adhHttp = new AdhHttp.Service(
+                    $httpMock, $cacheFactoryMock, <any>q, $timeoutMock, adhMetaApiMock, adhPreliminaryNames, adhConfigMock);
             });
 
             describe("options", () => {

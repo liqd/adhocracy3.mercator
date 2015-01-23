@@ -21,7 +21,7 @@ export var register = () => {
             var modernizrMock;
 
             beforeEach(() => {
-                adhHttpMock = <any>jasmine.createSpyObj("adhHttpMock", ["get", "post", "postRaw"]);
+                adhHttpMock = <any>jasmine.createSpyObj("adhHttpMock", ["get", "post", "postRaw", "invalidate"]);
                 adhHttpMock.post.and.returnValue(q.when({}));
                 adhHttpMock.get.and.returnValue(q.when({
                     data: {

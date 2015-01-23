@@ -939,7 +939,7 @@ def add_cors_headers_subscriber(event):
     event.response.headers.update({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers':
-        'Origin, Content-Type, Accept, X-User-Path, X-User-Token',
+        'Origin, Content-Type, Accept, X-User-Path, X-User-Token, Cache-Control',
         'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS',
     })
 

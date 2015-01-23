@@ -126,6 +126,11 @@ export class Service {
         }
 
         var success = (response) => {
+            // clear cache.  this is to give the user a way to work
+            // around shortcomings of websockets: log out, log in
+            // again, and the data can be trusted to be up to date.
+            this.adhHttp.invalidate();
+
             return _self.storeAndEnableToken(response.data.user_token, response.data.user_path);
         };
 
@@ -135,6 +140,9 @@ export class Service {
 
     public logOut() : void {
         var _self : Service = this;
+
+        // clear cache.  see `logIn` above for motivation.
+        this.adhHttp.invalidate();
 
         // The server does not have a logout yet.
         _self.deleteToken();

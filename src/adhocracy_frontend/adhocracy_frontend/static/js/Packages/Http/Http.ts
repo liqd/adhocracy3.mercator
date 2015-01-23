@@ -27,6 +27,15 @@ export interface IBackendErrorItem extends AdhError.IBackendErrorItem {};
 export var logBackendError : (response : ng.IHttpPromiseCallbackArg<IBackendError>) => void = AdhError.logBackendError;
 
 
+/**
+ * resources can only live in the cache for a certain number of
+ * seconds, then they have to be re-requested from the server.  this
+ * is a work-around for the fact that web-sockets reliability is not
+ * very high yet, and is not supported at all on some browsers.
+ */
+var cacheTimeoutSeconds : number = 8 * 60;
+
+
 export interface IOptions {
     OPTIONS : boolean;
     PUT : boolean;
@@ -59,12 +68,17 @@ export var emptyOptions : IOptions = {
 export class Service<Content extends ResourcesBase.Resource> {
     constructor(
         private $http : ng.IHttpService,
+        private $cacheFactory : ng.ICacheFactoryService,
         private $q : ng.IQService,
         private $timeout : ng.ITimeoutService,
         private adhMetaApi : AdhMetaApi.MetaApiQuery,
         private adhPreliminaryNames : AdhPreliminaryNames.Service,
         private adhConfig : AdhConfig.IService
-    ) {}
+    ) {
+        if (typeof $http.defaults.cache === "string") {
+            $http.defaults.cache = $cacheFactory($http.defaults.cache);
+        }
+    }
 
     private formatUrl(path) {
         if (!path) {
@@ -122,6 +136,7 @@ export class Service<Content extends ResourcesBase.Resource> {
             throw "attempt to http-put preliminary path: " + path;
         }
         path = this.formatUrl(path);
+        this.invalidate(path);
         return this.$http
             .put(path, obj);
     }
@@ -141,6 +156,7 @@ export class Service<Content extends ResourcesBase.Resource> {
         }
         path = this.formatUrl(path);
 
+        this.invalidate(path);
         if (typeof FormData !== "undefined" && FormData.prototype.isPrototypeOf(obj)) {
             return _self.$http({
                 method: "POST",
@@ -388,6 +404,26 @@ export class Service<Content extends ResourcesBase.Resource> {
     public withTransaction<Result>(callback : (httpTrans : AdhTransaction.Transaction) => ng.IPromise<Result>) : ng.IPromise<Result> {
         return callback(new AdhTransaction.Transaction(this, this.adhMetaApi, this.adhPreliminaryNames, this.adhConfig));
     }
+
+    /**
+     * invalidate cache on $http.  if argument is undefined, the
+     * entire cache is cleared.  otherwise, the resp. path is removed.
+     *
+     * (the name is chosen to make sense in the context of an http
+     * service, as opposed to more specialized cache service.  in the
+     * latter case, `remove` is entirely reasonable, but on http,
+     * `remove` would not be as easy to understand.)
+     */
+    public invalidate(path? : string) : void {
+        var cache = this.$http.defaults.cache;
+        if (cache) {
+            if (typeof path === "undefined") {
+                cache.removeAll();
+            } else {
+                cache.remove(path);
+            }
+        }
+    }
 }
 
 
@@ -398,7 +434,23 @@ export var register = (angular, metaApi) => {
         .module(moduleName, [
             AdhPreliminaryNames.moduleName
         ])
-        .service("adhHttp", ["$http", "$q", "$timeout", "adhMetaApi", "adhPreliminaryNames", "adhConfig", Service])
+        .config(["$httpProvider", ($httpProvider) => {
+            // we can't use the $cacheFactory service here yet,
+            // because we are in the config phase.  but we can set the
+            // cache to the Id string of the cache object, and
+            // initialize it in the service constructor.  to disable
+            // caching altogether, set to `false`.
+            $httpProvider.defaults.cache = false;  // FIXME: should be "AdhHttpCacheId", but then tests fail.
+
+            // FIXME: i have no reason to assume that this works.
+            // traditionally, the server sets this header field to
+            // tell the browser cache when to drop a response, and i
+            // was just hoping that the client magically could do the
+            // same thing.  NOT TESTED.  MAY NEED REPLACEMENT BY A
+            // BETTER IDEA.
+            $httpProvider.defaults.headers.common["Cache-Control"] = "max-age=" + cacheTimeoutSeconds.toString();
+        }])
+        .service("adhHttp", ["$http", "$cacheFactory", "$q", "$timeout", "adhMetaApi", "adhPreliminaryNames", "adhConfig", Service])
         .factory("adhMetaApi", () => new AdhMetaApi.MetaApiQuery(metaApi))
         .filter("adhFormatError", () => AdhError.formatError);
 };
