@@ -1000,6 +1000,10 @@ export var register = (angular) => {
                 if ($scope.$flow && $scope.$flow.support) {
                     var imgUploadController = $scope.mercatorProposalIntroductionForm["introduction-picture-upload"];
                     imgUploadController.$setValidity("required", imageExists());
+
+                    // HACK: `$setValidity` does not seem to add `ng-invalid` class directly.
+                    var imgUploadElement = $element.find("[name='introduction-picture-upload']");
+                    imgUploadElement.toggleClass("ng-invalid", imageExists());
                 }
 
                 if ($scope.mercatorProposalForm.$valid) {
