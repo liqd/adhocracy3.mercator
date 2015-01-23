@@ -47,7 +47,7 @@ $mercator-proposal-form-nav-width: 100% / 12 * 2;
 .mercator-proposal-form-subheading,
 .mercator-proposal-form-heading,
 .mercator-proposal-form-sub-subheading {
-    @include text(functional);
+    @include text-h3;
     margin: 0 0 0.8em;
 }
 
@@ -117,7 +117,7 @@ $mercator-proposal-form-nav-width: 100% / 12 * 2;
 .mercator-proposal-detail-meta,
 .mercator-propsal-list-item-meta {
     @include container;
-    @include text(functional-introvert);
+    @include text-single;
 
     // reset ul default styling
     margin: 0;
@@ -127,7 +127,7 @@ $mercator-proposal-form-nav-width: 100% / 12 * 2;
 
 .mercator-propsal-list-item-meta-item,
 .mercator-propsal-detail-meta-item {
-    @include text(functional-introvert);
+    @include text-single;
     float: left;
     margin-right: 0.83333333em;
 
@@ -231,7 +231,7 @@ $mercator-proposal-form-nav-width: 100% / 12 * 2;
 }
 
 .mercator-proposal-cover-header {
-    @include text(header);
+    @include text-title-detail;
     margin: 0;
 }
 

@@ -140,6 +140,6 @@ Register Dialog.
 
 .register-support,
 .login-support {
-    @include text(functional-introvert);
+    @include text-single;
     text-align: center;
 }

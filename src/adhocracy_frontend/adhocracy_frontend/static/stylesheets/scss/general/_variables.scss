@@ -25,9 +25,6 @@ $color-structure-border: #9d9c9c;
 
 //Brand colors
 $color-brand-one-normal: #fcb813;
-$color-brand-three-normal: #ce128b;
-
-$color-brand-one-normal: #fcb813;
 $color-brand-one-introvert: darken($color-brand-one-normal, 10%);
 $color-brand-one-extrovert: lighten($color-brand-one-normal, 10%);
 $color-brand-two-normal: #00aae5;
@@ -40,86 +37,159 @@ $color-brand-four-normal: #73bf44;
 $color-brand-four-introvert: darken($color-brand-four-normal, 10%);
 $color-brand-four-extrovert: lighten($color-brand-four-normal, 10%);
 
+// Font family
 $font-family-normal: "Lato", sans-serif;
+
+// Font weights
 $font-weight-introvert: 400;
 $font-weight-normal: normal;
 $font-weight-introvert: 400;
 $font-weight-extrovert: 900;
+
+// Font sizes
 $font-size-small: 12px;
 $font-size-normal: 14px;
 $font-size-plus: 16px;
 $font-size-large: 21px;
+$font-size-larger: 25px;
 $font-size-huge: 40px;
 
-// em is relative to $font-size-normal
+// Line heights
+$line-height-normal: 1.15;
+$line-height-large: 1.2;
+
+// Other variables
 $moving-column-menu-height: 24px / $font-size-normal * 1em;
 $moving-column-border-width: 0.4166em;
 $l-header-height: 2.8571em;
 $annotation-width: 34%;
 
-$padding-small: 0.5em;
-$padding-medium: 1em;
-
-@mixin font-tracking($value) {
-    @if $value == narrow {
-        word-spacing: 0.025em;
-        letter-spacing: 0.025em;
-    } @else if $value == normal {
-        word-spacing: 0.050em;
-        letter-spacing: 0.050em;
-    } @else {
-        word-spacing: $value;
-        letter-spacing: $value;
-    }
+// Text mixins
+@mixin text-title-proposal-list {
+    color: $color-text-normal;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-normal;
+    line-height: $line-height-large;
 }
 
-@mixin text($value) {
-    @if $value == running {
-        font-family: $font-family-normal;
-        font-weight: $font-weight-normal;
-        font-size: $font-size-normal;
-        //@include font-tracking(normal);
-        line-height: 1.2;
-        color: $color-text-normal;
-    } @else if $value == functional {
-        font-family: $font-family-normal;
-        font-weight: $font-weight-normal;
-        font-size: $font-size-plus;
-        @include font-tracking(normal);
-        line-height: 1.2;
-        color: $color-text-normal;
-    } @else if $value == functional-introvert {
-        font-family: $font-family-normal;
-        font-weight: $font-weight-introvert;
-        font-size: $font-size-small;
-        @include font-tracking(narrow);
-        line-height: 1.5;
-        color: $color-text-introvert;
-    } @else if $value == introvert {
-        font-family: $font-family-normal;
-        font-weight: $font-weight-introvert;
-        font-size: $font-size-normal;
-        @include font-tracking(narrow);
-        line-height: 1.2;
-        color: $color-text-introvert;
-    } @else if $value == header {
-        font-family: $font-family-normal;
-        font-weight: $font-weight-normal;
-        font-size: $font-size-large;
-        @include font-tracking(narrow);
-        line-height: 1.2;
-        color: $color-text-extrovert;
-    } @else if $value == meta {
-        font-family: $font-family-normal;
-        font-weight: $font-weight-normal;
-        font-size: $font-size-small;
-        @include font-tracking(normal);
-        line-height: 1.2;
-        color: $color-text-introvert;
-        text-transform: uppercase;
-    } @else {
-        @warn "no such text-style: #{$value}";
-    }
+@mixin text-link-proposal-list {
+    color: $color-text-highlight-normal;
+    font-size: $font-size-small;
+    font-weight: $font-weight-normal;
+    line-height: 1;
 }
 
-$width-action: 3em;
+@mixin text-single {
+    color: $color-text-introvert;
+    font-size: $font-size-small;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+}
+
+@mixin text-budget {
+    color: $color-text-introvert;
+    font-size: $font-size-plus;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+}
+
+@mixin text-title-detail {
+    color: $color-text-normal;
+    font-size: $font-size-large;
+    font-weight: $font-weight-extrovert;
+    line-height: $line-height-normal;
+}
+
+@mixin text-cta {
+    color: $color-text-inverted;
+    font-size: $font-size-small;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+}
+
+@mixin text-body {
+    color: $color-text-normal;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-normal;
+    line-height: $line-height-normal;
+}
+
+@mixin text-h1 {
+    color: $color-text-introvert;
+    font-weight: $font-weight-extrovert;
+    font-size: $font-size-normal;
+    line-height: $line-height-normal;
+}
+
+@mixin text-h2 {
+    color: $color-text-introvert;
+    font-size: $font-size-normal;
+    font-variant: small-caps;
+    font-weight: $font-weight-extrovert;
+    line-height: $line-height-normal;
+}
+
+@mixin text-h3 {
+    color: $color-text-normal;
+    font-weight: $font-weight-normal;
+    font-size: $font-size-plus;
+    line-height: $line-height-large;
+}
+
+@mixin text-link {
+    color: $color-text-highlight-normal;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+    text-decoration: none;
+}
+
+@mixin text-button {
+    color: $color-text-inverted;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-extrovert;
+    line-height: 1;
+}
+
+@mixin text-button-secondary {
+    color: $color-text-introvert;
+    font-size: $font-size-plus;
+    font-variant: small-caps;
+    font-weight: $font-weight-extrovert;
+    line-height: 1;
+}
+
+@mixin text-moving-column-menu {
+    color: $color-text-introvert;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+}
+
+@mixin text-input-field {
+    color: $color-text-introvert;
+    font-size: $font-size-normal;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+}
+
+@mixin text-info-plus {
+    color: $color-text-introvert;
+    font-size: $font-size-large;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+}
+
+@mixin text-profile-name {
+    color: $color-text-normal;
+    font-size: $font-size-huge;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+}
+
+@mixin text-add-proposal {
+    color: $color-text-highlight-normal;
+    font-size: $font-size-large;
+    font-weight: $font-weight-normal;
+    line-height: 1;
+}

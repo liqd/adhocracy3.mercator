@@ -194,7 +194,7 @@ States:
     font-size: $font-size-small;
     height: $moving-column-menu-height * ($font-size-normal / $font-size-small);
     line-height: $moving-column-menu-height * ($font-size-normal / $font-size-small) / 1em;
-    padding: 0 0 0 $padding-small;
+    padding: 0 0 0 0.5em;
 
     a {
         @include inline-block;

@@ -11,7 +11,7 @@ It is usually used in the header bar.
 
 .user-indicator {
     @include inline-block;
-    @include text(introvert);
+    @include text-single;
     vertical-align: middle;
     white-space: nowrap;
 

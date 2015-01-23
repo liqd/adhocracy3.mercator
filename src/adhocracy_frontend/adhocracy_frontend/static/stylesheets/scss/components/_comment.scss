@@ -146,7 +146,7 @@ parent: comment
 
 .comment-title,
 .comment-meta {
-    @include text(meta);
+    @include text-single;
 }
 
 .comment-title {
@@ -194,7 +194,7 @@ parent: comment
 
 .comment-header {
     @include clearfix;
-    @include text(introvert);
+    @include text-single;
     margin-bottom: 0.3em;
 
     .comment-header-icon {
