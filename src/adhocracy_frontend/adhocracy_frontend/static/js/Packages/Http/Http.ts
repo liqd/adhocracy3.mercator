@@ -391,6 +391,17 @@ export class Service<Content extends ResourcesBase.Resource> {
 }
 
 
+/**
+ * Filter out all paths that can not successfully be fetched.
+ */
+export var pathFilterService = ($q : ng.IQService, adhHttp : Service<any>) => {
+    return (paths : string[]) : ng.IPromise<string[]> => {
+        return AdhUtil.qFilter(paths.map((path) => adhHttp.get(path)), $q)
+            .then((resources) => resources.map((r) => r.path));
+    };
+};
+
+
 export var moduleName = "adhHttp";
 
 export var register = (angular, metaApi) => {
@@ -398,6 +409,7 @@ export var register = (angular, metaApi) => {
         .module(moduleName, [
             AdhPreliminaryNames.moduleName
         ])
+        .service("adhPathFilter", ["$q", "adhHttp", pathFilterService])
         .service("adhHttp", ["$http", "$q", "$timeout", "adhMetaApi", "adhPreliminaryNames", "adhConfig", Service])
         .factory("adhMetaApi", () => new AdhMetaApi.MetaApiQuery(metaApi))
         .filter("adhFormatError", () => AdhError.formatError);

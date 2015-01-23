@@ -160,3 +160,39 @@ export function endsWith(str, suffix) {
 
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
+
+
+/**
+ * Very much like $q.all().
+ *
+ * The only real difference is that it skips rejected promises instead of rejecting the whole result.
+ */
+export var qFilter = (promises : ng.IPromise<any>[], $q : ng.IQService) : ng.IPromise<any[]> => {
+    // unique marker
+    var empty = new Object();
+
+    var count = promises.length;
+    var results = [];
+
+    var deferred = $q.defer();
+
+    if (count === 0) {
+        deferred.resolve(results);
+    } else {
+        _.forEach(promises, (promise : ng.IPromise<any>, i : number) => {
+            results.push(empty);
+
+            promise
+                .then((result) => results[i] = result)
+                .finally(() => {
+                    count -= 1;
+                    if (count === 0) {
+                        results = results.filter((e) => e !== empty);
+                        deferred.resolve(results);
+                    }
+                });
+        });
+    }
+
+    return deferred.promise;
+};

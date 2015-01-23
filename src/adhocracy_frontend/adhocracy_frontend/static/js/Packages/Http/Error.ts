@@ -23,6 +23,10 @@ var renderBackendError = (response : ng.IHttpPromiseCallbackArg<any>) : void => 
         }
     };
 
+    if (response.status === 410) {
+        return;
+    }
+
     console.log("http response with error status: " + response.status);
     console.log("request (.config):", sanitize(response.config));
     if (typeof <any>response.headers !== "undefined") {

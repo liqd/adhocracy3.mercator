@@ -77,6 +77,7 @@ export interface IFacetsScope extends ng.IScope {
     toggleItem : (IFacet, IFacetItem) => void;
 }
 
+
 // FIXME: as the listing elements are tracked by their $id (the element path) in the listing template, we don't allow duplicate elements
 // in one listing. We should add a proper warning if that occurs or handle that case properly.
 
@@ -115,11 +116,12 @@ export class Listing<Container extends ResourcesBase.Resource> {
                     unregisterWebsocket(scope);
                 });
             },
-            controller: ["$scope", "adhHttp", "adhPreliminaryNames", "adhPermissions", (
-                $scope: ListingScope<Container>,
-                adhHttp: AdhHttp.Service<Container>,
+            controller: ["$scope", "adhHttp", "adhPreliminaryNames", "adhPermissions", "adhPathFilter", (
+                $scope : ListingScope<Container>,
+                adhHttp : AdhHttp.Service<Container>,
                 adhPreliminaryNames : AdhPreliminaryNames.Service,
-                adhPermissions : AdhPermissions.Service
+                adhPermissions : AdhPermissions.Service,
+                adhPathFilter : (paths : string[]) => ng.IPromise<string[]>
             ) : void => {
                 $scope.createPath = adhPreliminaryNames.nextPreliminary();
 
@@ -147,13 +149,17 @@ export class Listing<Container extends ResourcesBase.Resource> {
                     return adhHttp.get($scope.path, params).then((container) => {
                         $scope.container = container;
                         $scope.poolPath = _self.containerAdapter.poolPath($scope.container);
-                        $scope.elements = _self.containerAdapter.elemRefs($scope.container);
+                        var elements : any[] = _self.containerAdapter.elemRefs($scope.container);
 
                         if ($scope.sort && $scope.sort[0] === "-") {
-                            $scope.elements.reverse();
+                            elements.reverse();
                         }
 
-                        return adhPermissions.bindScope($scope, $scope.poolPath, "poolOptions");
+                        adhPermissions.bindScope($scope, $scope.poolPath, "poolOptions");
+
+                        return adhPathFilter(elements).then((paths) => {
+                            $scope.elements = paths;
+                        });
                     });
                 };
 

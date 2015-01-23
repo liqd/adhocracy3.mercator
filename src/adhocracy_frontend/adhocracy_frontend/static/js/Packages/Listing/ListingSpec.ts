@@ -105,6 +105,7 @@ export var register = () => {
                     var adhHttpMock;
                     var adhPreliminaryNamesMock;
                     var adhPermissionsMock;
+                    var adhPathFilterMock;
                     var scope;
 
                     beforeEach(() => {
@@ -113,6 +114,7 @@ export var register = () => {
                         adhPreliminaryNamesMock = jasmine.createSpyObj("adhPreliminaryNames", ["isPreliminary", "nextPreliminary"]);
                         adhPermissionsMock = jasmine.createSpyObj("adhPermissionsMock", ["bindScope"]);
                         adhPermissionsMock.bindScope.and.returnValue(q.when());
+                        adhPathFilterMock = jasmine.createSpy("adhPathFilterMock").and.callFake((a) => q.when(a));
 
                         scope = {
                             // arbitrary values
@@ -122,8 +124,8 @@ export var register = () => {
                             $watch: jasmine.createSpy("$watch")
                         };
 
-                        var controller = directive.controller[4];
-                        controller(scope, adhHttpMock, adhPreliminaryNamesMock, adhPermissionsMock);
+                        var controller = directive.controller[5];
+                        controller(scope, adhHttpMock, adhPreliminaryNamesMock, adhPermissionsMock, adhPathFilterMock);
                     });
 
                     it("watches scope.path", () => {
@@ -168,7 +170,7 @@ export var register = () => {
 
                         it("updates scope.elements using adapter from container", () => {
                             expect(adapter.elemRefs).toHaveBeenCalledWith(container);
-                            expect(scope.elements).toBe(elements);
+                            expect(scope.elements.length).toBe(elements.length);
                         });
                     });
 

@@ -2,6 +2,8 @@
 
 import JasmineHelpers = require("../../JasmineHelpers");
 
+import q = require("q");
+
 import AdhUtil = require("./Util");
 
 export var register = () => {
@@ -186,6 +188,32 @@ export var register = () => {
                 };
 
                 expect(() => AdhUtil.sortDagTopologically(dag, ["A"])).toThrow();
+            });
+        });
+
+        describe("qFilter", () => {
+            it("works mostly like $q.all", (done) => {
+                AdhUtil.qFilter([q.when("a"), q.when("b"), q.when("c")], q)
+                    .then((result) => {
+                        expect(result).toEqual(["a", "b", "c"]);
+                        done();
+                    });
+            });
+
+            it("filters out any rejected promises", (done) => {
+                AdhUtil.qFilter([q.when("a"), q.reject("b"), q.when("c")], q)
+                    .then((result) => {
+                        expect(result).toEqual(["a", "c"]);
+                        done();
+                    });
+            });
+
+            it("promises empty list if empty list was passed", (done) => {
+                AdhUtil.qFilter([], q)
+                    .then((result) => {
+                        expect(result).toEqual([]);
+                        done();
+                    });
             });
         });
     });

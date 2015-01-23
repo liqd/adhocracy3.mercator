@@ -278,8 +278,7 @@ export class ResourceWidget<R extends ResourcesBase.Resource, S extends IResourc
             }
         });
 
-        var clearID = wrapper.eventHandler.on("clear", () =>
-            self.clear(instance));
+        var clearID = wrapper.eventHandler.on("clear", () => self.clear(instance));
 
         scope.$on("triggerDelete", (ev, path : string) => self._handleDelete(instance, path));
         scope.$on("$delete", () => {
