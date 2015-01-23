@@ -124,6 +124,7 @@ Register Dialog.
 .register-form,
 .login-form {
     margin-bottom: 1em;
+    text-align: center;
 
     input[type="text"],
     input[type="email"],
@@ -142,4 +143,17 @@ Register Dialog.
 .login-support {
     @include text(functional-introvert);
     text-align: center;
+}
+
+.register-check {
+    margin-bottom: 1.4em;
+}
+
+.register-info,
+.login-info {
+    margin-top: 1em;
+
+    a {
+        text-decoration: none;
+    }
 }
