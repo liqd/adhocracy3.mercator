@@ -9,12 +9,18 @@
             placeholder="{{ 'email or username' | translate }}"
             required="required"
             data-ng-model="credentials.nameOrEmail" />
+        <span class="input-error" data-ng-show="loginForm.nameOrEmail.$error.required && loginForm.nameOrEmail.$dirty">
+            {{ "email or username is required." | translate }}
+        </span>
         <input
             type="password"
             name="password"
             placeholder="{{ 'password' | translate }}"
             required="required"
             data-ng-model="credentials.password" />
+        <span class="input-error" data-ng-show="loginForm.password.$error.required && loginForm.password.$dirty">
+            {{ "password is required." | translate }}
+        </span>
         <input
             type="submit"
             value="{{ 'login' | translate }}"
