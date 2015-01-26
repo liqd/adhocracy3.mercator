@@ -1,6 +1,16 @@
 $input-margin-bottom: 24px;
 $error-line-height: $font-size-normal;
 
+%error-spacing {
+    @extend .error-state;
+    margin-bottom: 0;
+
+    + .input-error,
+    + .input-error + .input-error {
+        margin-bottom: $input-margin-bottom - $error-line-height;
+    }
+}
+
 input[type="text"],
 input[type="url"],
 input[type="password"],
@@ -14,6 +24,12 @@ textarea {
     border: 0;
     color: $color-text-highlight-introvert;
     margin-bottom: $input-margin-bottom;
+
+    &.ng-dirty, &.is-dirty {
+        &.ng-invalid, &:invalid, &.is-invalid {
+            @extend %error-spacing;
+        }
+    }
 }
 
 .ng-submitted {
@@ -31,14 +47,7 @@ textarea {
         &.ng-invalid, &:invalid, &.is-invalid {
             // scss-lint:disable NestingDepth
 
-            @extend .error-state;
-            margin-bottom: 0;
-
-            + .input-error,
-            + .input-error .input-error
-            {
-                margin-bottom: $input-margin-bottom - $error-line-height;
-            }
+            @extend %error-spacing;
         }
     }
 }
