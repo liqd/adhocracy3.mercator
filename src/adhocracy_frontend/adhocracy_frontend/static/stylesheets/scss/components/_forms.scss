@@ -72,7 +72,7 @@ Textinput that represents a title.
 ```
 */
 
-@mixin error-state {
+%error-state {
     border-color: lightcoral;
     outline: 1px solid lightcoral;
 
@@ -118,7 +118,7 @@ textarea {
 
     &.ng-dirty, &.is-dirty {
         &.ng-invalid, &:invalid, &.is-invalid {
-            @include error-state;
+            @extend %error-state;
         }
     }
 
@@ -143,7 +143,7 @@ textarea {
     select,
     textarea {
         &.ng-invalid, &:invalid, &.is-invalid {
-            @include error-state;
+            @extend %error-state;
         }
     }
 }

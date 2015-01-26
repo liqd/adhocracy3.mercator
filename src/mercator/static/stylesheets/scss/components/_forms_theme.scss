@@ -2,7 +2,7 @@ $input-margin-bottom: 24px;
 $error-line-height: $font-size-normal;
 
 @mixin show-error {
-    @include error-state;
+    @extend %error-state;
     margin-bottom: 0;
 
     + .input-error,
