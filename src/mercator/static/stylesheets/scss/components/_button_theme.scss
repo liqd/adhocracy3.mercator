@@ -16,7 +16,6 @@ input[type="button"] {
 
     &.has-focus, &:focus,
     &.is-hover, &:hover {
-        //@include button-color($color-text-inverted, $color-text-highlight-introvert);
         color: $color-text-highlight-normal;
     }
 
@@ -32,7 +31,7 @@ input[type="button"] {
         padding: 0 1em;
         min-width: 9em;
 
-        &:hover {
+        &:hover, &:focus {
             background: $color-brand-two-extrovert;
         }
 
