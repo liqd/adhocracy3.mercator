@@ -857,12 +857,15 @@
 
         </section>
 
-        <input
-            type="submit"
-            name="submit"
-            value="{{ 'submit' | translate }}"
-            class="m-call-to-action" />
+        <footer class="mercator-proposal-form-footer">
+            <input
+                type="submit"
+                name="submit"
+                value="{{ 'publish' | translate }}"
+                class="m-call-to-action mercator-proposal-form-submit" />
 
-        <a class="button" href="" data-ng-click="cancel()">{{ "Cancel" | translate }}</a>
+            <a class="button" href="" data-ng-click="cancel()" class="mercator-proposal-form-cancel">
+            {{ "Cancel" | translate }}</a>
+        </footer>
     </form>
 </div><!-- /.mercator-proposal-form-container -->

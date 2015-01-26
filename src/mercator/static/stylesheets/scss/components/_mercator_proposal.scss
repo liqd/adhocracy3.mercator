@@ -16,11 +16,6 @@ $mercator-proposal-form-nav-width: 100% / 12 * 2;
         padding-bottom: 0.8em;
     }
 
-    input[type="submit"] {
-        font-size: $font-size-huge;
-        width: 100%;
-    }
-
     fieldset {
         border: 0;
         padding: 0 0 0 1.6em;
@@ -103,6 +98,19 @@ $mercator-proposal-form-nav-width: 100% / 12 * 2;
 
 .mercator-proposal-form-section {
     padding: 0 1em;
+}
+
+.mercator-proposal-form-footer {
+    border-top: 2px solid $color-structure-normal;
+    padding: 1em;
+}
+
+.mercator-proposal-form-submit {
+    float: right;
+}
+
+.mercator-proposal-form-cancel {
+    float: left;
 }
 
 .mercator-proposal-detail-view {
