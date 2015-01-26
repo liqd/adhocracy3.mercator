@@ -157,7 +157,10 @@ export var registerDirective = (adhConfig : AdhConfig.IService) => {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Register.html",
         scope: {},
-        controller: ["adhUser", "adhTopLevelState", "adhConfig", "$scope", registerController]
+        controller: ["adhUser", "adhTopLevelState", "adhConfig", "$scope", registerController],
+        link: (scope) => {
+            scope.registerForm.password_repeat.$error.passwords_match = (scope.input.password !== scope.input.passwordRepeat);
+        }
     };
 };
 
