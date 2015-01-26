@@ -1,6 +1,4 @@
 <div class="login">
-    <h1 class="title">{{ "Log in!" | translate }}</h1>
-
     <form novalidate="novalidate" class="login-form" name="loginForm">
         <div class="form-error" data-ng-repeat="error in errors track by $index">
             <p>{{ error | translate }}</p>
@@ -11,26 +9,31 @@
             placeholder="{{ 'email or username' | translate }}"
             required="required"
             data-ng-model="credentials.nameOrEmail" />
+        <span class="input-error" data-ng-show="loginForm.nameOrEmail.$error.required && loginForm.nameOrEmail.$dirty">
+            {{ "email or username is required." | translate }}
+        </span>
         <input
             type="password"
             name="password"
             placeholder="{{ 'password' | translate }}"
             required="required"
             data-ng-model="credentials.password" />
+        <span class="input-error" data-ng-show="loginForm.password.$error.required && loginForm.password.$dirty">
+            {{ "password is required." | translate }}
+        </span>
         <input
             type="submit"
             value="{{ 'login' | translate }}"
             class="m-call-to-action"
             data-ng-click="logIn()"
             data-ng-disabled="loginForm.$invalid" />
+        <div class="login-info">
+            <p>{{ "Or register" | translate }}
+            <a href="/register">{{ "here" | translate }}</a></p>
+        </div>
         <div class="login-support">
             {{ "Having trouble with login?" | translate}} <br />
             <a href="mailto:{{supportEmail}}?subject=Trouble%20with%20login">{{ supportEmail }}</a>
         </div>
     </form>
-
-    <div class="box-with-button">
-        <p>{{ "In case you do not have an account yet, sign up to a free account and participate!" | translate }}</p>
-        <a class="button" href="/register">{{ "register" | translate }}</a>
-    </div>
 </div>

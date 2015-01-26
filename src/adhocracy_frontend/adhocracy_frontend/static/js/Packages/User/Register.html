@@ -1,6 +1,4 @@
 <div class="register">
-    <h1 class="title">{{ "Register!" | translate }}</h1>
-
     <form novalidate="novalidate" class="register-form" name="registerForm">
         <div class="form-error" ng-repeat="error in errors track by $index">
             <p>{{ error | translate }}</p>
@@ -11,12 +9,21 @@
             placeholder="{{ 'username' | translate }}"
             data-ng-model="input.username"
             required="required" />
+        <span class="input-error" data-ng-show="registerForm.username.$error.required && registerForm.username.$dirty">
+            {{ "Username is required." | translate }}
+        </span>
         <input
             type="email"
             name="email"
             placeholder="{{ 'email' | translate }}"
             data-ng-model="input.email"
             required="required" />
+        <span class="input-error" data-ng-show="registerForm.email.$error.required && registerForm.email.$dirty">
+            {{ "Email is required." | translate }}
+        </span>
+        <span class="input-error" data-ng-show="registerForm.email.$error.email && registerForm.email.$dirty">
+            {{ "Email format is incorrect." | translate }}
+        </span>
         <input
             type="password"
             name="password"
@@ -25,17 +32,28 @@
             required="required"
             data-ng-minlength="6"
             data-ng-maxlength="100" />
+        <span class="input-error" data-ng-show="registerForm.password.$error.required && registerForm.password.$dirty">
+            {{ "Password is required." | translate }}
+        </span>
+        <span class="input-error" data-ng-show="registerForm.password.$error.minlength && registerForm.password.$dirty">
+            {{ "Password too short." | translate }}
+        </span>
         <input
             type="password"
             name="password_repeat"
             placeholder="{{ 'password repeat' | translate }}"
             data-ng-model="input.passwordRepeat"
-            required="required" />
-        <span class="input-error" data-ng-show="(!registerForm.password.$error.minlength) && (input.password !== input.passwordRepeat)">
+            required="required"
+            data-ng-class="{'ng-invalid': (input.password !== input.passwordRepeat)}"/>
+        <span class="input-error" data-ng-show="(!registerForm.password.$error.minlength) && (input.password !== input.passwordRepeat) && registerForm.password_repeat.$dirty">
             {{ "Password fields do not match." | translate }}
         </span>
-        <span class="input-error" data-ng-show="registerForm.password.$error.minlength">
-            {{ "Password too short." | translate }}
+        <div class="register-check">
+            <input type="checkbox" name="registerCheck" data-ng-model="input.registerCheck" required="required">
+            {{ "I accept terms and conditions" | translate }}
+        </div>
+        <span class="input-error" data-ng-show="registerForm.registerCheck.$error.required && (registerForm.registerCheck.$dirty || registerForm.$submitted)">
+            {{ "You must agree to terms &amp; conditions" | translate }}
         </span>
         <input
             type="submit"
@@ -44,16 +62,15 @@
             class="m-call-to-action"
             data-ng-click="register()"
             data-ng-disabled="registerForm.$invalid || input.password !== input.passwordRepeat" />
+        <div data-ng-if="!success" class="register-info">
+            <p>{{ "I already have an account. Log in" | translate }}
+            <a href="/login">{{ "here" | translate }}</a></p>
+        </div>
         <div class="register-support">
             {{ "Having trouble with registration?" | translate}} <br />
             <a href="mailto:{{supportEmail}}?subject=Trouble%20with%20registration">{{ supportEmail }}</a>
         </div>
     </form>
-
-    <div data-ng-if="!success" class="box-with-button">
-        <p>{{ "You already have an account? Go to the LogIn window." | translate }}</p>
-        <a class="button" href="/login">{{ "login" | translate }}</a>
-    </div>
 
     <div data-ng-if="success" class="register-success textbox">
         <p>{{ "Thank you for your registration. We sent you an email with an activation link. In case you do not recieve that email, please also check your spam folder." | translate }}</p>

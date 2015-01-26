@@ -4,16 +4,19 @@ input[type="reset"],
 input[type="submit"],
 input[type="button"] {
     @include button-base;
-    @include button-color($color-text-inverted, $color-text-highlight-normal);
 
     border: 0;
+    color: $color-text-highlight-introvert;
+    font-size: $font-size-normal;
     font-weight: $font-weight-normal;
     line-height: 2;
     height: 2em;
+    text-transform: uppercase;
+    min-width: 1px;
 
     &.has-focus, &:focus,
     &.is-hover, &:hover {
-        @include button-color($color-text-inverted, $color-text-highlight-introvert);
+        color: $color-text-highlight-normal;
     }
 
     &:disabled,
@@ -21,5 +24,19 @@ input[type="button"] {
     &.ng-disabled {
         @include opacity(0.5);
         cursor: default;
+    }
+
+    &.m-call-to-action {
+        @include button-color($color-text-highlight-normal, $color-text-inverted);
+        padding: 0 1em;
+        min-width: 9em;
+
+        &:hover, &:focus {
+            background: $color-brand-two-extrovert;
+        }
+
+        &:active {
+            background-color: $color-brand-four-normal;
+        }
     }
 }
