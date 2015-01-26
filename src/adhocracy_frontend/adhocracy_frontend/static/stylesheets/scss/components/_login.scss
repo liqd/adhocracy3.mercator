@@ -147,6 +147,10 @@ Register Dialog.
 
 .register-check {
     margin-bottom: 1.4em;
+
+    + .input-error {
+        margin-top: -1.4em;
+    }
 }
 
 .register-info,
