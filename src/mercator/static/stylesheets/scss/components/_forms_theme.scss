@@ -34,7 +34,9 @@ textarea {
             @extend .error-state;
             margin-bottom: 0;
 
-            + .input-error {
+            + .input-error,
+            + .input-error .input-error
+            {
                 margin-bottom: $input-margin-bottom - $error-line-height;
             }
         }
