@@ -2,6 +2,7 @@
 from unittest.mock import Mock
 from configparser import ConfigParser
 from shutil import rmtree
+from pytest import mark
 import json
 import os
 import subprocess
@@ -805,3 +806,25 @@ def app_admin(app):
 def app_god(app):
     """Return backend test app wrapper with god authentication."""
     return AppUser(app, base_path='/adhocracy', header=god_header)
+
+
+@mark.xfail(reason='issue #548')
+def test_get_users_without_authorization(app):
+    infos = []
+    i = 0
+
+    app = TestApp(app)
+    app.reset()
+
+    while True:
+        res = app.get('/principals/users/000000%d' % i, status=200,
+                expect_errors=True)
+        if '404' in res:
+            break
+        data = res.json['data']['adhocracy_core.sheets.principal.IUserBasic']
+        if data['email']:
+            infos.append(data['email'])
+
+        i += 1
+
+    assert not infos
