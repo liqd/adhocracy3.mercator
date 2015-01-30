@@ -4,7 +4,6 @@ import colander
 from adhocracy_core.interfaces import Dimensions
 from adhocracy_core.interfaces import ISheet
 from adhocracy_core.interfaces import IResource
-from adhocracy_core.interfaces import ISheetReferenceAutoUpdateMarker
 from adhocracy_core.interfaces import SheetToSheet
 from adhocracy_core.sheets import add_sheet_to_registry
 from adhocracy_core.sheets import sheet_metadata_defaults
@@ -22,72 +21,72 @@ from adhocracy_core.schema import URL
 from adhocracy_core.utils import get_sheet_field
 
 
-class IMercatorSubResources(ISheet, ISheetReferenceAutoUpdateMarker):
+class IMercatorSubResources(ISheet):
 
     """Marker interface for commentable subresources of MercatorProposal."""
 
 
-class IUserInfo(ISheet, ISheetReferenceAutoUpdateMarker):
+class IUserInfo(ISheet):
 
     """Marker interface for information about the proposal submitter."""
 
 
-class IOrganizationInfo(ISheet, ISheetReferenceAutoUpdateMarker):
+class IOrganizationInfo(ISheet):
 
     """Marker interface for organizational information."""
 
 
-class IIntroduction(ISheet, ISheetReferenceAutoUpdateMarker):
+class IIntroduction(ISheet):
 
     """Marker interface for the proposal introduction."""
 
 
-class IDescription(ISheet, ISheetReferenceAutoUpdateMarker):
+class IDescription(ISheet):
 
     """Marker interface for proposal description."""
 
 
-class ILocation(ISheet, ISheetReferenceAutoUpdateMarker):
+class ILocation(ISheet):
 
     """Marker interface for proposal location."""
 
 
-class IStory(ISheet, ISheetReferenceAutoUpdateMarker):
+class IStory(ISheet):
 
     """Marker interface for the story description."""
 
 
-class IOutcome(ISheet, ISheetReferenceAutoUpdateMarker):
+class IOutcome(ISheet):
 
     """Marker interface for the outcome description."""
 
 
-class ISteps(ISheet, ISheetReferenceAutoUpdateMarker):
+class ISteps(ISheet):
 
     """Marker interface for the steps description."""
 
 
-class IValue(ISheet, ISheetReferenceAutoUpdateMarker):
+class IValue(ISheet):
 
     """Marker interface for the value description."""
 
 
-class IPartners(ISheet, ISheetReferenceAutoUpdateMarker):
+class IPartners(ISheet):
 
     """Marker interface for the partner description."""
 
 
-class IFinance(ISheet, ISheetReferenceAutoUpdateMarker):
+class IFinance(ISheet):
 
     """Marker interface for financial aspects."""
 
 
-class IExperience(ISheet, ISheetReferenceAutoUpdateMarker):
+class IExperience(ISheet):
 
     """Marker interface for additional fields."""
 
 
-class IHeardFrom(ISheet, ISheetReferenceAutoUpdateMarker):
+class IHeardFrom(ISheet):
 
     """Marker interface for heard from fields."""
 

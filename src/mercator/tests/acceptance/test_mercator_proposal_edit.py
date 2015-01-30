@@ -22,7 +22,7 @@ class TestMercatorForm:
 
         assert not browser.is_text_present("edit")
 
-    @mark.xfail
+    @mark.xfail(reason="Image is missing")
     def test_resubmitting_proposal(self, browser_with_proposal):
         browser = browser_with_proposal
 
