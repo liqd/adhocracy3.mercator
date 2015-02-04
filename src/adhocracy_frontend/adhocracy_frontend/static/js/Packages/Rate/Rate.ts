@@ -48,6 +48,7 @@ var pkgLocation = "/Rate";
 export interface IRateScope extends ng.IScope {
     refersTo : string;
     postPoolPath : string;
+    locked : boolean;
     rates : {
         pro : number;
         contra : number;
@@ -249,6 +250,8 @@ export var rateController = (
     adhTopLevelState : AdhTopLevelState.Service
 ) : ng.IPromise<void> => {
 
+    $scope.locked = false;
+
     $scope.isActive = (rate : number) : boolean =>
         typeof $scope.myRateResource !== "undefined" &&
             rate === adapter.rate($scope.myRateResource);
@@ -358,6 +361,10 @@ export var rateController = (
     };
 
     $scope.postUpdate = () : ng.IPromise<void> => {
+        if ($scope.locked) {
+            return;
+        }
+        $scope.locked = true;
         if (typeof $scope.myRateResource === "undefined") {
             throw "internal error?!";
         } else {
@@ -370,7 +377,13 @@ export var rateController = (
                         fetchAggregatedRates($scope, adhHttp, $scope.postPoolPath, $scope.refersTo)
                     ]);
                 })
-                .then(() => { return; });
+                .catch(() => {
+                    console.log("Rate.postUpdate failed. Refetching.");
+                    fetchMyRate($scope, adhHttp, $scope.postPoolPath, $scope.refersTo, adhUser.userPath);
+                    fetchAggregatedRates($scope, adhHttp, $scope.postPoolPath, $scope.refersTo);
+                }).finally<void>(() => {
+                    $scope.locked = false;
+                });
         }
     };
 
