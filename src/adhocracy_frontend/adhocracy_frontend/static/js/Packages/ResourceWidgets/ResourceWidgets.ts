@@ -124,7 +124,7 @@ export var resourceWrapper = () => {
                 }
             };
 
-            self.eventManager = new adhEventManagerClass();
+            self.eventManager = new adhEventManagerClass($q);
 
             self.registerResourceDirective = (promise : ng.IPromise<ResourcesBase.Resource[]>) => {
                 resourcePromises.push(promise);

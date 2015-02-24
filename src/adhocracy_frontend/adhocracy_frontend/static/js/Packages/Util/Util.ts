@@ -196,3 +196,27 @@ export var qFilter = (promises : ng.IPromise<any>[], $q : ng.IQService) : ng.IPr
 
     return deferred.promise;
 };
+
+
+/**
+ * Execute a list of functions, one after the other.
+ */
+export var qSync = ($q : ng.IQService) => (list : Function[]) : ng.IPromise<any> => {
+    var deferred = $q.defer();
+    var i = 0;
+
+    var next = () => {
+        if (i < list.length) {
+            var fn = list[i];
+            $q.when(fn()).finally(() => {
+                i++;
+                next();
+            });
+        } else {
+            deferred.resolve();
+        }
+    };
+
+    next();
+    return deferred.promise;
+};

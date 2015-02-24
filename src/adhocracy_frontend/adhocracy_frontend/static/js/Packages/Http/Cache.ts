@@ -105,7 +105,7 @@ export class Service {
             if (!_.contains(this.nonResourceUrls, path)) {
                 wshandle = this.adhWebSocket.register(path, (msg) => {
                     this.invalidate(path);
-                });
+                }, 1000);
             }
             cached = {
                 wshandle: wshandle,

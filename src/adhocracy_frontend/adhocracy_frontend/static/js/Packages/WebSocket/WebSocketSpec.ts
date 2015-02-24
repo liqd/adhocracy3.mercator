@@ -1,5 +1,7 @@
 /// <reference path="../../../lib/DefinitelyTyped/jasmine/jasmine.d.ts"/>
 
+import q = require("q");
+
 import AdhConfig = require("../Config/Config");
 import AdhWebSocket = require("./WebSocket");
 
@@ -30,7 +32,7 @@ export var register = () => {
                 };
                 adhRawWebSocketMock = jasmine.createSpyObj("adhRawWebSocketFactory", ["send", "addEventListener"]);
                 adhEventManagerMocks = [];
-                service = new AdhWebSocket.Service(config, adhEventManagerClassMock, () => adhRawWebSocketMock);
+                service = new AdhWebSocket.Service(q, config, adhEventManagerClassMock, () => adhRawWebSocketMock);
             });
 
             it("calls the send method of web socket on every register to different resources", () => {

@@ -1,13 +1,16 @@
 /// <reference path="../../../lib/DefinitelyTyped/jasmine/jasmine.d.ts"/>
 
+import q = require("q");
+
 import AdhEventManager = require("./EventManager");
+
 
 export var register = () => {
     describe("EventManager", () => {
         var eventManager : AdhEventManager.EventManager;
 
         beforeEach(() => {
-            eventManager = new AdhEventManager.EventManager();
+            eventManager = new AdhEventManager.EventManager(q);
         });
 
         it("allows to set handlers for events", () => {

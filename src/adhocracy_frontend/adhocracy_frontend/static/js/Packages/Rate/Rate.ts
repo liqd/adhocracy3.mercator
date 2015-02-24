@@ -360,7 +360,7 @@ export var register = (angular) => {
             AdhUser.moduleName,
             AdhWebSocket.moduleName
         ])
-        .service("adhRateEventManager", ["adhEventManagerClass", (cls) => new cls()])
+        .service("adhRateEventManager", ["$q", "adhEventManagerClass", ($q, cls) => new cls($q)])
         .directive("adhRate", [
             "$q",
             "adhRateEventManager",

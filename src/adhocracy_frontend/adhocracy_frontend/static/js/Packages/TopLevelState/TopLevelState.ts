@@ -154,7 +154,7 @@ export class Service {
     ) {
         var self : Service = this;
 
-        this.eventManager = new adhEventManagerClass();
+        this.eventManager = new adhEventManagerClass($q);
         this.currentSpace = "";
         this.data = {"": <any>{}};
 

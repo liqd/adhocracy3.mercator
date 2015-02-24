@@ -69,15 +69,16 @@ export class Service {
     private domEventManager : AdhEventManager.EventManager;
 
     constructor(
+        $q : ng.IQService,
         private adhConfig : AdhConfig.IService,
         private adhEventManagerClass : typeof AdhEventManager.EventManager,
         rawWebSocketFactory : (uri : string) => IRawWebSocket
     ) {
         this.connected = false;
-        this.messageEventManager = new adhEventManagerClass();
+        this.messageEventManager = new adhEventManagerClass($q);
         this.registrations = {};
 
-        this.domEventManager = new adhEventManagerClass();
+        this.domEventManager = new adhEventManagerClass($q);
 
         this.ws = rawWebSocketFactory(adhConfig.ws_url);
         this.ws.onmessage = (ev) => {
@@ -103,14 +104,14 @@ export class Service {
         return this.connected;
     }
 
-    public register(path : string, callback : (msg : IServerEvent) => void) : number {
+    public register(path : string, callback : (msg : IServerEvent) => void, priority? : number) : number {
         if (!this.registrations[path]) {
             this.registrations[path] = 1;
             this.send("subscribe", path);
         } else {
             this.registrations[path] += 1;
         }
-        return this.messageEventManager.on(path, callback);
+        return this.messageEventManager.on(path, callback, priority);
     }
 
     public unregister(path : string, id : number) : void {
@@ -209,5 +210,5 @@ export var register = (angular) => {
             AdhEventManager.moduleName
         ])
         .factory("adhRawWebSocketFactory", ["Modernizr", rawWebSocketFactoryFactory])
-        .service("adhWebSocket", ["adhConfig", "adhEventManagerClass", "adhRawWebSocketFactory", Service]);
+        .service("adhWebSocket", ["$q", "adhConfig", "adhEventManagerClass", "adhRawWebSocketFactory", Service]);
 };

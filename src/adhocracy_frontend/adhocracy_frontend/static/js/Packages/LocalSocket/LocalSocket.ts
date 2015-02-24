@@ -13,19 +13,22 @@ export interface ILocalEvent extends AdhWebSocket.IServerEvent {}
  * local client.  In many cases this is desired because we do not want the
  * UI to change all the time but we do want it to update on user interaction.
  *
- * FIXME: Currewntly, very few events are actually triggered.
+ * FIXME: Currently, very few events are actually triggered.
  */
 export class Service {
     "use strict";
 
     private messageEventManager : AdhEventManager.EventManager;
 
-    constructor(adhEventManagerClass : typeof AdhEventManager.EventManager) {
-        this.messageEventManager = new adhEventManagerClass();
+    constructor(
+        $q : ng.IQService,
+        adhEventManagerClass : typeof AdhEventManager.EventManager
+    ) {
+        this.messageEventManager = new adhEventManagerClass($q);
     }
 
-    public register(path : string, callback : (msg : ILocalEvent) => void) : number {
-        return this.messageEventManager.on(path, callback);
+    public register(path : string, callback : (msg : ILocalEvent) => void, priority? : number) : number {
+        return this.messageEventManager.on(path, callback, priority);
     }
 
     public unregister(path : string, id : number) : void {
@@ -110,5 +113,5 @@ export var register = (angular) => {
         .module(moduleName, [
             AdhEventManager.moduleName
         ])
-        .service("adhLocalSocket", ["adhEventManagerClass", Service]);
+        .service("adhLocalSocket", ["$q", "adhEventManagerClass", Service]);
 };

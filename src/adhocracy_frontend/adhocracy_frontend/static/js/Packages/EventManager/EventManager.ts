@@ -1,3 +1,8 @@
+import _ = require("lodash");
+
+import AdhUtil = require("../Util/Util");
+
+
 /**
  * Generic event handler with on, off and trigger.
  *
@@ -6,17 +11,27 @@
  * you need it.  This way you can avoid conflicting event names.
  */
 export class EventManager {
-    private handlers : {[event : string]: {[id : number]: (arg : any) => void}} = {};
+    private handlers : {[event : string]: {[id : number]: {
+        priority : number;
+        handler : (arg : any) => void;
+    }}} = {};
     private nextID : number = 0;
+
+    constructor(
+        private $q : ng.IQService
+    ) {}
 
     private getNextID() : number {
         return this.nextID++;
     }
 
-    public on(event : string, handler : (arg : any) => void) : number {
+    public on(event : string, handler : (arg : any) => any, priority : number = 100) : number {
         this.handlers[event] = this.handlers[event] || {};
         var id = this.getNextID();
-        this.handlers[event][id] = handler;
+        this.handlers[event][id] = {
+            priority: priority,
+            handler: handler
+        };
         return id;
     }
 
@@ -30,13 +45,16 @@ export class EventManager {
         }
     }
 
-    public trigger(event : string, arg? : any) : void {
-        for (var id in this.handlers[event]) {
-            if (this.handlers[event].hasOwnProperty(id)) {
-                var fn = this.handlers[event][id];
-                fn(arg);
-            }
-        }
+    public trigger(event : string, arg? : any) : ng.IPromise<void> {
+        var handlers = (<Function>_.chain)(this.handlers[event])
+            .values()
+            .sortBy("priority")
+            .reverse()
+            .pluck("handler")
+            .map((fn) => () => fn(arg))
+            .value();
+
+        return AdhUtil.qSync(this.$q)(handlers);
     }
 }
 
