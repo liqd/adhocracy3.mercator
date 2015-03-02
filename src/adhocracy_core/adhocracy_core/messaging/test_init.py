@@ -140,12 +140,20 @@ def _msg_to_str(msg):
     # Undo quoted-printable encoding of spaces for convenient testing
     return msgtext.replace('=20', ' ')
 
+def mock_get_sheet_field(context, sheet, field_name, registry):
+    result = getattr(context, field_name)
+    return result
+
+
 @mark.usefixtures('integration')
 class TestSendAbuseComplaint():
 
-    def test_send_abuse_complaint_with_user(self, registry):
+    def test_send_abuse_complaint_with_user(self, monkeypatch, registry):
+        from adhocracy_core import messaging
         from adhocracy_core.resources.principal import IUser
+        monkeypatch.setattr(messaging, 'get_sheet_field', mock_get_sheet_field)
         user = Mock(spec=IUser)
+        user.name = 'Alex User'
         mailer = registry.messenger._get_mailer()
         assert len(mailer.outbox) == 0
         messenger = registry.messenger
@@ -158,7 +166,7 @@ class TestSendAbuseComplaint():
         assert messenger.abuse_handler_mail in msgtext
         assert url in msgtext
         assert remark in msgtext
-        assert 'sent by user' in msgtext
+        assert 'sent by user Alex User' in msgtext
 
     def test_send_abuse_complaint_without_user(self, registry):
         mailer = registry.messenger._get_mailer()
@@ -175,23 +183,21 @@ class TestSendAbuseComplaint():
 @mark.usefixtures('integration')
 class TestSendMessageToUser():
 
-    def _mock_get_sheet_field(self, context, sheet, field_name, registry):
-        result = getattr(context, field_name)
-        return result
-
     def test_send_message_to_user(self, monkeypatch, registry):
         from adhocracy_core import messaging
         from adhocracy_core.resources.principal import IUser
         recipient = Mock(spec=IUser)
         recipient.email = 'recipient@example.org'
         sender = Mock(spec=IUser)
+        sender.name = 'username'
         sender.email = 'sender@example.org'
-        monkeypatch.setattr(messaging, 'get_sheet_field',
-                            self._mock_get_sheet_field)
+        sender.name = 'Sandy Sender'
+        monkeypatch.setattr(messaging, 'get_sheet_field', mock_get_sheet_field)
         mailer = registry.messenger._get_mailer()
         assert len(mailer.outbox) == 0
         messenger = registry.messenger
-        messenger.message_user_subject = 'Adhocracy Info: {}'
+        messenger.message_user_subject =\
+            '[{site_name}] Message from {sender_name}: {title}'
         messenger.send_message_to_user(
             recipient=recipient,
             title='Important Adhocracy notice',
@@ -200,5 +206,5 @@ class TestSendMessageToUser():
         assert len(mailer.outbox) == 1
         msgtext = _msg_to_str(mailer.outbox[0])
         assert 'From: sender@example.org' in msgtext
-        assert 'Subject: Adhocracy Info: Important Adhocracy notice' in msgtext
+        assert 'Subject: [Adhocracy] Message from Sandy Sender: Important Adhocracy notice' in msgtext
         assert 'To: recipient@example.org' in msgtext

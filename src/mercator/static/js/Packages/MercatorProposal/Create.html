@@ -163,7 +163,7 @@
                                     {{ "TR__ERROR_REQUIRED_MERCATOR_PROPOSAL_ORGANIZATION_NAME" | translate }}</span>
                             </label>
                             <label>
-                                <span class="label-text">{{ "TR__MERCATOR_PROPOSAL_ORGANIZATION_COUNTRY" | translate }}</span>
+                                <span class="label-text">{{ "TR__MERCATOR_PROPOSAL_ORGANIZATION_PLANNED_COUNTRY" | translate }}</span>
                                 <country-select
                                     data-ng-model="data.organization_info.country"
                                     data-name="organization-info-country"
@@ -230,7 +230,7 @@
                                     {{ "TR__ERROR_REQUIRED_MERCATOR_PROPOSAL_ORGANIZATION_NAME" | translate }}</span>
                             </label>
                             <label>
-                                <span class="label-text">{{ "TR__MERCATOR_PROPOSAL_ORGANIZATION_COUNTRY" | translate }}</span>
+                                <span class="label-text">{{ "TR__MERCATOR_PROPOSAL_ORGANIZATION_PLANNED_COUNTRY" | translate }}</span>
                                 <country-select
                                     data-ng-model="data.organization_info.country"
                                     data-name="organization-info-country"
@@ -661,7 +661,7 @@
                 </div><!--/.annotated-section-body -->
 
                 <div class="annotated-section-annotation mercator-proposal-form-annotation">
-                    {{ "TR__MERCATOR_PROPOSAL_FINANCE_ANNOTATION" | translate }}
+                    <span data-adh-html-translate="TR__MERCATOR_PROPOSAL_FINANCE_ANNOTATION" data-translate-templates="{link: financialPlanTemplate}"></span>
                 </div><!--/.annotated-section-annotation -->
             </div><!--/.annotated-section -->
 

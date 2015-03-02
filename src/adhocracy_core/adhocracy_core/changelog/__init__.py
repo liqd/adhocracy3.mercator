@@ -21,6 +21,17 @@ def create_changelog() -> dict:
     return defaultdict(metadata)
 
 
+def clear_modification_date_after_commit_hook(success: bool,
+                                              registry: Registry):
+    """Delete the shared modification date for the transaction.
+
+    The date is set by :func:`adhocracy_utils.get_modification_date`.
+    """
+    if getattr(registry, '__modification_date__',  # pragma: no branch
+               None) is not None:
+        del registry.__modification_date__
+
+
 def includeme(config):
     """Add transaction changelog to the registry and register subscribers."""
     changelog = create_changelog()

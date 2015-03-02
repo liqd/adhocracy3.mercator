@@ -130,9 +130,9 @@ export var movingColumns = (
                 }
             };
 
-            adhTopLevelState.on("movingColumns", move);
-            adhTopLevelState.on("focus", resize);
-            adhTopLevelState.on("space", () => _.defer(resizeNoTransition));
+            scope.$on("$destroy", adhTopLevelState.on("movingColumns", move));
+            scope.$on("$destroy", adhTopLevelState.on("focus", resize));
+            scope.$on("$destroy", adhTopLevelState.on("space", () => _.defer(resizeNoTransition)));
             scope.$watch(() => element.find(".moving-column").length, resize);
         }
     };

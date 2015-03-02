@@ -4,6 +4,7 @@ import logging
 import colander
 
 from cornice.util import _JSONError
+from pyramid.exceptions import URLDecodeError
 from pyramid.security import NO_PERMISSION_REQUIRED
 from pyramid.view import view_config
 from pyramid.traversal import resource_path
@@ -58,6 +59,20 @@ def handle_error_400_auto_update_no_fork_allowed(error, request):
     dummy_node = named_object('root_versions')
     error_colander = colander.Invalid(dummy_node, msg + description)
     return handle_error_400_colander_invalid(error_colander, request)
+
+
+@view_config(
+    context=URLDecodeError,
+    permission=NO_PERMISSION_REQUIRED,
+)
+def handle_error_400_url_decode_error(error, request):
+    """
+    Handle error thrown by Pyramid if the request path is not valid UTF-8.
+
+    E.g. "/fooba%E9r/".
+    """
+    error_dict = _build_error_dict('url', '', str(error))
+    return _JSONError([error_dict], 400)
 
 
 @view_config(

@@ -1115,6 +1115,18 @@ class TestFileStoreType:
         assert inst.deserialize(None, value) == mock_response
         assert mock_response.size == mock_fstat_result.st_size
 
+    def test_deserialize_bytesio(self, inst, monkeypatch):
+        from adhocracy_core import schema
+        from io import BytesIO
+        mock_response = Mock()
+        mock_file_constructor = Mock(spec=schema.File,
+                                     return_value=mock_response)
+        monkeypatch.setattr(schema, 'File', mock_file_constructor)
+        value = Mock()
+        value.file = BytesIO(b'abcdef')
+        assert inst.deserialize(None, value) == mock_response
+        assert mock_response.size == 6
+
     def test_deserialize_exception(self, inst, monkeypatch):
         from adhocracy_core import schema
         mock_file_constructor = Mock(spec=schema.File, side_effect=IOError)

@@ -98,4 +98,13 @@ describe("comments", function() {
         expect(page.getCommentText(parent)).toEqual("comment 1b");
         expect(page.getCommentText(reply)).toEqual("comment 1.1b");
     });
+
+    xit("can be edited and replied - fail due to #803", function() {
+        var page = new EmbeddedCommentsPage("c11").get();
+        var parent = page.createComment("comment 1");
+        var changedComment = page.editComment(parent, ["comment 1 - edited"]);
+        var reply = page.createReply(changedComment, "reply 1");
+
+        expect(page.getCommentText(reply)).toEqual("reply 1");
+    });
 });

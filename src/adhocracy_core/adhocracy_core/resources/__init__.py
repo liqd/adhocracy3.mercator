@@ -1,13 +1,10 @@
 """Resource types mapped to sheets (OpenClosePrinciple), object hierarchy."""
-from datetime import datetime
-
 from pyramid.path import DottedNameResolver
 from pyramid.threadlocal import get_current_registry
 from pyramid.config import Configurator
 from pyramid.traversal import find_interface
 from pyramid.traversal import resource_path
 from pyramid.registry import Registry
-from pytz import UTC
 from substanced.content import add_content_type
 from zope.interface import directlyProvides
 from zope.interface import alsoProvides
@@ -24,6 +21,7 @@ from adhocracy_core.events import ResourceCreatedAndAdded
 from adhocracy_core.sheets.name import IName
 from adhocracy_core.sheets.metadata import IMetadata
 from adhocracy_core.utils import get_sheet
+from adhocracy_core.utils import get_modification_date
 
 
 def add_resource_type_to_registry(metadata: ResourceMetadata,
@@ -195,9 +193,7 @@ class ResourceFactory:
 
     def _get_metadata(self, resource: IResource, creator: IResource,
                       registry: Registry) -> dict:
-        # FIXME: bad SRP, there are two places responsible to set the default
-        # date, here and in adhocracy_core.schema.Date
-        now = datetime.utcnow().replace(tzinfo=UTC)
+        now = get_modification_date(registry)
         creator = creator if creator is not None else None
         metadata = {'creator': creator,
                     'creation_date': now,
@@ -205,6 +201,7 @@ class ResourceFactory:
                     'modified_by': creator,
                     'modification_date': now,
                     }
+
         item = find_interface(resource, IItem)
         if IItemVersion.providedBy(resource) and item is not None:
             item_sheet = get_sheet(item, IMetadata, registry=registry)

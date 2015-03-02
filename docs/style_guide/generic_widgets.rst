@@ -135,8 +135,8 @@ you can add constructor parameters::
             var _class = (<any>_self).constructor;
 
             return {
-                controller: ($scope) => {
-                    $scope.title = _self.title;
+                link: (scope) => {
+                    scope.title = _self.title;
                     ...
 
 

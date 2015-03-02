@@ -134,7 +134,9 @@ export var register = () => {
                                 PUT: false,
                                 GET: true,
                                 POST: false,
-                                HEAD: false
+                                HEAD: false,
+                                delete: false,
+                                hide: false
                             });
                             done();
                         },

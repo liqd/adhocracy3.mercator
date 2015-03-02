@@ -19,7 +19,8 @@ var embeddableDirectives = [
     "login",
     "register",
     "user-indicator",
-    "empty"
+    "empty",
+    "social-share"
 ];
 
 var metaParams = [
@@ -135,13 +136,16 @@ export var register = (angular) => {
                     };
                 }]);
         }])
-        .run(["$location", "$translate", ($location, $translate) => {
+        .run(["$location", "$translate", "adhConfig", ($location, $translate, adhConfig) => {
             // Note: This works despite the routing removing the locale search
             // parameter immediately after. This is a bit awkward though.
+
+            // FIXME: centralize locale setup in adhLocale
             var params = $location.search();
             if (params.hasOwnProperty("locale")) {
                 $translate.use(params.locale);
             }
+            adhConfig.locale = params.locale;
         }])
         .directive("href", ["adhConfig", "$location", "$rootScope", hrefDirective])
         .filter("adhCanonicalUrl", ["adhConfig", canonicalUrl]);

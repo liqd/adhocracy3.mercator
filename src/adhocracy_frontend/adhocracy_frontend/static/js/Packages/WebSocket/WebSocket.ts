@@ -103,28 +103,28 @@ export class Service {
         return this.connected;
     }
 
-    public register(path : string, callback : (msg : IServerEvent) => void) : number {
+    public register(path : string, callback : (msg : IServerEvent) => void) : Function {
         if (!this.registrations[path]) {
             this.registrations[path] = 1;
             this.send("subscribe", path);
         } else {
             this.registrations[path] += 1;
         }
-        return this.messageEventManager.on(path, callback);
+        var off : Function = this.messageEventManager.on(path, callback);
+
+        return () => {
+            if (!this.registrations[path]) {
+                throw "resource is not registered";
+            }
+            off();
+            this.registrations[path] -= 1;
+            if (this.registrations[path] === 0) {
+                this.send("unsubscribe", path);
+            }
+        };
     }
 
-    public unregister(path : string, id : number) : void {
-        if (!this.registrations[path]) {
-            throw "resource is not registered";
-        }
-        this.messageEventManager.off(path, id);
-        this.registrations[path] -= 1;
-        if (this.registrations[path] === 0) {
-            this.send("unsubscribe", path);
-        }
-    }
-
-    public addEventListener(event : string, callback : (arg?) => void) : number {
+    public addEventListener(event : string, callback : (arg?) => void) : Function {
         return this.domEventManager.on(event, callback);
     }
 

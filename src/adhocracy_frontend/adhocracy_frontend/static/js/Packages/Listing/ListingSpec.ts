@@ -86,7 +86,7 @@ export var register = () => {
                     }
                 };
 
-                var adhWebSocketMock = <any>jasmine.createSpyObj("WebSocketMock", ["register", "unregister"]);
+                var adhWebSocketMock = <any>jasmine.createSpyObj("WebSocketMock", ["register"]);
 
                 var adapter = <any>jasmine.createSpyObj("adapter", ["elemRefs", "poolPath"]);
                 adapter.elemRefs.and.returnValue(elements);
@@ -202,10 +202,11 @@ export var register = () => {
                         });
 
                         it("unregisters old websocket when path changes", () => {
-                            scope.poolPath = "pool/path";
-                            scope.wshandle = "wshandle";
+                            var wsOff = jasmine.createSpy("wsOff");
+                            scope.wsOff = wsOff;
                             callback("");
-                            expect(adhWebSocketMock.unregister).toHaveBeenCalledWith("pool/path", "wshandle");
+                            expect(wsOff).toHaveBeenCalled();
+                            expect(scope.wsOff).not.toBeDefined();
                         });
 
                         it("registers new websocket when path changes", () => {

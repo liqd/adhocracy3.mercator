@@ -393,3 +393,21 @@ class TestGetVisibilityChange:
         event.old_appstruct = {'deleted': False, 'hidden': False}
         event.new_appstruct = {'deleted': False, 'hidden': False}
         assert self.call_fut(event) == VisibilityChange.visible
+
+
+def test_get_modification_date_not_cached():
+    """The shared modification date is cached."""
+    from . import get_modification_date
+    registry = testing.DummyResource()
+    result = get_modification_date(registry)
+    assert registry.__modification_date__ is result
+
+
+def test_get_modification_date_cached():
+    """If the registry has the cached date, return it."""
+    from . import get_modification_date
+    from datetime import datetime
+    now = datetime.now()
+    registry = testing.DummyResource(__date__=now)
+    result = get_modification_date(registry)
+    assert result is registry.__modification_date__

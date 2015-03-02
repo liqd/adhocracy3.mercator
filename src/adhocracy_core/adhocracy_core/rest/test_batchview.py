@@ -97,6 +97,7 @@ class TestBatchView:
         from adhocracy_core.utils import is_batchmode
         request.body = self._make_json_with_subrequest_cstructs()
         request.__cached_principals__ = [1]
+        date = object()
         request.headers['X-User-Path'] = 2
         request.headers['X-User-Token'] = 3
         # Needed to stop the validator from complaining if these headers are

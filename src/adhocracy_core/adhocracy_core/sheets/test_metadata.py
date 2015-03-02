@@ -14,27 +14,6 @@ def mock_metadata_sheet(context, mock_sheet, registry_with_content):
     return mock_sheet
 
 
-class TestResourceModifiedMetadataSubscriber:
-
-    @fixture
-    def registry(self, registry_with_content):
-        return registry_with_content
-
-    def _call_fut(self, event):
-        from adhocracy_core.sheets.metadata import resource_modified_metadata_subscriber
-        return resource_modified_metadata_subscriber(event)
-
-    def test_with_metadata_isheet(self, context, registry, mock_metadata_sheet,
-                                  cornice_request):
-        from datetime import datetime
-        event = testing.DummyResource(object=context,
-                                      registry=registry,
-                                      request=cornice_request)
-        self._call_fut(event)
-
-        set_modification_date = mock_metadata_sheet.set.call_args[0][0]['modification_date']
-        assert set_modification_date.date() == datetime.now().date()
-
 
 class TestIMetadataSchema:
 
@@ -146,13 +125,6 @@ def test_includeme_register_index_creator(registry):
     from substanced.interfaces import IIndexView
     assert registry.adapters.lookup((IMetadata,), IIndexView,
                                     name='adhocracy|creator')
-
-
-@mark.usefixtures('integration')
-def test_includeme_register_metadata_update_subscriber(config):
-    handlers = config.registry.registeredHandlers()
-    handler_names = [x.handler.__name__ for x in handlers]
-    assert 'resource_modified_metadata_subscriber' in handler_names
 
 
 class TestVisibility:

@@ -3,6 +3,7 @@ from collections import Sequence
 from collections import OrderedDict
 from datetime import datetime
 import decimal
+import io
 import os
 import re
 
@@ -795,7 +796,10 @@ class FileStoreType(colander.SchemaType):
                           title=value.filename)
             # We add the size as an extra attribute since get_size() doesn't
             # work before the transaction has been committed
-            result.size = os.fstat(value.file.fileno()).st_size
+            if isinstance(value.file, io.BytesIO):
+                result.size = len(value.file.getvalue())
+            else:
+                result.size = os.fstat(value.file.fileno()).st_size
         except Exception as err:
             raise colander.Invalid(node, msg=str(err), value=value)
         if result.size > self.SIZE_LIMIT:

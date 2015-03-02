@@ -32,7 +32,7 @@ Switch the space (content/user)
             font-size: 130%;
         }
 
-        &.is-active i {
+        &.is-active i, &:active i {
             color: $color-text-highlight-normal;
         }
 

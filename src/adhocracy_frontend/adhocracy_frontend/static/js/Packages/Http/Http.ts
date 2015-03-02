@@ -14,6 +14,7 @@ import AdhWebSocket = require("../WebSocket/WebSocket");
 
 import ResourcesBase = require("../../ResourcesBase");
 
+import SIMetadata = require("../../Resources_/adhocracy_core/sheets/metadata/IMetadata");
 import SITag = require("../../Resources_/adhocracy_core/sheets/tags/ITag");
 import SIVersionable = require("../../Resources_/adhocracy_core/sheets/versions/IVersionable");
 
@@ -36,6 +37,8 @@ export interface IOptions {
     GET : boolean;
     POST : boolean;
     HEAD : boolean;
+    delete : boolean;
+    hide : boolean;
 }
 
 
@@ -44,7 +47,9 @@ export var emptyOptions : IOptions = {
     PUT: false,
     GET: false,
     POST: false,
-    HEAD: false
+    HEAD: false,
+    delete : false,
+    hide : false
 };
 
 
@@ -99,13 +104,16 @@ export class Service<Content extends ResourcesBase.Resource> {
         }
     }
 
-    private importOptions(raw : { data : IOptions }) : IOptions {
+    private importOptions(raw : { data : any }) : IOptions {
+        var metadata = AdhUtil.deepPluck(raw.data, ["PUT", "request_body", "data", SIMetadata.nick]);
         return {
             OPTIONS: !!raw.data.OPTIONS,
             PUT: !!raw.data.PUT,
             GET: !!raw.data.GET,
             POST: !!raw.data.POST,
-            HEAD: !!raw.data.HEAD
+            HEAD: !!raw.data.HEAD,
+            delete: Boolean(metadata && _.has(metadata, "deleted")),
+            hide: Boolean(metadata && _.has(metadata, "hidden"))
         };
     }
 
@@ -170,10 +178,10 @@ export class Service<Content extends ResourcesBase.Resource> {
             .put(path, obj);
     }
 
-    public put(path : string, obj : Content) : ng.IPromise<Content> {
+    public put(path : string, obj : Content, keepMetadata : boolean = false) : ng.IPromise<Content> {
         var _self = this;
 
-        return this.putRaw(path, AdhConvert.exportContent(this.adhMetaApi, obj))
+        return this.putRaw(path, AdhConvert.exportContent(this.adhMetaApi, obj, keepMetadata))
             .then(
                 (response) => {
                     _self.adhCache.invalidateUpdated(response.data.updated_resources);

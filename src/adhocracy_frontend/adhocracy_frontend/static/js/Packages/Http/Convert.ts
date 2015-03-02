@@ -185,7 +185,11 @@ export var importBatchContent = <Content extends ResourcesBase.Resource>(
  * also, fields with create_mandatory should not be missing from the
  * posted object.
  */
-export var exportContent = <Rs extends ResourcesBase.Resource>(adhMetaApi : AdhMetaApi.MetaApiQuery, obj : Rs) : Rs => {
+export var exportContent = <Rs extends ResourcesBase.Resource>(
+    adhMetaApi : AdhMetaApi.MetaApiQuery,
+    obj : Rs,
+    keepMetadata : boolean = false
+) : Rs => {
     "use strict";
 
     sanityCheck(obj);
@@ -209,7 +213,7 @@ export var exportContent = <Rs extends ResourcesBase.Resource>(adhMetaApi : AdhM
                     }
                     // workaround, as normal users can not set `hidden` field
                     // FIXME: use more appropriate place, e.g. expose in meta api
-                    if (sheetName === "adhocracy_core.sheets.metadata.IMetadata" && fieldName === "hidden") {
+                    if (!keepMetadata && sheetName === "adhocracy_core.sheets.metadata.IMetadata" && fieldName === "hidden") {
                         delete sheet[fieldName];
                     }
                 }

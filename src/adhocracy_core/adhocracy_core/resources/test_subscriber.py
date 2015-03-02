@@ -386,6 +386,38 @@ class TestAddDefaultGroupToUserSubscriber:
         assert mock_sheet.set.called is False
 
 
+class TestUpdateModificationDate:
+
+    @fixture
+    def registry(self, registry_with_content):
+        return registry_with_content
+
+    def _call_fut(self, event):
+        from .subscriber import update_modification_date_modified_by
+        return update_modification_date_modified_by(event)
+
+    def test_with_request(self, context, registry, mock_sheet, monkeypatch):
+        from datetime import datetime
+        from . import subscriber
+        from adhocracy_core.sheets.metadata import IMetadata
+        now = datetime.now()
+        monkeypatch.setattr(subscriber, 'get_modification_date', lambda x: now)
+        user = object()
+        monkeypatch.setattr(subscriber, 'get_user', lambda x: user)
+        register_sheet(context, mock_sheet, registry, isheet=IMetadata)
+        request = testing.DummyResource()
+        event = testing.DummyResource(object=context,
+                                      registry=registry,
+                                      request=request)
+        self._call_fut(event)
+        assert mock_sheet.set.call_args[0][0] == {'modification_date': now,
+                                                  'modified_by': user}
+        assert mock_sheet.set.call_args[1] ==\
+            {'send_event': False,  'omit_readonly': False, 'request': request,
+             'registry': registry}
+
+
+
 @fixture()
 def integration(config):
     config.include('adhocracy_core.events')
@@ -399,3 +431,6 @@ def test_register_subscriber(registry):
     assert subscriber.autoupdate_non_versionable_has_new_version.__name__ in handlers
     assert subscriber.autoupdate_versionable_has_new_version.__name__ in handlers
     assert subscriber.user_created_and_added_subscriber.__name__ in handlers
+    assert subscriber.update_modification_date_modified_by.__name__ in handlers
+
+

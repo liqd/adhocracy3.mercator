@@ -3,7 +3,9 @@
 <section class="user-list">
     <adh-listing
         data-path="/principals/users/"
-        data-no-create-form="true">
+        data-no-create-form="true"
+        data-frontend-order-predicate="frontendOrderPredicate"
+        data-frontend-order-reverse="frontendOrderReverse">
         <adh-user-list-item
             data-path="{{element}}"></adh-user-list-item>
     </adh-listing>

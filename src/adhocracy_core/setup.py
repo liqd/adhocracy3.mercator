@@ -17,7 +17,7 @@ requires = [
     'gunicorn',
     'substanced',
     'pyramid_tm',
-    'cornice',
+    'cornice < 0.18',  # We allow sequence data but cornice only dicts (#273)
     'colander',
     'autobahn',
     'websocket-client',

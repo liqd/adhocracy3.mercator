@@ -192,10 +192,9 @@ export var directiveFactory = (template : string, adapter : IRateAdapter<RIRateV
         scope: {
             refersTo: "@"
         },
-        link: (scope : IRateScope, element) : void => {
+        link: (scope : IRateScope) : void => {
             var myRateResource : RIRateVersion;
-            var webSocketHandle : number;
-            var rateEventHandle : number;
+            var webSocketOff : Function;
             var postPoolPath : string;
             var rates : {[key : string]: number};
             var lock : boolean;
@@ -244,15 +243,14 @@ export var directiveFactory = (template : string, adapter : IRateAdapter<RIRateV
             storeMyRateResource = (resource : RIRateVersion) => {
                 myRateResource = resource;
 
-                if (typeof webSocketHandle === "undefined") {
+                if (typeof webSocketOff === "undefined") {
                     var itemPath = AdhUtil.parentPath(resource.path);
-                    webSocketHandle = adhWebSocket.register(itemPath, (message) => {
+                    webSocketOff = adhWebSocket.register(itemPath, (message) => {
                         updateMyRate();
                         updateAggregatedRates();
                     });
-                    element.on("$destroy", () => {
-                        adhWebSocket.unregister(itemPath, webSocketHandle);
-                    });
+                    // FIXME DefinitelyTyped
+                    (<any>scope).$on("$destroy", webSocketOff);
                 }
             };
 
@@ -323,13 +321,11 @@ export var directiveFactory = (template : string, adapter : IRateAdapter<RIRateV
             };
 
             // sync with other local rate buttons
-            rateEventHandle = adhRateEventManager.on(scope.refersTo, () => {
+            // FIXME DefinitelyTyped
+            (<any>scope).$on("$destroy", adhRateEventManager.on(scope.refersTo, () => {
                 updateMyRate();
                 updateAggregatedRates();
-            });
-            element.on("$destroy", () => {
-                adhRateEventManager.off(scope.refersTo, rateEventHandle);
-            });
+            }));
 
             scope.auditTrailVisible = false;
             adhHttp.get(scope.refersTo)

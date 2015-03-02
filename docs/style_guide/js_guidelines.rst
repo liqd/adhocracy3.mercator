@@ -47,7 +47,23 @@ checked with tslint.
       first line (without a ``.``) is indented at n+0, all functions at
       n+1 (4 spaces deeper).
 
+   Example::
+
+      adhHttp.get(url)
+          .then(update)
+          .then(exit);
+
 -  Each new identifier has its own ``var``. (rationale: ``git diff`` / conflicts)
+
+   Example::
+
+      // bad
+      var someVariable
+          someOtherVariable;
+
+      // good
+      var someVariable;
+      var someOtherVariable;
 
 -  No whitespace immediately inside parentheses, brackets or braces (this
    includes empty blocks)::
@@ -56,7 +72,7 @@ checked with tslint.
        No:  spam( ham[ 1 ], { eggs: 2 } )
 
 -  Do not align your code. Use the following indentation rules instead
-   (single-line option is always allowed if reasonably short.):
+   (single-line option is always allowed if reasonably short):
 
    -  objects::
 
@@ -79,14 +95,14 @@ checked with tslint.
 
           var foo = (arg : number) : void => {
               return;
-          }
+          };
 
           var foo = (
-              arg: number,
-              otherarg: Class
+              arg : number,
+              otherarg : Class
           ) : void => {
               return;
-          }
+          };
 
 -  The last item in a list or in function parameters may be split across
    multiple lines::
@@ -123,14 +139,23 @@ TypeScript
       directory hierarchy, but something to be clarified. This rule
       is to be re-evaluated at some point.)
 
--  nested types are allowed up to 2 levels (``Foo<Bar<Baz>>``).  1
-   level is to be preferred where possible.
+-  imported adhocracy modules must be prefixed with "Adh".
+
+-  nested generic types are allowed up to 2 levels (``Foo<Bar<Baz>>``).
+   Fewer is to be preferred where possible.
 
 -  Type functions, not the variables they are assigned to.
 
 -  Use ``type[]`` rather than ``Array<type>``.
 
--  A colon used for types must always be surrounded by single spaces.
+-  A colon used for types must always be surrounded by single spaces::
+
+      // bad
+      var x: number;
+      var y:number;
+
+      // good
+      var x : number;
 
 Lambdas
 ~~~~~~~
@@ -225,22 +250,69 @@ Angular
 
 -  do not use ``$`` in your variable names (leave it to angular).
 
--  prefix
+-  all directives, filters and services are prefixed with "adh".
 
-   -  directives: 'adh.*' for all directives declared in a3.  (in the
-      future, this prefix may be split up in several ones, making
-      refactoring necessary.  Client-specific prefixes may be added
-      without the need for refactoring.)
+  .. NOTE:: In the future, this prefix may be split up in several
+     ones, making refactoring necessary.  Client-specific prefixes
+     may be added without the need for refactoring.
 
-   -  service registration: '"adhHttp"'.  (services must be implemented
-      so that they don't care if they are registered under another
-      name.)
+-  angular scopes should be typed with interfaces.
 
-   -  service module import: 'import Http = require("Adhocracy/Services/Http");'.
-      rationale: When using service modules, the fact that they provide
-      services is obvious.
+link vs. controller
+~~~~~~~~~~~~~~~~~~~
 
--  angular scopes must be typed with interfaces.
+When writing directives, ``link`` and ``controller`` do mostly the
+same::
+
+   var linkDirective = (service) => {
+       return {
+           link: (scope, element) => {
+               scope.foo = "bar";
+               service.something();
+           }
+       };
+   };
+
+   var ctrlDirective = () => {
+       return {
+           controller: ["$scope", "$element", "service", ($scope, $element, service) => {
+               $scope.foo = "bar";
+               service.something();
+           }]
+       };
+   };
+
+Note that dependency injection happens in different places in the two
+examples.
+
+In general, ``link`` is to be preferred.  There is one case where
+``controller`` must be used.  See `Creating Directives that
+Communicate`_ in the angular docs for an in depth discussion.  In that
+case, the controller should not be defined inline but as a separate
+``class``::
+
+   class FooController {
+       constructor(private depedency) {}
+
+       public something() {
+           ...
+       }
+   }
+
+   var ctrlDirective = () => {
+       return {
+           controller: ["dependency", FooController]
+       };
+   };
+
+   var subDirective = (service) => {
+       return {
+           require: "^ctrlDirective",
+           link: (scope, element, attrs, ctrl) => {
+               ctrl.something();
+           }
+       };
+   };
 
 Template
 ~~~~~~~~
@@ -252,8 +324,6 @@ Template
 
          <span data-ng-bind="foo"></span>
 
-   -  FIXME: include HTML checker for automated tests.
-
    -  Exception: The preferred way to use angular directives is the
       element syntax::
 
@@ -264,7 +334,7 @@ Template
 
 -  prefer ``{{…}}`` over ``ngBind`` (except for root template).
 
--  FIXME: when to apply which classes (should be in balance with
+.. FIXME:: when to apply which classes (should be in balance with
    :doc:`css_guidelines`)
 
    -  apply classes w/o a specific need/by default?
@@ -292,3 +362,4 @@ Documentation
 .. _tslint: https://github.com/palantir/tslint
 .. _jsdoc: http://usejsdoc.org/
 .. _isolated scope: https://docs.angularjs.org/guide/directive#isolating-the-scope-of-a-directive
+.. _Creating Directives that Communicate: https://docs.angularjs.org/guide/directive#creating-directives-that-communicate

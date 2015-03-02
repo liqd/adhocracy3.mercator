@@ -445,7 +445,7 @@ def index_budget(resource: IResource, default) -> str:
     for limit in BUDGET_INDEX_LIMIT_KEYWORDS:
         if funding <= limit:
             return [str(limit)]
-    return 'above_50000'
+    return ['above_50000']
 
 
 class ExperienceSchema(colander.MappingSchema):

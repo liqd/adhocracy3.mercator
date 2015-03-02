@@ -168,7 +168,12 @@ def send_registration_mail(context: IUser,
 
 def _generate_activation_path() -> str:
     random_bytes = urandom(18)
-    return '/activate/' + b64encode(random_bytes, altchars=b'-_').decode()
+    # We use '+_' as altchars since both are reliably recognized in URLs,
+    # even if they occur at the end. Conversely, '-' at the end of URLs is
+    # not recognized as part of the URL by some programs such as Thunderbird,
+    # and '/' might cause problems as well, especially if it occurs multiple
+    # times in a row.
+    return '/activate/' + b64encode(random_bytes, altchars=b'+_').decode()
 
 
 user_metadata = pool_metadata._replace(

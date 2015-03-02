@@ -36,7 +36,7 @@ require.config({
         q: "../lib/q/q",
         modernizr: "../lib2/modernizr/modernizr-2.8.3.min",
         moment: "../lib/moment/min/moment-with-locales.min",
-        sticky: "../lib/sticky-kit/jquery.sticky-kit.min",
+        sticky: "../lib/relatively-sticky/jquery.relatively-sticky.min",
         socialSharePrivacy: "../lib/jquery.socialshareprivacy/jquery.socialshareprivacy.min",
         adhTemplates: "./templates",
         polyfiller: "../lib/webshim/js-webshim/minified/polyfiller"

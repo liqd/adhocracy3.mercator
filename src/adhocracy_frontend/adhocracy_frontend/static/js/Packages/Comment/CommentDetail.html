@@ -6,10 +6,11 @@
                     <adh-user-meta data-path="{{data.creator}}"></adh-user-meta>
                 </span>
                 <span class="comment-header-date">
-                    <adh-time data-datetime="data.creationDate"></adh-time>
+                    <adh-time data-datetime="data.creationDate"></adh-time>.
                 </span>
                 <span class="comment-header-edited" data-ng-if="data.edited">
-                    ({{ "TR__EDITED" | translate }})
+                    {{ "TR__EDITED" | translate }}
+                    <adh-time data-datetime="data.modificationDate"></adh-time>
                 </span>
             </div>
             <div class="comment-header-column2">
@@ -26,6 +27,10 @@
                     <a href="#" data-ng-click="report()" data-ng-if="report">
                         <i class="icon-ban-circle"></i>
                         {{ "TR__REPORT" | translate }}
+                    </a>
+                    <a href="#" data-ng-click="delete()" data-ng-if="versionOptions.hide">
+                        <i class="icon-x"></i>
+                        {{ "TR__DELETE" | translate }}
                     </a>
                 </span>
                 <adh-rate data-refers-to="{{data.path}}"></adh-rate>
@@ -66,7 +71,8 @@
                 data-path="{{comment}}"
                 data-mode="display"
                 data-frontend-order-predicate="frontendOrderPredicate"
-                data-frontend-order-reverse="frontendOrderReverse">
+                data-frontend-order-reverse="frontendOrderReverse"
+                data-update-listing="update">
             </adh-comment-resource>
         </adh-resource-wrapper>
     </div>

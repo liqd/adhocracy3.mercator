@@ -27,9 +27,9 @@ export var register = () => {
         it("allows to unregister a single handler", () => {
             var spy1 = jasmine.createSpy("spy1");
             var spy2 = jasmine.createSpy("spy2");
-            var id1 = eventManager.on("test", spy1);
+            var off = eventManager.on("test", spy1);
             eventManager.on("test", spy2);
-            eventManager.off("test", id1);
+            off();
             eventManager.trigger("test");
             expect(spy1).not.toHaveBeenCalled();
             expect(spy2).toHaveBeenCalled();

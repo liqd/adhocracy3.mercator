@@ -40,8 +40,8 @@ adhocracy.use_mail_queue = true
 # Email address receiving abuse complaints
 adhocracy.abuse_handler_mail = abuse_handler@unconfigured.domain
 # Template for the subjects of messages sent to users (Python format string,
-# {} is the user-supplied title)
-adhocracy.message_user_subject = Adhocracy Info: {}
+# usable variables: {site_name}, {sender_name}, {title})
+adhocracy.message_user_subject = [{site_name}] Message from {sender_name}: {title}
 # If true, new user accounts are activated immediately without email verification
 adhocracy.skip_registration_mail = false
 # Mode to set http cache headers for resources, valid entries: no_cache, without_proxy_cache, with_proxy_cache

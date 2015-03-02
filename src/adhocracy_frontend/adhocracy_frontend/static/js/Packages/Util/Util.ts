@@ -15,6 +15,18 @@ export function isArrayMember(member : any, array : any[]) : boolean {
 }
 
 
+export function deepPluck(base, keys : string[]) : any {
+    "use strict";
+    return _.reduce(keys, (obj, key) => {
+        if (typeof obj === "undefined") {
+            return obj;
+        } else {
+            return obj[key];
+        }
+    }, base);
+}
+
+
 /**
  * Remove last hierarchy level from path (uris or directory paths). If given
  * url has a trailing slash, the returned url will also have a trailing slash.

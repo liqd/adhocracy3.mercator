@@ -34,4 +34,18 @@ describe("ratings", function() {
         rate.element(by.css(".is-rate-button-active")).click();
         expect(rate.element(by.css(".rate-difference")).getText()).toEqual("0");
     });
+
+    // fails when executed manually on the dev version
+    // but not when executed manually or automatically on the test version
+    xit("is not affected by the edition of the comment - issue #804", function() {
+        var page = new EmbeddedCommentsPage("c2").get();
+        var comment = page.createComment("c4");
+        var rate = page.getRateWidget(comment);
+
+        rate.element(by.css(".rate-pro")).click();
+
+        var changedComment = page.editComment(comment, ["c4 - edited"]);
+        var rate2 = page.getRateWidget(changedComment);
+        expect(rate2.element(by.css(".rate-difference")).getText()).toEqual("+1");
+    });
 });

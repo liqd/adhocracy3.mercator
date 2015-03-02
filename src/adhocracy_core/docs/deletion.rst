@@ -79,8 +79,7 @@ The effect of these flags is as follows:
   be prepared to encounter *410 Gone* responses and deal with them
   appropriately (e.g. by silently skipping them or by showing an
   explanation such as "Comment deleted").
-* FIXME Not implemented yet -- currently backreferences include all resources,
-  regardless of their visibility.
+* FIXME Not implemented yet, since the frontend doesn't yet need it.
   *Deleted* and *hidden* resources will normally not be shown in
   backreferences, which are calculated on demand. The
   *include=deleted|hidden|all* parameter can be used to change that and
@@ -226,7 +225,13 @@ Lets hide pool2::
     ...         'data': {'adhocracy_core.sheets.metadata.IMetadata':
     ...                      {'hidden': True}}}
     >>> resp_data = testapp.put_json(rest_url + "/adhocracy/pool2", data,
-    ...                              headers=manager_header)
+    ...                              headers=manager_header).json
+
+Inspecting the 'updated_resources' listing in the response, we see that
+pool2 was removed::
+
+    >>> resp_data['updated_resources']['removed']
+    ['http://localhost/adhocracy/pool2/']
 
 Now we get an error message when trying to retrieve the pool2::
 
@@ -262,7 +267,14 @@ private and cannot be directly queried from the frontend::
     >>> resp_data['errors'][0]['description']
     'No such catalog'
 
-Lets hide an item with referenced item versions:
+Lets hide an item with referenced item versions. Prior to doing so, lets check
+that there actually is a listed version::
+
+    >>> resp_data = testapp.get(paragraph_item_first_version)
+    >>> resp_data.json['data']['adhocracy_core.sheets.document.IParagraph']['elements_backrefs']
+    ['http://localhost/adhocracy/pool1/proposal_item/section_item/VERSION_0000001/']
+
+Now we hide the item::
 
     >>> data = {'content_type': 'adhocracy_core.resources.sample_proposal.IProposalItem',
     ...         'data': {'adhocracy_core.sheets.metadata.IMetadata':
@@ -271,7 +283,14 @@ Lets hide an item with referenced item versions:
     >>> resp_data.status
     '200 OK'
 
-Now the hidden item versions are removed from  backreference listings:
+The paragraph version that was referenced from the now hidden section version
+is affected by this change since its backreferences have changed. Therefore,
+it shows up in the list of modified resources::
+
+    >>> paragraph_item_first_version in resp_data.json['updated_resources']['modified']
+    True
+
+Now the hidden item versions are removed from backreference listings:
 
     >>> resp_data = testapp.get(paragraph_item_first_version)
     >>> resp_data.json['data']['adhocracy_core.sheets.document.IParagraph']['elements_backrefs']

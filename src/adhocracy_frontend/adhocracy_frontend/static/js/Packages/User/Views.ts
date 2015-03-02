@@ -85,94 +85,83 @@ export var activateController = (
 };
 
 
-export var loginController = (
-    adhUser : AdhUser.Service,
-    adhTopLevelState : AdhTopLevelState.Service,
+export var loginDirective = (
     adhConfig : AdhConfig.IService,
-    $scope : IScopeLogin
-) : void => {
-    $scope.errors = [];
-    $scope.supportEmail = adhConfig.support_email;
-
-    $scope.credentials = {
-        nameOrEmail: "",
-        password: ""
-    };
-
-    $scope.resetCredentials = () => {
-        $scope.credentials.nameOrEmail = "";
-        $scope.credentials.password = "";
-    };
-
-    $scope.cancel = () => {
-         adhTopLevelState.redirectToCameFrom("/");
-    };
-
-    $scope.logIn = () => {
-        return adhUser.logIn(
-            $scope.credentials.nameOrEmail,
-            $scope.credentials.password
-        ).then(() => {
-            adhTopLevelState.redirectToCameFrom("/");
-        }, (errors) => {
-            bindServerErrors($scope, errors);
-            $scope.credentials.password = "";
-        });
-    };
-};
-
-
-export var loginDirective = (adhConfig : AdhConfig.IService) => {
+    adhUser : AdhUser.Service,
+    adhTopLevelState : AdhTopLevelState.Service
+) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Login.html",
         scope: {},
-        controller: ["adhUser", "adhTopLevelState", "adhConfig", "$scope", loginController]
+        link: (scope : IScopeLogin) => {
+            scope.errors = [];
+            scope.supportEmail = adhConfig.support_email;
+
+            scope.credentials = {
+                nameOrEmail: "",
+                password: ""
+            };
+
+            scope.resetCredentials = () => {
+                scope.credentials.nameOrEmail = "";
+                scope.credentials.password = "";
+            };
+
+            scope.cancel = () => {
+                 adhTopLevelState.redirectToCameFrom("/");
+            };
+
+            scope.logIn = () => {
+                return adhUser.logIn(
+                    scope.credentials.nameOrEmail,
+                    scope.credentials.password
+                ).then(() => {
+                    adhTopLevelState.redirectToCameFrom("/");
+                }, (errors) => {
+                    bindServerErrors(scope, errors);
+                    scope.credentials.password = "";
+                });
+            };
+        }
     };
 };
 
 
-export var registerController = (
-    adhUser : AdhUser.Service,
-    adhTopLevelState : AdhTopLevelState.Service,
+export var registerDirective = (
     adhConfig : AdhConfig.IService,
-    $scope : IScopeRegister
+    adhUser : AdhUser.Service,
+    adhTopLevelState : AdhTopLevelState.Service
 ) => {
-    $scope.siteName = adhConfig.site_name;
-    $scope.termsUrl = adhConfig.terms_url;
-
-    $scope.input = {
-        username: "",
-        email: "",
-        password: "",
-        passwordRepeat: ""
-    };
-
-    $scope.cancel = () => {
-         adhTopLevelState.redirectToCameFrom("/");
-    };
-
-    $scope.errors = [];
-    $scope.supportEmail = adhConfig.support_email;
-
-    $scope.register = () : ng.IPromise<void> => {
-        return adhUser.register($scope.input.username, $scope.input.email, $scope.input.password, $scope.input.passwordRepeat)
-            .then((response) => {
-                $scope.errors = [];
-                $scope.success = true;
-            }, (errors) => bindServerErrors($scope, errors));
-    };
-};
-
-
-export var registerDirective = (adhConfig : AdhConfig.IService) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Register.html",
         scope: {},
-        controller: ["adhUser", "adhTopLevelState", "adhConfig", "$scope", registerController],
-        link: (scope) => {
-            scope.registerForm.password_repeat.$error.passwords_match = (scope.input.password !== scope.input.passwordRepeat);
+        link: (scope : IScopeRegister) => {
+            scope.siteName = adhConfig.site_name;
+            scope.termsUrl = adhConfig.terms_url;
+
+            scope.input = {
+                username: "",
+                email: "",
+                password: "",
+                passwordRepeat: ""
+            };
+
+            scope.cancel = () => {
+                 adhTopLevelState.redirectToCameFrom("/");
+            };
+
+            scope.errors = [];
+            scope.supportEmail = adhConfig.support_email;
+
+            scope.register = () : ng.IPromise<void> => {
+                return adhUser.register(scope.input.username, scope.input.email, scope.input.password, scope.input.passwordRepeat)
+                    .then((response) => {
+                        scope.errors = [];
+                        scope.success = true;
+                    }, (errors) => bindServerErrors(scope, errors));
+            };
         }
     };
 };
@@ -228,6 +217,8 @@ export var userListDirective = (adhUser : AdhUser.Service, adhConfig : AdhConfig
         templateUrl: adhConfig.pkg_path + pkgLocation + "/UserList.html",
         link: (scope) => {
             scope.user = adhUser;
+            scope.frontendOrderPredicate = (id) => id;
+            scope.frontendOrderReverse = true;
         }
     };
 };
@@ -249,7 +240,7 @@ export var userListItemDirective = (adhConfig : AdhConfig.IService) => {
                         $scope.userBasic = res.data[SIUserBasic.nick];
                     });
             }
-            adhTopLevelState.on("userUrl", (userUrl) => {
+            $scope.$on("$destroy", adhTopLevelState.on("userUrl", (userUrl) => {
                 if (!userUrl) {
                     $scope.selectedState = "";
                 } else if (userUrl === $scope.path) {
@@ -257,7 +248,7 @@ export var userListItemDirective = (adhConfig : AdhConfig.IService) => {
                 } else {
                     $scope.selectedState = "is-not-selected";
                 }
-            });
+            }));
         }]
     };
 };
@@ -377,8 +368,8 @@ export var register = (angular) => {
         .directive("adhListUsers", ["adhUser", "adhConfig", userListDirective])
         .directive("adhUserListItem", ["adhConfig", userListItemDirective])
         .directive("adhUserProfile", ["adhConfig", "adhHttp", "adhPermissions", "adhTopLevelState", "adhUser", userProfileDirective])
-        .directive("adhLogin", ["adhConfig", loginDirective])
-        .directive("adhRegister", ["adhConfig", registerDirective])
+        .directive("adhLogin", ["adhConfig", "adhUser", "adhTopLevelState", loginDirective])
+        .directive("adhRegister", ["adhConfig", "adhUser", "adhTopLevelState", registerDirective])
         .directive("adhUserIndicator", ["adhConfig", indicatorDirective])
         .directive("adhUserMeta", ["adhConfig", metaDirective])
         .directive("adhUserMessage", ["adhConfig", "adhHttp", userMessageDirective]);

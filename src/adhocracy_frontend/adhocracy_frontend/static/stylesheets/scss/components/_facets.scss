@@ -31,5 +31,11 @@
         &.is-active, &:active {
             color: $color-function-valid;
         }
+
+        &.is-active:after, &:active:after {
+            content: "\2713";
+            font-size: 135%;
+            line-height: 0.5;
+        }
     }
 }

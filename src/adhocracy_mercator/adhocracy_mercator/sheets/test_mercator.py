@@ -521,7 +521,7 @@ class TestMercatorBudgetIndex:
             context,
             finance_appstruct={'budget': 50001})
         result = index_budget(resource, 'default')
-        assert result == 'above_50000'
+        assert result == ['above_50000']
 
 
 class TestOutcomeSheet:

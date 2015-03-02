@@ -1244,6 +1244,19 @@ The LAST tag should point to the version we created within the batch request::
     >>> resp_data['data']['adhocracy_core.sheets.tags.ITag']['elements']
     ['.../adhocracy/Proposals/kommunismus/par1/VERSION_0000001/']
 
+All creation and modification dates are equal for one batch request:
+
+    >>> pdag_metadata = testapp.get(pdag_path).json['data']['adhocracy_core.sheets.metadata.IMetadata']
+    >>> pv0_path =  batch_resp['responses'][0]['body']['first_version_path']
+    >>> pv0_metadata = testapp.get(pv0_path).json['data']['adhocracy_core.sheets.metadata.IMetadata']
+    >>> pv1_path =  batch_resp['responses'][0]['body']['path']
+    >>> pv1_metadata = testapp.get(pv1_path).json['data']['adhocracy_core.sheets.metadata.IMetadata']
+    >>> pv0_metadata['creation_date'] \
+    ... == pv0_metadata['modification_date']\
+    ... == pv1_metadata['creation_date']\
+    ... == pv1_metadata['modification_date']
+    True
+
 Post another paragraph item and a version.  If the version post fails,
 the paragraph will not be present in the database ::
 

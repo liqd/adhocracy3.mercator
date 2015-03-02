@@ -23,28 +23,21 @@ interface IDocumentWorkbenchScope extends ng.IScope {
     contentType : string;
 }
 
-export class DocumentWorkbench {
-    public static templateUrl : string = pkgLocation + "/DocumentWorkbench.html";
-
-    public createDirective(adhConfig : AdhConfig.IService) {
-        var _self = this;
-        var _class = (<any>_self).constructor;
-
-        return {
-            restrict: "E",
-            templateUrl: adhConfig.pkg_path + _class.templateUrl,
-            controller: ["adhUser", "$scope", (
-                adhUser : AdhUser.Service,
-                $scope : IDocumentWorkbenchScope
-            ) : void => {
-                $scope.path = adhConfig.rest_url + adhConfig.rest_platform_path;
-                $scope.contentType = RIProposal.content_type;
-                $scope.user = adhUser;
-                $scope.websocketTestPaths = JSON.stringify([$scope.path]);
-            }]
-        };
-    }
-}
+export var documentWorkbench = (
+    adhConfig : AdhConfig.IService
+    adhUser : AdhUser.Service,
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/DocumentWorkbench.html",
+        link: (scope : IDocumentWorkbenchScope) => {
+            scope.path = adhConfig.rest_url + adhConfig.rest_platform_path;
+            scope.contentType = RIProposal.content_type;
+            scope.user = adhUser;
+            scope.websocketTestPaths = JSON.stringify([scope.path]);
+        }]
+    };
+};
 
 
 export var moduleName = "adhDocumentWorkbench";
@@ -83,6 +76,5 @@ export var register = (angular) => {
                     movingColumns: "is-show-show-hide"
                 });
         }])
-        .directive("adhDocumentWorkbench", ["adhConfig", (adhConfig) =>
-            new DocumentWorkbench().createDirective(adhConfig)]);
+        .directive("adhDocumentWorkbench", ["adhConfig", "adhUser", documentWorkbench]);
 };

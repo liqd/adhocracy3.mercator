@@ -91,6 +91,9 @@ parent: comment
             <span class="comment-header-date">
                 12/03/15
             </span>
+            <span class="comment-header-edited">
+                Edited 2 days ago
+            </span>
         </div>
         <div class="comment-header-column2">
             <span class="comment-header-links">
@@ -187,6 +190,16 @@ parent: comment
     .comment-header-creator {
         &:after {
             content: "|";
+        }
+    }
+
+    .comment-header-edited {
+        @include inline-block;
+        color: $color-structure-introvert;
+        font-style: italic;
+
+        &:first-letter {
+            text-transform: capitalize;
         }
     }
 

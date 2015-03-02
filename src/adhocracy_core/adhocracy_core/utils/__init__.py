@@ -1,8 +1,10 @@
 """Helper functions shared between modules."""
 from collections import namedtuple
+from collections.abc import Iterable
 from collections.abc import Sequence
 from datetime import datetime
 from functools import reduce
+from pytz import UTC
 import copy
 import json
 import pprint
@@ -15,8 +17,9 @@ from pyramid.traversal import find_resource
 from pyramid.traversal import find_interface
 from pyramid.traversal import resource_path
 from pyramid.threadlocal import get_current_registry
-from substanced.util import get_dotted_name
 from substanced.util import acquire
+from substanced.util import find_catalog
+from substanced.util import get_dotted_name
 from zope.interface import directlyProvidedBy
 from zope.interface import Interface
 from zope.interface import providedBy
@@ -394,6 +397,16 @@ def get_reason_if_blocked(resource: IResource) -> str:
     return reason
 
 
+def list_resource_with_descendants(resource: IResource) -> Iterable:
+    """List all descendants of a resource, including the resource itself."""
+    system_catalog = find_catalog(resource, 'system')
+    if system_catalog is None:
+        return []  # easier testing
+    path_index = system_catalog['path']
+    query = path_index.eq(resource_path(resource), include_origin=True)
+    return query.execute()
+
+
 def extract_events_from_changelog_metadata(meta: ChangelogMetadata) -> list:
     """
     Extract the relevant events affecting a resource.
@@ -442,3 +455,17 @@ def get_visibility_change(event: IResourceSheetModified) -> VisibilityChange:
             return VisibilityChange.revealed
         else:
             return VisibilityChange.invisible
+
+
+def get_modification_date(registry: Registry) -> datetime:
+    """Get the shared modification date for the current transaction.
+
+    This way every date created in one batch/post request
+    can use this as default value.
+    The frontend relies on this to ease sorting.
+    """
+    date = getattr(registry, '__modification_date__', None)
+    if date is None:
+        date = datetime.utcnow().replace(tzinfo=UTC)
+        registry.__modification_date__ = date
+    return date

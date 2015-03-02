@@ -52,12 +52,14 @@ export var register = () => {
             var instanceMock;
             var adhPermissionsMock;
             var adhPreliminaryNamesMock;
+            var adhTopLevelStateMock;
 
             beforeEach(() => {
                 adhPreliminaryNamesMock = jasmine.createSpyObj("adhPreliminaryNames", ["isPreliminary", "nextPreliminary"]);
                 adhPermissionsMock = jasmine.createSpyObj("adhPermissions", ["bindScope"]);
+                adhTopLevelStateMock = jasmine.createSpyObj("adhTopLevelState", ["on"]);
                 widget = new AdhComment.CommentResource(
-                    adapterMock, adhConfigMock, adhHttpMock, adhPermissionsMock, adhPreliminaryNamesMock, <any>q);
+                    adapterMock, adhConfigMock, adhHttpMock, adhPermissionsMock, adhPreliminaryNamesMock, adhTopLevelStateMock, <any>q);
 
                 wrapperMock = {
                     eventManager: jasmine.createSpyObj("eventManager", ["on", "off", "trigger"])
@@ -258,8 +260,9 @@ export var register = () => {
             beforeEach(() => {
                 var adhPreliminaryNamesMock = jasmine.createSpyObj("adhPreliminaryNames", ["isPreliminary", "nextPreliminary"]);
                 var adhPermissionsMock = jasmine.createSpyObj("adhPermissions", ["bindScope"]);
+                var adhTopLevelStateMock = jasmine.createSpyObj("adhTopLevelState", ["on"]);
                 widget = new AdhComment.CommentCreate(
-                    adapterMock, adhConfigMock, adhHttpMock, adhPermissionsMock, adhPreliminaryNamesMock, <any>q);
+                    adapterMock, adhConfigMock, adhHttpMock, adhPermissionsMock, adhPreliminaryNamesMock, adhTopLevelStateMock, <any>q);
             });
 
             it("sets 'templateUrl' on construction", () => {

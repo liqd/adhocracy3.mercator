@@ -70,19 +70,21 @@
                 </section><!-- /.commentable-section -->
 
                 <section class="commentable-section {{subResourceSelectedState('finance')}}">
-                    <div class="mercator-proposal-budget-col requested">
-                        <strong>{{ data.finance.requested_funding | number }} &euro;</strong>
-                        {{ "TR__MERCATOR_PROPOSAL_REQUESTED" | translate }}
-                    </div>
-                    <div class="mercator-proposal-budget-col">
-                        <strong>{{ data.finance.budget | number }} &euro;</strong>
-                        {{ "TR__MERCATOR_PROPOSAL_TOTAL_BUDGET" | translate }}
-                    </div>
-                    <div class="mercator-proposal-budget-col" data-ng-if="data.finance.granted">
-                        <span>
-                            <strong class="color-highlight-valid">{{ "TR__MERCATOR_PROPOSAL_GRANTED" | translate }}</strong>
-                            {{ "TR__MERCATOR_PROPOSAL_PROJECT" | translate }}
-                        </span>
+                    <div class="mercator-proposal-budget-row">
+                        <div class="mercator-proposal-budget-col requested">
+                            <strong>{{ data.finance.requested_funding | number }} &euro;</strong>
+                            {{ "TR__MERCATOR_PROPOSAL_REQUESTED" | translate }}
+                        </div>
+                        <div class="mercator-proposal-budget-col">
+                            <strong>{{ data.finance.budget | number }} &euro;</strong>
+                            {{ "TR__MERCATOR_PROPOSAL_TOTAL_BUDGET" | translate }}
+                        </div>
+                        <div class="mercator-proposal-budget-col" data-ng-if="data.finance.granted">
+                            <span>
+                                <strong class="color-highlight-valid">{{ "TR__MERCATOR_PROPOSAL_GRANTED" | translate }}</strong>
+                                {{ "TR__MERCATOR_PROPOSAL_FINANCE_OTHERS_SOURCES" | translate }}
+                            </span>
+                        </div>
                     </div>
 
                     <ul class="inline-boxes">

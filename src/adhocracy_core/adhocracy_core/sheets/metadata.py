@@ -1,5 +1,4 @@
 """Metadata Sheet."""
-from datetime import datetime
 from logging import getLogger
 
 from pyramid.registry import Registry
@@ -9,7 +8,6 @@ import colander
 from adhocracy_core.interfaces import IResource
 from adhocracy_core.interfaces import ISheet
 from adhocracy_core.interfaces import SheetToSheet
-from adhocracy_core.events import ResourceSheetModified
 from adhocracy_core.sheets import add_sheet_to_registry
 from adhocracy_core.sheets import AttributeStorageSheet
 from adhocracy_core.sheets import sheet_metadata_defaults
@@ -18,7 +16,6 @@ from adhocracy_core.schema import Boolean
 from adhocracy_core.schema import DateTime
 from adhocracy_core.schema import Reference
 from adhocracy_core.utils import get_sheet
-from adhocracy_core.utils import get_user
 from adhocracy_core.utils import get_sheet_field
 from adhocracy_core.utils import is_deleted
 from adhocracy_core.utils import is_hidden
@@ -48,19 +45,6 @@ class MetadataModifiedByReference(SheetToSheet):
     source_isheet = IMetadata
     source_isheet_field = 'modified_by'
     target_isheet = IUserBasic
-
-
-def resource_modified_metadata_subscriber(event):
-    """Update the `modified_by` and `modification_date` metadata."""
-    sheet = get_sheet(event.object, IMetadata, registry=event.registry)
-    request = event.request
-    modified_by = None if request is None else get_user(request)
-    sheet.set({'modified_by': modified_by,
-               'modification_date': datetime.now()},
-              send_event=False,
-              registry=event.registry,
-              request=request,
-              omit_readonly=False)
 
 
 @colander.deferred
@@ -167,9 +151,6 @@ def index_visibility(resource, default):
 def includeme(config):
     """Register sheets, add subscriber to update creation/modification date."""
     add_sheet_to_registry(metadata_metadata, config.registry)
-    config.add_subscriber(resource_modified_metadata_subscriber,
-                          ResourceSheetModified,
-                          interface=IMetadata)
     config.add_indexview(index_visibility,
                          catalog_name='adhocracy',
                          index_name='private_visibility',

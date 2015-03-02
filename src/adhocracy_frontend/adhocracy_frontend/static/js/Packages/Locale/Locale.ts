@@ -292,11 +292,130 @@ export var countryName = () => (code) => {
 };
 
 
+/**
+ * A service to wrap parts of a string in templates.
+ *
+ * wrap.replace("Hello [[:World]]!");
+ * -> "Hello World!"
+ *
+ * wrap.replace("Hello [[link:World]]!", {
+ *   link: "<a>{{content}}</a>"
+ * });
+ * -> "Hello <a>World</a>!"
+ */
+export class Wrap {
+    private openMarker : string = "[";
+    private closeMarker : string = "]";
+    private keySeparator : string = ":";
+    private escapeMarker : string = "\\";
+
+    constructor(private $interpolate) {}
+
+    public encode(msg : string) : string {
+        return msg
+            .replace(this.openMarker, this.escapeMarker + this.openMarker)
+            .replace(this.closeMarker, this.escapeMarker + this.closeMarker);
+    }
+
+    public decode(msg : string) : string {
+        return msg
+            .replace(this.escapeMarker + this.openMarker, this.openMarker)
+            .replace(this.escapeMarker + this.closeMarker, this.closeMarker);
+    }
+
+    public wrap(msg : string, templates) : string {
+        var a = msg.split(this.openMarker + this.openMarker);
+        if (a.length < 2) {
+            return msg;
+        }
+        var before = a.shift();
+        var after = a.join(this.openMarker + this.openMarker);
+
+        var b = after.split(this.closeMarker + this.closeMarker);
+        if (b.length < 2) {
+            throw "No matching closing marker found in " + msg;
+        }
+        var inside = b.shift();
+        after = b.join(this.closeMarker + this.closeMarker);
+
+        var c = inside.split(this.keySeparator);
+        if (c.length < 2) {
+            throw "No key seperator found in " + msg;
+        }
+        var key = c.shift();
+        inside = c.join(this.keySeparator);
+
+        var template = templates[key];
+        if (typeof template !== "undefined") {
+            inside = this.$interpolate(template)({
+                content: inside
+            });
+        }
+
+        return before + inside + this.wrap(after, templates);
+    }
+}
+
+
+/**
+ * Translate directive for strings that contain HTML.
+ *
+ * Imagine you want to translate some HTML like this:
+ *
+ *     Click <a href="#">here</a>!
+ *
+ * The issue of course is that a part of the string is wrapped in HTML.
+ * With plain translation, you can not easily translate this. Your only
+ * option is to split this into several translatable strings which might
+ * not work in some languages.
+ *
+ * This directive tries to solve the problem by using adhWrap. So the
+ * above could be written like this:
+ *
+ *     <span adh-html-translate="Click [[link:here]]!" translate-templates="{
+ *         link: '&lt;a href=&quot;#&quot;&gt;{{content}}&lt;/a&gt;'
+ *     }"></span>
+ */
+export var htmlTranslateDirective = ($translate, adhWrap : Wrap) => {
+    return {
+        restrict: "A",
+        scope: {
+            translateValues: "=?",
+            translateTemplates: "=?"
+        },
+        link: (scope, element, attrs) => {
+            // NOTE: we could use another element for this
+            var escapeHTML = (s : string) => element.text(s).html();
+
+            var update = () => {
+                var msg = attrs.adhHtmlTranslate || "";
+                var values = scope.translateValues || {};
+                var templates = scope.translateTemplates || {};
+
+                // FIXME: adhWrap.encode values before interpolating
+                $translate(msg, values).then((translated : string) => {
+                    var html = escapeHTML(translated);
+                    var wrapped = adhWrap.decode(adhWrap.wrap(html, templates));
+                    // FIXME: do some $sce related magic here
+                    element.html(wrapped);
+                });
+            };
+
+            scope.$watch(() => attrs.htmlTranslate, update);
+            scope.$watch("translateValues", update);
+            scope.$watch("translateTemplates", update);
+        }
+    };
+};
+
+
 export var moduleName = "adhLocale";
 
 export var register = (angular) => {
     angular
         .module(moduleName, [])
         .filter("adhCountryName", countryName)
+        .service("adhWrap", ["$interpolate", Wrap])
+        .directive("adhHtmlTranslate", ["$translate", "adhWrap", htmlTranslateDirective])
         .directive("countrySelect", ["adhConfig", countrySelect]);
 };

@@ -146,8 +146,16 @@ class Messenger():
         """
         assert self.abuse_handler_mail, 'No abuse handler mail specified!'
         logger.debug('Sending abuse complaint about %s', url)
-        user_path = None if user is None else resource_path(user)
-        args = {'url': url, 'remark': remark, 'user_path': user_path}
+        if user is not None:
+            user_name = self._get_user_name(user)
+            user_url = self._get_user_url(user)
+        else:
+            user_name = None
+            user_url = None
+        args = {'url': url,
+                'remark': remark,
+                'user_name': user_name,
+                'user_url': user_url}
         # FIXME For security reasons, we should check that the url starts
         # with one of the prefixes where frontends are supposed to be running
         self.render_and_send_mail(
@@ -167,14 +175,13 @@ class Messenger():
         logger.debug('Sending message entitled "%s" from %s to %s', title,
                      from_email, recipient_email)
         sender_name = self._get_user_name(from_user)
-        frontend_url = self.registry.settings.get('adhocracy.frontend_url',
-                                                  'http://localhost:6551')
-        sender_path = resource_path(from_user)
-        sender_url = '%s/r%s/' % (frontend_url, sender_path)
+        sender_url = self._get_user_url(from_user)
         site_name = self.registry.settings.get('adhocracy.site_name',
                                                'Adhocracy')
         self.render_and_send_mail(
-            subject=self.message_user_subject.format(title),
+            subject=self.message_user_subject.format(site_name=site_name,
+                                                     sender_name=sender_name,
+                                                     title=title),
             recipients=[recipient_email],
             template_asset_base='adhocracy_core:templates/message_user',
             args={
@@ -190,6 +197,12 @@ class Messenger():
 
     def _get_user_name(self, user: IResource) -> str:
         return get_sheet_field(user, IUserBasic, 'name', self.registry)
+
+    def _get_user_url(self, user: IResource)-> str:
+        frontend_url = self.registry.settings.get('adhocracy.frontend_url',
+                                                  'http://localhost:6551')
+        sender_path = resource_path(user)
+        return '%s/r%s/' % (frontend_url, sender_path)
 
 
 def includeme(config):

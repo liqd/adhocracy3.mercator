@@ -27,8 +27,9 @@
             class="m-call-to-action"
             data-ng-disabled="loginForm.$invalid" />
         <div class="login-info">
-            <p>{{ "TR__OR_REGISTER" | translate }}
-            <a href="/register">{{ "TR__LINK_HERE" | translate }}</a></p>
+            <p data-adh-html-translate="TR__OR_REGISTER_HERE" data-translate-templates="{
+                link: '&lt;a href=&quot;/register&quot;&gt;{{ content }}&lt;/a&gt;'
+            }"></p>
         </div>
         <div class="login-support">
             {{ "TR__LOGIN_SUPPORT" | translate}} <br />

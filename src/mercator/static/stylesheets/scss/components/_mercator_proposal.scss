@@ -383,8 +383,8 @@ $image-margin: 11px;
 }
 
 .mercator-proposal-budget-col {
+    @include inline-block;
     color: $color-text-introvert;
-    float: left;
     margin-bottom: 20px / $font-size-normal * 1em;
     padding-right: 2em;
 

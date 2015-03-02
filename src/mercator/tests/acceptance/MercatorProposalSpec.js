@@ -3,7 +3,7 @@
 var shared = require("./core/shared.js");
 var MercatorProposalFormPage = require("./MercatorProposalFormPage.js");
 var MercatorProposalListing = require("./MercatorProposalListing.js");
-
+var MercatorProposalDetailPage = require("./MercatorProposalDetailPage.js");
 
 describe("mercator proposal form", function() {
     afterEach(function() {
@@ -58,8 +58,125 @@ describe("mercator proposal form", function() {
         page.fillValid();
         page.submitButton.click();
         expect(browser.getCurrentUrl()).not.toContain("@create");
-        expect(element(by.css("adh-mercator-proposal-detail-view .mercator-proposal-cover-header"))
-            .getText()).toContain("protitle");
+
+        var detailPage = new MercatorProposalDetailPage();
+
+        // proposal pitch
+        expect(detailPage.title.getText()).toContain("protitle");
+        expect(detailPage.teaser.getText()).toBe("proteaser");
+        expect(detailPage.requestedFunding.getText()).toContain("1,000");
+        expect(detailPage.budget.getText()).toContain("1,200");
+        expect(detailPage.locationSpecific1.getText()).toContain("Bonn");
+        expect(detailPage.locationSpecific2.getText()).toContain("Ruhr Gebiet, Germany");
+
+        // proposal whos
+        expect(detailPage.userInfo.getText()).toContain("pita pasta");
+        expect(detailPage.organizationName.getText()).toContain("organization name");
+        expect(detailPage.organizationCountry.getText()).toContain("France");
+        expect(detailPage.organizationNonProfit.getText()).toContain("Non Profit");
+
+        // proposal details
+        expect(detailPage.description.getText()).toBe("prodescription");
+        expect(detailPage.story.getText()).toBe("story");
+
+        // proposal goals and vision
+        expect(detailPage.outcome.getText()).toBe("success");
+        expect(detailPage.steps.getText()).toContain("plan");
+        expect(detailPage.addedValue.getText()).toContain("relevance");
+        expect(detailPage.partners.getText()).toContain("partners");
+
+        // proposal additional information
+        expect(detailPage.experience.getText()).toContain("experience");
+    });
+
+    it("can be commented by the contributor", function() {
+        shared.loginContributor();
+
+        var list = new MercatorProposalListing().get();
+        var page = list.getDetailPage(0);
+        var commentContent = "some comment on the proposal";
+        var introCommentPage = page.getCommentPage("introduction");
+        var comment = introCommentPage.createComment(commentContent);
+
+        expect(introCommentPage.getCommentText(comment)).toBe(commentContent);
+    });
+
+    it("can be upvoted by the annotator", function() {
+        shared.loginAnnotator();
+
+        var list = new MercatorProposalListing().get();
+        var page = list.getDetailPage(0);
+
+        expect(page.rateDifference.getText()).toEqual("0");
+        page.rateWidget.click();
+        expect(page.rateDifference.getText()).toEqual("+1");
+    });
+
+    it("can be downvoted by the annotator", function() {
+        shared.loginAnnotator();
+
+        var list = new MercatorProposalListing().get();
+        var page = list.getDetailPage(0);
+
+        // annotator has upvoted once in the previous test
+        expect(page.rateDifference.getText()).toEqual("+1");
+        page.rateWidget.click();
+        expect(page.rateDifference.getText()).toEqual("0");
+    });
+
+    it("can be upvoted and then downvoted by the annotator", function() {
+        shared.loginAnnotator();
+
+        var list = new MercatorProposalListing().get();
+        var page = list.getDetailPage(0);
+
+        expect(page.rateDifference.getText()).toEqual("0");
+        page.rateWidget.click();
+        expect(page.rateDifference.getText()).toEqual("+1");
+        page.rateWidget.click();
+    });
+
+    it("can be upvoted by the contributor", function() {
+        shared.loginContributor();
+
+        var list = new MercatorProposalListing().get();
+        var page = list.getDetailPage(0);
+
+        expect(page.rateDifference.getText()).toEqual("0");
+        page.rateWidget.click();
+        expect(page.rateDifference.getText()).toEqual("+1");
+    });
+
+    it("can be downvoted by the contributor", function() {
+        shared.loginContributor();
+
+        var list = new MercatorProposalListing().get();
+        var page = list.getDetailPage(0);
+
+        // contributor has upvoted once in the previous test
+        expect(page.rateDifference.getText()).toEqual("+1");
+        page.rateWidget.click();
+        expect(page.rateDifference.getText()).toEqual("0");
+    });
+
+    it("can be upvoted and then downvoted by the contributor", function() {
+        shared.loginContributor();
+
+        var list = new MercatorProposalListing().get();
+        var page = list.getDetailPage(0);
+
+        expect(page.rateDifference.getText()).toEqual("0");
+        page.rateWidget.click();
+        expect(page.rateDifference.getText()).toEqual("+1");
+        page.rateWidget.click();
+    });
+
+    it("can not be rated by anonymous", function() {
+        var list = new MercatorProposalListing().get();
+        var page = list.getDetailPage(0);
+
+        page.rateWidget.click();
+        expect(browser.getCurrentUrl()).toContain("login");
     });
 
     it("allows creator to edit existing proposals (depends on submit)", function() {
@@ -118,16 +235,57 @@ describe("column navigation (depends on created proposal)", function() {
         expect(shared.hasClass(column2, "is-show"));
         expect(shared.hasClass(column3, "is-show"));
 
-        column3.all(by.css('.moving-column-menu-nav a')).last().click();
+        column3.all(by.css(".moving-column-menu-nav a")).last().click();
 
         expect(shared.hasClass(column1, "is-show"));
         expect(shared.hasClass(column2, "is-show"));
         expect(shared.hasClass(column3, "is-hide"));
 
-        column2.all(by.css('.moving-column-menu-nav a')).last().click();
+        column2.all(by.css(".moving-column-menu-nav a")).last().click();
 
         expect(shared.hasClass(column1, "is-show"));
         expect(shared.hasClass(column2, "is-hide"));
         expect(shared.hasClass(column3, "is-hide"));
+    });
+
+    it("allows a single column design when the screen size is small", function() {
+        var list = new MercatorProposalListing().get();
+        var proposal = list.getDetailPage(0);
+
+        var leftColumn = element.all(by.css("adh-moving-column div.moving-column"))
+                         .first();
+
+        expect(shared.hasClass(leftColumn, "is-show"));
+
+        // if using a tiling window manager, be sure your browser
+        // window is floating otherwise the following call won't work
+        browser.driver.manage().window().setSize(640, 480);
+        expect(shared.hasClass(leftColumn, "is-collapse"));
+
+        browser.driver.manage().window().setSize(1024, 1280);
+        expect(shared.hasClass(leftColumn, "is-show"));
+    });
+});
+
+describe("space navigation", function() {
+    it("content of comment being written is kept when switching", function() {
+        shared.loginAnnotator();
+
+        var list = new MercatorProposalListing().get();
+        var proposal = list.getDetailPage(0);
+        var introComment = proposal.getCommentPage("introduction");
+        var commentMsg = "a comment about the intro";
+
+        introComment.fillComment(commentMsg);
+
+        var userSpaceButton = element(by.css(".space-switch-user"));
+        userSpaceButton.click();
+
+        var contentSpaceButton = element(by.css(".space-switch-content"));
+
+        contentSpaceButton.click();
+
+        expect(element(by.css("adh-comment-create form textarea"))
+               .getAttribute("value")).toBe(commentMsg);
     });
 });

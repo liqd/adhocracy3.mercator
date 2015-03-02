@@ -20,11 +20,12 @@ export var register = () => {
             var adhEventManagerClassMock;
             var adhEventManagerMocks;
             var adhRawWebSocketMock;
+            var eventOff;
 
             beforeEach(() => {
+                eventOff = jasmine.createSpy("eventOff");
                 adhEventManagerClassMock = function() {
-                    this.on = jasmine.createSpy("adhEventManager.on");
-                    this.off = jasmine.createSpy("adhEventManager.off");
+                    this.on = jasmine.createSpy("adhEventManager.on").and.returnValue(eventOff);
                     this.trigger = jasmine.createSpy("adhEventManager.trigger");
                     adhEventManagerMocks.push(this);
                 };
@@ -53,19 +54,14 @@ export var register = () => {
             it("sends an unsubscription if all registrations have been unregistered", () => {
                 var resource = "/adhocracy/sidty";
                 expect(adhRawWebSocketMock.send.calls.count()).toEqual(0);
-                var id1 = service.register(resource, () => null);
+                var off1 = service.register(resource, () => null);
                 expect(adhRawWebSocketMock.send.calls.count()).toEqual(1);
-                var id2 = service.register(resource, () => null);
+                var off2 = service.register(resource, () => null);
                 expect(adhRawWebSocketMock.send.calls.count()).toEqual(1);
-                service.unregister(resource, id1);
+                off1();
                 expect(adhRawWebSocketMock.send.calls.count()).toEqual(1);
-                service.unregister(resource, id2);
+                off2();
                 expect(adhRawWebSocketMock.send.calls.count()).toEqual(2);
-            });
-
-            it("throws on unregistration of a not-subscribed resource", () => {
-                console.log((<any>service).registrations);
-                expect(() => service.unregister("/adhocracy/somethingelse", 0)).toThrow();
             });
 
             it("calls eventManager.trigger on event", () => {
@@ -99,8 +95,8 @@ export var register = () => {
             });
 
             it("resends all subscriptions on WebSocket open", () => {
-                var id1 = service.register("resource1", () => null);
-                service.unregister("resource1", id1);
+                var off1 = service.register("resource1", () => null);
+                off1();
                 service.register("resource2", () => null);
                 service.register("resource2", () => null);
 

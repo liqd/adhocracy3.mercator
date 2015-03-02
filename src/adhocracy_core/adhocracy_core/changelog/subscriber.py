@@ -9,8 +9,11 @@ from adhocracy_core.interfaces import IResourceSheetModified
 from adhocracy_core.interfaces import IItemVersionNewVersionAdded
 from adhocracy_core.interfaces import ISheetReferenceModified
 from adhocracy_core.interfaces import IResourceCreatedAndAdded
+from adhocracy_core.interfaces import VisibilityChange
 from adhocracy_core.utils import get_visibility_change
 from adhocracy_core.sheets.metadata import IMetadata
+from adhocracy_core.utils import find_graph
+from adhocracy_core.utils import list_resource_with_descendants
 
 
 def add_changelog_created(event):
@@ -45,12 +48,17 @@ def _increment_changed_descendants_counter(context):
 
 def add_changelog_backrefs(event):
     """Add changed_backrefs message to the transaction_changelog."""
-    changed_backrefs_is_modified = _add_changelog(event.registry, event.object,
+    _add_changelog_backrefs_for_resource(event.object, event.registry)
+
+
+def _add_changelog_backrefs_for_resource(resource: IResource,
+                                         registry: Registry):
+    changed_backrefs_is_modified = _add_changelog(registry, resource,
                                                   key='changed_backrefs',
                                                   value=True)
     if changed_backrefs_is_modified:
-        _increment_changed_backrefs_counter(event.object)
-    _add_changed_descendants_to_all_parents(event.registry, event.object)
+        _increment_changed_backrefs_counter(resource)
+    _add_changed_descendants_to_all_parents(registry, resource)
 
 
 def _increment_changed_backrefs_counter(context):
@@ -91,8 +99,21 @@ def _add_changelog(registry: Registry, resource: IResource, key: str,
 def add_changelog_visibility(event):
     """Add new visibility message to the transaction_changelog."""
     visibility = get_visibility_change(event)
-    _add_changelog(event.registry, event.object, key='visibility',
-                   value=visibility)
+    value_changed = _add_changelog(event.registry, event.object,
+                                   key='visibility', value=visibility)
+    if value_changed and visibility in (VisibilityChange.concealed,
+                                        VisibilityChange.revealed):
+        _mark_referenced_resources_as_changed(event.object, event.registry)
+
+
+def _mark_referenced_resources_as_changed(resource: IResource,
+                                          registry: Registry):
+    graph = find_graph(resource)
+    resource_and_descendants = list_resource_with_descendants(resource)
+    for res in resource_and_descendants:
+        references = graph.get_references(res)
+        for ref in references:
+            _add_changelog_backrefs_for_resource(ref.target, registry)
 
 
 def includeme(config):

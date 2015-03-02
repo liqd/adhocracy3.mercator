@@ -13,11 +13,14 @@ export class EventManager {
         return this.nextID++;
     }
 
-    public on(event : string, handler : (arg : any) => void) : number {
+    public on(event : string, handler : (arg : any) => void) : Function {
         this.handlers[event] = this.handlers[event] || {};
         var id = this.getNextID();
         this.handlers[event][id] = handler;
-        return id;
+
+        return () => {
+            this.off(event, id);
+        };
     }
 
     public off(event? : string, id? : number) : void {

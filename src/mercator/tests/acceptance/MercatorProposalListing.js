@@ -4,18 +4,8 @@ var path = require("path");
 
 var shared = require("./core/shared.js");
 var MercatorProposalFormPage = require("./MercatorProposalFormPage.js");
-
-
-var MercatorProposalDetailPage = function() {
-    this.column = element(by.tagName("adh-mercator-proposal-detail-column"));
-    this.coverCommentsButton = element(by.css('.mercator-proposal-cover-show-comments'));
-    this.editButton = this.column.element(by.cssContainingText("a", "edit"));
-
-    this.getEditPage = function() {
-        this.editButton.click();
-        return new MercatorProposalFormPage();
-    };
-};
+var EmbeddedCommentsPage = require("./core/EmbeddedCommentsPage.js");
+var MercatorProposalDetailPage = require("./MercatorProposalDetailPage.js");
 
 var MercatorProposalListing = function() {
     this.listing = element(by.tagName("adh-mercator-proposal-listing"));
@@ -38,4 +28,4 @@ var MercatorProposalListing = function() {
     };
 };
 
-module.exports = MercatorProposalListing;
+module.exports = MercatorProposalListing

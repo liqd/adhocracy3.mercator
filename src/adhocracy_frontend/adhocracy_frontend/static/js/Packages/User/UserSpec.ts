@@ -73,45 +73,46 @@ export var register = () => {
                 expect(elementMock.on).toHaveBeenCalledWith("storage", jasmine.any(Function));
             });
 
-            describe("on storage", () => {
-                var fn;
-                var eventMock;
-
+            describe("updateSessionFromStorage", () => {
                 beforeEach(() => {
                     spyOn(adhUser, "enableToken");
                     spyOn(adhUser, "deleteToken");
-
-                    var args = elementMock.on.calls.mostRecent().args;
-                    expect(args[0]).toBe("storage");
-                    fn = <any>args[1];
-                    eventMock = {
-                        originalEvent: {
-                            key: "user-session",
-                            newValue: JSON.stringify({
-                                "user-path": "huhu",
-                                "user-token": "huhu"
-                            })
-                        }
-                    };
                 });
 
                 it("calls 'enableToken' if 'user-token' and 'user-path' exist in storage", (done) => {
-                    windowMock.localStorage.getItem.and.returnValue("huhu");
-                    fn(eventMock);
-                    _.defer(() => {
+                    var sessionValue = JSON.stringify({
+                        "user-path": "huhu",
+                        "user-token": "huhu"
+                    });
+                    (<any>adhUser).updateSessionFromStorage(sessionValue).then((success) => {
                         expect(adhUser.enableToken).toHaveBeenCalledWith("huhu", "huhu");
+                        expect(success).toBe(true);
                         done();
                     });
                 });
 
                 it("calls 'deleteToken' if neither 'user-token' nor 'user-path' exist in storage", (done) => {
-                    windowMock.localStorage.getItem.and.returnValue(null);
-                    fn(eventMock);
+                    (<any>adhUser).updateSessionFromStorage(null).then((success) => {
+                        expect(adhUser.deleteToken).toHaveBeenCalled();
+                        expect(success).toBe(false);
+                        done();
+                    });
                     _.defer(() => {
                         expect(rootScopeMock.$apply).toHaveBeenCalled();
                         var callback = rootScopeMock.$apply.calls.mostRecent().args[0];
                         callback();
+                    });
+                });
+
+                it("calls 'deleteToken' if the backend does not accept the user-token", (done) => {
+                    httpMock.head.and.returnValue(q.reject());
+                    var sessionValue = JSON.stringify({
+                        "user-path": "huhu",
+                        "user-token": "huhu"
+                    });
+                    (<any>adhUser).updateSessionFromStorage(sessionValue).then((success) => {
                         expect(adhUser.deleteToken).toHaveBeenCalled();
+                        expect(success).toBe(false);
                         done();
                     });
                 });

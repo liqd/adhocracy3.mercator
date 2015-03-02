@@ -443,7 +443,8 @@ def app_settings(request) -> dict:
     settings['mail.default_sender'] = 'substanced_demo@example.com'
     settings['adhocracy.abuse_handler_mail'] \
         = 'abuse_handler@unconfigured.domain'
-    settings['adhocracy.message_user_subject'] = 'Adhocracy Info: {}'
+    settings['adhocracy.message_user_subject'] =\
+        '[{site_name}] Message from {sender_name}: {title}'
     return settings
 
 

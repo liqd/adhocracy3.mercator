@@ -38,6 +38,33 @@ class TestHandleError400ColanderInvalid:
         assert json.loads(inst.body.decode()) == wanted
 
 
+class TestHandleError400URLDecodeError:
+
+    def make_one(self, error, request):
+        from adhocracy_core.rest.exceptions import handle_error_400_url_decode_error
+        return handle_error_400_url_decode_error(error, request)
+
+    def test_render_exception_error(self, request_):
+        from cornice.util import _JSONError
+        from pyramid.exceptions import URLDecodeError
+        import json
+        try:
+            b'\222'.decode()
+            assert False
+        except UnicodeDecodeError as err:
+            error = URLDecodeError(err.encoding, err.object,
+                                   err.start,err.end, err.reason)
+            inst = self.make_one(error, request_)
+
+            assert isinstance(inst, _JSONError)
+            assert inst.status == '400 Bad Request'
+            wanted = {'status': 'error',
+                      'errors': [{'location': 'url',
+                                  'name': '',
+                                  'description': "'utf-8' codec can't decode byte 0x92 in position 0: invalid start byte"}]}
+            assert json.loads(inst.body.decode()) == wanted
+
+
 class TestHandleError500Exception:
 
     def make_one(self, error, request_):

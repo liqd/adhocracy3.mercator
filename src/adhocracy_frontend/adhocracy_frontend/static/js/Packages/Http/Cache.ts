@@ -10,7 +10,7 @@ import AdhWebSocket = require("../WebSocket/WebSocket");
 import AdhHttp = require("./Http");
 
 export interface IHttpCacheItem {
-    wshandle : number;
+    wsOff : Function;
     promises : {[query : string] : ng.IPromise<any>};
 }
 
@@ -48,7 +48,7 @@ export class Service {
             deleteOnExpire: "aggressive",
             recycleFreq: 5000, // milliseconds
             onExpire: (key, value) => {
-                this.adhWebSocket.unregister(key, value.wshandle);
+                value.wsOff();
             }
         });
 
@@ -61,8 +61,8 @@ export class Service {
     public invalidate(path : string) : void {
         var cached = this.cache.get(path);
         if (typeof cached !== "undefined") {
-            if (typeof cached.wshandle !== "undefined") {
-                this.adhWebSocket.unregister(path, cached.wshandle);
+            if (typeof cached.wsOff !== "undefined") {
+                cached.wsOff();
             }
             this.cache.remove(path);
             if (this.debug) { console.log("invalidate: " + path); };
@@ -101,14 +101,14 @@ export class Service {
 
         var cached = this.cache.get(path);
         if (typeof cached === "undefined") {
-            var wshandle;
+            var wsOff : Function;
             if (!_.contains(this.nonResourceUrls, path)) {
-                wshandle = this.adhWebSocket.register(path, (msg) => {
+                wsOff = this.adhWebSocket.register(path, (msg) => {
                     this.invalidate(path);
                 });
             }
             cached = {
-                wshandle: wshandle,
+                wsOff: wsOff,
                 promises: {}
             };
             this.cache.put(path, cached);

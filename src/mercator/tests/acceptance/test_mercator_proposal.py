@@ -127,7 +127,6 @@ def fill_all(browser):
 
     browser.find_by_name('finance-budget').first.fill(1000)
     browser.find_by_name('finance-requested-funding').first.fill(1000)
-    browser.find_by_name('finance-granted').first.check()
 
     browser.find_by_name('experience').first.fill('experience')
     browser.find_by_name('heard-from-colleague').first.check()

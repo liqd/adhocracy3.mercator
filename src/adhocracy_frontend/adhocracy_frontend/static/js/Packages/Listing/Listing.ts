@@ -71,7 +71,7 @@ export interface ListingScope<Container> extends ng.IScope {
     frontendOrderPredicate : IPredicate;
     frontendOrderReverse : boolean;
     update : (boolean?) => ng.IPromise<void>;
-    wshandle : number;
+    wsOff : Function;
     clear : () => void;
     onCreate : () => void;
 }
@@ -97,9 +97,9 @@ export class Listing<Container extends ResourcesBase.Resource> {
         var _class = (<any>_self).constructor;
 
         var unregisterWebsocket = (scope) => {
-            if (typeof scope.poolPath !== "undefined" && typeof scope.wshandle !== "undefined") {
-                adhWebSocket.unregister(scope.poolPath, scope.wshandle);
-                scope.wshandle = undefined;
+            if (typeof scope.wsOff !== "undefined") {
+                scope.wsOff();
+                scope.wsOff = undefined;
             }
         };
 
@@ -151,6 +151,9 @@ export class Listing<Container extends ResourcesBase.Resource> {
                             });
                         });
                     }
+                    if ($scope.sort) {
+                        params["sort"] = $scope.sort;
+                    }
                     return adhHttp.get($scope.path, params, warmup).then((container) => {
                         $scope.container = container;
                         $scope.poolPath = _self.containerAdapter.poolPath($scope.container);
@@ -200,7 +203,7 @@ export class Listing<Container extends ResourcesBase.Resource> {
                         // that is not possible.
                         $scope.update(true).then(() => {
                             try {
-                                $scope.wshandle = adhWebSocket.register($scope.poolPath, () => $scope.update());
+                                $scope.wsOff = adhWebSocket.register($scope.poolPath, () => $scope.update());
                             } catch (e) {
                                 console.log(e);
                                 console.log("Will continue on resource " + $scope.poolPath + " without server bind.");

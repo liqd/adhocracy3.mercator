@@ -128,7 +128,7 @@ The menu should always have the same state as its columns.
     &.is-collapse {
         background-color: $color-background-base;
         border: 2px solid $color-structure-normal;
-        border-width: 2px 0 2px 2px;
+        border-width: 2px 2px 2px 0;
         font-size: $font-size-small;
         text-align: center;
 

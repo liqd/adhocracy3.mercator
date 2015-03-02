@@ -22,11 +22,11 @@ Hallo ${name},
 
 vielen Dank für Deine Registrierung auf ${site_name}.
 
-Diese E-Mail dient der Validierung deiner Identität. Bitte
-nutze den folgenden Link um dein Nutzerkonto zu aktivieren.
+Diese E-Mail dient der Validierung Deiner Identität. Bitte
+nutze den folgenden Link um Dein Nutzerkonto zu aktivieren.
 
 ${frontend_url}${activation_path}
 
-Wir wünschen Dir viel Spaß und Inspiration.
+Wir wünschen Dir viel Spaß und Inspiration!
 
 Dein "${site_name}"-Team

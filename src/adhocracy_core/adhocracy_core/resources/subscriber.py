@@ -14,6 +14,7 @@ from adhocracy_core.interfaces import ISheet
 from adhocracy_core.interfaces import IResourceCreatedAndAdded
 from adhocracy_core.interfaces import ISheetReferenceAutoUpdateMarker
 from adhocracy_core.interfaces import ISheetReferenceNewVersion
+from adhocracy_core.interfaces import IResourceSheetModified
 from adhocracy_core.resources.principal import IGroup
 from adhocracy_core.resources.principal import IUser
 from adhocracy_core.sheets.principal import IPermissions
@@ -25,10 +26,29 @@ from adhocracy_core.utils import get_sheet
 from adhocracy_core.utils import get_sheet_field
 from adhocracy_core.utils import get_iresource
 from adhocracy_core.utils import get_last_version
+from adhocracy_core.utils import get_modification_date
+from adhocracy_core.utils import get_user
 from adhocracy_core.sheets.versions import IVersionable
+from adhocracy_core.sheets.metadata import IMetadata
 
 
 logger = getLogger(__name__)
+
+
+def update_modification_date_modified_by(event):
+    """Update the IMetadata fields `modified_by` and `modification_date`."""
+    sheet = get_sheet(event.object, IMetadata, registry=event.registry)
+    request = event.request
+    appstruct = {}
+    appstruct['modification_date'] = get_modification_date(event.registry)
+    if request is not None:
+        appstruct['modified_by'] = get_user(request)
+    sheet.set(appstruct,
+              send_event=False,
+              registry=event.registry,
+              request=request,
+              omit_readonly=False,
+              )
 
 
 def user_created_and_added_subscriber(event):
@@ -187,3 +207,6 @@ def includeme(config):
     config.add_subscriber(user_created_and_added_subscriber,
                           IResourceCreatedAndAdded,
                           interface=IUser)
+    config.add_subscriber(update_modification_date_modified_by,
+                          IResourceSheetModified,
+                          isheet=IMetadata)

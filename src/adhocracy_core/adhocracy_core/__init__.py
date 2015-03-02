@@ -37,6 +37,8 @@ def add_after_commit_hooks(request):
     from adhocracy_core.websockets.client import \
         send_messages_after_commit_hook
     from adhocracy_core.changelog import clear_changelog_after_commit_hook
+    from adhocracy_core.changelog import \
+        clear_modification_date_after_commit_hook
     current_transaction = transaction.get()
     registry = request.registry
     # Order matters here
@@ -46,6 +48,8 @@ def add_after_commit_hooks(request):
                                            args=(registry,))
     current_transaction.addAfterCommitHook(clear_changelog_after_commit_hook,
                                            args=(registry,))
+    current_transaction.addAfterCommitHook(
+        clear_modification_date_after_commit_hook, args=(registry,))
 
 
 def includeme(config):

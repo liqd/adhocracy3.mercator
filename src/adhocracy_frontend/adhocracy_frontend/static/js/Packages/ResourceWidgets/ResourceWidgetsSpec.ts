@@ -100,6 +100,7 @@ export var register = () => {
             var adhPreliminaryNamesMock;
             var resourceWidget;
             var instanceMock;
+            var eventOff;
 
             beforeEach(() => {
                 adhHttpMock = jasmine.createSpyObj("adhHttp", ["get"]);
@@ -114,7 +115,9 @@ export var register = () => {
                         "triggerSetMode"]),
                     deferred: q.defer()
                 };
-                instanceMock.wrapper.eventManager = jasmine.createSpyObj("eventManager", ["on", "off", "trigger"]);
+                eventOff = jasmine.createSpy("eventOff");
+                instanceMock.wrapper.eventManager = jasmine.createSpyObj("eventManager", ["on", "trigger"]);
+                instanceMock.wrapper.eventManager.on.and.returnValue(eventOff);
                 instanceMock.wrapper.triggerSubmit.and.returnValue(q.when());
 
                 resourceWidget = new AdhResourceWidgets.ResourceWidget(adhHttpMock, adhPreliminaryNamesMock, <any>q);
@@ -158,9 +161,9 @@ export var register = () => {
                         expect(resourceWidget.update).toHaveBeenCalled();
                     });
 
-                    describe("on $delete", () => {
+                    describe("on $destroy", () => {
                         beforeEach(() => {
-                            var fn = getArgsByFirst(scopeMock.$on, "$delete")[0][1];
+                            var fn = getArgsByFirst(scopeMock.$on, "$destroy")[0][1];
                             instance.deferred.resolve = jasmine.createSpy("resolve");
                             fn("event");
                         });
@@ -170,7 +173,7 @@ export var register = () => {
                         });
 
                         it("unregisters all listeners on wrapper.eventManager", () => {
-                            expect(instance.wrapper.eventManager.off.calls.count()).toBe(4);
+                            expect(eventOff.calls.count()).toBe(4);
                         });
                     });
 

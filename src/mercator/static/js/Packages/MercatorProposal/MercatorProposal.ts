@@ -172,6 +172,7 @@ export interface IScope extends AdhResourceWidgets.IResourceWidgetScope {
     commentableUrl : string;
     $flow? : Flow;
     create : boolean;
+    financialPlanTemplate : string;
 }
 
 export interface IControllerScope extends IScope {
@@ -302,24 +303,36 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
         var directive = super.createDirective();
         directive.scope.poolPath = "@";
         directive.scope.create = "@";
-        directive.controller = ["adhTopLevelState", "$scope", (adhTopLevelState : AdhTopLevelState.Service, $scope : IScope) => {
-            adhTopLevelState.on("proposalUrl", (proposalVersionUrl) => {
-                if (!proposalVersionUrl) {
-                    $scope.selectedState = "";
-                } else if (proposalVersionUrl === $scope.path) {
-                    $scope.selectedState = "is-selected";
-                } else {
-                    $scope.selectedState = "is-not-selected";
-                }
-            });
-            adhTopLevelState.bind("commentableUrl", $scope);
-        }];
         return directive;
     }
 
     public link(scope, element, attrs, wrapper) {
         var instance = super.link(scope, element, attrs, wrapper);
+
         instance.scope.$flow = this.flowFactory.create();
+
+        scope.$watch(() => this.adhConfig.locale, (locale) => {
+            var financialPlanUrl : string;
+
+            if (locale === "de") {
+                financialPlanUrl = this.adhConfig.custom["financial_plan_url_de"];
+            } else {
+                financialPlanUrl = this.adhConfig.custom["financial_plan_url_en"];
+            }
+            scope.financialPlanTemplate = "<a href=\"" + financialPlanUrl + "\" target=\"_blank\">{{content}}</a>";
+        });
+
+        scope.$on("$destroy", this.adhTopLevelState.on("proposalUrl", (proposalVersionUrl) => {
+            if (!proposalVersionUrl) {
+                scope.selectedState = "";
+            } else if (proposalVersionUrl === scope.path) {
+                scope.selectedState = "is-selected";
+            } else {
+                scope.selectedState = "is-not-selected";
+            }
+        }));
+        scope.$on("$destroy", this.adhTopLevelState.bind("commentableUrl", scope));
+
         return instance;
     }
 
@@ -876,7 +889,7 @@ export var listItem = (adhConfig : AdhConfig.IService, adhHttp : AdhHttp.Service
         scope: {
             path: "@"
         },
-        link: (scope) => {
+        link: (scope, element) => {
             scope.data  = {};
             adhHttp.get(scope.path).then((proposal) => {
                 scope.data.user_info = {
@@ -900,10 +913,11 @@ export var listItem = (adhConfig : AdhConfig.IService, adhHttp : AdhHttp.Service
                 });
                 adhHttp.get(proposal.data[SIMercatorSubResources.nick].finance).then((finance) => {
                     scope.data.finance = {
-                        budget: finance.data[SIMercatorFinance.nick].budget
+                        budget: finance.data[SIMercatorFinance.nick].budget,
+                        requested_funding: finance.data[SIMercatorFinance.nick].requested_funding
                     };
                 });
-                adhTopLevelState.on("proposalUrl", (proposalVersionUrl) => {
+                scope.$on("$destroy", adhTopLevelState.on("proposalUrl", (proposalVersionUrl) => {
                     if (!proposalVersionUrl) {
                         scope.selectedState = "";
                     } else if (proposalVersionUrl === scope.path) {
@@ -911,7 +925,7 @@ export var listItem = (adhConfig : AdhConfig.IService, adhHttp : AdhHttp.Service
                     } else {
                         scope.selectedState = "is-not-selected";
                     }
-                });
+                }));
             });
 
             countSupporters(adhHttp, AdhUtil.parentPath(scope.path) + "rates/", scope.path).then((count) => {
@@ -1096,12 +1110,7 @@ export var register = (angular) => {
             };
 
             $scope.showFinanceGrantedInfo = () : boolean => {
-                if ($scope.data.finance && $scope.data.finance.other_sources) {
-                    if ($scope.data.finance.other_sources !== "") {
-                        return true;
-                    }
-                }
-                return false;
+                return ($scope.data.finance && $scope.data.finance.other_sources && $scope.data.finance.other_sources !== "");
             };
 
             var imageExists = () => {

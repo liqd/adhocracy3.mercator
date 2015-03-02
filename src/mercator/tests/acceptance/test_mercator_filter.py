@@ -16,7 +16,7 @@ class TestMercatorFilter(object):
         return sidebar[1].find_by_tag('li')
 
     @fixture(scope='class')
-    def budgets(self, browser, sidebar):
+    def requested_fundings(self, browser, sidebar):
         return sidebar[2].find_by_tag('li')
 
     @fixture(scope='class')
@@ -40,34 +40,34 @@ class TestMercatorFilter(object):
         locations[-1].find_by_css('a').first.click()
         assert wait(lambda: is_filtered(browser, proposals))
 
-    def test_filter_budget(self, browser, budgets, proposals):
-        for budget in budgets:
-            budget.find_by_css('a').first.click()
+    def test_filter_requested_funding(self, browser, requested_fundings, proposals):
+        for requested_funding in requested_fundings:
+            requested_funding.find_by_css('a').first.click()
             assert wait(lambda:
-                is_filtered(browser, proposals, budget=budget))
+                is_filtered(browser, proposals, requested_funding=requested_funding))
 
-    def test_unfilter_budget(self, browser, budgets, proposals):
-        budgets[-1].find_by_css('a').first.click()
+    def test_unfilter_requested_funding(self, browser, requested_fundings, proposals):
+        requested_fundings[-1].find_by_css('a').first.click()
         assert wait(lambda: is_filtered(browser, proposals))
 
-    def test_filter_combinations(self, browser, locations, budgets, proposals):
+    def test_filter_combinations(self, browser, locations, requested_fundings, proposals):
         for location in locations:
             location.find_by_css('a').first.click()
-            for budget in budgets:
-                budget.find_by_css('a').first.click()
+            for requested_funding in requested_fundings:
+                requested_funding.find_by_css('a').first.click()
                 assert wait(lambda:
                     is_filtered(browser, proposals, location=location,
-                                budget=budget))
+                                requested_funding=requested_funding))
 
 
 
-def is_filtered(browser, proposals, location=None, budget=None):
+def is_filtered(browser, proposals, location=None, requested_funding=None):
     try:
         title_sheet = 'adhocracy_mercator.sheets.mercator.ITitle'
         title = lambda p: p[23]['body']['data'][title_sheet]['title']
         expected_titles = [title(p) for p in proposals
             if _verify_location(location, p) and
-            _verify_budget(budget, p)]
+            _verify_requested_funding(requested_funding, p)]
 
         proposal_list = browser.find_by_css('.moving-column-body').first.\
                                 find_by_tag('ol').first
@@ -101,27 +101,24 @@ def _verify_location(location, proposal):
     return False
 
 
-def _verify_budget(budget, proposal):
-    '''Return whether the passed proposal is of given budget.'''
+def _verify_requested_funding(requested_funding, proposal):
+    '''Return whether the passed proposal is of given requested_funding.'''
     data = proposal[4]['body']['data']
     finance = data['adhocracy_mercator.sheets.mercator.IFinance']
 
-    if budget is None:
+    if requested_funding is None:
         return True
 
-    elif budget.has_class('facet-item-5000'):
-        return 0 <= finance['budget'] <= 5000
+    elif requested_funding.has_class('facet-item-5000'):
+        return 0 <= finance['requested_funding'] <= 5000
 
-    elif budget.has_class('facet-item-10000'):
-        return 5000 <= finance['budget'] <= 10000
+    elif requested_funding.has_class('facet-item-10000'):
+        return 5000 <= finance['requested_funding'] <= 10000
 
-    elif budget.has_class('facet-item-20000'):
-        return 10000 <= finance['budget'] <= 20000
+    elif requested_funding.has_class('facet-item-20000'):
+        return 10000 <= finance['requested_funding'] <= 20000
 
-    elif budget.has_class('facet-item-50000'):
-        return 20000 <= finance['budget'] <= 50000
-
-    elif budget.has_class('facet-item-above_50000'):
-        return finance['budget'] >= 50000
+    elif requested_funding.has_class('facet-item-50000'):
+        return 20000 <= finance['requested_funding'] <= 50000
 
     return False
