@@ -234,11 +234,11 @@ export var europeanCountries = [
 "LI",
 "LT",
 "LU",
+"ME",
 "MK",
 "MT",
 "MD",
 "MC",
-"CS",
 "NL",
 "NO",
 "PL",
@@ -279,7 +279,7 @@ export var countrySelect = ($scope) => {
             },
         link: (scope) => {
 
-                scope.countries = allCountries;
+                scope.countries = europeanCountries;
 
         }
     };
@@ -287,7 +287,7 @@ export var countrySelect = ($scope) => {
 
 
 export var countryName = () => (code) => {
-    var candidates = _.filter(allCountries, (i) => i === code);
+    var candidates = _.filter(europeanCountries, (i) => i === code);
     return candidates.length !== 0 ? candidates[0] : code;
 };
 
