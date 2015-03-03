@@ -33,7 +33,9 @@
                         {{ "TR__DELETE" | translate }}
                     </a>
                 </span>
-                <adh-rate data-refers-to="{{data.path}}"></adh-rate>
+                <adh-recompile-on-change data-value="{{data.path}}" data-key="path2">
+                    <adh-rate data-refers-to="{{path2}}"></adh-rate>
+                </adh-recompile-on-change>
             </div>
         </div>
 

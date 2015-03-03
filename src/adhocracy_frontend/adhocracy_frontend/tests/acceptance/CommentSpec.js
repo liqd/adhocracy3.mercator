@@ -99,7 +99,7 @@ describe("comments", function() {
         expect(page.getCommentText(reply)).toEqual("comment 1.1b");
     });
 
-    xit("can be edited and replied - fail due to #803", function() {
+    it("can be edited and replied", function() {
         var page = new EmbeddedCommentsPage("c11").get();
         var parent = page.createComment("comment 1");
         var changedComment = page.editComment(parent, ["comment 1 - edited"]);

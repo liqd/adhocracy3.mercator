@@ -86,16 +86,12 @@ export var recompileOnChange = ($compile : ng.ICompileService) => {
                 link = {post: link};
             }
 
-            var contents = element.contents().remove();
-            var compiledContents;
-            var innerScope : ng.IScope;
-
             return {
                 pre: (link && link.pre) ? link.pre : null,
                 post: (scope : ng.IScope, element, attrs) => {
-                    if (!compiledContents) {
-                        compiledContents = $compile(contents);
-                    }
+                    var contents = element.contents().remove();
+                    var compiledContents = $compile(contents);
+                    var innerScope : ng.IScope;
 
                     scope.$watch(() => attrs["value"], (value) => {
                         if (typeof innerScope !== "undefined") {

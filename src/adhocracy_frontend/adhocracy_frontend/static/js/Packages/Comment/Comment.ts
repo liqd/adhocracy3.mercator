@@ -149,6 +149,14 @@ export class CommentResource<R extends ResourcesBase.Resource> extends AdhResour
             return this.update(instance);
         };
 
+        var originalSubmit = scope.submit;
+        scope.submit = () => {
+            return originalSubmit().then((x) => {
+                this.update(instance);
+                return x;
+            });
+        };
+
         return instance;
     }
 

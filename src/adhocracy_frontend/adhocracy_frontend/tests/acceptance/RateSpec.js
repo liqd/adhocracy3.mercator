@@ -35,9 +35,7 @@ describe("ratings", function() {
         expect(rate.element(by.css(".rate-difference")).getText()).toEqual("0");
     });
 
-    // fails when executed manually on the dev version
-    // but not when executed manually or automatically on the test version
-    xit("is not affected by the edition of the comment - issue #804", function() {
+    it("is not affected by the edition of the comment", function() {
         var page = new EmbeddedCommentsPage("c2").get();
         var comment = page.createComment("c4");
         var rate = page.getRateWidget(comment);
