@@ -1,6 +1,5 @@
 import _ = require("lodash");
 
-
 export var allCountries = [
 
 "AF",
@@ -260,7 +259,7 @@ export var europeanCountries = [
 ];
 
 
-export var countrySelect = ($scope) => {
+export var countrySelect = ($translate) => {
 
     return {
         scope: {
@@ -273,23 +272,41 @@ export var countrySelect = ($scope) => {
             (elm, attr) => {
                 attr.star = (attr.required === "required") ? "*" : "";
                 return "<select data-ng-model=\"value\" name=\"{{name}}\"" +
-                "       data-ng-options=\"c as (c | translate) for c in countries\" data-ng-required=\"required\">" +
+                "       data-ng-options=\"c.code as c.name for c in countries | orderBy: 'name'\" data-ng-required=\"required\">" +
                 "           <option value=\"\" selected>{{ 'TR__COUNTRY' | translate }}" + attr.star + "</option>" +
                 "</select>";
             },
         link: (scope) => {
 
-                scope.countries = europeanCountries;
+                var countries = new Array();
 
+                _.forEach(europeanCountries, function(index) {
+                    $translate(index).then((translated : string) => {
+                        var entry = new CountryContainer(index, translated);
+                        countries.push(entry);
+                    });
+                });
+                scope.countries = countries;
         }
     };
 };
-
 
 export var countryName = () => (code) => {
     var candidates = _.filter(europeanCountries, (i) => i === code);
     return candidates.length !== 0 ? candidates[0] : code;
 };
+
+export class CountryContainer {
+    private code : string;
+    private name : string;
+
+    constructor(code : string, name : string) {
+        this.code = code;
+        this.name = name;
+    }
+
+
+}
 
 
 /**
@@ -417,5 +434,5 @@ export var register = (angular) => {
         .filter("adhCountryName", countryName)
         .service("adhWrap", ["$interpolate", Wrap])
         .directive("adhHtmlTranslate", ["$translate", "adhWrap", htmlTranslateDirective])
-        .directive("countrySelect", ["adhConfig", countrySelect]);
+        .directive("countrySelect", ["$translate", "adhConfig", countrySelect]);
 };
