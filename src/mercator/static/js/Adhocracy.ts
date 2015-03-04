@@ -133,8 +133,14 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     }]);
     app.config(["$translateProvider", ($translateProvider) => {
         $translateProvider.useStaticFilesLoader({
-            prefix: "/static/i18n/",
-            suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
+            files: [{
+                prefix: "/static/i18n/",
+                suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
+            }, {
+                prefix: "/static/i18n/countries_",
+                suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
+            }
+            ]
         });
         $translateProvider.preferredLanguage(config.locale);
         $translateProvider.fallbackLanguage("en");
