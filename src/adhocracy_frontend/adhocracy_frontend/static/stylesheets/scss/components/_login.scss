@@ -122,7 +122,8 @@ Register Dialog.
 }
 
 .register-form,
-.login-form {
+.login-form,
+.password-reset-form {
     margin-bottom: 1em;
     text-align: center;
 
@@ -139,6 +140,17 @@ Register Dialog.
 }
 
 .login-form {
+    input[type="submit"] {
+        margin-top: 24px / $font-size-normal * 1em;
+    }
+}
+
+.password-reset-form {
+    label, p {
+        display: block;
+        text-align: left;
+    }
+
     input[type="submit"] {
         margin-top: 24px / $font-size-normal * 1em;
     }
@@ -174,7 +186,8 @@ Register Dialog.
 }
 
 .register-cancel,
-.login-cancel {
+.login-cancel,
+.password-reset-cancel {
     color: $color-text-highlight-introvert;
     display: block;
     font-size: $font-size-plus;
