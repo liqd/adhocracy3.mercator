@@ -4,6 +4,14 @@
         <a href=""
             data-ng-click="ctrl.toggleSidebar()"
             data-ng-class="{'is-active': _showSidebar}">{{ "TR__FILTERS" | translate }}</a>
+        <a href=""
+            class="moving-column-menu-nav"
+            data-ng-click="shared.setSort('rates')"
+            data-ng-class="{'is-active': (shared.sort==='rates')}">{{ "TR__SORT_BY_RATES" | translate }}</a>
+        <a href=""
+            class="moving-column-menu-nav"
+            data-ng-click="shared.setSort('item_creation_date')"
+            data-ng-class="{'is-active': shared.sort==='item_creation_date'}">{{ "TR__SORT_BY_CREATION_DATE" | translate }}</a>
     </div>
 
     <a data-ng-switch-when="collapsed" href="{{ platformUrl | adhResourceUrl:undefined:{proposalUrl: proposalUrl, movingColumns: 'is-show-show-hide'} }}">
