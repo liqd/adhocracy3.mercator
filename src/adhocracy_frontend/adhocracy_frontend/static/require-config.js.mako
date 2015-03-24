@@ -36,6 +36,7 @@ require.config({
         angularFlow: "../lib/ng-flow/dist/ng-flow.min",
         angularMessages: "../lib/angular-messages/angular-messages.min",
         flow: "../lib/flow.js/dist/flow.min",
+        leaflet: "../lib/leaflet/dist/leaflet",
         lodash: "../lib/lodash/lodash.min",
         q: "../lib/q/q",
         modernizr: "../lib2/modernizr/modernizr-2.8.3.min",

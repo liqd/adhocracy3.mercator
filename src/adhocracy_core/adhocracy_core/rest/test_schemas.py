@@ -870,10 +870,13 @@ class TestDeferredValidateResetPasswordEmail:
         validator = self._call_fut(node, {'context': context,
                                           'request': request})
         user = testing.DummyResource(active=False,
-                                     __provides__=IPasswordAuthentication)
+                                     __provides__=IPasswordAuthentication,
+                                     activate=Mock())
         mock_user_locator.get_user_by_email.return_value = user
-        with raises(colander.Invalid):
-            validator(node, 'test@email.de')
+        validator(node, 'test@email.de')
+        user.activate.assert_called
+        assert request.validated['user'] is user
+
 
 
 class TestPOSTResetPasswordRequestSchema:

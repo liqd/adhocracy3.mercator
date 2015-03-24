@@ -14,7 +14,7 @@
             data-ng-class="{'is-active': shared.sort==='item_creation_date'}">{{ "TR__SORT_BY_CREATION_DATE" | translate }}</a>
     </div>
 
-    <a data-ng-switch-when="collapsed" href="{{ platformUrl | adhResourceUrl:undefined:{proposalUrl: proposalUrl, movingColumns: 'is-show-show-hide'} }}">
+    <a data-ng-switch-when="collapsed" data-ng-href="{{ platformUrl | adhResourceUrl:undefined:{proposalUrl: proposalUrl, movingColumns: 'is-show-show-hide'} }}">
         <i class="icon-list-filled moving-column-icon"></i>
     </a>
 

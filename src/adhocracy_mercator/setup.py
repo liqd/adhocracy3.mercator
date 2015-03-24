@@ -41,5 +41,8 @@ setup(name='adhocracy_mercator',
       entry_points="""\
       [paste.app_factory]
       main = adhocracy_mercator:main
+      [console_scripts]
+      export_mercator_proposals =\
+          adhocracy_mercator.scripts.export:export_proposals
       """,
       )

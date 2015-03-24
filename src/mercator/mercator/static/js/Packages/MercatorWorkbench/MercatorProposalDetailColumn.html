@@ -1,17 +1,17 @@
 <div data-ng-switch="transclusionId">
     <div data-ng-switch-when="menu">
         <i class="icon-document moving-column-icon"></i>
-        <a data-ng-if="proposalItemOptions.POST" href="{{ proposalUrl | adhResourceUrl:'edit' }}">{{ "TR__EDIT" | translate }}</a>
+        <a data-ng-if="proposalItemOptions.POST" data-ng-href="{{ proposalUrl | adhResourceUrl:'edit' }}">{{ "TR__EDIT" | translate }}</a>
         <a href="" data-ng-click="ctrl.toggleOverlay('abuse')">{{ "TR__REPORT" | translate }}</a>
         <a href="" data-ng-click="ctrl.toggleOverlay('share')">{{ "TR__SHARE" | translate }}</a>
         <a data-ng-if="proposalItemOptions.hide" href="" data-ng-click="delete()">{{ "TR__DELETE" | translate }}</a>
 
         <div class="moving-column-menu-nav">
-            <a href="{{ platformUrl | adhResourceUrl }}" title="{{ 'TR__CLOSE' | translate }}"><i class="icon-x moving-column-menu-nav-icon"></i></a>
+            <a data-ng-href="{{ platformUrl | adhResourceUrl }}" title="{{ 'TR__CLOSE' | translate }}"><i class="icon-x moving-column-menu-nav-icon"></i></a>
         </div>
     </div>
 
-    <a data-ng-switch-when="collapsed" href="{{ proposalUrl | adhResourceUrl }}"><i class="icon-document moving-column-icon"></i></a>
+    <a data-ng-switch-when="collapsed" data-ng-href="{{ proposalUrl | adhResourceUrl }}"><i class="icon-document moving-column-icon"></i></a>
 
     <adh-recompile-on-change data-ng-switch-when="body" data-value="{{proposalUrl}}" data-key="proposalUrl">
         <adh-resource-wrapper>

@@ -60,7 +60,7 @@
         <label class="login-check">
             <div class="login-check-input">
                 <input type="checkbox" name="registerCheck" data-ng-model="input.registerCheck" required="required" />
-                {{ "TR__I_ACCEPT_THE" | translate }} <a href="{{ termsUrl }}" target="_blank">{{ "TR__TERMS_AND_CONDITIONS" | translate }}</a>
+                {{ "TR__I_ACCEPT_THE" | translate }} <a data-ng-href="{{ termsUrl }}" target="_blank">{{ "TR__TERMS_AND_CONDITIONS" | translate }}</a>
             </div>
             <span class="input-error" data-ng-show="showError(registerForm, registerForm.registerCheck, 'required')">
                 {{ "TR__ERROR_REQUIRED_TERMS_AND_CONDITIONS" | translate }}
@@ -88,6 +88,6 @@
     <a class="login-cancel" href="" ng-click="cancel()">{{ "TR__CANCEL" | translate }}</a>
     <div class="login-info">
         {{ "TR__REGISTRATION_SUPPORT" | translate }} <br />
-        <a href="mailto:{{supportEmail}}?subject=Trouble%20with%20registration">{{ supportEmail }}</a>
+        <a data-ng-href="mailto:{{supportEmail}}?subject=Trouble%20with%20registration">{{ supportEmail }}</a>
     </div>
 </div>

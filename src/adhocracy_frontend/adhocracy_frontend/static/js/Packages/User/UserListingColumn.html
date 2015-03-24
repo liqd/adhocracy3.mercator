@@ -5,7 +5,7 @@
 
     <adh-list-users data-ng-switch-when="body"></adh-list-users>
 
-    <a data-ng-switch-when="collapsed" href="{{ '/principals/users/' | adhResourceUrl:undefined:{userUrl: userUrl, movingColumns: 'is-show-show-hide'} }}">
+    <a data-ng-switch-when="collapsed" data-ng-href="{{ '/principals/users/' | adhResourceUrl:undefined:{userUrl: userUrl, movingColumns: 'is-show-show-hide'} }}">
         <i class="icon-users moving-column-icon"></i>
     </a>
 </div>

@@ -3,6 +3,7 @@
 /// <reference path="../lib/DefinitelyTyped/lodash/lodash.d.ts"/>
 /// <reference path="../lib/DefinitelyTyped/modernizr/modernizr.d.ts"/>
 /// <reference path="../lib/DefinitelyTyped/moment/moment.d.ts"/>
+/// <reference path="../lib/DefinitelyTyped/leaflet/leaflet.d.ts"/>
 /// <reference path="./_all.d.ts"/>
 
 import angular = require("angular");
@@ -17,6 +18,7 @@ import angularElastic = require("angularElastic");  if (angularElastic) { ; };
 
 import modernizr = require("modernizr");
 import moment = require("moment");
+import leaflet = require("leaflet");
 import webshim = require("polyfiller");
 
 import AdhAbuse = require("./Packages/Abuse/Abuse");
@@ -47,6 +49,8 @@ import AdhTracking = require("./Packages/Tracking/Tracking");
 import AdhUser = require("./Packages/User/User");
 import AdhUserViews = require("./Packages/User/Views");
 import AdhWebSocket = require("./Packages/WebSocket/WebSocket");
+import AdhMapping = require("./Packages/Mapping/Mapping");
+
 import AdhTemplates = require("adhTemplates");  if (AdhTemplates) { ; };
 
 webshim.setOptions("basePath", "/static/lib/webshim/js-webshim/minified/shims/");
@@ -79,6 +83,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
         "angular-data.DSCacheFactory",
         AdhComment.moduleName,
         AdhDone.moduleName,
+        AdhMapping.moduleName,
         AdhCrossWindowMessaging.moduleName,
         AdhEmbed.moduleName,
         AdhResourceArea.moduleName,
@@ -119,9 +124,17 @@ export var init = (config : AdhConfig.IService, meta_api) => {
         $locationProvider.html5Mode(true);
     }]);
     app.config(["$translateProvider", ($translateProvider) => {
-        $translateProvider.useStaticFilesLoader({
-            prefix: "/static/i18n/",
-            suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
+         $translateProvider.useStaticFilesLoader({
+            files: [{
+                prefix: "/static/i18n/core_",
+                suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
+            }, {
+                prefix: "/static/i18n/countries_",
+                suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
+            }, {
+                prefix: "/static/i18n/meinberlin_",
+                suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
+            }]
         });
         $translateProvider.preferredLanguage(config.locale);
         $translateProvider.fallbackLanguage("en");
@@ -135,6 +148,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     app.value("angular", angular);
     app.value("Modernizr", modernizr);
     app.value("moment", moment);
+    app.value("leaflet", leaflet);
 
     app.filter("signum", () => (n : number) : string => n > 0 ? "+" + n.toString() : n.toString());
 
@@ -152,6 +166,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     AdhListing.register(angular);
     AdhLocale.register(angular);
     AdhLocalSocket.register(angular);
+    AdhMapping.register(angular);
     AdhMovingColumns.register(angular);
     AdhPermissions.register(angular);
     AdhPreliminaryNames.register(angular);

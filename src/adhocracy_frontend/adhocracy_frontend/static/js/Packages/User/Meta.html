@@ -1,2 +1,2 @@
 <!-- as this is an inline directive, whitespace is relevant, including no newline at end of file
---><span data-ng-if="isAnonymous">{{name || userBasic.name}}</span><a href="{{ path | adhResourceUrl }}" data-ng-if="!isAnonymous">{{name || userBasic.name}}</a>
+--><span data-ng-if="isAnonymous">{{name || userBasic.name}}</span><a data-ng-href="{{ path | adhResourceUrl }}" data-ng-if="!isAnonymous">{{name || userBasic.name}}</a>

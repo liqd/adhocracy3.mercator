@@ -404,7 +404,7 @@ the user. The link contains the path to identify the password reset request::
 If the user clicks on this link, the frontend has to send a post request with the
 new password to the reset password end point::
 
-    >>> newest_reset_path = getfixture('newest_reset_path')
+    >>> newest_reset_path = getfixture('newest_reset_path')()
     >>> prop = {'path': newest_reset_path,
     ...         'password': 'new_password'}
     >>> resp_data = testapp.post_json('/password_reset', prop).json
@@ -413,3 +413,37 @@ new password to the reset password end point::
      'user_path': 'http://localhost/principals/users/0000008/',
      'user_token':...
 
+If the user is not activated yet::
+
+    >>> prop = {'content_type': 'adhocracy_core.resources.principal.IUser',
+    ...         'data': {
+    ...              'adhocracy_core.sheets.principal.IUserBasic': {
+    ...                  'name': 'Gerd Müller'},
+    ...              'adhocracy_core.sheets.principal.IUserExtended': {
+    ...                  'email': 'gerd@example.org'},
+    ...              'adhocracy_core.sheets.principal.IPasswordAuthentication': {
+    ...                  'password': 'EckVocUbs3'}}}
+    >>> resp_data = testapp.post_json(rest_url + "/principals/users", prop).json
+    >>> user_path = resp_data["path"]
+
+    >>> resp_data = testapp.get(user_path, status=410).json
+    >>> resp_data['reason']
+    'hidden'
+
+but does a successfull password reset::
+
+    >>> prop = {'email': 'gerd@example.org'}
+    >>> resp = testapp.post_json(rest_url + "/create_password_reset", prop)
+    >>> resp.status_code
+    200
+
+    >>> newest_reset_path = getfixture('newest_reset_path')()
+    >>> prop = {'path': newest_reset_path,
+    ...         'password': 'new_password'}
+    >>> resp_data = testapp.post_json('/password_reset', prop).json
+
+he is activated ::
+
+    >>> resp_data = testapp.get(user_path, status=200).json
+    >>> resp_data['path'] == user_path
+    True

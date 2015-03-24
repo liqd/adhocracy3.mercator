@@ -3,6 +3,7 @@
 /// <reference path="../lib/DefinitelyTyped/lodash/lodash.d.ts"/>
 /// <reference path="../lib/DefinitelyTyped/modernizr/modernizr.d.ts"/>
 /// <reference path="../lib/DefinitelyTyped/moment/moment.d.ts"/>
+/// <reference path="../lib/DefinitelyTyped/leaflet/leaflet.d.ts"/>
 /// <reference path="./_all.d.ts"/>
 
 import angular = require("angular");
@@ -18,6 +19,7 @@ import angularElastic = require("angularElastic");  if (angularElastic) { ; };
 import modernizr = require("modernizr");
 import moment = require("moment");
 import webshim = require("polyfiller");
+import leaflet = require("leaflet");
 
 import AdhAbuse = require("./Packages/Abuse/Abuse");
 import AdhConfig = require("./Packages/Config/Config");
@@ -33,6 +35,7 @@ import AdhInject = require("./Packages/Inject/Inject");
 import AdhListing = require("./Packages/Listing/Listing");
 import AdhLocale = require("./Packages/Locale/Locale");
 import AdhLocalSocket = require("./Packages/LocalSocket/LocalSocket");
+import AdhMapping = require("./Packages/Mappting/Mapping");
 import AdhMovingColumns = require("./Packages/MovingColumns/MovingColumns");
 import AdhPermissions = require("./Packages/Permissions/Permissions");
 import AdhPreliminaryNames = require("./Packages/PreliminaryNames/PreliminaryNames");
@@ -144,6 +147,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     app.value("angular", angular);
     app.value("Modernizr", modernizr);
     app.value("moment", moment);
+    app.value("leaflet", leaflet);
 
     app.filter("signum", () => (n : number) : string => n > 0 ? "+" + n.toString() : n.toString());
 
@@ -162,6 +166,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     AdhListing.register(angular);
     AdhLocale.register(angular);
     AdhLocalSocket.register(angular);
+    AdhMapping.register(angular);
     AdhMovingColumns.register(angular);
     AdhPermissions.register(angular);
     AdhPreliminaryNames.register(angular);

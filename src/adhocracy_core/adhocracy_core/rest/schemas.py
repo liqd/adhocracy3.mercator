@@ -521,10 +521,8 @@ def deferred_validate_password_reset_email(node: SchemaNode, kw: dict):
             msg = 'This user has no password to reset: {0}'.format(value)
             raise colander.Invalid(node, msg)
         if not user.active:
-            msg = 'This user is not activated yet: {0}'.format(value)
-            raise colander.Invalid(node, msg)
-        else:
-            request.validated['user'] = user
+            user.activate()
+        request.validated['user'] = user
     return validate_email
 
 
