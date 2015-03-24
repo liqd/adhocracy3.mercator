@@ -195,6 +195,10 @@ export class Listing<Container extends ResourcesBase.Resource> {
                     $scope.createPath = adhPreliminaryNames.nextPreliminary();
                 };
 
+                $scope.$watch("sort", (sort : string) => {
+                    $scope.update();
+                });
+
                 $scope.$watch("path", (newPath : string) => {
                     unregisterWebsocket($scope);
 

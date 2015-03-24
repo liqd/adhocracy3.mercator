@@ -142,6 +142,9 @@ export var mercatorProposalListingColumnDirective = (
                 ]
             }];
             scope.shared.sort = "rates";
+            scope.shared.setSort = (sort : string) => {
+                scope.shared.sort = sort;
+            };
             scope.frontendOrderReverse = true;
         }
     };

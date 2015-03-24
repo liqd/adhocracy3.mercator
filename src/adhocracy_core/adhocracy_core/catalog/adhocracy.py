@@ -32,6 +32,7 @@ class AdhocracyCatalogIndexes:
     rate = catalog.Field()
     rates = catalog.Field()
     creator = catalog.Field()
+    item_creation_date = catalog.Field()
     reference = Reference()
 
 
@@ -42,6 +43,12 @@ def index_creator(resource, default) -> str:
         return creator
     userid = resource_path(creator)
     return userid
+
+
+def index_item_creation_date(resource, default) -> str:
+    """Return creator userid value for the creator index."""
+    date = get_sheet_field(resource, IMetadata, 'item_creation_date')
+    return date
 
 
 def index_visibility(resource, default) -> [str]:
@@ -102,6 +109,11 @@ def includeme(config):
     config.add_indexview(index_creator,
                          catalog_name='adhocracy',
                          index_name='creator',
+                         context=IMetadata,
+                         )
+    config.add_indexview(index_item_creation_date,
+                         catalog_name='adhocracy',
+                         index_name='item_creation_date',
                          context=IMetadata,
                          )
     config.add_indexview(index_rate,

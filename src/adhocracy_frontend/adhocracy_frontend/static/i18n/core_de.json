@@ -105,6 +105,8 @@
     "TR__RESET": "Zurücksetzen",
     "TR__SAVE": "speichern",
     "TR__SHARE": "teilen",
+    "TR__SORT_BY_RATES": "sortieren nach Unterstützung",
+    "TR__SORT_BY_CREATION_DATE": "sortieren nach Datum",
     "TR__SPACE_CONTENT": "Inhalt",
     "TR__SPACE_USER": "Nutzer*innen",
     "TR__SUBJECT": "Betreff",
