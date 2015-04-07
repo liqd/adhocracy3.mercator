@@ -2,14 +2,17 @@ sudo: false
 language: python
 python:
   - "3.4"
+before_install:
+  - export DISPLAY=:10
+  - "sh -e /etc/init.d/xvfb start"
 install:
   - "git fetch --unshallow"
   - "python bootstrap.py --setuptools-version=12.0.4"
-  - "PATH=${TRAVIS_BUILD_DIR}/bin:${PATH} ./bin/buildout 2>/dev/null"
+  - "PATH=${TRAVIS_BUILD_DIR}/bin:${PATH} ./bin/buildout -c buildout-${BUILDOUT_TARGET}.cfg 2>/dev/null"
 script:
   - "./bin/py.test_run_unittests_with_coverage"
   - "./bin/py.test_run_all"
-  - "PATH=${TRAVIS_BUILD_DIR}/bin:${PATH} ./bin/protractor etc/protractorConfSauce.js"
+  - "PATH=${TRAVIS_BUILD_DIR}/bin:${PATH} ./bin/protractor etc/protractorConfTravis.js"
 notifications:
   email: false
 after_success:
@@ -18,11 +21,9 @@ cache:
   directories:
     - eggs
     - node_modules
-addons:
-  sauce_connect: true
 env:
-  global:
-  # SAUCE_USERNAME
-  - secure: ovz89AOVSOa0HefNp4Wbl1t5jV6nTJqQhf99klH/FAEtQRsZe5oklzi0zpDUXa1zIF18pGFLt0Bv8Nct7njp0N2fH8oItP7jmHpGwhHE8EQTWdvMq7KK3UX30JdXrFsyHTxnW8nGlNdTRcww/zn7KjwUTbja+4Y0RsCBB5HdA+w=
-  # SAUCE_ACCESS_KEY
-  - secure: Nt4lAAiTCqTGBj7nPu+Kov1MeFUaapI4swkyoDHsXGE2x6/aeDmOErOHrur5QrOQEOkqwsLPeeshuu4J+3+f3LdhnV0kRVkNMRryFqOM4I953jhgsw8B+p4KWT7/sqCT2ubCmyVcaLjNlDX+pdZIu2pT9LcEkF8tfg5zkDcf5Fw=
+  matrix:
+    - BUILDOUT_TARGET=meinberlin
+    - BUILDOUT_TARGET=mercator
+addons:
+  firefox: "34.0"

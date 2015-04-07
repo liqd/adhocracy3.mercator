@@ -11,13 +11,11 @@ omit =
     src/adhocracy_core/adhocracy_core/__init__.py
     src/adhocracy/adhocracy/scaffolds/__init__
     src/adhocracy_sample/adhocracy_sample/__init__.py
-    src/adhocracy_core/setup.py
-    src/adhocracy_mercator/setup.py
-    src/adhocracy_sample/setup.py
+    src/*/setup.py
     src/adhocracy_mercator/adhocracy_mercator/__init__.py
 source =
     src/adhocracy_core
-    src/adhocracy_mercator
+    src/${adhocracy:backend_package_name}
     src/adhocracy_sample
 
 [report]

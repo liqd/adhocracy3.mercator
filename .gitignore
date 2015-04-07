@@ -20,6 +20,7 @@ __pycache__
 /etc/compass.min.rb
 /etc/compass.rb
 /etc/hologram.yml
+/etc/coveragerc
 /python
 /develop-eggs
 /var
