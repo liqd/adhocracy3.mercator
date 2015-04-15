@@ -9,6 +9,10 @@
     }
 }
 
+.is-selected {
+    background-color: $color-text-highlight-normal;
+}
+
 .mein-berlin-kiezkassen-proposal-detail {
     .rate {
         float: right;
@@ -76,67 +80,5 @@
         @include inline-block;
         margin: 0;
         text-align: left;
-    }
-}
-
-
-/*doc
----
-title: Kiezkassen Proposal List Item
-name: mein-berlin-kiezkassen-proposal-list-item
-category: meinberlin
----
-
-```html_example
-<a href="#" class="mein-berlin-kiezkassen-proposal-list-item">
-    <h1>My Proposal</h1>
-
-    <div class="mein-berlin-kiezkassen-proposal-list-item-meta">
-        <div><i class="icon-speechbubble-unfilled"></i> 20 comments</div>
-        <div><i class="icon-voting"></i> +10 rates</div>
-        <div><i class="icon-pin-detail"></i> Tempelhof, Berlin</div>
-    </div>
-</a>
-
-<a href="#" class="mein-berlin-kiezkassen-proposal-list-item is-selected">
-    <h1>My selected Proposal</h1>
-
-    <div class="mein-berlin-kiezkassen-proposal-list-item-meta">
-        <div><i class="icon-speechbubble-unfilled"></i> 20 comments</div>
-        <div><i class="icon-voting"></i> +10 rates</div>
-        <div><i class="icon-pin-detail"></i> Tempelhof, Berlin</div>
-    </div>
-</a>
-```
-*/
-.mein-berlin-kiezkassen-proposal-list-item {
-    @include container;
-    border: 1px solid $color-structure-border;
-    color: $color-text-introvert;
-    display: block;
-    margin-bottom: 0.5em;
-    padding: 1em;
-
-    h1 {
-        @include span(first 2 of 3);
-        color: $color-text-normal;
-        margin: 0;
-        padding-right: 1.5em;
-    }
-
-    .mein-berlin-kiezkassen-proposal-list-item-meta {
-        @include span(last 1 of 3);
-        border-left: 1px solid $color-text-introvert;
-        padding-left: 1.5em;
-    }
-
-    &:hover, &:focus {
-        border-color: $color-text-highlight-normal;
-        color: $color-text-introvert;
-    }
-
-    &:active, &.is-selected {
-        border-color: $color-text-highlight-normal;
-        color: $color-text-highlight-normal;
     }
 }

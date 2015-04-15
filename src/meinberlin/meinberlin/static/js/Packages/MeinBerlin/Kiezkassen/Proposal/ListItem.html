@@ -1,9 +1,3 @@
-<a href="{{ path | adhResourceUrl }}" class="mein-berlin-kiezkassen-proposal-list-item">
-    <h1>{{ data.title }}</h1>
-
-    <div class="mein-berlin-kiezkassen-proposal-list-item-meta">
-        <div><i class="icon-speechbubble-unfilled"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</div>
-        <div><i class="icon-voting"></i> {{data.rateCount | signum}} {{ "TR__RATES" | translate }}</div>
-        <div><i class="icon-pin-detail"></i> {{data.locationText}}</div>
-    </div>
-</a>
+<div class="mein-berlin-kiezkassen-proposal-list-item">
+    <h1><a href="{{ path | adhResourceUrl }}">{{ data.title }}</a></h1>
+</div>
