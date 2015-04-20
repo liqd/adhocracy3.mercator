@@ -161,7 +161,7 @@ export var init = (config : AdhConfig.IService, meta_api) => {
     app.value("Modernizr", modernizr);
     app.value("moment", moment);
 
-    app.filter("signum", () => (n : number) : string => n > 0 ? "+" + n.toString() : n.toString());
+    app.filter("signum", () => (n : number) : string => typeof n === "number" ? n > 0 ? "+" + n.toString() : n.toString() : "0");
 
     // register our modules
     app.value("adhConfig", config);
