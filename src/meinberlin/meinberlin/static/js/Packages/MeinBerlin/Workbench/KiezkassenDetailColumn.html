@@ -1,9 +1,18 @@
 <div data-ng-switch="transclusionId">
     <div data-ng-switch-when="menu">
-        <i class="icon-process moving-column-icon"></i>
+        <div class="moving-column-tab">
+            <i class="icon-list-column moving-column-icon"></i>
+            {{ "TR__PROPOSAL_LIST" | translate }}
+        </div>
+        <div class="moving-column-menu-switch">
+            <a class="moving-column-menu-switch-item" href=""><i class="icon-list"></i></a>
+            <a class="moving-column-menu-switch-item" href=""><i class="icon-map-filled"></i></a>
+        </div>
     </div>
 
-    <a data-ng-switch-when="collapsed" data-ng-href="{{ processUrl | adhResourceUrl }}"><i class="icon-process moving-column-icon"></i></a>
+    <a class="moving-column-expand" data-ng-switch-when="collapsed" data-ng-href="{{ processUrl | adhResourceUrl }}">
+        <i class="icon-list-column moving-column-icon"></i>
+    </a>
 
     <adh-mein-berlin-kiezkassen-detail
         data-ng-switch-when="body"

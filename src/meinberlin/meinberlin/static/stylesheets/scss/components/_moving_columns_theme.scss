@@ -1,4 +1,81 @@
+.moving-column {
+    &.is-collapse {
+        background: $color-structure-normal;
+        border: 0;
+
+        .moving-column-expand {
+            color: $color-text-introvert;
+
+            &:hover, &:focus, &:active {
+                color: $color-text-highlight-normal;
+            }
+
+            .moving-column-icon {
+                margin-right: 0;
+            }
+        }
+
+    }
+
+    &.is-first-visible-child {
+        @include border-top-left-radius(10px / $font-size-small * 1em);
+    }
+
+    &.is-last-visible-child {
+        @include border-top-right-radius(10px / $font-size-small * 1em);
+    }
+}
+
 .moving-column-body {
     background: $color-background-base-introvert;
-    padding: 12px / $font-size-normal * 1em;
+    border: 0;
+    padding: (12px / $font-size-normal * 1em) (15px / $font-size-normal * 1em);
+}
+
+.moving-column-icon {
+    margin-right: 5px / $font-size-normal * 1em;
+}
+
+.moving-column-menu {
+    padding: 0;
+}
+
+.moving-column-tab {
+    @include inline-block;
+    background: $color-background-base-introvert;
+    color: $color-text-introvert;
+    float: left;
+    font-size: $font-size-small;
+    font-weight: $font-weight-extrovert;
+    padding: 0 (15px / $font-size-small * 1em);
+    text-transform: uppercase;
+    vertical-align: baseline;
+}
+
+.moving-column-menu-switch {
+    float: right;
+
+    .moving-column-menu-switch-item {
+        color: $color-text-introvert;
+        margin-right: 15px / $font-size-normal * 1em;
+
+        &:hover, &:active, &.is-active {
+            color: $color-brand-two-normal;
+        }
+    }
+}
+
+.moving-column-menu-nav {
+    .moving-column-menu-nav-button {
+        background: $color-structure-transparent;
+        color: $color-text-highlight-normal;
+        padding: 0 (15px / $font-size-small * 1em);
+        min-width: 1px;
+        vertical-align: middle;
+
+        .moving-column-menu-nav-icon {
+            font-size: 16px / $font-size-small * 1em;
+            line-height: $moving-column-menu-height / 1em * $font-size-normal / 16px * 1em;
+        }
+    }
 }

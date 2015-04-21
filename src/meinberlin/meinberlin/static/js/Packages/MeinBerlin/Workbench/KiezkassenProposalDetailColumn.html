@@ -1,13 +1,18 @@
 <div data-ng-switch="transclusionId">
     <div data-ng-switch-when="menu">
-        <i class="icon-document moving-column-icon"></i>
+        <div class="moving-column-tab">
+            <i class="icon-document moving-column-icon"></i>
+            {{ "TR__PROPOSAL" | translate }}
+        </div>
 
         <div class="moving-column-menu-nav">
             <a class="moving-column-menu-nav-button" data-ng-href="{{ processUrl | adhResourceUrl }}" title="{{ 'TR__CLOSE' | translate }}"><i class="icon-x moving-column-menu-nav-icon"></i></a>
         </div>
     </div>
 
-    <a data-ng-switch-when="collapsed" data-ng-href="{{ proposalUrl | adhResourceUrl }}"><i class="icon-document moving-column-icon"></i></a>
+    <a class="moving-column-expand" data-ng-switch-when="collapsed" data-ng-href="{{ proposalUrl | adhResourceUrl }}">
+        <i class="icon-document moving-column-icon"></i>
+    </a>
 
     <adh-mein-berlin-kiezkassen-proposal-detail
         data-ng-switch-when="body"

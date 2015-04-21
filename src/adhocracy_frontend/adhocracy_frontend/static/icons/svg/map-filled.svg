@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2985"
+   viewBox="0 0 48 48"
+   version="1.1"
+   inkscape:version="0.48.5 r10040"
+   width="100%"
+   height="100%"
+   sodipodi:docname="Map_View_Icon.svg">
+  <defs
+     id="defs11" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1054"
+     inkscape:window-height="1063"
+     id="namedview9"
+     showgrid="false"
+     inkscape:zoom="4.9166667"
+     inkscape:cx="24"
+     inkscape:cy="24"
+     inkscape:window-x="0"
+     inkscape:window-y="1095"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2985" />
+  <metadata
+     id="metadata2990">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <path
+     transform="translate(0,-0.01875)"
+     style="fill:#666666"
+     d="M 30.2,37.7 17.8,48 17.8,10.5 30.2,0 z"
+     id="polygon3309" />
+  <path
+     style="fill:#666666"
+     id="path3311"
+     d="m 32.8,-0.01875 v 37.6 l 14.7,10.4 c 0.2,0.1 0.5,0 0.5,-0.3 v -37 c 0,-0.4 -0.2,-0.9 -0.6,-1.1 l -14.6,-9.6 z"
+     inkscape:connector-curvature="0" />
+  <path
+     style="fill:#666666"
+     id="path3313"
+     d="m 0,0.38125 v 36.4 c 0,0.5 0.2,0.9 0.6,1.1 l 14.6,10 v -37.9 l -14.7,-9.9 c -0.2,-0.2 -0.5,0 -0.5,0.3 z"
+     inkscape:connector-curvature="0" />
+</svg>

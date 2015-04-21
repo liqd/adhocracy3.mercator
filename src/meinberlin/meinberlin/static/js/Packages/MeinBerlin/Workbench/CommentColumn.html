@@ -1,6 +1,9 @@
 <div data-ng-switch="transclusionId">
     <div data-ng-switch-when="menu">
-        <i class="icon-speechbubble-unfilled moving-column-icon"></i>
+        <div class="moving-column-tab">
+            <i class="icon-speechbubble-unfilled moving-column-icon"></i>
+            {{ "TR__COMMENTS" | translate }}
+        </div>
         <div class="moving-column-menu-nav">
             <a class="moving-column-menu-nav-button" data-ng-href="{{ proposalUrl | adhResourceUrl }}" title="{{ 'TR__CLOSE' | translate }}"><i class="icon-x moving-column-menu-nav-icon"></i></a>
         </div>
