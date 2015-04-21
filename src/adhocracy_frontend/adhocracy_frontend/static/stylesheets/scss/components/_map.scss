@@ -52,9 +52,25 @@
 }
 
 .map-list {
+
+    .map-list-container {
+        display: table;
+        width: 100%;
+    }
+
     .map-list-navigate {
-        float: left;
-        margin-top: 50px / $font-size-normal * 1em;
+        font-weight: bold;
+        font-size: $font-size-normal;
+
+        &:hover, &:focus {
+            text-decoration: none;
+        }
+    }
+
+    .map-list-navigate-container,
+    .map-list-scroll-container {
+        display: table-cell;
+        vertical-align: middle;
     }
 
     .map-list-navigate-next {
@@ -62,18 +78,16 @@
     }
 
     .map-list-scroll-container-inner {
-        margin: 0;
-    }
-
-    .map-list-scroll-container {
         overflow: hidden;
-        margin-top: 20px / $font-size-normal * 1em;
+        margin: (20px / $font-size-normal * 1em) 0 0;
+        vertical-align: top;
         //FIXME: remove this when we are in moving columns
         white-space: nowrap;
     }
 
     .map-list-item {
         @include inline-block;
+        vertical-align: baseline;
         width: 100%;
     }
 

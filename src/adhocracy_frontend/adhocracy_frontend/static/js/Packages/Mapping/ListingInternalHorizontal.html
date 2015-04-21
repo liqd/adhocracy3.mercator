@@ -1,0 +1,31 @@
+<div class="map-list map-list-horizontal">
+    <div class="map-list-map"></div>
+    <div class="map-list-container">
+        <div class="map-list-navigate-container">
+            <a class="map-list-navigate map-list-navigate-back" href="" data-ng-click="getPreviousItem(selectedItem);" title="{{ 'TR__PREVIOUS' | translate }}">
+            <i class="icon-chevron-prev"></i></a>
+        </div>
+        <div class="map-list-scroll-container">
+            <ol class="map-list-scroll-container-inner">
+                <li
+                    ng-repeat ="(key, item) in items"
+                    class="map-list-item map-list-item{{key}}">
+                    <div class="map-list-item-col-left">
+                        <h3 class="map-list-item-title">{{item.value.title}}</h3>
+                        <p class="map-list-item-location map-list-meta-item"><i class="map-list-meta-item-icon icon-pin-detail"></i> {{item.value.locationText}}</p>
+                    </div>
+                    <div class="map-list-item-col-right">
+                        <!-- FIXME: dummy data -->
+                        <p class="map-list-item-comments map-list-meta-item"><i class="map-list-meta-item-icon icon-speechbubble-unfilled"></i> {{ item.value.commentCount }} {{ "TR__COMMENTS" | translate }}</p>
+                        <p class="map-list-item-votes map-list-meta-item"><i class="map-list-meta-item-icon icon-voting"></i> 234 {{ "TR__VOTES" | translate }}</p>
+                        <a href="{{item.value.url | adhResourceUrl }}" class="button arrow-button">{{ "TR__MORE" | translate }}</a>
+                    </div>
+                </li>
+            </ol>
+        </div>
+        <div class="map-list-navigate-container">
+            <a class="map-list-navigate map-list-navigate-next" href="" data-ng-click="getNextItem(selectedItem);" title="{{ 'TR__NEXT' | translate }}">
+            <i class="icon-chevron-next"></i></a>
+        </div>
+    </div>
+</div>

@@ -11,13 +11,30 @@
 
     <a href="{{path | adhResourceUrl:'create_proposal'}}">{{ "TR__CREATE_PROPOSAL" | translate }}</a>
 
-    <adh-listing
-        data-path="/"
-        data-no-create-form="true"
-        data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
-        data-params="{tag: 'LAST'}"
-        data-content-type="adhocracy_meinberlin.resources.kiezkassen.IProposalVersion">
-        <adh-mein-berlin-kiezkassen-proposal-list-item data-path="{{element}}">
-        </adh-mein-berlin-kiezkassen-proposal-list-item>
-    </adh-listing>
+    <div class="mein-berlin-kiezkassen-detail-listing">
+        <a href="" data-ng-click="showMap = !showMap">toggle map</a>
+
+        <adh-listing
+            data-path="/"
+            data-ng-show="!showMap"
+            data-no-create-form="true"
+            data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
+            data-params="{tag: 'LAST'}"
+            data-content-type="adhocracy_meinberlin.resources.kiezkassen.IProposalVersion">
+            <adh-mein-berlin-kiezkassen-proposal-list-item data-path="{{element}}">
+            </adh-mein-berlin-kiezkassen-proposal-list-item>
+        </adh-listing>
+
+        <adh-map-listing
+            data-path="/"
+            data-ng-if="showMap"
+            data-polygon="polygon"
+            data-no-create-form="true"
+            data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
+            data-params="{tag: 'LAST'}"
+            data-content-type="adhocracy_meinberlin.resources.kiezkassen.IProposalVersion">
+            <adh-mein-berlin-kiezkassen-proposal-list-item data-path="{{element}}">
+            </adh-mein-berlin-kiezkassen-proposal-list-item>
+        </adh-map-listing>
+    </div>
 </div>

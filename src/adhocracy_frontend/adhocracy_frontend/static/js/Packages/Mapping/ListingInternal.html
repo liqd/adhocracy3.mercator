@@ -1,13 +1,13 @@
 <div class="row">
     <div class="cols-2">
-        <div class="map"></div>
+        <div class="map-list-map"></div>
     </div>
     <!-- FIXME: rm inline CSS -->
-    <ol class="cols-2 scroll-container listing-elements" style="height: {{height}}px; overflow-y: scroll;">
+    <ol class="cols-2 map-list-scroll-container listing-elements" style="height: {{height}}px; overflow-y: scroll;">
         <li
             data-ng-repeat="(key, item) in items"
             data-ng-hide="item.hide"
-            class="listing-element item{{key}}"
+            class="map-list-item{{key}}"
             data-ng-class="{'is-selected': selectedItem == item}">
             <a data-ng-click="toggleItem(item)" href="" style="display: block; padding: 1em;">{{ item.value.title }}</a>
         </li>
