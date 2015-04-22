@@ -1,0 +1,8 @@
+pyunit:
+    command: bin/coverage run bin/py.test -m"not functional and not jasmine" src/adhocracy_*  && bin/coverage report && bin/coverage html
+pyfunc:
+    command: bin/py.test -m"functional and not jasmine" src/adhocracy_*
+jsunit:
+    command: make -C ./parts/static/js/ compile_tests_node && bin/jasmine-node ./parts/static/js
+acceptance:
+    command: bin/protractor etc/protractorConf.js

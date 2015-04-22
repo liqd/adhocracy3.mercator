@@ -31,6 +31,7 @@ if sys.version_info < (3, 4):
 
 test_requires = [
     'pytest',
+    'polytester',
     'selenium',
     'webtest',
     'pytest-splinter',
