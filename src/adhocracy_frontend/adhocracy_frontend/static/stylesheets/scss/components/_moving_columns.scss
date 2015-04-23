@@ -237,7 +237,13 @@ States:
     line-height: $moving-column-menu-height * ($font-size-normal / $font-size-small) / 1em;
     padding: 0 0 0 $padding-small;
 
-    .moving-column-menu-nav-button {
+    .moving-column-menu-button {
+        @include inline-block;
+        color: $color-text-highlight-introvert;
+        font-size: $font-size-small;
+        font-weight: $font-weight-introvert;
+        float: left;
+        margin-right: 2.5em;
         text-decoration: none;
 
         &:hover, &:focus {
@@ -246,22 +252,31 @@ States:
 
         &:active, &.is-active {
             color: $color-text-highlight-normal;
-         }
+        }
     }
 
     .moving-column-menu-nav-button,
-    .moving-column-menu-sort-label {
-        @include inline-block;
-        color: $color-text-highlight-introvert;
-        font-size: $font-size-small;
-        font-weight: $font-weight-introvert;
-        float: left;
-        margin-left: 2.5em;
+    .moving-column-menu-sort-label,
+    .moving-column-menu-sort-option {
+        @extend .moving-column-menu-button;
     }
 
     .moving-column-menu-sort-label {
         font-style: italic;
         margin-right: 1em;
+
+        &:hover, &:focus, &:active {
+            color: $color-text-highlight-introvert;
+        }
+    }
+
+    .moving-column-menu-nav-button {
+        color: $color-text-inverted;
+        margin-right: 0;
+
+        &:hover, &:focus {
+            color: $color-text-highlight-normal;
+        }
     }
 
     .moving-column-menu-sort-option {
@@ -292,6 +307,7 @@ States:
     float: left;
     font-size: 17px;
     line-height: (24/17);
+    margin-right: 30px / 17px * 1em;
     vertical-align: middle;
 }
 
