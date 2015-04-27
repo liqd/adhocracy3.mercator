@@ -2,14 +2,16 @@
     $height: 1.2em;
     @extend .print-only;
     line-height: $height;
+
     &:before {
-        background-image: url('/static/icons/png/favicon.png');
+        @include inline-block;
+        background-image: url("/static/icons/png/favicon.png");
         background-repeat: no-repeat;
         background-size: contain;
-        content:"";
-        display: inline-block;
+        content: "";
         height: $height;
         line-height: $height;
+        margin-right: 0.5em;
         width: $height;
     }
 }
