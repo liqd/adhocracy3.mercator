@@ -1,11 +1,9 @@
 .mercator-print-header {
-    $height: 1.2em;
     @extend .print-only;
-    line-height: $height;
 
     img {
         @include inline-block;
-        height: $height;
+        height: 1.2em;
         width: auto;
     }
 }
