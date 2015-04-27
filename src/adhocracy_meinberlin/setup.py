@@ -41,5 +41,10 @@ setup(name='adhocracy_meinberlin',
       entry_points="""\
       [paste.app_factory]
       main = adhocracy_meinberlin:main
+      [console_scripts]
+      import_bezirksregions=\
+          adhocracy_meinberlin.scripts.import_geodata:import_bezirksregions
+      import_bezirke =\
+          adhocracy_meinberlin.scripts.import_geodata:import_bezirke
       """,
       )
