@@ -1,0 +1,15 @@
+.mercator-print-header {
+    $height: 1.2em;
+    @extend .print-only;
+    line-height: $height;
+    &:before {
+        background-image: url('/static/icons/png/favicon.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        content:"";
+        display: inline-block;
+        height: $height;
+        line-height: $height;
+        width: $height;
+    }
+}
