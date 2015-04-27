@@ -1,0 +1,9 @@
+.mercator-print-header {
+    @extend .print-only;
+
+    img {
+        @include inline-block;
+        height: 1.2em;
+        width: auto;
+    }
+}
