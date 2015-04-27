@@ -198,7 +198,7 @@ $mercator-proposal-form-nav-width: 100% / 12 * 2;
         float: none;
         font-size: $font-size-plus;
 
-        i:not(.m-definition), &.mercator-propsal-detail-meta-item-rate {
+        i:not(.m-definition-before):not(.m-definition-after), &.mercator-propsal-detail-meta-item-rate {
             display: none;
         }
     }
