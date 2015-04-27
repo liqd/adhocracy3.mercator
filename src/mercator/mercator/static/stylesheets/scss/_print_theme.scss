@@ -3,15 +3,9 @@
     @extend .print-only;
     line-height: $height;
 
-    &:before {
+    img {
         @include inline-block;
-        background-image: url("/static/icons/png/favicon.png");
-        background-repeat: no-repeat;
-        background-size: contain;
-        content: "";
         height: $height;
-        line-height: $height;
-        margin-right: 0.5em;
-        width: $height;
+        width: auto;
     }
 }
