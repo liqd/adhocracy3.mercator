@@ -14,7 +14,7 @@
         @include inline-block;
         list-style: none;
 
-        a {
+        .tab-button {
             background: $color-structure-border;
             color: $color-text-inverted;
             display: block;
@@ -25,13 +25,13 @@
         }
 
         &:last-child {
-            a {
+            .tab-button {
                 margin-right: 0;
             }
         }
 
         &.is-active {
-            a {
+            .tab-button {
                 background: $color-background-base-introvert;
                 border: 1px solid $color-structure-border;
                 border-width: 1px 1px 0;

@@ -8,7 +8,9 @@
             {{tab.content}}
         </tab>
     </tabset>
-    <tabset>
+    <tabset
+        data-closed-by-default="true"
+        data-full-width="true">
         <tab data-ng-repeat="tab2 in tabs2" data-heading="{{tab2.heading}}" data-classes="{{tab2.classes}}">
             {{tab2.content}}
         </tab>
