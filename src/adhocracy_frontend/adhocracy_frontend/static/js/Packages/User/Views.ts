@@ -15,7 +15,7 @@ import SIUserBasic = require("../../Resources_/adhocracy_core/sheets/principal/I
 var pkgLocation = "/User";
 
 
-export interface IScopeLogin {
+export interface IScopeLogin extends angular.IScope {
     user : AdhUser.Service;
     loginForm : angular.IFormController;
     credentials : {
@@ -32,7 +32,7 @@ export interface IScopeLogin {
 }
 
 
-export interface IScopeRegister {
+export interface IScopeRegister extends angular.IScope {
     registerForm : angular.IFormController;
     input : {
         username : string;
@@ -132,6 +132,12 @@ export var loginDirective = (
                     scope.credentials.password = "";
                 });
             };
+
+            scope.$watch(() => adhUser.loggedIn, (value : boolean) => {
+                if (value) {
+                    adhTopLevelState.redirectToCameFrom("/");
+                }
+            });
         }
     };
 };
@@ -165,6 +171,12 @@ export var registerDirective = (
 
             scope.errors = [];
             scope.supportEmail = adhConfig.support_email;
+
+            scope.$watch(() => adhUser.loggedIn, (value : boolean) => {
+                if (value) {
+                    adhTopLevelState.redirectToCameFrom("/");
+                }
+            });
 
             scope.register = () : angular.IPromise<void> => {
                 return adhUser.register(scope.input.username, scope.input.email, scope.input.password, scope.input.passwordRepeat)
