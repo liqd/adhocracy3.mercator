@@ -3,8 +3,10 @@
         <li
             class="tab {{tab.classes}}"
             data-ng-repeat="tab in tabs"
+            data-ng-index="$index"
             data-ng-class="{'is-active': tab.active}">
-            <a class="tab-button" href="" data-ng-click="tab.select();">{{tab.heading}}</a>
+            <span class="tab-button" data-ng-if="processHeader">{{tab.heading}} <a href="" data-ng-click="tab.select();">Info</a></span>
+            <a class="tab-button" href="" data-ng-click="tab.select();" data-ng-if="!processHeader">{{tab.heading}}</a>
         </li>
     </ul>
     <div class="tabset-panes">

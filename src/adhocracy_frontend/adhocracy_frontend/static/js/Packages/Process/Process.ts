@@ -1,7 +1,11 @@
 /// <reference path="../../../lib/DefinitelyTyped/angularjs/angular.d.ts"/>
 
+import _ = require("lodash");
+import AdhConfig = require("../Config/Config");
+import AdhTabs = require("../Tabs/Tabs");
 import AdhTopLevelState = require("../TopLevelState/TopLevelState");
 
+var pkgLocation = "/MeinBerlin/Kiezkassen/Context";
 
 export class Provider implements angular.IServiceProvider {
     public templateFactories : {[processType : string]: any};
@@ -58,14 +62,46 @@ export var processViewDirective = (
     };
 };
 
+export var processHeaderDirective = (adhConfig : AdhConfig.IService, $translate) => {
+    return {
+        restrict: "E",
+        link: (scope, element) => {
+            // FIXME: Dummy data
+            var currentPhase = 1;
+            scope.tabs = [];
+            _([0, 1, 2, 3]).forEach(function(n) {
+                // FIXME : lodash can probably do this much tidier
+                scope.tabs[n] = {};
+                scope.tabs[n].heading = $translate.instant("TR__MEINBERLIN_PHASE" + (n + 1) + "_HEADING");
+                scope.tabs[n].content = $translate.instant("TR__MEINBERLIN_PHASE" + (n + 1) + "_CONTENT");
+            }).value();
+
+            scope.tabs[currentPhase].classes = "is-current-phase";
+            scope.processHeader = true;
+        },
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/header.html"
+    };
+};
+
+export var phasesTabsController = (scope, element, document) => {
+    element.find(".tabset-panes-wrapper").height(0);
+    document.on("click", ".mein-berlin-keizkassen-context-header .tab", () => {
+        element.find(".tabset-panes-wrapper").height(element.find(".tabset-panes").outerHeight());
+    });
+    var tabsScope = element.find(".tabset-tabs").scope();
+    tabsScope.processHeader = true;
+};
 
 export var moduleName = "adhProcess";
 
 export var register = (angular) => {
     angular
         .module(moduleName, [
-            AdhTopLevelState.moduleName
+            AdhTopLevelState.moduleName,
+            AdhTabs.moduleName
         ])
         .provider("adhProcess", Provider)
-        .directive("adhProcessView", ["adhTopLevelState", "adhProcess", "$compile", processViewDirective]);
+        .directive("adhProcessView", ["adhTopLevelState", "adhProcess", "$compile", processViewDirective])
+        .directive("adhProcessHeader", ["adhConfig", "$translate", processHeaderDirective])
+        .controller("phasesTabsController", ["$scope", "$element", "$document", phasesTabsController]);
 };

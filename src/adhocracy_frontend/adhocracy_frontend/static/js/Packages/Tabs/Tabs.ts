@@ -10,6 +10,7 @@ var pkgLocation = "/Tabs";
 export interface ITabScope extends angular.IScope {
     active : boolean;
     heading : string;
+    classes : string;
     select() : void;
     height : number;
 }
@@ -17,6 +18,7 @@ export interface ITabScope extends angular.IScope {
 export interface ITabsetScope extends angular.IScope {
     tabs : ITabScope[];
     fullWidth? : boolean;
+    closedByDefault : boolean;
 }
 
 export class TabSetController {
@@ -66,7 +68,9 @@ export class TabSetController {
         // we can"t run the select function on the first tab
         // since that would select it twice
         if (this.$scope.tabs.length === 1) {
-            tab.active = true;
+            if (!this.$scope.closedByDefault) {
+                tab.active = true;
+            }
         } else if (tab.active) {
             this.select(tab);
         }
@@ -93,7 +97,8 @@ export var tabsetDirective = (adhConfig : AdhConfig.IService) => {
     return {
         restrict: "E",
         scope: {
-            fullWidth: "=?"
+            fullWidth: "=?",
+            closedByDefault: "=?"
         },
         transclude: true,
         templateUrl: adhConfig.pkg_path + pkgLocation + "/tabset.html",
@@ -109,7 +114,8 @@ export var tabDirective = (adhConfig : AdhConfig.IService) => {
         templateUrl: adhConfig.pkg_path + pkgLocation + "/tab.html",
         scope: {
             active: "=?",
-            heading: "@"
+            heading: "@",
+            classes: "@"
         },
         link: (scope : ITabScope, element, attrs, tabsetCtrl : TabSetController) => {
             scope.height = 0;

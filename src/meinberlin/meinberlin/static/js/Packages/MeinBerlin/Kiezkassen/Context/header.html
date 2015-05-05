@@ -1,0 +1,21 @@
+<div class="mein-berlin-keizkassen-context-header">
+    <div class="mein-berlin-keizkassen-context-main-header">
+        <div class="mein-berlin-keizkassen-context-main-header-left">
+            <i class="mein-berlin-keizkassen-context-header-logo icon-meinberlin-logo"></i>
+        </div>
+        <div class="mein-berlin-keizkassen-context-main-header-right">
+            <button class="m-call-to-action">Add Proposal</button>
+            <button>Login</button>
+        </div>
+    </div>
+    <tabset
+        data-full-width="true"
+        data-ng-controller="phasesTabsController"
+        data-closed-by-default="true">
+        <tab data-ng-repeat="tab in tabs"
+            data-heading="{{tab.heading}}"
+            data-classes="{{tab.classes}}">
+            {{tab.content}}
+        </tab>
+    </tabset>
+</div>
