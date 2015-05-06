@@ -1,13 +1,86 @@
+@mixin stretch {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+
+    @media print {
+        position: static;
+        overflow: visible;
+    }
+}
+
+/*doc
+---
+title: layout rows
+name: l-rows
+category: layout
+---
+
+This deeply nested structure allows to have multiple rows where the last one
+stetches to the end of the screen (i.e. a non-static positioned container).
+
+It might be possible to have a much simpler implementation using [flexbox].
+That is not supported by all targeted browsers however.
+
+[flexbox]: https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_flexbox_to_lay_out_web_applications
+
+```html_example
+<div style="width: 300px; height: 200px; position: relative">
+    <div class="l-rows-wrapper">
+        <div class="l-rows">
+            <div class="l-row">
+                <div class="l-cell" style="background: red">
+                    huhu
+                </div>
+            </div>
+
+            <div class="l-row">
+                <div class="l-cell">
+                    <div style="overflow-y: auto; background: green; position: absolute; top: 0; bottom: 0; left: 0; right: 0;">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+```
+*/
+@media screen {
+    .l-rows-wrapper {
+        @include stretch;
+    }
+
+    .l-rows {
+        display: table;
+        width: 100%;
+        height: 100%;
+    }
+
+    .l-row {
+        display: table-row;
+
+        &:last-child {
+            height: 100%;
+        }
+    }
+
+    .l-cell {
+        display: table-cell;
+        position: relative;
+    }
+}
+
 .main-header {
     position: relative;
+    line-height: 2.8571em;
 
     @media print {
         display: none;
     }
-}
-
-.l-header {
-    line-height: $l-header-height;
 }
 
 .l-header-wrapper {
@@ -32,36 +105,20 @@
 }
 
 .l-header-center {
+    position: absolute;
     left: 0;
     text-align: center;
     top: 0;
     width: 100%;
     z-index: 0;
-}
-
-.l-header-right {
-    float: right;
-}
-
-.l-content {
-    top: $l-header-height;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    overflow: hidden;
-
-    @media print {
-        overflow: visible;
-    }
-}
-
-.l-header-center,
-.l-content {
-    position: absolute;
 
     @media print {
         position: static;
     }
+}
+
+.l-header-right {
+    float: right;
 }
 
 .l-center {

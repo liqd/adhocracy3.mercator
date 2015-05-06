@@ -1,18 +1,28 @@
-<h1 class="mercator-print-header" data-aria-hidden="true"><img src="/static/icons/png/favicon.png" alt=""/> {{ "TR__ADVOCATE_EUROPE" | translate }}</h1>
-<header class="l-header main-header">
-    <div class="l-header-wrapper">
-        <div class="l-header-left">
-            <adh-mercator-proposal-add-button></adh-mercator-proposal-add-button>
+<div class="l-rows-wrapper">
+    <div class="l-rows">
+        <div class="l-row">
+            <div class="l-cell">
+                <h1 class="mercator-print-header" data-aria-hidden="true"><img src="/static/icons/png/favicon.png" alt=""/> {{ "TR__ADVOCATE_EUROPE" | translate }}</h1>
+
+                <header class="l-header main-header">
+                    <div class="l-header-wrapper">
+                        <div class="l-header-left">
+                            <adh-mercator-proposal-add-button></adh-mercator-proposal-add-button>
+                        </div>
+                        <div class="l-header-center">
+                            <adh-space-switch></adh-space-switch>
+                        </div>
+                        <div class="l-header-right">
+                            <adh-user-indicator></adh-user-indicator>
+                        </div>
+                    </div>
+                    <adh-http-busy></adh-http-busy>
+                </header>
+            </div>
         </div>
-        <div class="l-header-center">
-            <adh-space-switch></adh-space-switch>
-        </div>
-        <div class="l-header-right">
-            <adh-user-indicator></adh-user-indicator>
+
+        <div class="l-row">
+            <div class="l-cell" data-ng-transclude="">
         </div>
     </div>
-    <adh-http-busy></adh-http-busy>
-</header>
-
-<div class="l-content" data-ng-transclude="">
 </div>

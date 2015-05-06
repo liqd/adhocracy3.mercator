@@ -32,6 +32,10 @@ from adhocracy_core.utils import get_sheet
 from adhocracy_core.utils import get_sheet_field
 
 
+# Set GDAL_LEGACY flag for GDAL <= 1.10
+GDAL_LEGACY = True
+
+
 def import_bezirke():
     """Import Berlin districts to adhocracy meinBerlin.
 
@@ -55,7 +59,7 @@ def import_bezirke():
     locations = find_service(root, 'locations')
 
     url = 'http://fbinter.stadt-berlin.de/fb/'\
-          'wfs/geometry/senstadt/re_bezirke/?TYPENAMES=GML2'
+          'wfs/geometry/senstadt/re_bezirke/'
 
     _download_geodata('/tmp/bezirke.json', url, 'fis:re_bezirke')
 
@@ -107,7 +111,7 @@ def import_bezirksregions():
     locations = find_service(root, 'locations')
 
     url = 'http://fbinter.stadt-berlin.de/fb/'\
-          'wfs/geometry/senstadt/re_bezirksregion?TYPENAMES=GML2'
+          'wfs/geometry/senstadt/re_bezirksregion'
     _download_geodata('/tmp/bezirksregions.json', url, 'fis:re_bezirksregion')
 
     data = json.load(open('/tmp/bezirksregions.json', 'r'))
@@ -158,7 +162,9 @@ def _slugify(value: str) -> str:
 def _download_geodata(filename: str, url: str, layer: str):
     call = 'ogr2ogr -s_srs EPSG:25833'\
            ' -t_srs WGS84 -f'\
-           ' geoJSON %s WFS:"%s" %s' % (filename, url, layer)
+           ' geoJSON %s%s WFS:"%s" %s' % (
+               filename, '?TYPENAMES=GML2' if GDAL_LEGACY else '',
+               url, layer)
     try:
         os.remove(filename)
     except:
