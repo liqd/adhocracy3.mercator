@@ -10,5 +10,13 @@
     "TR__MEINBERLIN_LOCATION": "Sie können den Ort auf der Karte anzeigen (optional)",
     "TR__MEINBERLIN_LOCATION_TEXT": "Bitte geben Sie einen Ort für Ihr Projekt an, z.B. Grundschule XY",
     "TR__MEINBERLIN_MEIN_BERLIN_SIMPLE_PROPOSAL": "Kiezkasse: Vorschlag einreichen",
-    "TR__MEINBERLIN_TITLE": "Titel ihres Projektvorschlages"
+    "TR__MEINBERLIN_TITLE": "Titel ihres Projektvorschlages",
+    "TR__MEINBERLIN_PHASE1_HEADING": "Informationsphase",
+    "TR__MEINBERLIN_PHASE1_CONTENT": "Lorem ipsum Veniam deserunt nostrud aliquip officia aliqua esse Ut voluptate in consequat dolor.",
+    "TR__MEINBERLIN_PHASE2_HEADING": "Ideensammlungsphase",
+    "TR__MEINBERLIN_PHASE2_CONTENT": "Alle Interessierten werden aufgerufen Vorschläge für Projekte in der Bezirksregion zu machen. Die Angabe der Kosten soll bitte die Mehrwertsteuer enthalten. Vorschläge können aber auch noch offline in der Bürgerversammlung gemacht werden. Alle Vorschläge (offline und online) werden dann bei der Bürgerversammlung beschlossen.",
+    "TR__MEINBERLIN_PHASE3_HEADING": "Bürgerversammlung",
+    "TR__MEINBERLIN_PHASE3_CONTENT": "In dieser Phase können keine Vorschläge mehr online eingereicht, kommentiert oder bewertet werden. Vorschläge können aber noch offline in der Bürgerversammlung gemacht werden. Alle Vorschläge werden dann vor Ort vorgestellt und abgestimmt. Die Art und Weise der Abstimmung bestimmt die Bürgerversammlung selbst. Offline Vorschläge werden online eingereicht.",
+    "TR__MEINBERLIN_PHASE4_HEADING": "Ergebnisse",
+    "TR__MEINBERLIN_PHASE4_CONTENT": "Nach der Prüfung vom zuständigen Fachamt des Bezirksamtes werden die Vorschläge, die realisiert werden und ggf. diejenigen, die nicht realisierbar sind, online markiert und angezeigt. Die Projekte müssen bis Mitte Dezember realisiert und abgerechnet werden."
 }

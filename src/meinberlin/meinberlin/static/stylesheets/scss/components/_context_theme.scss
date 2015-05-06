@@ -1,0 +1,91 @@
+.mein-berlin-keizkassen-context-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+
+.mein-berlin-keizkassen-context-header .tab {
+    overflow: visible;
+    position: relative;
+
+    &, ,.tab-button, &.is-active .tab-button {
+        border: 0;
+    }
+
+    &.is-active {
+        &:after {
+            border-left-color: $color-background-base-introvert;
+        }
+
+        &:before {
+            display: none;
+        }
+    }
+
+    &.is-current-phase {
+        @include single-box-shadow(0, 2px, 0, 0, $color-function-valid);
+    }
+
+    .tab-button, &.is-active .tab-button {
+        line-height: 1em;
+        margin-right: 0;
+        top: 0;
+    }
+
+    &:after, &:before {
+        border-top: 1em solid transparent;
+        border-left: 0.5em solid $color-structure-border;
+        border-bottom: 1em solid transparent;
+        content: "";
+        height: 0;
+        position: absolute;
+        right: -0.5em;
+        top: 0;
+        width: 0;
+        z-index: 2;
+    }
+
+    &:before {
+        border-left-color: $color-text-inverted;
+        right: -0.6em;
+        margin-left: 1px;
+        z-index: 1;
+    }
+}
+
+
+.mein-berlin-keizkassen-context-header .tabset-tabs {
+    .tabset-panes {
+        border-bottom: 0;
+    }
+
+    .tabset-panes-wrapper {
+        overflow: hidden;
+    }
+}
+
+.mein-berlin-keizkassen-context-content {
+    position: relative;
+    height: 100%;
+}
+
+.mein-berlin-keizkassen-context-header-logo {
+    color: $color-text-highlight-normal;
+    font-size: 2em;
+}
+
+.mein-berlin-keizkassen-context-main-header {
+    @include clearfix;
+    line-height: 2em;
+}
+
+.mein-berlin-keizkassen-context-main-header-left {
+    @include span(6 of 12 first);
+}
+
+.mein-berlin-keizkassen-context-main-header-right {
+    @include span(6 of 12 last);
+    text-align: right;
+}

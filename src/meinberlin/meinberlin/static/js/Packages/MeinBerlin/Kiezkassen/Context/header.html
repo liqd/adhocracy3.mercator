@@ -1,0 +1,21 @@
+<div class="mein-berlin-keizkassen-context-header">
+    <div class="mein-berlin-keizkassen-context-main-header">
+        <div class="mein-berlin-keizkassen-context-main-header-left">
+            <i class="mein-berlin-keizkassen-context-header-logo icon-meinberlin-logo"></i>
+        </div>
+        <div class="mein-berlin-keizkassen-context-main-header-right">
+            <a href="{{path | adhResourceUrl:'create_proposal'}}" class="button m-call-to-action">{{ "TR__CREATE_PROPOSAL" | translate }}</a>
+            <a href="/login" class="button m-call-to-action-secondary"><i class="icon-user-unfilled"></i> Login</a>
+        </div>
+    </div>
+    <tabset
+        data-full-width="true"
+        data-ng-controller="phasesTabsController"
+        data-closed-by-default="true">
+        <tab data-ng-repeat="tab in tabs"
+            data-heading="{{tab.heading}}"
+            data-classes="{{tab.classes}}">
+            {{tab.content}}
+        </tab>
+    </tabset>
+</div>
