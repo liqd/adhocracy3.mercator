@@ -23,23 +23,45 @@
 [data-icon]:before { content: attr(data-icon); }
 
 [data-icon]:before,
+.icon-add:before,
+.icon-attention:before,
+.icon-back-to-top:before,
+.icon-ban-circle:before,
 .icon-budget:before,
+.icon-calendar:before,
 .icon-chevron-next:before,
 .icon-chevron-prev:before,
 .icon-comment-gap:before,
 .icon-document:before,
+.icon-documents:before,
 .icon-group:before,
+.icon-key:before,
+.icon-list:before,
 .icon-list-column:before,
+.icon-list-filled:before,
 .icon-location:before,
+.icon-mail:before,
+.icon-mail-filled:before,
 .icon-map-filled:before,
+.icon-map-pin:before,
 .icon-map-pin-add:before,
-.icon-meinberlin-logo:before,
+.icon-minus:before,
+.icon-pig:before,
 .icon-pin-detail:before,
+.icon-pointy-rectangle-left:before,
+.icon-pointy-rectangle-right:before,
 .icon-process:before,
 .icon-project:before,
 .icon-reply:before,
 .icon-search:before,
+.icon-speechbubble:before,
+.icon-speechbubble-document:before,
+.icon-speechbubble-unfilled:before,
 .icon-speechbubbles:before,
+.icon-tick:before,
+.icon-user:before,
+.icon-user-unfilled:before,
+.icon-users:before,
 .icon-vote-down:before,
 .icon-vote-up:before,
 .icon-voting:before,
@@ -59,25 +81,47 @@
   font-smoothing: antialiased;
 }
 
-.icon-budget:before { content: "\f100"; }
+.icon-add:before { content: "\f100"; }
+.icon-attention:before { content: "\f101"; }
+.icon-back-to-top:before { content: "\f120"; }
+.icon-ban-circle:before { content: "\f102"; }
+.icon-budget:before { content: "\f123"; }
+.icon-calendar:before { content: "\f103"; }
 .icon-chevron-next:before { content: "\f129"; }
 .icon-chevron-prev:before { content: "\f12a"; }
-.icon-comment-gap:before { content: "\f12f"; }
-.icon-document:before { content: "\f101"; }
-.icon-group:before { content: "\f102"; }
-.icon-list-column:before { content: "\f12b"; }
-.icon-location:before { content: "\f10e"; }
-.icon-map-filled:before { content: "\f12c"; }
-.icon-map-pin-add:before { content: "\f103"; }
-.icon-meinberlin-logo:before { content: "\f131"; }
-.icon-pin-detail:before { content: "\f104"; }
-.icon-process:before { content: "\f105"; }
-.icon-project:before { content: "\f106"; }
-.icon-reply:before { content: "\f107"; }
-.icon-search:before { content: "\f108"; }
-.icon-speechbubbles:before { content: "\f109"; }
-.icon-vote-down:before { content: "\f10a"; }
-.icon-vote-up:before { content: "\f10b"; }
-.icon-voting:before { content: "\f10c"; }
-.icon-voting-gap:before { content: "\f130"; }
-.icon-x:before { content: "\f10d"; }
+.icon-comment-gap:before { content: "\f12b"; }
+.icon-document:before { content: "\f104"; }
+.icon-documents:before { content: "\f105"; }
+.icon-group:before { content: "\f124"; }
+.icon-key:before { content: "\f106"; }
+.icon-list:before { content: "\f107"; }
+.icon-list-column:before { content: "\f12c"; }
+.icon-list-filled:before { content: "\f108"; }
+.icon-location:before { content: "\f125"; }
+.icon-mail:before { content: "\f109"; }
+.icon-mail-filled:before { content: "\f10a"; }
+.icon-map-filled:before { content: "\f12d"; }
+.icon-map-pin:before { content: "\f10b"; }
+.icon-map-pin-add:before { content: "\f10c"; }
+.icon-minus:before { content: "\f10d"; }
+.icon-pig:before { content: "\f10e"; }
+.icon-pin-detail:before { content: "\f126"; }
+.icon-pointy-rectangle-left:before { content: "\f10f"; }
+.icon-pointy-rectangle-right:before { content: "\f110"; }
+.icon-process:before { content: "\f111"; }
+.icon-project:before { content: "\f127"; }
+.icon-reply:before { content: "\f112"; }
+.icon-search:before { content: "\f113"; }
+.icon-speechbubble:before { content: "\f114"; }
+.icon-speechbubble-document:before { content: "\f115"; }
+.icon-speechbubble-unfilled:before { content: "\f116"; }
+.icon-speechbubbles:before { content: "\f117"; }
+.icon-tick:before { content: "\f118"; }
+.icon-user:before { content: "\f11c"; }
+.icon-user-unfilled:before { content: "\f11d"; }
+.icon-users:before { content: "\f11e"; }
+.icon-vote-down:before { content: "\f121"; }
+.icon-vote-up:before { content: "\f122"; }
+.icon-voting:before { content: "\f128"; }
+.icon-voting-gap:before { content: "\f12e"; }
+.icon-x:before { content: "\f11f"; }
