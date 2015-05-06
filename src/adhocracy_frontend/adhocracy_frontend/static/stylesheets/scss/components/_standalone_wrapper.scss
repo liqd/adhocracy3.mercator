@@ -1,6 +1,7 @@
 .standalone-wrapper,
 .standalone-wrapper .standalone-wrapper-title,
-.standalone-wrapper label {
+.standalone-wrapper label,
+.standalone-wrapper .form-error {
     text-align: center;
 }
 
@@ -12,8 +13,10 @@
     position: relative;
 
     .standalone-wrapper-title {
+        color: $color-text-normal;
+        font-size: $font-size-large;
         font-weight: $font-weight-extrovert;
-        margin-bottom: 50px / $font-size-normal * 1em;
+        margin-bottom: 50px / $font-size-large * 1em;
     }
 
     form {
