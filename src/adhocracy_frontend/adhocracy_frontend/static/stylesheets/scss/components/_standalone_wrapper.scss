@@ -9,6 +9,7 @@
     margin: 0 auto;
     max-width: 480px / $font-size-normal * 1em;
     padding: (40px / $font-size-normal * 1em) (90px / $font-size-normal * 1em);
+    position: relative;
 
     .standalone-wrapper-title {
         font-weight: $font-weight-extrovert;
