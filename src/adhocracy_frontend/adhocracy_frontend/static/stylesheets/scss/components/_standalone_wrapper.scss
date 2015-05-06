@@ -23,7 +23,7 @@ when you follow an Adhocracy link from your email. Could contain branding.
 
 .standalone-wrapper {
     background: $color-background-base-introvert;
-    margin: 0 auto (90px / $font-size-normal * 1em);
+    margin: (90px / $font-size-normal * 1em) auto 0;
     max-width: 480px / $font-size-normal * 1em;
     padding: (40px / $font-size-normal * 1em) (90px / $font-size-normal * 1em);
     position: relative;
