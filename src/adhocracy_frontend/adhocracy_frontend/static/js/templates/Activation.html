@@ -2,27 +2,21 @@
     <adh-user-indicator></adh-user-indicator>
 </header>
 
-<div class="l-center">
+<div class="standalone-wrapper">
     <div data-ng-if="ready">
         <div data-ng-if="success">
-            <h2>{{ "TR__ACTIVATION_SUCCESS_TITLE" | translate }}</h2>
-
-            <div class="textbox">
-                <p>{{ "TR__ACTIVATION_CLOSE_THIS_TAB_AND_PROCEED" | translate }}</p>
-            </div>
+            <h1 class="standalone-wrapper-title">{{ "TR__ACTIVATION_SUCCESS_TITLE" | translate }}</h1>
+            <p>{{ "TR__ACTIVATION_CLOSE_THIS_TAB_AND_PROCEED" | translate }}</p>
         </div>
         <div data-ng-if="!success">
-            <h2>{{ "TR__ACTIVATION_ERROR_TITLE" | translate }}</h2>
-
-            <div class="textbox">
-                <p>
-                    {{ "TR__ACTIVATION_ERROR_SUPPORT" | translate }}
-                    <a data-ng-href="mailto:{{ translationData.supportEmail }}?subject=Activation%20failed">{{ translationData.supportEmail }}</a>.
-                </p>
-                <p>{{ "TR__ACTIVATION_ERROR_1" | translate }}</p>
-                <p>{{ "TR__ACTIVATION_ERROR_2" | translate }}</p>
-                <p>{{ "TR__ACTIVATION_ERROR_3" | translate }}</p>
-            </div>
+            <h1 class="standalone-wrapper-title">{{ "TR__ACTIVATION_ERROR_TITLE" | translate }}</h1>
+            <p>
+                {{ "TR__ACTIVATION_ERROR_SUPPORT" | translate }}
+                <a data-ng-href="mailto:{{ translationData.supportEmail }}?subject=Activation%20failed">{{ translationData.supportEmail }}</a>.
+            </p>
+            <p>{{ "TR__ACTIVATION_ERROR_1" | translate }}</p>
+            <p>{{ "TR__ACTIVATION_ERROR_2" | translate }}</p>
+            <p>{{ "TR__ACTIVATION_ERROR_3" | translate }}</p>
         </div>
     </div>
 </div>
