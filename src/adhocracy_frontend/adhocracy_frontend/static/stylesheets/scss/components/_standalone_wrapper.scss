@@ -1,0 +1,21 @@
+.standalone-wrapper,
+.standalone-wrapper .standalone-wrapper-title,
+.standalone-wrapper label {
+    text-align: center;
+}
+
+.standalone-wrapper {
+    background: $color-background-base-introvert;
+    margin: 0 auto;
+    max-width: 480px / $font-size-normal * 1em;
+    padding: (40px / $font-size-normal * 1em) (90px / $font-size-normal * 1em);
+
+    .standalone-wrapper-title {
+        font-weight: $font-weight-extrovert;
+        margin-bottom: 50px / $font-size-normal * 1em;
+    }
+
+    form {
+        padding: 0;
+    }
+}
