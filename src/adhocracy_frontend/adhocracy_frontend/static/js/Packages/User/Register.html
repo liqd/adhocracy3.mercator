@@ -93,12 +93,10 @@
     <!-- FIXME: Technically this should only display if you logged in as the user you just registered as, but
     this will display if you log in as any user -->
     <div data-ng-if="success && loggedIn" class="login-success">
-        <div class="standalone-wrapper">
-            <h1 class="standalone-wrapper-title">{{ "TR__REGISTRATION_THANKS_FOR_REGISTERING" | translate:{siteName: siteName, userName: userName} }}</h1>
-            <p data-adh-html-translate="TR__REGISTRATION_PROCEED" data-translate-values="{siteName: siteName}" data-translate-templates="{
-                link: '&lt;a href=&quot;&quot; data-ng-click=&quot;goBack()&quot;&gt;{{ content }}&lt;/a&gt;'
-            }"></p>
-        </div>
+        <h2>{{ "TR__REGISTRATION_THANKS_FOR_REGISTERING" | translate:{siteName: siteName, userName: userName} }}</h2>
+        <p data-adh-html-translate="TR__REGISTRATION_PROCEED" data-translate-values="{siteName: siteName}" data-translate-templates="{
+            link: '&lt;a href=&quot;&quot; data-ng-click=&quot;goBack()&quot;&gt;{{ content }}&lt;/a&gt;'
+        }"></p>
     </div>
 
     <a class="login-cancel" href="" data-ng-click="cancel()">{{ "TR__CANCEL" | translate }}</a>
