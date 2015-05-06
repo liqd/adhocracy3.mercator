@@ -86,14 +86,14 @@
         }"></p>
     </div>
     <div data-ng-if="success && !loggedIn" class="login-success">
-        <p>{{ "TR__REGISTER_SUCCESS" | translate }}</p>
+        <h2>{{ "TR__REGISTER_SUCCESS" | translate }}</h2>
         <p>{{ "TR__REGISTRATION_CALL_FOR_ACTIVATION" | translate:{siteName: siteName} }}</p>
         <!-- FIXME: Show option in case the user is not automatically logged in (e.g. 3rd party cookies blocked. -->
     </div>
     <!-- FIXME: Technically this should only display if you logged in as the user you just registered as, but
     this will display if you log in as any user -->
     <div data-ng-if="success && loggedIn" class="login-success">
-        <p>{{ "TR__REGISTRATION_THANKS_FOR_REGISTERING" | translate:{siteName: siteName, userName: userName} }}</p>
+        <h2>{{ "TR__REGISTRATION_THANKS_FOR_REGISTERING" | translate:{siteName: siteName, userName: userName} }}</h2>
         <p data-adh-html-translate="TR__REGISTRATION_PROCEED" data-translate-values="{siteName: siteName}" data-translate-templates="{
             link: '&lt;a href=&quot;&quot; data-ng-click=&quot;goBack()&quot;&gt;{{ content }}&lt;/a&gt;'
         }"></p>

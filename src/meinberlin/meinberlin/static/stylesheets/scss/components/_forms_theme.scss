@@ -1,5 +1,4 @@
 form {
-    //FIXME : this will be related to moving columns when we have it
     background-color: $color-background-base-introvert;
     padding: 1em;
 }
@@ -25,4 +24,15 @@ textarea {
 .input-error {
     position: relative;
     top: -(16px / $font-size-small * 1em);
+}
+
+//server errors
+.form-error {
+    background: transparent;
+    border: 0;
+    color: $color-text-highlight-normal;
+    font-weight: $font-weight-extrovert;
+    margin-top: 0;
+    padding: 0;
+    text-align: left;
 }
