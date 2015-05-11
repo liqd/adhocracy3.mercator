@@ -29,9 +29,10 @@
 }
 
 .moving-column-body {
-    background: $color-background-base-introvert;
-    border: 0;
-    padding: 0 (5px / $font-size-normal * 1em);
+    background: $color-background-base;
+    border: 0 5px 5px;
+    border-color: $color-background-base-introvert;
+    padding: 0;
 }
 
 .moving-column-icon {

@@ -1,9 +1,16 @@
-<a href="{{ path | adhResourceUrl }}" class="mein-berlin-kiezkassen-proposal-list-item {{selectedState}}">
-    <h1>{{ data.title }}</h1>
-
-    <div class="mein-berlin-kiezkassen-proposal-list-item-meta">
-        <div><i class="icon-speechbubble-unfilled"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</div>
-        <div><i class="icon-voting"></i> {{data.rateCount | signum}} {{ "TR__RATES" | translate }}</div>
-        <div><i class="icon-pin-detail"></i> {{data.locationText}}</div>
-    </div>
-</a>
+<div class="meinberlin-kiezkassen-proposal-map-list-item meinberlin-kiezkassen-proposal-map-list-item-vertical {{selectedState}}">
+    <a class="meinberlin-kiezkassen-proposal-map-list-item-detail-link" href="{{path | adhResourceUrl }}">
+        <div class="map-list-item-col-left">
+            <h3 class="map-list-item-title">{{data.title}}</h3>
+            {{ "TR__BY" | translate }}
+            <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta>
+            {{ "TR__ON" | translate }}
+            <adh-time data-datetime="data.creationDate" data-format="L"></adh-time>
+        </div>
+        <div class="map-list-item-col-right">
+            <p class="map-list-item-comments map-list-meta-item"><i class="map-list-meta-item-icon icon-speechbubble-unfilled"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</p>
+            <p class="map-list-item-votes map-list-meta-item"><i class="map-list-meta-item-icon icon-voting"></i> {{ data.rateCount | signum }} {{ "TR__RATES" | translate }}</p>
+            <p class="map-list-item-location map-list-meta-item"><i class="map-list-meta-item-icon icon-pin-detail"></i> {{data.locationText}}</p>
+        </div>
+    </a>
+</div>

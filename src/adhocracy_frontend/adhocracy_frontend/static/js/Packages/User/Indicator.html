@@ -1,7 +1,7 @@
 <div class="user-indicator" data-ng-switch="user.loggedIn">
     <div ng-switch-when="true">
         <a data-ng-if="!noLink" data-ng-href="{{ user.userPath | adhResourceUrl }}" class="user-indicator-name">{{user.data.name}}</a
-        ><span data-ng-if="noLink" class="user-indicator-name">{{user.data.name}}</a>,
+        ><span data-ng-if="noLink" class="user-indicator-name">{{user.data.name}}</span>,
         <a class="user-indicator-logout" href="" data-ng-click="logOut()">{{ "TR__LOGOUT" | translate }}</a>
     </div>
     <div ng-switch-default="">

@@ -1,11 +1,16 @@
 <div class="meinberlin-kiezkassen-proposal-map-list-item {{selectedState}}">
-    <div class="map-list-item-col-left">
-        <h3 class="map-list-item-title">{{data.title}}</h3>
-        <p class="map-list-item-location map-list-meta-item"><i class="map-list-meta-item-icon icon-pin-detail"></i> {{data.locationText}}</p>
-    </div>
-    <div class="map-list-item-col-right">
-        <p class="map-list-item-comments map-list-meta-item"><i class="map-list-meta-item-icon icon-speechbubble-unfilled"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</p>
-        <p class="map-list-item-votes map-list-meta-item"><i class="map-list-meta-item-icon icon-voting"></i> {{ data.rateCount | signum }} {{ "TR__RATES" | translate }}</p>
-        <a href="{{path | adhResourceUrl }}" class="button arrow-button">{{ "TR__MORE" | translate }}</a>
-    </div>
+    <a class="meinberlin-kiezkassen-proposal-map-list-item-detail-link" href="{{path | adhResourceUrl }}">
+        <div class="map-list-item-col-left">
+            <h3 class="map-list-item-title">{{data.title}}</h3>
+            {{ "TR__BY" | translate }}
+            <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta>
+            {{ "TR__ON" | translate }}
+            <adh-time data-datetime="data.creationDate" data-format="L"></adh-time>
+        </div>
+        <div class="map-list-item-col-right">
+            <p class="map-list-item-comments map-list-meta-item"><i class="map-list-meta-item-icon icon-speechbubble-unfilled"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</p>
+            <p class="map-list-item-votes map-list-meta-item"><i class="map-list-meta-item-icon icon-voting"></i> {{ data.rateCount | signum }} {{ "TR__RATES" | translate }}</p>
+            <p class="map-list-item-location map-list-meta-item"><i class="map-list-meta-item-icon icon-pin-detail"></i> {{data.locationText}}</p>
+        </div>
+    </a>
 </div>

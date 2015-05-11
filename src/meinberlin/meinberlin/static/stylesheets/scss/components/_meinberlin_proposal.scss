@@ -88,55 +88,63 @@ category: meinberlin
 ---
 
 ```html_example
-<a href="#" class="mein-berlin-kiezkassen-proposal-list-item">
-    <h1>My Proposal</h1>
+<div class="meinberlin-kiezkassen-proposal-map-list-item meinberlin-kiezkassen-proposal-map-list-item-vertical">
+    <a class="meinberlin-kiezkassen-proposal-map-list-item-detail-link" href="">
+        <div class="map-list-item-col-left">
+            <h3 class="map-list-item-title">The title of my proposal</h3>
+            By God on 12/10/15
+        </div>
+        <div class="map-list-item-col-right">
+            <p class="map-list-item-comments map-list-meta-item"><i class="map-list-meta-item-icon icon-speechbubble-unfilled"></i> 12 Comments</p>
+            <p class="map-list-item-votes map-list-meta-item"><i class="map-list-meta-item-icon icon-voting"></i> +12 votes</p>
+            <p class="map-list-item-location map-list-meta-item"><i class="map-list-meta-item-icon icon-pin-detail"></i> Berlin</p>
+        </div>
+    </a>
+</div>
 
-    <div class="mein-berlin-kiezkassen-proposal-list-item-meta">
-        <div><i class="icon-speechbubble-unfilled"></i> 20 comments</div>
-        <div><i class="icon-voting"></i> +10 rates</div>
-        <div><i class="icon-pin-detail"></i> Tempelhof, Berlin</div>
-    </div>
-</a>
-
-<a href="#" class="mein-berlin-kiezkassen-proposal-list-item is-selected">
-    <h1>My selected Proposal</h1>
-
-    <div class="mein-berlin-kiezkassen-proposal-list-item-meta">
-        <div><i class="icon-speechbubble-unfilled"></i> 20 comments</div>
-        <div><i class="icon-voting"></i> +10 rates</div>
-        <div><i class="icon-pin-detail"></i> Tempelhof, Berlin</div>
-    </div>
-</a>
+<div class="meinberlin-kiezkassen-proposal-map-list-item meinberlin-kiezkassen-proposal-map-list-item-vertical is-selected">
+    <a class="meinberlin-kiezkassen-proposal-map-list-item-detail-link" href="">
+        <div class="map-list-item-col-left">
+            <h3 class="map-list-item-title">The title of my proposal</h3>
+            By God on 12/10/15
+        </div>
+        <div class="map-list-item-col-right">
+            <p class="map-list-item-comments map-list-meta-item"><i class="map-list-meta-item-icon icon-speechbubble-unfilled"></i> 12 Comments</p>
+            <p class="map-list-item-votes map-list-meta-item"><i class="map-list-meta-item-icon icon-voting"></i> +12 votes</p>
+            <p class="map-list-item-location map-list-meta-item"><i class="map-list-meta-item-icon icon-pin-detail"></i> Berlin</p>
+        </div>
+    </a>
+</div>
 ```
 */
-.mein-berlin-kiezkassen-proposal-list-item {
-    @include container;
-    border: 1px solid $color-structure-border;
-    color: $color-text-introvert;
+.meinberlin-kiezkassen-proposal-map-list-item,
+.meinberlin-kiezkassen-proposal-map-list-item-detail-link {
+    @include clearfix;
+}
+
+.meinberlin-kiezkassen-proposal-map-list-item-detail-link {
     display: block;
-    margin-bottom: 0.5em;
-    padding: 1em;
+    padding: 10px / $font-size-normal * 1em;
 
-    h1 {
-        @include span(first 2 of 3);
+    *:not(a) {
         color: $color-text-normal;
-        margin: 0;
-        padding-right: 1.5em;
-    }
-
-    .mein-berlin-kiezkassen-proposal-list-item-meta {
-        @include span(last 1 of 3);
-        border-left: 1px solid $color-text-introvert;
-        padding-left: 1.5em;
+        text-decoration: none;
     }
 
     &:hover, &:focus {
-        border-color: $color-text-highlight-normal;
-        color: $color-text-introvert;
+        @include clearfix;
+        background: $color-structure-normal;
     }
+}
 
-    &:active, &.is-selected {
-        border-color: $color-text-highlight-normal;
-        color: $color-text-highlight-normal;
+.meinberlin-kiezkassen-proposal-map-list-item {
+    &.is-selected {
+        .meinberlin-kiezkassen-proposal-map-list-item-detail-link {
+            background: $color-structure-normal;
+        }
     }
+}
+
+.meinberlin-kiezkassen-proposal-map-list-item-vertical {
+    border-bottom: 1px solid $color-background-base-introvert;
 }
