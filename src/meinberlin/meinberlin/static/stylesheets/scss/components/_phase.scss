@@ -146,6 +146,10 @@ parent: phase-header
 </div>
 ```
 */
+.phase-header {
+    margin-bottom: 10px / $font-size-normal * 1em;
+}
+
 .phase {
     font-size: $font-size-small;
     color: $color-text-normal;
