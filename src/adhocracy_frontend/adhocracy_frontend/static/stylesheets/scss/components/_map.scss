@@ -80,7 +80,12 @@ rather than in response to user action.
 }
 
 .leaflet-marker-icon {
-    -webkit-text-stroke: 1px $color-text-inverted;
+    @include text-shadow(
+        -1px -1px 0 $color-text-inverted,
+        1px -1px 0 $color-text-inverted,
+        -1px 1px 0 $color-text-inverted,
+        1px 1px 0 $color-text-inverted
+    );
     color: $color-brand-two-normal;
     font-size: 42px;
 

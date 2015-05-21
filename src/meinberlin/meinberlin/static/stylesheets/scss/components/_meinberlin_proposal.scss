@@ -31,44 +31,65 @@
 .mein-berlin-kiezkassen-proposal-detail-body {
     @include clearfix;
     background: $color-background-base;
-    margin-bottom: 10px / $font-size-normal * 1em;
-    padding: (20px / $font-size-normal * 1em) (10px / $font-size-normal * 1em) (12px / $font-size-normal * 1em);
+    padding: 0 (10px / $font-size-normal * 1em);
 }
 
 .mein-berlin-kiezkassen-proposal-detail-body-comments {
     float: right;
     padding-left: 40px / $font-size-small * 1em;
     text-align: center;
-}
 
-.mein-berlin-kiezkassen-proposal-detail-body-comments-icon,
-.mein-berlin-kiezkassen-proposal-detail-meta-item-icon {
-    font-size: 20px;
+    &, a {
+        color: $color-text-highlight-introvert;
+        font-size: $font-size-small;
+    }
+
+    [class*=icon-] {
+        display: block;
+        line-height: 17px;
+        font-size: 17px;
+    }
 }
 
 .mein-berlin-kiezkassen-proposal-detail-body-comments-icon {
     display: block;
+    font-size: 20px;
 }
 
 .mein-berlin-kiezkassen-proposal-detail-header {
-    padding-top: 36px / $font-size-normal * 1em;
+    padding-top: 30px / $font-size-normal * 1em;
 
     .mein-berlin-kiezkassen-proposal-detail-header-title {
         color: $color-text-normal;
         font-size: $font-size-normal;
         font-weight: $font-weight-extrovert;
-        margin: 0 0 (20px / $font-size-normal * 1em);
+        margin: 0 0 (30px / $font-size-normal * 1em);
     }
 }
 
+.mein-berlin-kiezkassen-proposal-detail-detail {
+    margin-bottom: 30px / $font-size-normal * 1em;
+    padding-right: 15%;
+}
+
+.mein-berlin-kiezkassen-proposal-detail-meta-item,
+.mein-berlin-kiezkassen-proposal-detail-author {
+    color: $color-text-introvert;
+    font-size: $font-size-small;
+}
+
+.mein-berlin-kiezkassen-proposal-detail-author {
+    margin-bottom: 30px / $font-size-small * 1em;
+}
+
 .mein-berlin-kiezkassen-proposal-detail-meta {
+    @include clearfix;
     list-style-type: none;
+    margin: 0 0 (40px / $font-size-normal * 1em);
     padding: 0;
 
     .mein-berlin-kiezkassen-proposal-detail-meta-item {
-        @include gallery(4 of 12);
-        color: $color-text-introvert;
-        font-size: $font-size-small;
+        @include gallery(3 of 12);
 
         &:nth-child(2) {
             text-align: center;
@@ -88,6 +109,13 @@
         @include inline-block;
         margin: 0;
         text-align: left;
+    }
+
+    .mein-berlin-kiezkassen-proposal-detail-meta-item-comments,
+    .mein-berlin-kiezkassen-proposal-detail-meta-item-location {
+        a {
+            color: $color-text-highlight-introvert;
+        }
     }
 }
 
