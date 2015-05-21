@@ -1,49 +1,36 @@
 <article class="mein-berlin-kiezkassen-proposal-detail">
     <header class="mein-berlin-kiezkassen-proposal-detail-header">
-        <h1 class="mein-berlin-kiezkassen-proposal-detail-header-title">{{ data.title }}</h1>
         <ul class="mein-berlin-kiezkassen-proposal-detail-meta">
-            <li class="mein-berlin-kiezkassen-proposal-detail-meta-item">
-                <p class="mein-berlin-kiezkassen-proposal-detail-meta-item-text">
-                    {{ "TR__BY" | translate }}
-                    <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta><br/>
-                    {{ "TR__ON" | translate }}
-                    <adh-time data-datetime="data.creationDate" data-format="L"></adh-time>
-                </p>
+            <li class="mein-berlin-kiezkassen-proposal-detail-meta-item mein-berlin-kiezkassen-proposal-detail-meta-item-location">
+                <i class="icon-pin-detail"></i> {{data.locationText}}
+            </li>
+            <li class="mein-berlin-kiezkassen-proposal-detail-meta-item mein-berlin-kiezkassen-proposal-detail-meta-item-comments">
+                <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="disguised-link">
+                    <i class="icon-speechbubble"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}
+                </a>
             </li>
             <li class="mein-berlin-kiezkassen-proposal-detail-meta-item mein-berlin-kiezkassen-proposal-detail-meta-budget">
-                <i class="mein-berlin-kiezkassen-proposal-detail-meta-item-icon icon-budget"></i>
-                <p class="mein-berlin-kiezkassen-proposal-detail-meta-item-text">
-                    {{ "TR__MEINBERLIN_BUDGET" | translate }}:<br/>
-                    {{data.budget}} &euro;
-                </p>
+                <i class="mein-berlin-kiezkassen-proposal-detail-meta-item-icon icon-budget"></i> {{data.budget}} &euro;
             </li>
             <li class="mein-berlin-kiezkassen-proposal-detail-meta-item mein-berlin-kiezkassen-proposal-detail-meta-participation">
                 <adh-rate data-refers-to="{{path}}"></adh-rate>
             </li>
         </ul>
+        <h1 class="mein-berlin-kiezkassen-proposal-detail-header-title">{{ data.title }}</h1>
     </header>
 
     <section class="mein-berlin-kiezkassen-proposal-detail-body">
         <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="disguised-link mein-berlin-kiezkassen-proposal-detail-body-comments">
-            <i class="icon-speechbubble-unfilled"></i> {{ data.commentCount }}
+            <i class="icon-speechbubble"></i> {{ data.commentCount }}
         </a>
-        <p>{{data.detail}}</p>
+        <p class="mein-berlin-kiezkassen-proposal-detail-detail">{{data.detail}}</p>
 
-        <footer class="mein-berlin-kiezkassen-proposal-detail-body-footer">
-            <ul class="mein-berlin-kiezkassen-proposal-detail-meta">
-                <li class="mein-berlin-kiezkassen-proposal-detail-meta-item">
-                    <i class="icon-pin-detail"></i> {{data.locationText}}
-                </li>
-                <li class="mein-berlin-kiezkassen-proposal-detail-meta-item">
-                    <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="disguised-link">
-                        <i class="icon-speechbubble-unfilled"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}
-                    </a>
-                </li>
-                <li class="mein-berlin-kiezkassen-proposal-detail-meta-item">
-                    <adh-rate data-refers-to="{{path}}"></adh-rate>
-                </li>
-            </ul>
-        </footer>
+        <p class="mein-berlin-kiezkassen-proposal-detail-author">
+            {{ "TR__BY" | translate }}
+            <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta><br/>
+            {{ "TR__ON" | translate }}
+            <adh-time data-datetime="data.creationDate" data-format="L"></adh-time>
+        </p>
     </section>
 
     <section>
