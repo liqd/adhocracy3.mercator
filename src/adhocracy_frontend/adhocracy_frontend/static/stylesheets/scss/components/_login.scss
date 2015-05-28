@@ -96,6 +96,10 @@ Dialog for login related flow (login, register, password reset).
     input[type="submit"] {
         margin-top: 24px / $font-size-normal * 1em;
     }
+
+    + .login-cancel {
+        margin-top: 20px / $font-size-small * 1em;
+    }
 }
 
 .login-title {

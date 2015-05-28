@@ -12,9 +12,23 @@
     }
 }
 
+.login-title {
+    text-align: center;
+}
+
 .login-cancel {
     font-variant: normal;
     font-size: $font-size-small;
     margin-top: 0;
     text-transform: capitalize;
+}
+
+.m-user-form-wrapper {
+    .main-header-logo {
+        @extend .mein-berlin-keizkassen-context-header-logo;
+
+        &:before {
+            @extend .icon-meinberlin-logo:before;
+        }
+    }
 }
