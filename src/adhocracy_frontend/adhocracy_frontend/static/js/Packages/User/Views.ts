@@ -500,6 +500,14 @@ export var userListingColumnDirective = (
     };
 };
 
+export var adhUserManagementHeaderDirective = (
+    adhConfig : AdhConfig.IService
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/UserManagementHeader.html"
+    };
+};
 
 export var moduleName = "adhUserViews";
 
@@ -578,5 +586,6 @@ export var register = (angular) => {
         .directive("adhUserMeta", ["adhConfig", "adhResourceArea", metaDirective])
         .directive("adhUserMessage", ["adhConfig", "adhHttp", userMessageDirective])
         .directive("adhUserDetailColumn", ["adhPermissions", "adhConfig", userDetailColumnDirective])
-        .directive("adhUserListingColumn", ["adhConfig", userListingColumnDirective]);
+        .directive("adhUserListingColumn", ["adhConfig", userListingColumnDirective])
+        .directive("adhUserManagementHeader", ["adhConfig", adhUserManagementHeaderDirective]);
 };
