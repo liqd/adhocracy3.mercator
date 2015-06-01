@@ -142,8 +142,9 @@ Open html documentation::
 Create scaffold for extension packages
 ---------------------------------------
 ::
-
-    bin/pcreate -s adocracy_extension adhocracy_XX
+    cd src
+    ../bin/pcreate -s adocracy_extension adhocracy_XX
+    cd ..
 
 Update packages
 ---------------
@@ -153,7 +154,7 @@ python
 
 Check whether new Python versions exist::
 
-    bin/checkversions -v -l 0 versions.cfg | grep was
+    bin/checkversions -v -l 0 ./src/adhocracy_core/versions.cfg | grep was
 
 You may then update the pinned Python versions in `versions.cfg` if
 appropriate.
