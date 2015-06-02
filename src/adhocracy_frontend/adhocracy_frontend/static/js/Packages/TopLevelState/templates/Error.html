@@ -1,4 +1,4 @@
 <div class="error-page error-page-{{code}}" data-ng-switch="code">
     <img class="error-page-image" data-ng-switch-when="404" src="/static/images/404.png" alt="{{code}} - {{message | translate}}" />
-    <h1 class="error-page-title">{{code}} - {{message | translate}}</h1>
+    <h1 class="error-page-title" data-ng-switch-when="!404">{{code}} - {{message | translate}}</h1>
 </div>
