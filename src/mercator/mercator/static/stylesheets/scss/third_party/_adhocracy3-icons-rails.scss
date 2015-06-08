@@ -28,6 +28,7 @@
 .icon-back-to-top:before,
 .icon-ban-circle:before,
 .icon-calendar:before,
+.icon-community-award:before,
 .icon-document:before,
 .icon-documents:before,
 .icon-key:before,
@@ -46,6 +47,7 @@
 .icon-speechbubble-document:before,
 .icon-speechbubble-unfilled:before,
 .icon-speechbubbles:before,
+.icon-star:before,
 .icon-tick:before,
 .icon-user:before,
 .icon-user-unfilled:before,
@@ -72,6 +74,7 @@
 .icon-back-to-top:before { content: "\f102"; }
 .icon-ban-circle:before { content: "\f103"; }
 .icon-calendar:before { content: "\f104"; }
+.icon-community-award:before { content: "\f11e"; }
 .icon-document:before { content: "\f105"; }
 .icon-documents:before { content: "\f106"; }
 .icon-key:before { content: "\f107"; }
@@ -81,19 +84,20 @@
 .icon-mail-filled:before { content: "\f10b"; }
 .icon-map-pin:before { content: "\f10c"; }
 .icon-minus:before { content: "\f10d"; }
-.icon-pencil:before { content: "\f11d"; }
-.icon-pig:before { content: "\f10e"; }
-.icon-pointy-rectangle-left:before { content: "\f10f"; }
-.icon-pointy-rectangle-right:before { content: "\f110"; }
-.icon-reply:before { content: "\f111"; }
-.icon-speechbubble:before { content: "\f112"; }
-.icon-speechbubble-document:before { content: "\f113"; }
-.icon-speechbubble-unfilled:before { content: "\f114"; }
-.icon-speechbubbles:before { content: "\f115"; }
-.icon-tick:before { content: "\f116"; }
-.icon-user:before { content: "\f117"; }
-.icon-user-unfilled:before { content: "\f118"; }
-.icon-users:before { content: "\f119"; }
-.icon-vote-down:before { content: "\f11a"; }
-.icon-vote-up:before { content: "\f11b"; }
-.icon-x:before { content: "\f11c"; }
+.icon-pencil:before { content: "\f10e"; }
+.icon-pig:before { content: "\f10f"; }
+.icon-pointy-rectangle-left:before { content: "\f110"; }
+.icon-pointy-rectangle-right:before { content: "\f111"; }
+.icon-reply:before { content: "\f112"; }
+.icon-speechbubble:before { content: "\f113"; }
+.icon-speechbubble-document:before { content: "\f114"; }
+.icon-speechbubble-unfilled:before { content: "\f115"; }
+.icon-speechbubbles:before { content: "\f116"; }
+.icon-star:before { content: "\f120"; }
+.icon-tick:before { content: "\f117"; }
+.icon-user:before { content: "\f118"; }
+.icon-user-unfilled:before { content: "\f119"; }
+.icon-users:before { content: "\f11a"; }
+.icon-vote-down:before { content: "\f11b"; }
+.icon-vote-up:before { content: "\f11c"; }
+.icon-x:before { content: "\f11d"; }
