@@ -1,0 +1,42 @@
+.has-badge {
+    &:after {
+        border-top: (50px / $font-size-plus * 1em) solid $color-brand-two-normal;
+        border-left: (50px / $font-size-plus * 1em)  solid transparent;
+        content: " ";
+        height: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 0;
+    }
+
+    &.m-winner,
+    &.m-community-award {
+        &:before {
+            color: $color-text-inverted;
+            position: absolute;
+            top: 6px / $font-size-plus * 1em;
+            z-index: 10;
+        }
+    }
+
+    &.m-winner {
+        &:after {
+            border-top-color: $color-brand-one-normal;
+        }
+
+        &:before {
+            @extend .icon-star:before;
+            font-size: 20px / $font-size-plus * 1em;
+            right: 3px / $font-size-plus * 1em;
+        }
+    }
+
+    &.m-community-award {
+        &:before {
+            @extend .icon-community-award:before;
+            font-size: 18px / $font-size-plus * 1em;
+            right: 6px / $font-size-plus * 1em;
+        }
+    }
+}
