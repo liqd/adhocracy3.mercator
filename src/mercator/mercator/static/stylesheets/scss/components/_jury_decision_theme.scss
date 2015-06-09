@@ -1,0 +1,54 @@
+/*doc
+---
+title: Jury Decision
+name: jury-decision
+category: Widgets
+---
+
+Highlighted section for proposal detail that contains the winning proposals jury decision text.
+
+Example navigation
+
+```html_example
+<nav class="section-jump-navigation jump-navigation m-narrow m-unnumbered" data-adh-sticky="">
+    <ol>
+        <li><a
+            href="#jury-decision"
+            title="Jury Decision"><i class="icon-star"></i></a></li>
+        <li><a
+            href="#1"
+            title="Number 1">1.</a></li>
+        <li><a
+            href="#2"
+            title="Number 2">2.</a></li>
+    </ol>
+</nav>
+<div class="section-jump-main chapter-wrapper">
+    <section class="chapter m-jury-decision" id="jury-decision">
+        <section class="jury-decision-section">
+            <h2 class="chapter-header"
+                data-offset="50">Jury Decision</h2>
+            <p>Lorem ipsum Ex veniam anim proident fugiat culpa est mollit ea minim Excepteur ut Ut in adipisicing
+            officia commodo id magna ex culpa et veniam magna non dolor reprehenderit ea commodo sit.</p>
+            <div class="jury-decision-section-icon">
+                <i class="icon-star"></i>
+            </div>
+        </section>
+    </section>
+</div>
+```
+*/
+
+.jury-decision-section {
+    @extend .commentable-section;
+    background: $color-brand-one-normal;
+
+    .jury-decision-section-icon {
+        @extend .commentable-section-show-comments;
+        color: $color-text-inverted;
+    }
+
+    .chapter-header {
+        color: $color-text-normal;
+    }
+}
