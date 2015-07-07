@@ -68,6 +68,12 @@ States:
         white-space: pre-line;
     }
 
+    .markdown-rendered {
+        p {
+            white-space: normal;
+        }
+    }
+
     &.is-not-selected {
         background: $color-background-base-introvert;
     }

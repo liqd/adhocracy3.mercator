@@ -74,6 +74,10 @@ is selected, no state is applied.
 .comment-content {
     line-height: 1.15;
     white-space: pre-line;
+
+    .markdown-rendered {
+        white-space: normal;
+    }
 }
 
 .comment-children-create-form,
