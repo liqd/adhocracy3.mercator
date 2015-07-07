@@ -64,6 +64,10 @@ States:
         margin-bottom: 0;
     }
 
+    p {
+        white-space: pre-line;
+    }
+
     &.is-not-selected {
         background: $color-background-base-introvert;
     }
