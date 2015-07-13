@@ -46,15 +46,14 @@ document_meta = item_meta._replace(
                    IParagraph,
                    IDocumentVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-        add_ratesservice,
-        add_badge_assignments_service,
-    ],
     item_type=IDocumentVersion,
     permission_create='create_proposal',
     is_implicit_addable=True,
-)
+)._add(after_creation=[
+    add_commentsservice,
+    add_ratesservice,
+    add_badge_assignments_service,
+])
 
 
 def includeme(config):

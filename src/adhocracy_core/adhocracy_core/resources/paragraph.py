@@ -45,8 +45,7 @@ paragraph_meta = item_meta._replace(
     permission_create='edit_proposal',
     use_autonaming=True,
     autonaming_prefix='PARAGRAPH_',
-    after_creation=item_meta.after_creation + [add_commentsservice]
-)
+)._add(after_creation=[add_commentsservice])
 
 
 def includeme(config):

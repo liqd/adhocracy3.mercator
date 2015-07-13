@@ -45,12 +45,9 @@ organization_info_meta = item_meta._replace(
     iresource=IOrganizationInfo,
     element_types=[IOrganizationInfoVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IOrganizationInfoVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IIntroImage(IAsset):
@@ -94,12 +91,9 @@ introduction_meta = item_meta._replace(
     iresource=IIntroduction,
     element_types=[IIntroductionVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IIntroductionVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IDescriptionVersion(IItemVersion):
@@ -127,12 +121,9 @@ description_meta = item_meta._replace(
     iresource=IDescription,
     element_types=[IDescriptionVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IDescriptionVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class ILocationVersion(IItemVersion):
@@ -160,12 +151,9 @@ location_meta = item_meta._replace(
     iresource=ILocation,
     element_types=[ILocationVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=ILocationVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IStoryVersion(IItemVersion):
@@ -193,12 +181,9 @@ story_meta = item_meta._replace(
     iresource=IStory,
     element_types=[IStoryVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IStoryVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IOutcomeVersion(IItemVersion):
@@ -226,12 +211,9 @@ outcome_meta = item_meta._replace(
     iresource=IOutcome,
     element_types=[IOutcomeVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IOutcomeVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IStepsVersion(IItemVersion):
@@ -259,12 +241,9 @@ steps_meta = item_meta._replace(
     iresource=ISteps,
     element_types=[IStepsVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IStepsVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IValueVersion(IItemVersion):
@@ -292,12 +271,9 @@ value_meta = item_meta._replace(
     iresource=IValue,
     element_types=[IValueVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IValueVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IPartnersVersion(IItemVersion):
@@ -325,12 +301,9 @@ partners_meta = item_meta._replace(
     iresource=IPartners,
     element_types=[IPartnersVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IPartnersVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IFinanceVersion(IItemVersion):
@@ -358,12 +331,9 @@ finance_meta = item_meta._replace(
     iresource=IFinance,
     element_types=[IFinanceVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IFinanceVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IExperienceVersion(IItemVersion):
@@ -391,12 +361,9 @@ experience_meta = item_meta._replace(
     iresource=IExperience,
     element_types=[IExperienceVersion,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-    ],
     item_type=IExperienceVersion,
     permission_create='edit_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice])
 
 
 class IMercatorProposalVersion(IItemVersion):
@@ -441,16 +408,13 @@ mercator_proposal_meta = item_meta._replace(
                    IFinance,
                    IExperience,
                    ],
-    after_creation=item_meta.after_creation + [
-        add_commentsservice,
-        add_ratesservice,
-        add_badge_assignments_service,
-        add_logbook_service,
-    ],
     item_type=IMercatorProposalVersion,
     is_implicit_addable=True,
     permission_create='create_mercator_proposal',
-)
+)._add(after_creation=[add_commentsservice,
+                       add_ratesservice,
+                       add_badge_assignments_service,
+                       add_logbook_service])
 
 
 class IProcess(process.IProcess):

@@ -172,11 +172,9 @@ def add_assets_service(context: IPool, registry: Registry, options: dict):
 
 pool_with_assets_meta = pool_meta._replace(
     iresource=IPoolWithAssets,
-    basic_sheets=pool_meta.basic_sheets + [
-        adhocracy_core.sheets.asset.IHasAssetPool],
     after_creation=[add_assets_service],
     is_implicit_addable=True,
-)
+)._add(basic_sheets=[adhocracy_core.sheets.asset.IHasAssetPool])
 
 
 def includeme(config):

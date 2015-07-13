@@ -260,6 +260,7 @@ def includeme(config):
     config.include('.subscriber')
     config.include('.geo')
     config.include('.process')
+    config.include('.proposal')
     config.include('.document')
     config.include('.document_process')
     config.include('.paragraph')

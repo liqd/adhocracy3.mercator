@@ -220,6 +220,14 @@ class ResourceMetadata(namedtuple('ResourceMetadata',
         Set addable content types, class heritage is honored
     """
 
+    def _add(self, **kw):
+        """Add elements to the value identified by key."""
+        last_modified = self
+        for key, value in kw.items():
+            new_value = getattr(last_modified, key) + value
+            last_modified = last_modified._replace(**{key: new_value})
+        return last_modified
+
 
 class IResource(ILocation):
 

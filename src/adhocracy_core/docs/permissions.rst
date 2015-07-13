@@ -148,7 +148,8 @@ Can create process content::
     >>> resp = participant.options('/organisation/process').json
     >>> pprint(sorted([r['content_type'] for r in resp['POST']['request_body']]))
     ['adhocracy_core.resources.document.IDocument',
-     'adhocracy_core.resources.external_resource.IExternalResource']
+     'adhocracy_core.resources.external_resource.IExternalResource',
+     'adhocracy_core.resources.proposal.IProposal']
 
 Can edit his own process content::
 

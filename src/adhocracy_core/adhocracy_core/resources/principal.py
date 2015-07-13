@@ -67,12 +67,11 @@ def create_initial_content_for_principals(context: IPool, registry: Registry,
 principals_meta = service_meta._replace(
     iresource=IPrincipalsService,
     content_name='principals',
-    after_creation=[create_initial_content_for_principals,
-                    add_badges_service] + service_meta.after_creation,
     element_types=[],  # we don't want the frontend to post resources here
     permission_create='create_service',
     extended_sheets=[adhocracy_core.sheets.badge.IHasBadgesPool],
-)
+)._add(after_creation=[create_initial_content_for_principals,
+                       add_badges_service])
 
 
 class IUser(IPool):

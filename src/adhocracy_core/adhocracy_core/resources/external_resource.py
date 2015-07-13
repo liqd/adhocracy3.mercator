@@ -25,9 +25,7 @@ external_resource_meta = pool_meta._replace(
     is_implicit_addable=True,
     permission_create='create_external',
     extended_sheets=[adhocracy_core.sheets.comment.ICommentable],
-    after_creation=([add_commentsservice, add_ratesservice]
-                    + pool_meta.after_creation),
-)
+)._add(after_creation=[add_commentsservice, add_ratesservice])
 
 
 def includeme(config):

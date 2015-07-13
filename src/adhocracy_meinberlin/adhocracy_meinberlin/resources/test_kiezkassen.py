@@ -35,10 +35,10 @@ class TestProposalVersion:
                [adhocracy_core.sheets.badge.IBadgeable,
                 adhocracy_core.sheets.title.ITitle,
                 adhocracy_core.sheets.description.IDescription,
-                kiezkassen.IProposal,
-                adhocracy_core.sheets.geo.IPoint,
                 adhocracy_core.sheets.comment.ICommentable,
                 adhocracy_core.sheets.rate.IRateable,
+                kiezkassen.IProposal,
+                adhocracy_core.sheets.geo.IPoint,
                 ]
         assert meta.permission_create == 'edit_proposal'
 

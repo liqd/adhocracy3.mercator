@@ -1,30 +1,30 @@
-from pytest import mark
+from pyramid import testing
 from pytest import fixture
+from pytest import mark
 
 class TestProposal:
 
     @fixture
     def meta(self):
-        from .alexanderplatz import proposal_meta
+        from .proposal import proposal_meta
         return proposal_meta
 
     def test_meta(self, meta):
-        from .alexanderplatz import IProposalVersion
+        from .proposal import IProposalVersion
         assert meta.element_types == [IProposalVersion]
         assert meta.item_type == IProposalVersion
         assert meta.permission_create == 'create_proposal'
 
     @mark.usefixtures('integration')
-    def test_create(self, registry, meta, context):
+    def test_create(self, meta, registry):
         res = registry.content.create(meta.iresource.__identifier__)
         assert meta.iresource.providedBy(res)
-
 
 class TestProposalVersion:
 
     @fixture
     def meta(self):
-        from .alexanderplatz import proposal_version_meta
+        from .proposal import proposal_version_meta
         return proposal_version_meta
 
     def test_meta(self, meta):
@@ -35,7 +35,6 @@ class TestProposalVersion:
                 adhocracy_core.sheets.description.IDescription,
                 adhocracy_core.sheets.comment.ICommentable,
                 adhocracy_core.sheets.rate.IRateable,
-                adhocracy_core.sheets.geo.IPoint,
                 ]
         assert meta.permission_create == 'edit_proposal'
 
@@ -43,21 +42,3 @@ class TestProposalVersion:
     def test_create(self, meta, registry):
         res = registry.content.create(meta.iresource.__identifier__)
         assert meta.iresource.providedBy(res)
-
-
-class TestProcess:
-
-    @fixture
-    def meta(self):
-        from .alexanderplatz import process_meta
-        return process_meta
-
-    def test_meta(self, meta):
-        from adhocracy_core.resources.process import IProcess
-        from adhocracy_meinberlin import sheets
-        from adhocracy_meinberlin import resources
-        assert meta.iresource is resources.alexanderplatz.IProcess
-
-    @mark.usefixtures('integration')
-    def test_create(self, registry, meta):
-        assert registry.content.create(meta.iresource.__identifier__)

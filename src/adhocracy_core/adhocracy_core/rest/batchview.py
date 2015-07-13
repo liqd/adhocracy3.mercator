@@ -64,9 +64,9 @@ class BatchView(RESTView):
             response_list.append(item_response)
             if not item_response.was_successful():
                 err_msg = 'Exception in sub request {0} {1}: {2}'
-                logger.exception(err_msg.format(item['method'],
-                                                item['path'],
-                                                item_response.body))
+                logger.error(err_msg.format(item['method'],
+                                            item['path'],
+                                            item_response.body))
                 err = _JSONError([], status=item_response.code)
                 err.text = dumps(self._response_list_to_json(response_list))
                 raise err
