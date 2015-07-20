@@ -149,6 +149,56 @@ def import_bezirksregions():
     transaction.commit()
 
 
+def import_polygon_from_geojson():
+    """Import a Polygon from a geojson file.
+
+    usage::
+
+        bin/import_polygon_from_geojson etc/development.ini path_to_geojson title
+    """
+    usage = 'usage: %prog config_file'
+    parser = optparse.OptionParser(
+        usage=usage,
+        description=textwrap.dedent(inspect.getdoc(import_bezirksregions))
+    )
+    options, args = parser.parse_args(sys.argv[1:])
+    if not len(args) >= 3:
+        print('You must provide at least three arguments')
+        return 2
+
+    env = bootstrap(args[0])
+    filepath = args[1]
+    title = args[2]
+    root = env['root']
+    registry = env['registry']
+    locations = find_service(root, 'locations')
+
+    data = json.load(open(filepath, 'r'))
+
+    for feature in data['features']:
+
+        geometry = feature['geometry']['coordinates']
+        type = feature['geometry']['type']
+        if type == 'Polygon':
+            geometry = [geometry]
+
+        geosheet = {'coordinates': geometry,
+                    'administrative_division': None,
+                    'part_of': None,
+                    'type': 'MultiPolygon'}
+
+        appstructs = {
+            IName.__identifier__: {
+                'name': _slugify(title)},
+            IMultiPolygon.__identifier__: geosheet,
+            ITitle.__identifier__: {
+                'title': title}}
+
+        _create_multipolygon(registry, appstructs, locations)
+
+    transaction.commit()
+
+
 def _slugify(value: str) -> str:
     value = unicodedata.normalize(
         'NFKD',
