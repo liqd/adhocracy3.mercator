@@ -12,6 +12,7 @@ export interface ITabScope extends angular.IScope {
     highlighted : boolean;
     heading : string;
     classes : string;
+    href : string;
     select() : void;
     height : number;
 }
@@ -118,7 +119,8 @@ export var tabDirective = (adhConfig : AdhConfig.IService) => {
             active: "=?",
             highlighted: "=?",
             heading: "@",
-            classes: "@"
+            classes: "@",
+            href: "@"
         },
         link: (scope : ITabScope, element, attrs, tabsetCtrl : TabSetController) => {
             var paneElement = element.find(".tab-pane");

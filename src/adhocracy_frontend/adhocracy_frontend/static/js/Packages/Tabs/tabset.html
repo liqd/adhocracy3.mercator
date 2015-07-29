@@ -7,7 +7,7 @@
                 'is-active': tab.active,
                 'is-highlighted': tab.highlighted
             }">
-            <a class="tab-button" href="" data-ng-click="tab.select();">{{tab.heading}}</a>
+            <a class="tab-button" href="" data-ng-href="{{tab.href}}" data-ng-click="tab.select();">{{tab.heading}}</a>
         </li>
     </ul>
     <div class="tabset-panes">

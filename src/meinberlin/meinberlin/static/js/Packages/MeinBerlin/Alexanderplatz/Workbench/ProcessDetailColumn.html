@@ -11,32 +11,30 @@
             <i class="icon-list moving-column-icon"></i>
         </div>
     </a>
-
-    <div data-ng-switch-when="body">
-        <div class="tabs">
-            <a
-                class="tab"
-                data-ng-class="{'is-active': tab === 'proposals'}"
-                data-ng-href="{{ processUrl | adhResourceUrl:'proposals' }}">{{ "TR__PROPOSALS" | translate }}</a>
-            <a
-                class="tab"
-                data-ng-class="{'is-active': tab === 'documents'}"
-                data-ng-href="{{ processUrl | adhResourceUrl }}">{{ "TR__MEINBERLIN_ALEXANDERPLATZ_DOCUMENT" | translate }}</a>
-        </div>
-
-        <div data-ng-if="tab === 'proposals'">
-        </div>
-
-        <div data-ng-if="tab === 'documents'">
-            <adh-map-listing
-                data-path="{{processUrl}}"
-                data-polygon="polygon"
-                data-no-create-form="true"
-                data-empty-text="{{ 'TR__DOCUMENT_EMPTY_TEXT' | translate }}"
-                data-params="{tag: 'LAST'}"
-                data-content-type="adhocracy_core.resources.document.IGeoDocumentVersion">
-                <adh-document-map-list-item data-path="{{item}}"></adh-document-map-list-item>
-            </adh-map-listing>
-        </div>
+    <div data-ng-switch-when="body" class="tabset m-full-width">
+        <tabset
+            data-full-width="true"
+            data-closed-by-default="false">
+            <tab
+                data-heading="TR__PROPOSALS"
+                data-highlighted="tab == 'proposals'"
+                data-ng-href="{{ processUrl | adhResourceUrl:'proposals' }}">
+                NOTHING HERE YET
+            </tab>
+            <tab
+                data-heading="TR__MEINBERLIN_ALEXANDERPLATZ_DOCUMENT"
+                data-highlighted="tab == 'documents'"
+                data-ng-href="{{ processUrl | adhResourceUrl }}">
+                <adh-map-listing
+                    data-path="{{processUrl}}"
+                    data-polygon="polygon"
+                    data-no-create-form="true"
+                    data-empty-text="{{ 'TR__DOCUMENT_EMPTY_TEXT' | translate }}"
+                    data-params="{tag: 'LAST'}"
+                    data-content-type="adhocracy_core.resources.document.IGeoDocumentVersion">
+                    <adh-document-map-list-item data-path="{{item}}"></adh-document-map-list-item>
+                </adh-map-listing>
+            </tab>
+        </tabset>
     </div>
 </div>
