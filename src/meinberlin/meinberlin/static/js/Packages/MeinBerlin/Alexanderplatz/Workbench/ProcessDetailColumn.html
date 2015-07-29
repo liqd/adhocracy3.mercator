@@ -1,9 +1,23 @@
-<div data-ng-switch="transclusionId">
+<div data-ng-switch="transclusionId" class="tabset m-full-width m-button-style">
     <div data-ng-switch-when="menu">
-        <i class="icon-list moving-column-icon"></i>
+        <div class="moving-column-tab">
+            <i class="icon-list moving-column-icon"></i>
 
-        <a href="{{ processUrl | adhResourceUrl:'create_document'}}" data-ng-if="tab === 'documents'">{{ "TR__CREATE_DOCUMENT" | translate }}</a>
-        <a href="{{ processUrl | adhResourceUrl:'create_proposal'}}" data-ng-if="tab === 'proposals'">{{ "TR__CREATE_PROPOSAL" | translate }}</a>
+            <a href="{{ processUrl | adhResourceUrl:'create_document'}}" data-ng-if="tab === 'documents'">{{ "TR__CREATE_DOCUMENT" | translate }}</a>
+            <a href="{{ processUrl | adhResourceUrl:'create_proposal'}}" data-ng-if="tab === 'proposals'">{{ "TR__CREATE_PROPOSAL" | translate }}</a>
+        </div>
+        <div class="moving-column-menu-switch" data-ng-if="tab === 'documents'">
+            <a
+                class="moving-column-menu-switch-item"
+                href=""
+                data-ng-click="showMap(false)"
+                data-ng-class="{ 'is-active': !shared.isShowMap }"><i class="icon-list-column"></i></a>
+            <a
+                class="moving-column-menu-switch-item"
+                href=""
+                data-ng-click="showMap(true)"
+                data-ng-class="{ 'is-active': shared.isShowMap }"><i class="icon-map-filled"></i></a>
+        </div>
     </div>
 
     <a class="moving-column-expand" data-ng-switch-when="collapsed" data-ng-href="{{ processUrl | adhResourceUrl }}">
@@ -13,31 +27,47 @@
     </a>
 
     <div data-ng-switch-when="body">
-        <div class="tabs">
+        <ul class="tabset-tabs">
+            <li class="tab"
+                data-ng-class="{'is-active': tab === 'proposals'}">
             <a
-                class="tab"
-                data-ng-class="{'is-active': tab === 'proposals'}"
+                class="tab-button"
                 data-ng-href="{{ processUrl | adhResourceUrl:'proposals' }}">{{ "TR__PROPOSALS" | translate }}</a>
-            <a
-                class="tab"
-                data-ng-class="{'is-active': tab === 'documents'}"
-                data-ng-href="{{ processUrl | adhResourceUrl }}">{{ "TR__MEINBERLIN_ALEXANDERPLATZ_DOCUMENT" | translate }}</a>
-        </div>
+            </li>
+            <li class="tab"
+                data-ng-class="{'is-active': tab === 'documents'}">
+                <a
+                    class="tab-button"
+                    data-ng-href="{{ processUrl | adhResourceUrl }}">{{ "TR__MEINBERLIN_ALEXANDERPLATZ_DOCUMENT" | translate }}</a>
+            </li>
+        </ul>
 
         <div data-ng-if="tab === 'proposals'">
         </div>
 
         <div data-ng-if="tab === 'documents'">
-            <adh-map-listing
-                data-ng-if="polygon"
+            <adh-wait condition="shared.isShowMap">
+                <adh-map-listing
+                    data-path="{{processUrl}}"
+                    data-polygon="polygon"
+                    data-ng-show="shared.isShowMap"
+                    data-no-create-form="true"
+                    data-empty-text="{{ 'TR__DOCUMENT_EMPTY_TEXT' | translate }}"
+                    data-params="{tag: 'LAST'}"
+                    data-content-type="adhocracy_core.resources.document.IGeoDocumentVersion">
+                    <adh-document-map-list-item data-path="{{item}}"></adh-document-map-list-item>
+                </adh-map-listing>
+            </adh-wait>
+
+            <adh-listing
                 data-path="{{processUrl}}"
-                data-polygon="polygon"
+                data-ng-show="!shared.isShowMap"
                 data-no-create-form="true"
-                data-empty-text="{{ 'TR__DOCUMENT_EMPTY_TEXT' | translate }}"
+                data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
                 data-params="{tag: 'LAST'}"
                 data-content-type="adhocracy_core.resources.document.IGeoDocumentVersion">
-                <adh-document-map-list-item data-path="{{item}}"></adh-document-map-list-item>
-            </adh-map-listing>
+                <adh-document-list-item data-path="{{element}}"></adh-document-list-item>
+            </adh-listing>
         </div>
     </div>
 </div>

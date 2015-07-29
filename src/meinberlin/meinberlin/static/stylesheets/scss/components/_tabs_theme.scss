@@ -1,0 +1,26 @@
+.tabset-tabs {
+    @include clearfix;
+    margin-bottom: 2px;
+
+    .tab {
+        float: left;
+        width: 50%;
+
+        .tab-button {
+            background: $color-structure-normal;
+            font-weight: $font-weight-extrovert;
+        }
+
+        &, &.is-active {
+            .tab-button {
+                color: $color-text-highlight-normal;
+            }
+        }
+
+        &.is-active {
+            .tab-button {
+                background: $color-text-inverted;
+            }
+        }
+    }
+}

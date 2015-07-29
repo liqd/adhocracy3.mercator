@@ -114,6 +114,7 @@ export var mapInput = (
 
             if (typeof scope.zoom !== "undefined") {
                 map.setZoom(scope.zoom);
+                //
             }
 
             var selectedItemLeafletIcon = (<any>leaflet).divIcon(cssAddIcon);
@@ -346,11 +347,16 @@ export class MapListingController {
         var mapElement = this.$element.find(".map-list-map");
         mapElement.height(this.$scope.height);
 
-        var map = this.leaflet.map(mapElement[0]);
+        var map = this.leaflet.map(mapElement[0], {
+            zoomControl: false
+        });
         this.leaflet.tileLayer("https://maps.berlinonline.de/tile/bright/{z}/{x}/{y}.png", {maxZoom: 18}).addTo(map);
 
         this.$scope.polygon = this.leaflet.polygon(this.leaflet.GeoJSON.coordsToLatLngs(this.$scope.rawPolygon), style);
         this.$scope.polygon.addTo(map);
+
+        // add zoom control bottom right
+        map.addControl( this.leaflet.control.zoom({position: 'bottomright'}) );
 
         // limit map to polygon
         map.fitBounds(this.$scope.polygon.getBounds());

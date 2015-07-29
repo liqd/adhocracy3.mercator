@@ -63,6 +63,10 @@ export var processDetailColumnDirective = (
             scope.$on("$destroy", adhTopLevelState.bind("tab", scope));
             adhPermissions.bindScope(scope, () => scope.processUrl, "processOptions");
 
+            scope.showMap = (isShowMap) => {
+                scope.shared.isShowMap = isShowMap;
+            };
+
             scope.$watch("processUrl", (processUrl) => {
                 if (processUrl) {
                     getProcessPolygon(adhHttp)(processUrl).then((polygon) => {

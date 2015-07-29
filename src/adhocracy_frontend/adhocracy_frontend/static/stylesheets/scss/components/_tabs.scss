@@ -4,6 +4,23 @@
             text-align: center;
         }
     }
+    // FIXME: Possible inconsistency here whether this should be part of 'classes' or added to the tabset css like this
+    // will review at a later date
+    &.m-button-style {
+        .tab {
+            &.is-active, & {
+                .tab-button {
+                    top: 0;
+                }
+            }
+
+            &.is-active {
+                .tab-button {
+                    border: 0;
+                }
+            }
+        }
+    }
 }
 
 .tabset-tabs {

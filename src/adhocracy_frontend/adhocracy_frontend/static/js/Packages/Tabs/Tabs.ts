@@ -20,6 +20,7 @@ export interface ITabsetScope extends angular.IScope {
     tabs : ITabScope[];
     fullWidth? : boolean;
     closedByDefault : boolean;
+    buttonStyle : boolean;
 }
 
 export class TabSetController {
@@ -100,7 +101,8 @@ export var tabsetDirective = (adhConfig : AdhConfig.IService) => {
         restrict: "E",
         scope: {
             fullWidth: "=?",
-            closedByDefault: "=?"
+            closedByDefault: "=?",
+            buttonStyle: "=?"
         },
         transclude: true,
         templateUrl: adhConfig.pkg_path + pkgLocation + "/tabset.html",

@@ -71,7 +71,8 @@
         }
 
         &:hover, &:active, &.is-active {
-            color: $color-brand-two-normal;
+            background: $color-brand-two-normal;
+            color: $color-text-inverted;
         }
     }
 }
