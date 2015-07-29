@@ -4,6 +4,22 @@
             text-align: center;
         }
     }
+
+    &.m-button-style {
+        .tab {
+            &.is-active, & {
+                .tab-button {
+                    top: 0;
+                }
+            }
+
+            &.is-active {
+                .tab-button {
+                    border: 0;
+                }
+            }
+        }
+    }
 }
 
 .tabset-tabs {
