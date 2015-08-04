@@ -2,6 +2,7 @@ from pyramid import testing
 from pytest import fixture
 from pytest import mark
 
+from adhocracy_core.resources import process
 
 @fixture
 def integration(integration):
@@ -31,3 +32,24 @@ def test_initiate_and_transition_to_result(registry, context):
     assert workflow.state_of(context) is 'result'
     workflow.transition_to_state(context, request, 'closed')
     assert workflow.state_of(context) is 'closed'
+
+
+class TestStandardWorkflow:
+
+    @fixture
+    def meta(self):
+        from .standard import standard_meta
+        return standard_meta
+
+    @fixture
+    def acl(self, meta, registry):
+        from adhocracy_core.resources.root import root_acm
+        from adhocracy_core.authorization import acm_to_acl
+        acm = meta['states']['draft']['acm']
+        acl = acm_to_acl(acm, registry) + acm_to_acl(root_acm, registry)
+        return acl
+
+    def test_draft_initiator_can_view_proposal(self, acl):
+        index_initiator = acl.index(('Allow', 'initiator', 'view'))
+        index_participant = acl.index(('Deny', 'participant', 'view'))
+        assert index_initiator < index_participant
