@@ -1,0 +1,29 @@
+<div class="phase">
+    <h3 class="phase-title">{{phase.title}}</h3>
+    <div class="phase-process-type">{{phase.processType}}</div>
+    <p class="phase-description">{{phase.description}}</p>
+    <div class="phase-meta">
+        <span class="phase-availability">
+            <i class="icon-comment-gap m-availability-indicator" data-ng-class="{'is-available': phase.commentAvailable}"></i>
+            <i class="icon-voting-gap m-availability-indicator" data-ng-class="{'is-available': phase.votingAvailable}"></i>
+
+            <span class="phase-availability-summary">
+                <span data-ng-if="phase.commentAvailable && phase.votingAvailable">{{ "TR__AVAILABLE_PARTICIPATION" | translate}}</span>
+                <span data-ng-if="phase.commentAvailable && !phase.votingAvailable">{{ "TR__AVAILABLE_COMMENT" | translate}}</span>
+                <span data-ng-if="!phase.commentAvailable && phase.votingAvailable">{{ "TR__AVAILABLE_VOTING" | translate}}</span>
+                <span data-ng-if="!phase.commentAvailable && !phase.votingAvailable">{{ "TR__AVAILABLE_NONE" | translate}}</span>
+            </span>
+        </span>
+
+        <!--<span class="phase-date">
+            <i class="icon-calendar"></i>
+            <span data-ng-if="phase.startDate" title="{{ 'TR__START_DATE' | translate }}">
+                <adh-time data-datetime="phase.startDate" format="L"></adh-time>
+            </span>
+            <span data-ng-if="phase.startDate && phase.endDate"> / </span>
+            <span data-ng-if="phase.endDate" title="{{ 'TR__END_DATE' | translate }}">
+                <adh-time data-datetime="phase.endDate" format="L"></adh-time>
+            </span>
+        </span>-->
+    </div>
+</div>

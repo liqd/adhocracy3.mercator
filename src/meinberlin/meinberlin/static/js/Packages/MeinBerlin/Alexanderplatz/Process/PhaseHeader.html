@@ -1,0 +1,13 @@
+<div class="phase-header">
+    <tabset
+        data-full-width="true"
+        data-closed-by-default="true">
+        <tab
+            data-ng-repeat="phase in phases"
+            data-heading="{{phase.shorttitle}}"
+            data-classes="m-phase"
+            data-highlighted="phase.name == currentPhase">
+            <adh-mein-berlin-alexanderplatz-phase data-phase="phase"></adh-mein-berlin-alexanderplatz-phase>
+        </tab>
+    </tabset>
+</div>
