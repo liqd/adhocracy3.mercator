@@ -34,17 +34,17 @@ some basic dependencies to build PIL (python image library):
 
 6. libjpeg8-dev zlib1g-dev (http://pillow.readthedocs.org/en/latest/installation.html)
 
-create SSH key and upload to github ::
+Create SSH key and upload to github::
 
     ssh-keygen -t rsa -C "your_email@example.com"
 
-checkout source code ::
+Checkout source code::
 
     git clone git@github.com:liqd/adhocracy3.git
     cd adhocracy3
     git submodule update --init
 
-compile python 3.4 and PIL ::
+Compile python 3.4 and PIL::
 
     cd python
     python ./bootstrap.py
@@ -52,20 +52,27 @@ compile python 3.4 and PIL ::
     ./bin/install-links
     cd ..
 
-install adhocracy ::
+Install adhocracy::
 
     ./bin/python ./bootstrap.py -v 2.3.1 --setuptools-version=12.1
     ./bin/buildout
 
-update your shell environment::
+Update your shell environment::
 
     source ./source_env
 
+Make the default workflow public::
+
+  ./bin/set_workflow_state etc/development.ini BASE_RESOURCE WORKFLOW_NAME participate
+
+BASE_RESOURCE and WORKFLOW_NAME must be replaced with suitable values
+depending on the actually used setup. In the Mercator setup, the
+BASE_RESOURCE is ``/mercator`` and WORKFLOW_NAME is ``mercator``.
 
 Documentation
 -------------
 
-build sphinx documentation ::
+Build sphinx documentation::
 
     bin/sphinx_build_adhocracy
     xdg-open docs/build/html/index.html  # (alternatively, cut & paste the url into your browser)
