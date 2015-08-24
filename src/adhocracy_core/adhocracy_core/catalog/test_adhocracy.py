@@ -28,6 +28,7 @@ def test_create_adhocracy_catalog(pool_graph, registry):
     assert 'rates' in catalogs['adhocracy']
     assert 'creator' in catalogs['adhocracy']
     assert 'item_creation_date' in catalogs['adhocracy']
+    assert 'item_badge' in catalogs['adhocracy']
     assert 'private_visibility' in catalogs['adhocracy']
     assert 'badge' in catalogs['adhocracy']
     assert 'title' in catalogs['adhocracy']
@@ -249,6 +250,54 @@ def test_includeme_register_index_badge(registry):
     from substanced.interfaces import IIndexView
     assert registry.adapters.lookup((IBadgeable,), IIndexView,
                                     name='adhocracy|badge')
+
+
+class TestIndexItemBadge:
+
+    @fixture
+    def registry(self, registry_with_content):
+        return registry_with_content
+
+    @fixture
+    def mock_catalogs(self, monkeypatch, mock_catalogs) -> Mock:
+        from . import adhocracy
+        monkeypatch.setattr(adhocracy, 'find_service',
+                            lambda x, y: mock_catalogs)
+        return mock_catalogs
+
+    def test_return_default_if_no_item_in_lineage(self, context):
+        from .adhocracy import index_item_badge
+        assert index_item_badge(context, 'default') == 'default'
+
+    def test_return_badge_name_of_item(
+            self, item, context, mock_catalogs, search_result, query):
+        from adhocracy_core.sheets.badge import IBadgeAssignment
+        from .adhocracy import index_item_badge
+
+        badge = testing.DummyResource(__name__='badge')
+        assignment = testing.DummyResource(__name__='assignement')
+        result_assignments = search_result._replace(elements=[assignment])
+        result_badges = search_result._replace(elements=[badge])
+        mock_catalogs.search.side_effect = [result_assignments, result_badges]
+        item['version'] = context
+
+        assert index_item_badge(item['version'], None) == ['badge']
+        search_calls = mock_catalogs.search.call_args_list
+        query_assignments = query._replace(references = [(None, IBadgeAssignment,
+                                                          'object', item)],
+                                           only_visible=True)
+        assert search_calls[0][0][0] == query_assignments
+        query_badges = query._replace(references = [(assignment, IBadgeAssignment,
+                                                     'badge', None)],
+                                            only_visible=True)
+        assert search_calls[1][0][0] == query_badges
+
+    @mark.usefixtures('integration')
+    def test_includeme_register_index_item_badge(self, registry):
+        from adhocracy_core.sheets.versions import IVersionable
+        from substanced.interfaces import IIndexView
+        assert registry.adapters.lookup((IVersionable,), IIndexView,
+                                        name='adhocracy|item_badge')
 
 
 class TestIndexTitle:

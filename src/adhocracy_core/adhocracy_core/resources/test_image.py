@@ -5,8 +5,6 @@ from pytest import mark
 def test_image_meta():
     from .image import image_meta
     from .image import IImage
-    from adhocracy_core.sheets.asset import IAssetData
-    from adhocracy_core.sheets.metadata import IMetadata
     from adhocracy_core.sheets.image import IImageMetadata
     meta = image_meta
     assert meta.iresource is IImage

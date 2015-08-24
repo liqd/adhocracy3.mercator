@@ -23,6 +23,7 @@ def test_item_meta():
                                  adhocracy_core.sheets.versions.IVersions,
                                  adhocracy_core.sheets.pool.IPool,
                                  adhocracy_core.sheets.metadata.IMetadata,
+                                 adhocracy_core.sheets.workflow.IWorkflowAssignment,
                                  )
     assert meta.element_types == (
         IItemVersion,

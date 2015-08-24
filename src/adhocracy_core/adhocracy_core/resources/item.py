@@ -35,6 +35,7 @@ item_meta = pool_meta._replace(
                   adhocracy_core.sheets.versions.IVersions,
                   adhocracy_core.sheets.pool.IPool,
                   adhocracy_core.sheets.metadata.IMetadata,
+                  adhocracy_core.sheets.workflow.IWorkflowAssignment,
                   ),
     element_types=(IItemVersion,
                    ITag,

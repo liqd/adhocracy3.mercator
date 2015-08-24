@@ -11,6 +11,7 @@ class TestDocument:
         return document_meta
 
     def test_meta(self, meta):
+        from adhocracy_core import sheets
         from adhocracy_core import resources
         from adhocracy_core.interfaces import ITag
         assert meta.iresource == resources.document.IDocument
@@ -18,6 +19,8 @@ class TestDocument:
                                       resources.paragraph.IParagraph,
                                       resources.document.IDocumentVersion,
                                       )
+        assert meta.extended_sheets == (sheets.badge.IBadgeable,
+                                        )
         assert meta.item_type == resources.document.IDocumentVersion
         assert meta.permission_create == 'create_document'
         assert resources.comment.add_commentsservice in meta.after_creation

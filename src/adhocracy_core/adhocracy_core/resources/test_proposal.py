@@ -10,9 +10,12 @@ class TestProposal:
         return proposal_meta
 
     def test_meta(self, meta):
+        from adhocracy_core import sheets
         from .proposal import IProposalVersion
         assert meta.element_types == (IProposalVersion,)
         assert meta.item_type == IProposalVersion
+        assert meta.extended_sheets == (sheets.badge.IBadgeable,
+                                        )
         assert meta.permission_create == 'create_proposal'
         assert meta.autonaming_prefix == 'proposal_'
         assert meta.use_autonaming

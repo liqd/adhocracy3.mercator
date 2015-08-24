@@ -63,6 +63,7 @@ src/adhocracy_frontend/adhocracy_frontend/build/
 src/mercator/mercator/build/
 src/meinberlin/meinberlin/build/
 src/pcompass/pcompass/build/
+src/s1/s1/build/
 src/spd/spd/build/
 /tmp
 /wheelhouse

@@ -47,6 +47,8 @@ document_meta = item_meta._replace(
                    IParagraph,
                    IDocumentVersion,
                    ),
+    extended_sheets=(adhocracy_core.sheets.badge.IBadgeable,
+                     ),
     item_type=IDocumentVersion,
     permission_create='create_document',
     is_implicit_addable=True,

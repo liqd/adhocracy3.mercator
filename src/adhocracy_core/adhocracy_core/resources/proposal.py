@@ -39,6 +39,8 @@ proposal_meta = item_meta._replace(
     content_name='Proposal',
     iresource=IProposal,
     element_types=(IProposalVersion,),
+    extended_sheets=(IBadgeable,
+                     ),
     item_type=IProposalVersion,
     is_implicit_addable=True,
     autonaming_prefix='proposal_',

@@ -49,6 +49,19 @@ def test_reindex_badge_index(event, catalog, mock_sheet, registry_with_content):
     catalog.reindex_index.assert_called_with(badgeable, 'badge')
 
 
+def test_reindex_item_badge(event, catalog):
+    from unittest.mock import call
+    from .subscriber import reindex_item_badge
+    from adhocracy_core.sheets.versions import IVersionable
+    event.object['version'] = testing.DummyResource(__provides__=IVersionable)
+    event.object['other'] = testing.DummyResource()
+    reindex_item_badge(event)
+
+    index_calls = catalog.reindex_index.call_args_list
+    assert call(event.object['version'], 'item_badge') in index_calls
+    assert call(event.object['other'], 'item_badge') not in index_calls
+
+
 @fixture
 def mock_reindex(monkeypatch):
     from . import subscriber
@@ -145,5 +158,6 @@ def test_register_subscriber(registry):
     assert subscriber.reindex_visibility.__name__ in handlers
     assert subscriber.reindex_rates.__name__ in handlers
     assert subscriber.reindex_badge.__name__ in handlers
+    assert subscriber.reindex_item_badge.__name__ in handlers
 
 
