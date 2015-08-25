@@ -246,6 +246,10 @@ export class Service {
                         return this.fromLocation();
                     }
 
+                    if (search.cameFrom) {
+                        this.setCameFrom(search.cameFrom);
+                    }
+
                     this._set("space", data["space"] || "");
                     delete data["space"];
 
