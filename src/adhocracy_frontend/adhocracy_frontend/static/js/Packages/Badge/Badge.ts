@@ -5,6 +5,7 @@ import * as _ from "lodash";
 import * as AdhConfig from "../Config/Config";
 import * as AdhCredentials from "../User/Credentials";
 import * as AdhHttp from "../Http/Http";
+import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 
 import RIBadgeAssignment from "../../Resources_/adhocracy_core/resources/badge/IBadgeAssignment";
 import * as SIBadgeable from "../../Resources_/adhocracy_core/sheets/badge/IBadgeable";
@@ -53,7 +54,8 @@ export var getBadgesFactory = (
 
 export var bindPath = (
     adhHttp : AdhHttp.Service<any>,
-    $q : angular.IQService
+    $q : angular.IQService,
+    adhTopLevelState? : AdhTopLevelState.Service
 ) => (
     scope,
     pathKey? : string
@@ -149,6 +151,35 @@ export var badgeAssignmentEditDirective = (
         },
         link: (scope, element) => {
             bindPath(adhHttp, $q)(scope, "path");
+
+            scope.submit = () => {
+                var resource = scope.resource;
+                return adhHttp.put(resource.path, fill(resource, scope, adhCredentials.userPath));
+            };
+        }
+    };
+};
+
+export var badgeAssignmentEditInlineDirective = (
+    adhConfig : AdhConfig.IService,
+    adhHttp : AdhHttp.Service<any>,
+    $q : angular.IQService,
+    adhCredentials : AdhCredentials.Service,
+    adhTopLevelState : AdhTopLevelState.Service
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/AssignmentInline.html",
+        scope: {
+            path: "@"
+        },
+        link: (scope, element) => {
+            var processUrl = adhTopLevelState.get("processUrl");
+            adhHttp.get(processUrl).then((resource) => {
+                scope.badgesPath = resource.data["adhocracy_core.sheets.badge.IHasBadgesPool"].badges_pool;
+                scope.badgeablePath = scope.path;
+                bindPath(adhHttp, $q)(scope, "path");
+            });
 
             scope.submit = () => {
                 var resource = scope.resource;

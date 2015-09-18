@@ -26,6 +26,7 @@
                 {{ "TR__ERROR_REQUIRED_TITLE" | translate }}
             </span>
         </label>
+        <adh-badge-assignment-edit-inline data-path="{{path}}"></adh-badge-assignment-edit-inline>
         <adh-map-input
             data-ng-if="hasMap && polygon"
             data-lng="data.coordinates[0]"

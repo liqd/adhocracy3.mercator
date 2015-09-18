@@ -1,0 +1,18 @@
+<select
+    data-ng-model="data.badge"
+    name="badges"
+    data-ng-options="badge.path as badge.title for badge in badges"
+    required="required">
+    <option value="">{{ "TR__CHOOSE_BADGE" | translate }}</option>
+</select>
+<span data-ng-show="form.$submitted || form.badges.$touched">
+    <span class="input-error" data-ng-show="form.badges.$error.required">Please choose a badge</span>
+</span>
+
+<label>
+    <span class="label-text">{{ "TR__BADGE_DESCRIPTION" | translate }}</span>
+    <textarea
+        data-ng-model="data.description"
+        name="badge-description">
+    </textarea>
+</label>
