@@ -1,0 +1,17 @@
+<div class="l-header mein-berlin-stadtforum-context-header">
+    <div class="l-header-left">
+        <i class="header-logo icon-meinberlin-logo" title="mein Berlin"></i>
+    </div>
+    <div class="l-header-right">
+        <a
+            href="{{processUrl | adhResourceUrl:'create_proposal'}}"
+            class="button-cta"
+            data-ng-if="!(!processOptions.POST && processOptions.loggedIn)">
+            {{ "TR__CREATE_PROPOSAL" | translate }}</a>
+        <span
+            class="button-cta ng-disabled"
+            data-ng-if="!processOptions.POST && processOptions.loggedIn">
+            {{ "TR__CREATE_PROPOSAL" | translate }}</span>
+        <adh-user-indicator></adh-user-indicator>
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="mein-berlin-stadtforum-detail">
+    <div data-ng-switch="currentPhase.name">
+        <div data-ng-switch-when="announce" class="mein-berlin-stadtforum-detail-announce">
+            {{ currentPhase.description }}
+        </div>
+        <div data-ng-switch-default="" class="mein-berlin-stadtforum-detail-listing">
+            <adh-listing
+                data-path="{{path}}"
+                data-ng-show="!shared.isShowMap"
+                data-no-create-form="true"
+                data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
+                data-params="{tag: 'LAST'}"
+                data-content-type="adhocracy_meinberlin.resources.stadtforum.IProposalVersion">
+                <adh-mein-berlin-proposal-list-item data-path="{{element}}" data-is-kiezkasse="true">
+                </adh-mein-berlin-proposal-list-item>
+            </adh-listing>
+
+            <div
+                class="map-info-persistent"
+                data-ng-if="shared.isShowMap"
+                data-adh-html-translate="TR__MAP_INCOMPLETE"
+                data-translate-templates="{
+                    link: '&lt;a href=&quot;&quot; data-ng-click=&quot;showMap(false)&quot;&gt;{{ content }}&lt;/a&gt;'
+            }"></div>
+            <adh-wait condition="shared.isShowMap">
+                <adh-map-listing
+                    data-path="{{path}}"
+                    data-ng-show="shared.isShowMap"
+                    data-polygon="polygon"
+                    data-no-create-form="true"
+                    data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
+                    data-params="{tag: 'LAST'}"
+                    data-content-type="adhocracy_meinberlin.resources.stadtforum.IProposalVersion">
+                    <adh-mein-berlin-proposal-map-list-item
+                        data-path="{{item}}"
+                        data-is-kiezkasse="true">
+                    </adh-mein-berlin-proposal-map-list-item>
+                </adh-map-listing>
+            </adh-wait>
+        </div>
+    </div>
+</div>

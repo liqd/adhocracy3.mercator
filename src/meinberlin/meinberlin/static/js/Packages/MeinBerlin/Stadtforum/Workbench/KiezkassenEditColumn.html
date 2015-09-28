@@ -1,0 +1,10 @@
+<div data-ng-switch="transclusionId">
+    <div data-ng-switch-when="menu">
+    </div>
+
+    <adh-mein-berlin-stadtforum-edit
+        data-ng-switch-when="body"
+        data-ng-if="processUrl"
+        data-path="{{processUrl}}">
+    </adh-mein-berlin-stadtforum-edit>
+</div>

@@ -1,0 +1,248 @@
+<form
+    novalidate="novalidate"
+    data-ng-submit="submit()"
+    class="mein-berlin-edit-process-form"
+    name="stadtforumProcessForm">
+
+    <h2>Edit Stadtforum process</h2>
+
+    <div class="form-error" data-ng-repeat="error in errors track by $index">
+        <p>{{ error | adhFormatError | translate }}</p>
+    </div>
+
+    <!-- Title -->
+    <label>
+        <span class="label-text">{{ "TR__MEINBERLIN_TITLE" | translate }}</span>
+        <input
+            type="text"
+            data-ng-model="data.title"
+            name="title"
+            minlength="3"
+            maxlength="100"
+            required="required" />
+        <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.title, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_TITLE" | translate }}
+        </span>
+    </label>
+
+    <!-- Workflow state -->
+    <label>
+        <span class="label-text">{{ "TR__WORKFLOW_STATE" | translate }}</span>
+        <select ng-model="data.workflowState" ng-options="item for item in data.availableWorkflowStates">
+            <option value="">{{ data.currentWorkflowState }} ({{ "TR__CURRENT_STATE" | translate }})</option>
+
+        </select>
+    </label>
+
+    <!-- Workflowsteps -->
+    <h4>Edit Announce Phase</h4>
+    <label>
+        <span class="label-text">Description</span>
+        <input
+            type="text"
+            data-ng-model="data.announce_description"
+            name="announce_description"
+            minlength="3"
+            maxlength="100"
+            required="required" />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.announce_description, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DESCRIPTION" | translate }}
+            </span>
+    </label>
+    <label>
+        <span class="label-text">start date</span>
+        <input
+            type="text"
+            data-ng-model="data.announce_start_date"
+            name="announce_start_date"
+            data-ng-pattern="/([0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|(1|2)[0-9]|0[1-9])$/"
+            placeholder="yyyy-mm-dd"
+            required="required"
+            />
+            <span
+                class="input-error"
+                data-ng-if="showError(stadtforumProcessForm, stadtforumProcessForm.announce_start_date,'pattern')">
+                {{ "TR__ERROR_INVALID_DATE" | translate }}</span>
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.announce_start_date, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DATE" | translate }}
+            </span>
+    </label>
+
+
+    <h4>Edit Draft Phase</h4>
+    <label>
+        <span class="label-text">Description</span>
+        <input
+            type="text"
+            data-ng-model="data.draft_description"
+            name="draft_description"
+            minlength="3"
+            maxlength="100"
+            required="required"
+            />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.draft_description, 'required')">
+                {{ "TR__MEINBERLIN_ERROR_REQUIRED_DESCRIPTION" | translate }}
+            </span>
+    </label>
+    <label>
+        <span class="label-text">start date</span>
+        <input
+            type="text"
+            data-ng-model="data.draft_start_date"
+            name="draft_start_date"
+            data-ng-pattern="/([0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|(1|2)[0-9]|0[1-9])$/"
+            placeholder="yyyy-mm-dd"
+            required="required"
+            />
+            <span
+                class="input-error"
+                data-ng-if="showError(stadtforumProcessForm, stadtforumProcessForm.draft_start_date,'pattern')">
+                {{ "TR__ERROR_INVALID_DATE" | translate }}</span>
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.draft_start_date, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DATE" | translate }}
+            </span>
+    </label>
+
+
+    <h4>Edit Participate Phase</h4>
+    <label>
+        <span class="label-text">Description</span>
+        <input
+            type="text"
+            data-ng-model="data.participate_description"
+            name="participate_description"
+            minlength="3"
+            maxlength="100"
+            required="required"
+            />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.participate_description, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DESCRIPTION" | translate }}
+            </span>
+    </label>
+    <label>
+        <span class="label-text">start date</span>
+        <input
+            type="text"
+            data-ng-model="data.participate_start_date"
+            name="participate_start_date"
+            data-ng-pattern="/([0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|(1|2)[0-9]|0[1-9])$/"
+            placeholder="yyyy-mm-dd"
+            required="required"
+            />
+            <span
+                class="input-error"
+                data-ng-if="showError(stadtforumProcessForm, stadtforumProcessForm.participate_start_date,'pattern')">
+                {{ "TR__ERROR_INVALID_DATE" | translate }}</span>
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.participate_start_date, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DATE" | translate }}
+            </span>
+    </label>
+
+    <h4>Edit Evaluate Phase</h4>
+    <label>
+        <span class="label-text">Description</span>
+        <input
+            type="text"
+            data-ng-model="data.evaluate_description"
+            name="evaluate_description"
+            minlength="3"
+            maxlength="100"
+            required="required" />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.evaluate_description, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DESCRIPTION" | translate }}
+            </span>
+    </label>
+
+    <label>
+        <span class="label-text">start date</span>
+        <input
+            type="text"
+            data-ng-model="data.evaluate_start_date"
+            name="evaluate_start_date"
+            data-ng-pattern="/([0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|(1|2)[0-9]|0[1-9])$/"
+            placeholder="yyyy-mm-dd"
+            required="required" />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.evaluate_start_date, 'pattern')">
+            {{ "TR__ERROR_INVALID_DATE" | translate }}
+            </span>
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.evaluate_start_date, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DATE" | translate }}
+            </span>
+    </label>
+
+    <h4>Edit Result Phase</h4>
+    <label>
+        <span class="label-text">Description</span>
+        <input
+            type="text"
+            data-ng-model="data.result_description"
+            name="result_description"
+            minlength="3"
+            maxlength="100"
+            required="required" />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.result_description, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DESCRIPTION" | translate }}
+            </span>
+    </label>
+
+    <label>
+        <span class="label-text">start date</span>
+        <input
+            type="text"
+            data-ng-model="data.result_start_date"
+            name="result_start_date"
+            data-ng-pattern="/([0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|(1|2)[0-9]|0[1-9])$/"
+            placeholder="yyyy-mm-dd"
+            required="required" />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.result_start_date, 'pattern')">
+            {{ "TR__ERROR_INVALID_DATE" | translate }}
+            </span>
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.result_start_date, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DATE" | translate }}
+            </span>
+    </label>
+
+    <h4>Edit Closed Phase</h4>
+    <label>
+        <span class="label-text">Description</span>
+        <input
+            type="text"
+            data-ng-model="data.closed_description"
+            name="closed_description"
+            minlength="3"
+            maxlength="100"
+            required="required" />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.closed_description, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DESCRIPTION" | translate }}
+            </span>
+    </label>
+
+    <label>
+        <span class="label-text">start date</span>
+        <input
+            type="text"
+            data-ng-model="data.closed_start_date"
+            name="closed_start_date"
+            data-ng-pattern="/([0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|(1|2)[0-9]|0[1-9])$/"
+            placeholder="yyyy-mm-dd"
+            required="required" />
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.closed_start_date, 'pattern')">
+            {{ "TR__ERROR_INVALID_DATE" | translate }}
+            </span>
+            <span class="input-error" data-ng-show="showError(stadtforumProcessForm, stadtforumProcessForm.closed_start_date, 'required')">
+            {{ "TR__MEINBERLIN_ERROR_REQUIRED_DATE" | translate }}
+            </span>
+    </label>
+
+    <!-- DATA SUBMIT -->
+    <footer class="form-footer mein-berlin-proposal-form-footer">
+        <input
+            type="submit"
+            name="submit"
+            value="{{ 'TR__PUBLISH' | translate }}"
+            class="button-cta form-footer-button-cta" />
+
+        <a href="{{ processUrl | adhResourceUrl }}" data-ng-click="cancel()" class="button form-footer-button">
+        {{ "TR__CANCEL" | translate }}</a>
+    </footer>
+</form>
