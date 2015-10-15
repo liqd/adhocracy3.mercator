@@ -1,0 +1,13 @@
+[ {"path": "/",
+   "content_type": "adhocracy_core.resources.organisation.IOrganisation",
+   "data": {"adhocracy_core.sheets.name.IName":
+            {"name": "organisation"}
+           }},
+  {"path": "/organisation",
+   "content_type": "adhocracy_meinberlin.resources.stadtforum.IProcess",
+   "data": {"adhocracy_core.sheets.name.IName":
+            {"name": "stadtforum"},
+            "adhocracy_core.sheets.title.ITitle":
+            {"title": "Sample Stadtforum participation process"}
+           }}
+]

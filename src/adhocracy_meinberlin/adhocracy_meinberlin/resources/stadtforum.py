@@ -15,7 +15,7 @@ process_meta = process.process_meta._replace(
     element_types=(IProposal,
                    ),
     is_implicit_addable=True,
-    workflow_name = 'standard',
+    workflow_name = 'stadtforum',
 )
 
 

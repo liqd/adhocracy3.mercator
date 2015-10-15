@@ -6,3 +6,4 @@ def includeme(config):  # pragma: no cover
     config.include('.kiezkassen')
     config.include('.bplan')
     config.include('.alexanderplatz')
+    config.include('.stadtforum')
