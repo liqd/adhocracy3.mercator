@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Embedded S-1 process</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <!-- begin embed snipped -->
+        <script type="text/javascript" src="http://localhost:6551/AdhocracySDK.js"></script>
+        <script type="text/javascript">
+            adhocracy.init("http://localhost:6551", function(adhocracy) {
+                adhocracy.embed(".adhocracy_marker");
+            });
+        </script>
+        <div class="adhocracy_marker" data-widget="s1" data-initial-url="/r/s1" data-autoresize="false" data-locale="de" data-autourl="true" style="height:800px"></div>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+<div data-ng-switch="transclusionId">
+    <div data-ng-switch-when="menu">
+        <div class="moving-column-tab">
+            <i class="icon-user-unfilled moving-column-icon"></i>
+        </div>
+        <a
+            class="moving-column-menu-button"
+            href=""
+            data-ng-click="ctrl.toggleOverlay('messaging')"
+            data-ng-if="messageOptions.POST">{{ "TR__MESSAGING" | translate }}</a>
+
+        <div class="moving-column-menu-nav">
+            <a class="button m-menu-action" data-ng-href="{{ '/principals/users/' | adhResourceUrl }}">{{ 'TR__CLOSE' | translate }} X</a>
+        </div>
+    </div>
+
+    <adh-recompile-on-change
+        data-ng-switch-when="body"
+        data-value="{{userUrl}}">
+        <adh-user-profile
+            data-path="{{userUrl}}">
+            <section class="s1-user-profile-proposal-list">
+                <h3 class="s1-user-profile-proposal-list-heading">{{ "TR__USERS_PROPOSALS" | translate:userBasic }}</h3>
+                <adh-s1-proposal-listing
+                    data-creator="{{path}}">
+                </adh-s1-proposal-listing>
+            </section>
+        </adh-user-profile>
+    </adh-recompile-on-change>
+
+    <adh-user-message
+        data-ng-switch-when="overlays"
+        data-ng-if="overlay === 'messaging'"
+        data-recipient-url="{{userUrl}}">
+    </adh-user-message>
+</div>

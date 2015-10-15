@@ -1,0 +1,20 @@
+<div data-ng-switch="transclusionId">
+    <div data-ng-switch-when="menu">
+        <a data-ng-href="{{ proposalUrl | adhParentPath | adhResourceUrl:'edit' }}"
+            data-ng-click="edit()"
+            data-ng-class="{'is-active': isEdit}"
+            class="button m-menu-action">{{ "TR__EDIT" | translate }}</a>
+        <div class="moving-column-menu-nav">
+            <a
+                class="button m-menu-action"
+                data-ng-href="{{ processUrl | adhResourceUrl:meeting }}">{{ 'TR__CLOSE' | translate }} X</a>
+        </div>
+    </div>
+    <adh-s1-proposal-detail
+        data-ng-switch-when="body"
+        data-path="{{proposalUrl}}">
+    </adh-s1-proposal-detail>
+    <a class="moving-column-expand" data-ng-switch-when="collapsed" data-ng-href="{{ proposalUrl | adhParentPath | adhResourceUrl }}">
+        <i class="icon-collapse moving-column-expand-icon"></i>
+    </a>
+</div>

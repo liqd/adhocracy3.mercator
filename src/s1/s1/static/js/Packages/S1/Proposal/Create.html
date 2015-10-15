@@ -1,0 +1,55 @@
+<form
+    novalidate="novalidate"
+    data-ng-submit="submit()"
+    class="s1-proposal-form"
+    name="S1ProposalForm">
+
+    <div class="s1-proposal-form-upper">
+        <div class="form-error" data-ng-repeat="error in errors track by $index">
+            <p>{{ error | adhFormatError | translate }}</p>
+        </div>
+
+        <label>
+            <input
+                type="text"
+                data-ng-model="data.title"
+                name="title"
+                minlength="3"
+                maxlength="100"
+                required="required"
+                class="s1-proposal-form-title s1-proposal-title"
+                placeholder="{{ 'TR__S1_TITLE_PLACEHOLDER' | translate }}" />
+            <span class="input-error" data-ng-show="showError(S1ProposalForm, S1ProposalForm.title, 'required')">
+                {{ "TR__S1_ERROR_REQUIRED_TITLE" | translate }}
+            </span>
+        </label>
+
+        <label>
+            <textarea
+                data-msd-elastic=""
+                data-ng-model="data.description"
+                name="description"
+                maxlength="1000"
+                class="s1-proposal-form-description"
+                placeholder="{{ 'TR__S1_DESCRIPTION_PLACEHOLDER' | translate }}"
+                required="required"></textarea>
+
+            <span class="input-error" data-ng-show="showError(S1ProposalForm, S1ProposalForm.description, 'required')">
+                {{ "TR__S1_ERROR_REQUIRED_DESCRIPTION" | translate }}
+            </span>
+        </label>
+    </div>
+
+    <footer class="form-footer s1-proposal-form-footer">
+        <input
+            type="submit"
+            name="submit"
+            value="{{ 'TR__PUBLISH' | translate }}"
+            class="button-cta form-footer-button-cta m-variant" />
+
+        <a
+            href=""
+            data-ng-click="cancel()"
+            class="button m-menu-action">{{ "TR__CANCEL" | translate }}</a>
+    </footer>
+</form>

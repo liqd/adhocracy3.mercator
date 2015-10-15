@@ -1,0 +1,67 @@
+$susy: (
+    gutters: 0.05
+);
+
+.s1-landing {
+    @include container;
+    background: $color-background-base-introvert;
+}
+
+.s1-landing-row,
+.s1-landing-section {
+    @include clearfix;
+    @include rem(border-bottom, 4px solid $color-background-base-introvert);
+    background: $color-background-base;
+}
+
+.s1-landing-row {
+    .s1-landing-section {
+        border-bottom: 0;
+    }
+}
+
+.s1-landing-section {
+    @include rem(padding, 19px 16px 13px);
+}
+
+.s1-landing-section-header {
+    @include rem(font-size, $font-size-normal);
+    @include rem(margin, 0 0 20px);
+    color: $color-text-normal;
+    font-weight: $font-weight-medium;
+}
+
+.s1-landing-section-footer {
+    @include rem(margin-top, 4px);
+    float: right;
+
+    .button {
+        font-weight: bold;
+    }
+}
+
+.s1-landing-section-left {
+    @include span(9 of 12 first);
+}
+
+.s1-landing-section-right {
+    @include rem(border-left, 4px solid $color-background-base-introvert);
+    @include span(3 of 12 last);
+}
+
+.s1-landing-section-go {
+    text-align: center;
+
+    .button-cta {
+        @include rem(margin-bottom, 17px);
+        display: block;
+    }
+
+    .button {
+        font-weight: $font-weight-extrovert;
+    }
+}
+
+.s1-landing-section-footer-more {
+    @extend .m-introvert;
+}

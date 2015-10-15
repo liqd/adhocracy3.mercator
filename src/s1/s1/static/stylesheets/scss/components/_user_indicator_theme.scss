@@ -1,0 +1,31 @@
+.user-indicator {
+    vertical-align: top;
+
+    .button {
+        margin-right: 0;
+        text-align: left;
+    }
+
+    a {
+        @include inline-block;
+    }
+
+    .user-indicator-icon {
+        @include rem(font-size, 20px);
+        @include rem(margin-right, 5px);
+    }
+
+    .user-data {
+        @include inline-block;
+
+        .button {
+            @include border-radius(0);
+            display: block;
+        }
+    }
+
+    .user-indicator-lout {
+        height: auto;
+        line-height: 1;
+    }
+}

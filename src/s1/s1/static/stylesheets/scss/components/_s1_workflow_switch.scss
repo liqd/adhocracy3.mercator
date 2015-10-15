@@ -1,0 +1,84 @@
+.s1-workflow-switch {
+    @include clearfix;
+    @include rem(margin, 0 auto 27px);
+    width: $moving-column-single-width-max;
+}
+
+$state-height: 15px;
+$arrow-width: 5px;
+
+.s1-states {
+    @include clearfix;
+    @include border-radius($state-height / 2);
+    border: 1px solid $color-brand-one-normal;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.s1-state {
+    @include rem(font-size, $font-size-small);
+    @include rem(line-height, $state-height);
+    color: $color-brand-one-normal;
+    float: left;
+    position: relative;
+    text-align: center;
+    width: 33.3333333333%;
+
+    &.is-selected {
+        background: $color-background-base;
+        color: $color-brand-one-extrovert;
+
+        &:after {
+            border-left-color: $color-background-base;
+        }
+    }
+
+    &:first-child {
+        @include border-radius(($state-height / 2) 0 0 ($state-height / 2));
+
+        &:before {
+            display: none;
+        }
+    }
+
+    &:last-child {
+        @include border-radius(0 ($state-height / 2) ($state-height / 2) 0);
+    }
+
+    &:after, &:before {
+        @include rem(border-left, $arrow-width solid $color-background-base-introvert);
+        @include rem(border-top, $state-height / 2 solid transparent);
+        @include rem(border-bottom, $state-height / 2 solid transparent);
+        content: "";
+        height: 0;
+        position: absolute;
+        top: 0;
+        width: 0;
+        z-index: 1;
+    }
+
+    &:before {
+        border-left-color: $color-brand-one-normal;
+        left: 0;
+    }
+
+    &:after {
+        right: 1px - $arrow-width;
+        z-index: 2;
+    }
+}
+
+.s1-workflow-switch.has-switch .s1-workflow-switch-transcluded {
+    @include span(9 of 12 first);
+}
+
+.s1-workflow-switch-container {
+    @include span(3 of 12 last);
+    text-align: center;
+
+    .button {
+        @include rem(line-height, $state-height);
+        height: auto;
+    }
+}

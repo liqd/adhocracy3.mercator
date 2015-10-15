@@ -1,0 +1,26 @@
+<adh-recompile-on-change data-value="{{path}}">
+    <div class="s1-proposal-detail is-{{data.workflowState}}" data-ng-if="data.title">
+        <h1 class="s1-proposal-title">{{ data.title }}</h1>
+
+        <ul class="meta-list">
+            <li class="meta-list-item"><adh-time data-datetime="data.creationDate" data-format="L"></adh-time></li>
+            <li class="meta-list-item">{{ data.rateCount }} {{ "TR__SUPPORTERS" | translate }}</li>
+            <li class="meta-list-item">{{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</li>
+        </ul>
+
+        <div class="s1-meta-list-actions">
+            <ul class="meta-list">
+                <li class="meta-list-item meta-list-item-rate"><adh-rate data-refers-to="{{path}}"></adh-rate></li>
+                <li class="meta-list-item meta-list-item-comments"><a data-ng-href="{{ path | adhResourceUrl:'comments' }}"><i class="icon-speechbubble-unfilled meta-list-item-comments-icon"></i> {{ "TR__COMMENTS" | translate }}</a></li>
+            </ul>
+        </div>
+
+        <div class="s1-author-details">
+            <adh-user-meta data-path="{{data.creator}}"></adh-user-meta>
+        </div>
+
+        <div class="s1-proposal-detail-text">
+            <adh-parse-markdown data-parsetext="data.description"></adh-parse-markdown>
+        </div>
+    </div>
+</adh-recompile-on-change>

@@ -1,0 +1,103 @@
+.s1-proposal-list-item {
+    @include clearfix;
+    @include rem(padding, 21px 16px 17px 16px);
+    @include rem(margin-bottom, 4px);
+    background: $color-background-base;
+    display: block;
+    text-decoration: none;
+
+    .s1-proposal-list-item-meta {
+        float: right;
+
+        .meta-list-item {
+            @include rem(margin-right, 8px);
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+
+    &.is-selected {
+        border: 1px solid $color-text-highlight-normal;
+    }
+}
+
+.s1-proposal-list-item-type {
+    color: $color-brand-one-normal;
+
+    &.is-selected {
+        color: $color-function-winner;
+    }
+}
+
+.s1-proposal-title {
+    @include rem(margin, 17px 0 14px);
+    @include rem(padding-bottom, 23px);
+    border-bottom: 1px solid $color-background-base-introvert;
+    color: $color-text-normal;
+    font-family: $font-family-serif;
+    font-size: $font-size-large;
+}
+
+.s1-proposal-list-item-creator a {
+    text-decoration: none;
+}
+
+.s1-proposal-list-item-time {
+    color: $color-text-introvert;
+    display: block;
+    padding-top: 2px;
+}
+
+.s1-proposal-detail {
+    @include rem(padding, 5px 0 0 12px);
+
+    .s1-proposal-title {
+        @include rem(margin-bottom, 8px);
+        border: 0;
+        padding-bottom: 0;
+    }
+}
+
+.s1-proposal-list .listing-elements {
+    @include clearfix;
+    background: $color-background-base-introvert;
+}
+
+.s1-author-details .user-meta {
+    @include rem(padding, 20px 0);
+    border: 1px solid $color-background-base-introvert;
+    border-width: 1px 0;
+    display: block;
+    text-decoration: none;
+}
+
+.s1-proposal-detail-text {
+    @include rem(padding-top, 28px);
+}
+
+.s1-proposal-form {
+    padding: 2em;
+
+    label {
+        @include rem(margin-bottom, 20px);
+        display: block;
+    }
+
+    .s1-proposal-form-title,
+    .s1-proposal-form-description {
+        background: $color-background-base-introvert;
+        border-left: 1px solid $color-text-introvert;
+    }
+
+    .s1-proposal-form-title {
+        @include rem(min-height, 50px);
+        font-weight: $font-weight-extrovert;
+        margin-top: 0;
+    }
+
+    .s1-proposal-form-description {
+        @include rem(min-height, 300px);
+    }
+}

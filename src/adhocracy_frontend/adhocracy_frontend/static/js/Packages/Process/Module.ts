@@ -11,5 +11,6 @@ export var register = (angular) => {
             AdhTopLevelStateModule.moduleName
         ])
         .provider("adhProcess", AdhProcess.Provider)
+        .directive("adhWorkflowSwitch", ["adhConfig", "adhHttp", "$window", AdhProcess.workflowSwitchDirective])
         .directive("adhProcessView", ["adhTopLevelState", "adhProcess", "$compile", AdhProcess.processViewDirective]);
 };

@@ -1,0 +1,42 @@
+<div data-ng-switch="transclusionId" data-ng-if="processState === 'propose'">
+    Meeting B is not yet open for participation.
+</div>
+
+<div data-ng-switch="transclusionId" data-ng-if="processState !== 'propose'">
+    <div data-ng-switch-when="menu">
+        <div class="moving-column-menu-sorts">
+            <span class="button m-menu-action">{{ "TR__SORT_BY" | translate }}</span>
+            <a href=""
+                class="button m-menu-action"
+                data-ng-click="shared.setSort('rates')"
+                data-ng-class="{'is-active': shared.sort==='rates'}">{{ "TR__RATES" | translate }}</a>
+            <a href=""
+                class="button m-menu-action"
+                data-ng-click="shared.setSort('item_creation_date')"
+                data-ng-class="{'is-active': shared.sort==='item_creation_date'}">{{ "TR__CREATION_DATE" | translate }}</a>
+        </div>
+    </div>
+
+    <adh-facets
+        data-ng-switch-when="sidebar"
+        data-update="shared.update"
+        data-facets="shared.facets">
+    </adh-facets>
+
+    <div data-ng-switch-when="body">
+        <adh-s1-proposal-listing
+            data-ng-if="proposalState"
+            data-state="{{proposalState}}"
+            data-decision-date="{{decisionDate}}"
+            data-update="shared.update"
+            data-facets="shared.facets"
+            data-sort="shared.sort"
+            data-reverse="shared.reverse">
+            data-facets="shared.facets">
+        </adh-s1-proposal-listing>
+    </div>
+
+    <a class="moving-column-expand" data-ng-switch-when="collapsed" data-ng-href="{{ processUrl | adhResourceUrl:'next' }}">
+        <i class="icon-collapse moving-column-expand-icon"></i>
+    </a>
+</div>

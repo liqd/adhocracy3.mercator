@@ -98,6 +98,7 @@ class TestChangeChildrenToSelectedRejected:
             depth=2,
             only_visible=True,
             sort_by='rates',
+            reverse=True,
             indexes = {'tag': 'LAST',
                        'workflow_state': 'voteable'},
             )

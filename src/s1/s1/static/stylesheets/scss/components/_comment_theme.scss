@@ -1,0 +1,48 @@
+.listing-create-form,
+.comment-children-create-form,
+.comment-children-edit-form {
+    background: transparent;
+}
+
+.comment-create-form-text,
+.comment-edit-form-text {
+    background: $color-background-base-introvert;
+}
+
+.comment-current-user {
+    @include rem(padding, 0 0 7px 18px);
+    color: $color-text-highlight-normal;
+    display: block;
+}
+
+.comment-header {
+    @include clearfix;
+    @include rem(margin-bottom, 5px);
+    font-size: $font-size-normal;
+
+    .comment-header-creator {
+        float: left;
+
+        &:after {
+            display: none;
+        }
+    }
+
+    .comment-header-date {
+        float: right;
+    }
+}
+
+.comment-footer-links {
+    a {
+        @include rem(margin-right, 21px);
+    }
+}
+
+.comment-children-edit-form {
+    padding-left: 0;
+}
+
+.comment-main {
+    @include rem(padding-top, 22px);
+}

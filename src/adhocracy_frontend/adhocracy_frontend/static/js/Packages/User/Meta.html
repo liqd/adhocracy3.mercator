@@ -1,5 +1,5 @@
 <!-- as this is an inline directive, whitespace is relevant, including no newline at end of file
---><span data-ng-if="noLink">{{name || userBasic.name}}</span><a data-ng-href="{{ path | adhResourceUrl }}" data-ng-if="!noLink">{{name || userBasic.name}}</a>
+--><span data-ng-if="noLink" class="user-meta">{{name || userBasic.name}}</span><a class="user-meta" data-ng-href="{{ path | adhResourceUrl }}" data-ng-if="!noLink">{{name || userBasic.name}}</a>
 <span data-ng-repeat="assignment in assignments">
 	<span class="badge">{{ assignment.title }}</span>
 </span>

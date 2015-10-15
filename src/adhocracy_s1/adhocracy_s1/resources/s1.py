@@ -4,6 +4,7 @@ from adhocracy_core.resources import process
 from adhocracy_core.resources import proposal
 from adhocracy_core.resources.logbook import add_logbook_service
 from adhocracy_core.sheets.logbook import IHasLogbookPool
+from adhocracy_core.sheets.rate import ILikeable
 
 
 class IProcess(process.IProcess):
@@ -25,7 +26,9 @@ class IProposalVersion(proposal.IProposalVersion):
 proposal_version_meta = proposal.proposal_version_meta\
     ._replace(iresource=IProposalVersion,
               )\
-    ._add(extended_sheets=(IHasLogbookPool,))
+    ._add(extended_sheets=(IHasLogbookPool,
+                           ILikeable,
+                           ))
 
 
 class IProposal(proposal.IProposal):

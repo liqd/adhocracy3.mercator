@@ -157,7 +157,7 @@ export class Listing<Container extends ResourcesBase.Resource> {
                     if (typeof $scope.contentType !== "undefined") {
                         params.content_type = $scope.contentType;
                         if (_.endsWith($scope.contentType, "Version")) {
-                            params.depth = 2;
+                            params.depth = params.depth || 2;
                             params.tag = "LAST";
                         }
                     }

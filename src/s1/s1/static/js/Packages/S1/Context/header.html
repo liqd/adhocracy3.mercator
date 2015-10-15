@@ -1,0 +1,15 @@
+<div class="s1-header">
+    <a class="s1-header-logo-link" data-ng-href="{{ processUrl | adhResourceUrl }}">
+        <i class="icon-partou-logo s1-header-logo" title="PARTOU."></i>
+    </a>
+
+    <div class="s1-header-menu">
+        <a class="s1-header-link button-cta-secondary" data-ng-class="{'is-active': meeting == 'archive'}" data-ng-href="{{ processUrl | adhResourceUrl:'archive' }}">{{ "TR__ARCHIVE" | translate }}</a>
+        <adh-s1-meeting-selector></adh-s1-meeting-selector>
+        <adh-user-indicator data-separator="/"></adh-user-indicator>
+        <a data-ng-href="{{ '/principals/users' | adhResourceUrl }}" class="button-cta-secondary">{{ "TR__S1_USER_LIST" | translate }}</a>
+    </div>
+</div>
+<adh-workflow-switch data-path="{{ processUrl }}">
+    <adh-s1-state-indicator data-path="{{ processUrl }}"></adh-s1-state-indicator>
+</adh-workflow-switch>

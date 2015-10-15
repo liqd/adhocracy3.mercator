@@ -33,7 +33,7 @@ def do_transition_to_result(context: IPool, request: Request, **kwargs):
     decision_date = datetime.utcnow().replace(tzinfo=UTC)
     _store_state_data(context, 'result', request, start_date=decision_date)
     _change_children_to_rejected_or_selected(context, request,
-                                              start_date=decision_date)
+                                             start_date=decision_date)
 
 
 def _change_children_to_rejected_or_selected(context: IPool, request: Request,
@@ -89,6 +89,7 @@ def _get_children_sort_by_rates(context) -> []:
                                                   only_visible=True,
                                                   interfaces=(IRateable, IVersionable),
                                                   sort_by='rates',
+                                                  reverse=True,
                                                   indexes={'tag': 'LAST',
                                                            'workflow_state': 'voteable'},
 

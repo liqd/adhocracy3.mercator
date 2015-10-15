@@ -1,0 +1,17 @@
+<div class="user-indicator" data-ng-switch="credentials.loggedIn">
+    <div data-ng-switch-when="true">
+        <i class="icon-user user-indicator-icon"></i>
+        <div class="user-data">
+            <a data-ng-if="!noLink" data-ng-href="{{ credentials.userPath | adhResourceUrl }}" class="button m-narrow">{{user.data.name}}</a>
+            <span data-ng-if="noLink" class="button m-menu-action m-narrow">{{user.data.name}}</span>
+            <a class="button m-menu-action m-narrow user-indicator-lout" href="" data-ng-click="logOut()">{{ "TR__LOGOUT" | translate }}</a>
+        </div>
+    </div>
+    <div data-ng-switch-default="">
+        <div class="user-indicator-primary">
+            <i class="icon-user user-indicator-login-icon"></i> <a class="button-cta-secondary" href="" data-ng-click="logIn()">{{ "TR__LOGIN" | translate }}</a>
+            /
+            <a class="button-cta-secondary" href="" data-ng-click="register()">{{ 'TR__REGISTER' | translate }}</a>
+        </div>
+    </div>
+</div>

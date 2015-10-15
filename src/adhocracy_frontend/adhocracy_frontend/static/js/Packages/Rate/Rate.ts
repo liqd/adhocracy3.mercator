@@ -97,7 +97,7 @@ export class Service {
     public fetchRate(poolPath : string, object : string, subject : string) : angular.IPromise<RIRateVersion> {
         var query : any = {
             content_type: RIRateVersion.content_type,
-            depth: 2,
+            depth: "all",
             tag: "LAST"
         };
         query[SIRate.nick + ":subject"] = subject;
@@ -117,7 +117,7 @@ export class Service {
     public fetchAggregatedRates(poolPath : string, object : string) : angular.IPromise<{[key : string]: number}> {
         var query : any = {
             content_type: RIRateVersion.content_type,
-            depth: 2,
+            depth: "all",
             tag: "LAST",
             count: "true",
             aggregateby: "rate"

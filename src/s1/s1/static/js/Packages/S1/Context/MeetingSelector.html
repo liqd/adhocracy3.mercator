@@ -1,0 +1,10 @@
+<span class="button-group" data-ng-if="workflowState === 'propose'">
+    <a class="button button-cta" data-ng-class="{'is-active': meeting == 'current'}" data-ng-href="{{ processUrl | adhResourceUrl:'current' }}">{{ "TR__MEETING_A" | translate }}</a>
+    <a class="button button-cta m-variant" data-ng-href="{{ processUrl | adhResourceUrl:'create-proposal' }}">{{ "TR__CREATE_PROPOSAL" | translate }}</a>
+</span>
+
+<a class="button-cta-secondary" data-ng-class="{'is-active': meeting == 'current'}" data-ng-href="{{ processUrl | adhResourceUrl:'current' }}" data-ng-if="workflowState !== 'propose'">{{ "TR__MEETING_A" | translate }}</a>
+<span class="button-group" data-ng-if="workflowState !== 'propose'">
+    <a class="button button-cta" data-ng-class="{'is-active': meeting == 'next'}" data-ng-href="{{ processUrl | adhResourceUrl:'next' }}">{{ "TR__MEETING_B" | translate }}</a>
+    <a class="button button-cta m-variant" data-ng-href="{{ processUrl | adhResourceUrl:'create-proposal' }}">{{ "TR__CREATE_PROPOSAL" | translate }}</a>
+</span>

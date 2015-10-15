@@ -1,0 +1,26 @@
+.rate {
+    .rate-pro {
+        color: $color-function-valid;
+
+        &:hover, &:focus, &:active,
+        &.is-rate-button-active {
+            .s1-rate-icon:before {
+                @extend .icon-vote-filled;
+            }
+        }
+
+        &.is-rate-button-active {
+            &:hover {
+                color: $color-function-invalid;
+            }
+
+            &:active {
+                color: $color-function-valid;
+
+                .s1-rate-icon:before {
+                    @extend .icon-vote;
+                }
+            }
+        }
+    }
+}

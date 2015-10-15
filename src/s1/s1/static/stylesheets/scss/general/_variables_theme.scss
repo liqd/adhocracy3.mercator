@@ -1,0 +1,47 @@
+//Brand colors
+$color-brand-one-normal: #b3b3b3;
+$color-brand-one-introvert: #e6e6e6;
+$color-brand-one-extrovert: #808080;
+$color-brand-two-normal: #29abe2;
+$color-brand-two-introvert: #7fcdee;
+$color-brand-two-extrovert: #1f80aa;
+$color-brand-three-normal: #666;
+
+// Text colors
+$color-text-normal: #333;
+$color-text-introvert: #666;
+$color-text-highlight-normal: $color-brand-two-introvert;
+$color-text-highlight-introvert: $color-brand-two-introvert;
+$color-text-highlight-extrovert: $color-brand-two-extrovert;
+
+// Function colors
+$color-function-valid: #73bf44;
+$color-function-invalid: #f00;
+$color-function-winner: #f79321;
+
+// Structure colors
+$color-structure-extrovert: #808080;
+$color-structure-border: $color-background-base-introvert;
+
+$font-family-normal: "Roboto", sans-serif;
+$font-family-serif: "Merriweather", serif;
+
+$font-size-smaller: 9px;
+$font-size-small: 10px;
+$font-size-normal: 12px;
+$font-size-plus: 14px;
+$font-size-large: 18px;
+
+//Other
+$moving-column-single-width-max: $font-size-normal * 64;
+
+$color-button-text: $color-brand-one-extrovert;
+$color-button-text-hover: $color-brand-one-normal;
+$color-button-cta-text: $color-text-normal;
+$color-button-cta-base: $color-brand-one-introvert;
+$color-button-cta-hover-background: $color-brand-one-normal;
+$color-button-cta-active-background: $color-brand-one-extrovert;
+$color-button-cta-active-text: $color-text-inverted;
+
+$s1-header-width: 80%;
+$moving-column-menu-height: 30px / $font-size-normal * 1em;

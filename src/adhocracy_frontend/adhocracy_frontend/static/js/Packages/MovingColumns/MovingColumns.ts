@@ -17,14 +17,17 @@ export var movingColumns = (
     $window
 ) => {
     return {
-        link: (scope, element) => {
+        link: (scope, element, attrs) => {
             var cls : string;
             var fontSize : number = parseInt(element.css("font-size"), 10);
-
-            var maxShowWidth = 55 * fontSize;
+            var maxWidth = attrs.maxWidth ? attrs.maxWidth : 55;
+            var maxShowWidth = maxWidth * fontSize;
             var minShowWidth = 35 * fontSize;
             var collapseWidth = 2 * fontSize;
-            var spacing = Math.ceil(0.3 * fontSize);
+            if (attrs.spacing) {
+                attrs.spacing = (parseInt(attrs.spacing, 10) === 0) ? 0.0000001 : attrs.spacing; // FIXME: why doesn't 0 work ?
+            }
+            var spacing = attrs.spacing ? attrs.spacing : Math.ceil(0.3 * fontSize);
 
             var clearStates = (element) => {
                 element.removeClass("is-show");

@@ -1,0 +1,14 @@
+<div class="rate" data-ng-class="{
+    'is-disabled': disabled || (!optionsPostPool.POST && optionsPostPool.loggedIn)
+}" data-ng-if="ready">
+    <a
+        href=""
+        class="rate-pro"
+        data-ng-class="{
+            'is-rate-button-active': myRate === 1,
+            'is-disabled': disabled || (!optionsPostPool.POST && optionsPostPool.loggedIn)
+        }"
+        data-ng-click="toggle(1)">
+        <i class="icon-vote s1-rate-icon"></i> {{'TR__SUPPORT' | translate}}
+    </a>
+</div>

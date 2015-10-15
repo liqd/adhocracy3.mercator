@@ -1,0 +1,41 @@
+.s1-header {
+    @include rem(padding, 10px 0 17px);
+
+    position: relative;
+
+    .s1-header-logo-link, .button,
+    .user-indicator, .button-group,
+    .s1-header-link {
+        @include rem(margin-right, 60px);
+    }
+
+    .button-group, .user-indicator {
+        .button {
+            margin-right: 0;
+        }
+    }
+}
+
+.s1-header-logo-link {
+    @include inline-block;
+    @include rem(line-height, 30px);
+    @include rem(top, 10px);
+    color: $color-text-introvert;
+    position: absolute;
+    left: 0;
+
+    &:hover, &:focus {
+        color: $color-text-normal;
+    }
+}
+
+.s1-header-logo {
+    @include rem(font-size, 17px);
+    @include rem(margin-left, 24px);
+}
+
+.s1-header-menu {
+    width: $s1-header-width;
+    margin: 0 auto;
+    text-align: center;
+}

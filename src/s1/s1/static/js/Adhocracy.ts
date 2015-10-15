@@ -6,56 +6,60 @@
 /// <reference path="../lib/DefinitelyTyped/leaflet/leaflet.d.ts"/>
 /// <reference path="./_all.d.ts"/>
 
-import angular = require("angular");
+import * as angular from "angular";
 
-import angularAnimate = require("angularAnimate");  if (angularAnimate) { ; };
-import angularAria = require("angularAria");  if (angularAria) { ; };
-import angularMessages = require("angularMessages");  if (angularMessages) { ; };
-import angularCache = require("angularCache");  if (angularCache) { ; };
-import angularTranslate = require("angularTranslate");  if (angularTranslate) { ; };
-import angularTranslateLoader = require("angularTranslateLoader");  if (angularTranslateLoader) { ; };
-import angularElastic = require("angularElastic");  if (angularElastic) { ; };
+import * as angularAnimate from "angularAnimate";  if (angularAnimate) { ; };
+import * as angularAria from "angularAria";  if (angularAria) { ; };
+import * as angularMessages from "angularMessages";  if (angularMessages) { ; };
+import * as angularCache from "angularCache";  if (angularCache) { ; };
+import * as angularTranslate from "angularTranslate";  if (angularTranslate) { ; };
+import * as angularTranslateLoader from "angularTranslateLoader";  if (angularTranslateLoader) { ; };
+import * as angularElastic from "angularElastic";  if (angularElastic) { ; };
 
-import modernizr = require("modernizr");
-import moment = require("moment");
-import webshim = require("polyfiller");
-import leaflet = require("leaflet");
-import markdownit = require("markdownit");
+import * as modernizr from "modernizr";
+import * as moment from "moment";
+import * as webshim from "polyfiller";
+import * as leaflet from "leaflet";
+import * as markdownit from "markdownit";
 
-import AdhAbuse = require("./Packages/Abuse/Abuse");
-import AdhBadge = require("./Packages/Badge/Badge");
-import AdhConfig = require("./Packages/Config/Config");
-import AdhComment = require("./Packages/Comment/Comment");
-import AdhCrossWindowMessaging = require("./Packages/CrossWindowMessaging/CrossWindowMessaging");
-import AdhDateTime = require("./Packages/DateTime/DateTime");
-import AdhDocumentWorkbench = require("./Packages/DocumentWorkbench/DocumentWorkbench");
-import AdhDone = require("./Packages/Done/Done");
-import AdhEmbed = require("./Packages/Embed/Embed");
-import AdhEventManager = require("./Packages/EventManager/EventManager");
-import AdhHttp = require("./Packages/Http/Http");
-import AdhImage = require("./Packages/Image/Image");
-import AdhInject = require("./Packages/Inject/Inject");
-import AdhListing = require("./Packages/Listing/Listing");
-import AdhLocale = require("./Packages/Locale/Locale");
-import AdhLocalSocket = require("./Packages/LocalSocket/LocalSocket");
-import AdhMarkdown = require("./Packages/Markdown/Markdown");
-import AdhMapping = require("./Packages/Mapping/Mapping");
-import AdhMovingColumns = require("./Packages/MovingColumns/MovingColumns");
-import AdhPermissions = require("./Packages/Permissions/Permissions");
-import AdhPreliminaryNames = require("./Packages/PreliminaryNames/PreliminaryNames");
-import AdhProcess = require("./Packages/Process/Process");
-import AdhRate = require("./Packages/Rate/Rate");
-import AdhAngularHelpers = require("./Packages/AngularHelpers/AngularHelpers");
-import AdhResourceArea = require("./Packages/ResourceArea/ResourceArea");
-import AdhResourceWidgets = require("./Packages/ResourceWidgets/ResourceWidgets");
-import AdhShareSocial = require("./Packages/ShareSocial/ShareSocial");
-import AdhSticky = require("./Packages/Sticky/Sticky");
-import AdhTopLevelState = require("./Packages/TopLevelState/TopLevelState");
-import AdhTracking = require("./Packages/Tracking/Tracking");
-import AdhUser = require("./Packages/User/User");
-import AdhUserViews = require("./Packages/User/Views");
-import AdhWebSocket = require("./Packages/WebSocket/WebSocket");
-import AdhTemplates = require("adhTemplates");  if (AdhTemplates) { ; };
+import * as AdhAbuseModule from "./Packages/Abuse/Module";
+import * as AdhBadgeModule from "./Packages/Badge/Module";
+import * as AdhCommentModule from "./Packages/Comment/Module";
+import * as AdhCrossWindowMessagingModule from "./Packages/CrossWindowMessaging/Module";
+import * as AdhDateTimeModule from "./Packages/DateTime/Module";
+import * as AdhDocumentWorkbenchModule from "./Packages/DocumentWorkbench/Module";
+import * as AdhDoneModule from "./Packages/Done/Module";
+import * as AdhEmbedModule from "./Packages/Embed/Module";
+import * as AdhEventManagerModule from "./Packages/EventManager/Module";
+import * as AdhHttpModule from "./Packages/Http/Module";
+import * as AdhImageModule from "./Packages/Image/Module";
+import * as AdhInjectModule from "./Packages/Inject/Module";
+import * as AdhListingModule from "./Packages/Listing/Module";
+import * as AdhLocaleModule from "./Packages/Locale/Module";
+import * as AdhLocalSocketModule from "./Packages/LocalSocket/Module";
+import * as AdhMarkdownModule from "./Packages/Markdown/Module";
+import * as AdhMappingModule from "./Packages/Mapping/Module";
+import * as AdhMovingColumnsModule from "./Packages/MovingColumns/Module";
+import * as AdhPermissionsModule from "./Packages/Permissions/Module";
+import * as AdhPreliminaryNamesModule from "./Packages/PreliminaryNames/Module";
+import * as AdhProcessModule from "./Packages/Process/Module";
+import * as AdhRateModule from "./Packages/Rate/Module";
+import * as AdhAngularHelpersModule from "./Packages/AngularHelpers/Module";
+import * as AdhResourceAreaModule from "./Packages/ResourceArea/Module";
+import * as AdhResourceWidgetsModule from "./Packages/ResourceWidgets/Module";
+import * as AdhS1Module from "./Packages/S1/Module";
+import * as AdhShareSocialModule from "./Packages/ShareSocial/Module";
+import * as AdhStickyModule from "./Packages/Sticky/Module";
+import * as AdhTopLevelStateModule from "./Packages/TopLevelState/Module";
+import * as AdhTrackingModule from "./Packages/Tracking/Module";
+import * as AdhUserModule from "./Packages/User/Module";
+import * as AdhUserViewsModule from "./Packages/User/ViewsModule";
+import * as AdhWebSocketModule from "./Packages/WebSocket/Module";
+
+import * as AdhConfig from "./Packages/Config/Config";
+import * as AdhTopLevelState from "./Packages/TopLevelState/TopLevelState";
+
+import * as AdhTemplates from "adhTemplates";  if (AdhTemplates) { ; };
 
 webshim.setOptions("basePath", "/static/lib/webshim/js-webshim/minified/shims/");
 webshim.setOptions("forms-ext", {"replaceUI": true});
@@ -84,16 +88,17 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "ngAnimate",
         "ngAria",
         "ngMessages",
-        AdhComment.moduleName,
-        AdhDocumentWorkbench.moduleName,
-        AdhDone.moduleName,
-        AdhCrossWindowMessaging.moduleName,
-        AdhEmbed.moduleName,
-        AdhResourceArea.moduleName,
-        AdhSticky.moduleName,
-        AdhTracking.moduleName,
-        AdhUserViews.moduleName,
-        AdhMarkdown.moduleName
+        AdhCommentModule.moduleName,
+        AdhDocumentWorkbenchModule.moduleName,
+        AdhDoneModule.moduleName,
+        AdhCrossWindowMessagingModule.moduleName,
+        AdhEmbedModule.moduleName,
+        AdhResourceAreaModule.moduleName,
+        AdhStickyModule.moduleName,
+        AdhTrackingModule.moduleName,
+        AdhUserViewsModule.moduleName,
+        AdhMarkdownModule.moduleName,
+        AdhS1Module.moduleName
     ];
 
     if (config.cachebust) {
@@ -106,7 +111,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         adhTopLevelStateProvider
             .when("", ["$location", ($location) : AdhTopLevelState.IAreaInput => {
                 $location.replace();
-                $location.path("/r/adhocracy/");
+                $location.path("/r/s1/");
                 return {
                     skip: true
                 };
@@ -135,6 +140,9 @@ export var init = (config : AdhConfig.IService, metaApi) => {
             }, {
                 prefix: "/static/i18n/countries_",
                 suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
+            }, {
+                prefix: "/static/i18n/s1_",
+                suffix: config.cachebust ? ".json?" + config.cachebust_suffix : ".json"
             }]
         });
         $translateProvider.useSanitizeValueStrategy("escape");
@@ -155,38 +163,39 @@ export var init = (config : AdhConfig.IService, metaApi) => {
 
     // register our modules
     app.value("adhConfig", config);
-    AdhAbuse.register(angular);
-    AdhBadge.register(angular);
-    AdhComment.register(angular);
-    AdhCrossWindowMessaging.register(angular, config.trusted_domains !== []);
-    AdhDateTime.register(angular);
-    AdhDocumentWorkbench.register(angular);
-    AdhDone.register(angular);
-    AdhEmbed.register(angular);
-    AdhEventManager.register(angular);
-    AdhHttp.register(angular, config, metaApi);
-    AdhImage.register(angular);
-    AdhInject.register(angular);
-    AdhListing.register(angular);
-    AdhLocale.register(angular);
-    AdhLocalSocket.register(angular);
-    AdhMapping.register(angular);
-    AdhMarkdown.register(angular);
-    AdhMovingColumns.register(angular);
-    AdhPermissions.register(angular);
-    AdhPreliminaryNames.register(angular);
-    AdhProcess.register(angular);
-    AdhRate.register(angular);
-    AdhAngularHelpers.register(angular);
-    AdhResourceArea.register(angular);
-    AdhResourceWidgets.register(angular);
-    AdhShareSocial.register(angular);
-    AdhSticky.register(angular);
-    AdhTopLevelState.register(angular);
-    AdhTracking.register(angular);
-    AdhUser.register(angular);
-    AdhUserViews.register(angular);
-    AdhWebSocket.register(angular);
+    AdhAbuseModule.register(angular);
+    AdhBadgeModule.register(angular);
+    AdhCommentModule.register(angular);
+    AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
+    AdhDateTimeModule.register(angular);
+    AdhDocumentWorkbenchModule.register(angular);
+    AdhDoneModule.register(angular);
+    AdhEmbedModule.register(angular);
+    AdhEventManagerModule.register(angular);
+    AdhHttpModule.register(angular, config, metaApi);
+    AdhImageModule.register(angular);
+    AdhInjectModule.register(angular);
+    AdhListingModule.register(angular);
+    AdhLocaleModule.register(angular);
+    AdhLocalSocketModule.register(angular);
+    AdhMappingModule.register(angular);
+    AdhMarkdownModule.register(angular);
+    AdhMovingColumnsModule.register(angular);
+    AdhPermissionsModule.register(angular);
+    AdhPreliminaryNamesModule.register(angular);
+    AdhProcessModule.register(angular);
+    AdhRateModule.register(angular);
+    AdhAngularHelpersModule.register(angular);
+    AdhResourceAreaModule.register(angular);
+    AdhResourceWidgetsModule.register(angular);
+    AdhS1Module.register(angular);
+    AdhShareSocialModule.register(angular);
+    AdhStickyModule.register(angular);
+    AdhTopLevelStateModule.register(angular);
+    AdhTrackingModule.register(angular);
+    AdhUserModule.register(angular);
+    AdhUserViewsModule.register(angular);
+    AdhWebSocketModule.register(angular);
 
     // force-load some services
     var injector = angular.bootstrap(document.body, ["a3"], {strictDi: true});
