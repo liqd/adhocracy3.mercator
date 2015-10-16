@@ -1,6 +1,6 @@
-<div class="s1-workflow-switch" data-ng-class="{ 'has-switch': availableStates }">
-    <div class="s1-workflow-switch-transcluded" data-ng-transclude=""></div>
-    <div class="s1-workflow-switch-container" data-ng-if="availableStates">
-        <a class="button m-menu-action" href="" data-ng-click="switchState(newState)" data-ng-repeat="newState in availableStates">{{ "TR__S1_SWITCH_TO" | translate }} {{ newState }}</a>
+<div class="workflow-switch" data-ng-class="{ 'has-switch': availableStates }">
+    <div class="workflow-switch-transcluded" data-ng-transclude=""></div>
+    <div class="workflow-switch-container" data-ng-if="availableStates">
+        <a class="button m-menu-action" href="" data-ng-click="switchState(newState)" data-ng-repeat="newState in availableStates">{{ "TR__SWITCH_STATE_TO" | translate }} {{ newState }}</a>
     </div>
 </div>
