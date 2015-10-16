@@ -9,8 +9,13 @@ import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 import * as AdhCredentials from "./Credentials";
 import * as AdhUser from "./User";
 
+import RICommentVersion from "../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
+import RIProposalVersion from "../../Resources_/adhocracy_core/resources/proposal/IProposalVersion";
+import RIRateVersion from "../../Resources_/adhocracy_core/resources/rate/IRateVersion";
 import RIUser from "../../Resources_/adhocracy_core/resources/principal/IUser";
 import RIUsersService from "../../Resources_/adhocracy_core/resources/principal/IUsersService";
+import * as SIMetadata from "../../Resources_/adhocracy_core/sheets/metadata/IMetadata";
+import * as SIPool from "../../Resources_/adhocracy_core/sheets/pool/IPool";
 import * as SIUserBasic from "../../Resources_/adhocracy_core/sheets/principal/IUserBasic";
 
 var pkgLocation = "/User";
@@ -590,6 +595,40 @@ export var adhUserManagementHeaderDirective = (
     };
 };
 
+
+export var adhUserActivityOverviewDirective = (
+    adhConfig: AdhConfig.IService,
+    adhHttp: AdhHttp.Service<any>
+) => {
+    return {
+        restrict: "E",
+        scope: {
+            path: "@"
+        },
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/UserActivityOverview.html",
+        link: (scope, element, attrs) => {
+            // TODO attrs should determine which request to make
+            var params = {
+                depth: "all",
+                tag: "LAST",
+                count: true,
+                elements: false
+            };
+            params[SIMetadata.nick + ":creator"] = scope.path;
+
+            var requestCountInto = (contentType, scopeTarget, shouldRequest) => {
+                if (shouldRequest === "true") {
+                    adhHttp.get(adhConfig.rest_url, _.assign({ content_type: contentType.content_type }, params))
+                        .then((pool) => { scope[scopeTarget] = pool.data[SIPool.nick].count; });
+                }
+            };
+
+            requestCountInto(RICommentVersion, "commentCount", attrs.showComments);
+            requestCountInto(RIProposalVersion, "proposalCount", attrs.showProposals);
+            requestCountInto(RIRateVersion, "rateCount", attrs.showRatings);
+        }
+    };
+};
 
 export var registerRoutes = (
     context : string = ""

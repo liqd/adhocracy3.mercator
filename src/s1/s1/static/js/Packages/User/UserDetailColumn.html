@@ -19,8 +19,13 @@
         data-value="{{userUrl}}">
         <adh-user-profile
             data-path="{{userUrl}}">
+            <adh-user-activity-overview
+              data-show-comments="true"
+              data-show-proposals="true"
+              data-show-ratings="true"
+            >
+            </adh-user-activity-overview>
             <section class="s1-user-profile-proposal-list">
-                <h3 class="s1-user-profile-proposal-list-heading">{{ "TR__USERS_PROPOSALS" | translate:userBasic }}</h3>
                 <adh-s1-proposal-listing
                     data-creator="{{path}}">
                 </adh-s1-proposal-listing>
