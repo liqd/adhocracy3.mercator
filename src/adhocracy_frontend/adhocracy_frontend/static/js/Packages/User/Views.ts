@@ -616,14 +616,16 @@ export var adhUserActivityOverviewDirective = (
             };
             params[SIMetadata.nick + ":creator"] = scope.path;
 
-            adhHttp.get(adhConfig.rest_url, _.assign({ content_type: RICommentVersion.content_type }, params))
-                .then((pool) => { scope.commentCount = pool.data[SIPool.nick].count; });
+            var requestCountInto = (contentType, scopeTarget, shouldRequest) => {
+                if (shouldRequest === "true") {
+                    adhHttp.get(adhConfig.rest_url, _.assign({ content_type: contentType.content_type }, params))
+                        .then((pool) => { scope[scopeTarget] = pool.data[SIPool.nick].count; });
+                }
+            };
 
-            adhHttp.get(adhConfig.rest_url, _.assign({ content_type: RIProposalVersion.content_type }, params))
-                .then((pool) => { scope.proposalCount = pool.data[SIPool.nick].count; });
-
-            adhHttp.get(adhConfig.rest_url, _.assign({ content_type: RIRateVersion.content_type }, params))
-                .then((pool) => { scope.rateCount = pool.data[SIPool.nick].count; });
+            requestCountInto(RICommentVersion, "commentCount", attrs.showComments);
+            requestCountInto(RIProposalVersion, "proposalCount", attrs.showProposals);
+            requestCountInto(RIRateVersion, "rateCount", attrs.showRatings);
         }
     };
 };
