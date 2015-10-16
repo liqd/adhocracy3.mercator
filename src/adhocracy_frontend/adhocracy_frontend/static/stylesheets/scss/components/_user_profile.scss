@@ -57,3 +57,16 @@
         }
     }
 }
+
+.user-activity-overview {
+    width: 100%;
+    border-top: 1px solid LightGray;
+    border-bottom: 1px solid LightGray;
+    
+    // td directives ordered this way to ensure rendering with
+    // less than three items will remove them in the order middle, last, first
+    td { text-align: center; }
+    td:last-child { text-align: right; }
+    td:first-child { text-align: left; }
+    
+}
