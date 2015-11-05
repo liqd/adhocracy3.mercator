@@ -206,8 +206,11 @@ class TokenHeaderAuthenticationPolicy(CallbackAuthenticationPolicy):
         settings = request.registry.settings
         if not asbool(settings.get('adhocracy.validate_user_token', True)):
             return userid
-        authenticated_userid = tokenmanager.get_user_id(token,
-                                                        timeout=self.timeout)
+        if token is None:
+            raise KeyError
+        with statsd_timer('authenticationuser', rate=.1):
+            authenticated_userid = \
+                tokenmanager.get_user_id(token, timeout=self.timeout)
         if authenticated_userid != userid:
             raise KeyError
         return authenticated_userid
@@ -248,11 +251,12 @@ class TokenHeaderAuthenticationPolicy(CallbackAuthenticationPolicy):
         cached_principals = getattr(request, '__cached_principals__', None)
         if cached_principals:
             return cached_principals
-        with statsd_timer('authenticationuser', rate=.1):
-            if self.authenticated_userid(request) is None:
-                return [Everyone, Anonymous]
-            principals = super().effective_principals(request)
-            request.__cached_principals__ = principals
+        if self.authenticated_userid(request) is None:
+            # FIXME this should go to principals.groups_and_roles_finder
+            # to make adhocracy work with other authentication polices.
+            return [Everyone, Anonymous]
+        principals = super().effective_principals(request)
+        request.__cached_principals__ = principals
         return principals
 
 
