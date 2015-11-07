@@ -130,7 +130,7 @@ class User(Pool):
         sheet = get_sheet(self, IMetadata)
         appstruct = sheet.get()
         appstruct['hidden'] = not active
-        statsd_incr('useractivated', 1)
+        statsd_incr('users.activated', 1)
         sheet.set(appstruct)
 
 
@@ -237,7 +237,7 @@ class PasswordReset(Base):
         if not user.active:  # pragma: no cover
             user.activate()
         del self.__parent__[self.__name__]
-        statsd_incr('pwordreseted', 1)
+        statsd_incr('pwordresets.reset', 1)
 
 
 passwordreset_meta = resource_meta._replace(
@@ -369,7 +369,7 @@ class UserLocatorAdapter(object):
 
 def groups_and_roles_finder(userid: str, request: Request) -> list:
     """A Pyramid authentication policy groupfinder callback."""
-    with statsd_timer('authenticationgroups', rate=.1):
+    with statsd_timer('authentication.groups', rate=.1):
         userlocator = request.registry.getMultiAdapter((request.context,
                                                         request),
                                                        IRolesUserLocator)

@@ -23,19 +23,19 @@ def incr_event_metric(name: str, rate: float, event: object):
         registry = get_current_registry()
     statsd_incr(name, value=1, rate=rate, registry=registry)
 
-incr_started = partial(incr_event_metric, 'started', 1)
-incr_resource_created = partial(incr_event_metric, 'resourcecreated', .05)
-incr_pwordreset_created = partial(incr_event_metric, 'pwordresetcreated', 1)
-incr_user_created = partial(incr_event_metric, 'usercreated', 1)
+incr_started = partial(incr_event_metric, 'app.started', 1)
+incr_resource_created = partial(incr_event_metric, 'resources.created', .05)
+incr_pwordreset_created = partial(incr_event_metric, 'pwordresets.created', 1)
+incr_user_created = partial(incr_event_metric, 'users.created', 1)
 
 
 def incr_requests(event):
     """Increment statsd metrics to count requests."""
     method = event.request.method.lower()
     path = event.request.path
-    name = 'requests' + method
+    name = 'requests.' + method
     if path == '/batch':
-        name += 'batch'
+        name += '.batch'
     incr_event_metric(name, .1, event)
 
 

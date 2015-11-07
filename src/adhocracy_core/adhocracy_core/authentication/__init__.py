@@ -248,7 +248,7 @@ class TokenHeaderAuthenticationPolicy(CallbackAuthenticationPolicy):
         cached_principals = getattr(request, '__cached_principals__', None)
         if cached_principals:
             return cached_principals
-        with statsd_timer('authenticationuser', rate=.1):
+        with statsd_timer('authentication.user', rate=.1):
             if self.authenticated_userid(request) is None:
                 return [Everyone, Anonymous]
             principals = super().effective_principals(request)

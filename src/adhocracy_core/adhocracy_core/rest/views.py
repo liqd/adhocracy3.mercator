@@ -382,7 +382,7 @@ class ResourceRESTView(RESTView):
     @view_config(request_method='OPTIONS')
     def options(self) -> dict:
         """Get possible request/response data structures and http methods."""
-        with statsd_timer('processoptions', rate=.1, registry=self.registry):
+        with statsd_timer('process.options', rate=.1, registry=self.registry):
             cstruct = self._options(self.context, self.request)
         return cstruct
 
@@ -475,9 +475,9 @@ class ResourceRESTView(RESTView):
 
     def _get_get_metric_name(self) -> str:
         if self.request.validated:
-            return 'processgetwithquery'
+            return 'process.get'
         else:
-            return 'processgetwithoutquery'
+            return 'process.get.query'
 
     def _get_sheets_data_cstruct(self):
         queryparams = self.request.validated if self.request.validated else {}
@@ -508,7 +508,7 @@ class SimpleRESTView(ResourceRESTView):
                  accept='application/json')
     def put(self) -> dict:
         """Edit resource and get response data."""
-        with statsd_timer('processput', rate=.1, registry=self.registry):
+        with statsd_timer('process.put', rate=.1, registry=self.registry):
             sheets = self.content.get_sheets_edit(self.context, self.request)
             appstructs = self.request.validated.get('data', {})
             for sheet in sheets:
@@ -588,11 +588,11 @@ class PoolRESTView(SimpleRESTView):
         return self.build_post_response(resource)
 
     def _get_post_metric_name(self, iresource: IInterface) -> str:
-        name = 'processpost'
+        name = 'process.post'
         if iresource.isOrExtends(IProposalVersion):
-            name = 'processpostproposalversion'
+            name = 'process.post.proposalversion'
         elif iresource.isOrExtends(IRateVersion):
-            name = 'processpostrateversion'
+            name = 'process.post.rateversion'
         return name
 
     @view_config(request_method='PUT',
@@ -616,7 +616,7 @@ class ItemRESTView(PoolRESTView):
                  permission='view')
     def get(self) -> dict:
         """Get resource data."""
-        with statsd_timer('processget', rate=.1, registry=self.registry):
+        with statsd_timer('process.get', rate=.1, registry=self.registry):
             schema = GETItemResponseSchema().bind(request=self.request,
                                                   context=self.context)
             appstruct = {}
@@ -934,7 +934,8 @@ class MetaApiView(RESTView):
     def get(self) -> dict:
         """Get the API specification of this installation as JSON."""
         # Collect info about all resources
-        with statsd_timer('processgetmetapi', rate=.1, registry=self.registry):
+        with statsd_timer('process.get.metaapi', rate=.1,
+                          registry=self.registry):
             resources_meta = self.request.registry.content.resources_meta
             resource_map = self._describe_resources(resources_meta)
 

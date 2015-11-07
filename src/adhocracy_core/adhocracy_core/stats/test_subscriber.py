@@ -41,7 +41,7 @@ def test_incr_requests_metrics_http_methods(request_, mock_statsd_incr, event):
     request_.method = 'POST'
     event.request = request_
     incr_requests(event)
-    mock_statsd_incr.assert_called_with('requestspost', value=1, rate=0.1,
+    mock_statsd_incr.assert_called_with('requests.post', value=1, rate=0.1,
                                         registry=request_.registry)
 
 def test_incr_requests_metric_post_batch(request_, mock_statsd_incr, event):
@@ -50,7 +50,7 @@ def test_incr_requests_metric_post_batch(request_, mock_statsd_incr, event):
     request_.path = '/batch'
     event.request = request_
     incr_requests(event)
-    mock_statsd_incr.assert_called_with('requestspostbatch', value=1, rate=0.1,
+    mock_statsd_incr.assert_called_with('requests.post.batch', value=1, rate=0.1,
                                         registry=request_.registry)
 
 
