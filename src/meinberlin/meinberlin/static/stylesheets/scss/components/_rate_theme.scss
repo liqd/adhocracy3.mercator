@@ -40,7 +40,7 @@
 
     &.is-disabled {
         &:after {
-            @extend .icon-voting:before;
+            @extend .icon-voting:before !optional;
             cursor: not-allowed;
             line-height: 1.35;
             font-size: 150%;

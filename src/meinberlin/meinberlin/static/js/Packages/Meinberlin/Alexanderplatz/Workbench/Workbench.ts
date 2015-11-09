@@ -159,11 +159,6 @@ export var documentCreateColumnDirective = (
                     });
                 }
             });
-
-            scope.cancel = () => {
-                var url = adhResourceUrl(scope.processUrl);
-                adhTopLevelState.goToCameFrom(url);
-            };
         }
     };
 };

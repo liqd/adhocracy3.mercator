@@ -4,8 +4,6 @@
             <i class="icon-document moving-column-icon"></i>
             {{ "TR__MEINBERLIN_ALEXANDERPLATZ_DOCUMENT" | translate }}
         </div>
-
-        <a class="moving-column-menu-button" href="" data-ng-click="cancel()">{{ "TR__CANCEL" | translate }}</a>
     </div>
 
     <a class="moving-column-expand" data-ng-switch-when="collapsed" data-ng-href="{{ processUrl | adhResourceUrl:'create_document' }}">
@@ -15,6 +13,9 @@
     </a>
 
     <div class="tabs" data-ng-switch-when="body">
+        <adh-resource-actions
+            data-cancel="true"
+            data-resource-path="{{processUrl}}"></adh-resource-actions>
         <adh-document-create data-path="{{processUrl}}" data-has-map="true" data-has-image="true" data-polygon="polygon"></adh-document-create>
     </div>
 </div>

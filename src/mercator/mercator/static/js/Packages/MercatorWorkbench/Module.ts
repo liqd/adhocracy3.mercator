@@ -5,6 +5,7 @@ import * as AdhListingModule from "../Listing/Module";
 import * as AdhMercatorProposalModule from "../MercatorProposal/Module";
 import * as AdhMovingColumnsModule from "../MovingColumns/Module";
 import * as AdhPermissionsModule from "../Permissions/Module";
+import * as AdhResourceActionsModule from "../ResourceActions/Module";
 import * as AdhResourceAreaModule from "../ResourceArea/Module";
 import * as AdhTopLevelStateModule from "../TopLevelState/Module";
 import * as AdhUserModule from "../User/Module";
@@ -28,6 +29,7 @@ export var register = (angular) => {
             AdhMercatorProposalModule.moduleName,
             AdhMovingColumnsModule.moduleName,
             AdhPermissionsModule.moduleName,
+            AdhResourceActionsModule.moduleName,
             AdhResourceAreaModule.moduleName,
             AdhTopLevelStateModule.moduleName,
             AdhUserModule.moduleName

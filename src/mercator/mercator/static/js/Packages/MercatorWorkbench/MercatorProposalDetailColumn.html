@@ -19,6 +19,15 @@
     </a>
 
     <adh-recompile-on-change data-ng-switch-when="body" data-value="{{proposalUrl}}">
+        <adh-resource-actions
+            data-resource-path="{{proposalUrl}}"
+            data-edit="true"
+            data-report="true"
+            data-share="true"
+            data-delete="true"
+            data-print="true"></adh-resource-actions>
+
+        <adh-document-create data-path="{{processUrl}}" data-has-map="true" data-has-image="true" data-polygon="polygon"></adh-document-create>
         <adh-resource-wrapper>
             <adh-mercator-proposal-detail-view data-ng-if="proposalUrl" data-path="{{proposalUrl}}"></adh-mercator-proposal-detail-view>
         </adh-resource-wrapper>

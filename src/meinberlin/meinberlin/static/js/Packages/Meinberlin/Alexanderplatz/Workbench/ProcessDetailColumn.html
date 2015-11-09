@@ -9,12 +9,6 @@
             {{ "TR__MAP" | translate }}
         </div>
 
-        <a
-            class="moving-column-menu-button"
-            data-ng-click="setCameFrom()"
-            href="{{ processUrl | adhResourceUrl:'create_document'}}"
-            data-ng-if="processOptions.canPost(documentItemType) && tab === 'documents'">{{ "TR__CREATE_DOCUMENT" | translate }}</a>
-
         <div class="moving-column-menu-switch">
             <a
                 class="moving-column-menu-switch-item"
@@ -39,6 +33,8 @@
     </a>
 
     <div data-ng-switch-when="body">
+        <adh-resource-actions
+            data-create-document-path="processUrl | adhResourceUrl:'create_document'"></adh-resource-actions>
         <ul class="tabset-tabs">
             <li class="tab"
                 data-ng-class="{'is-active': tab === 'proposals'}">

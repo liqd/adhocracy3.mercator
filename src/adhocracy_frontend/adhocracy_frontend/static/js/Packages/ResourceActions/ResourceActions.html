@@ -1,0 +1,24 @@
+<div class="action-bar">
+    <!-- FIXME : proposalItemOptions.POST showing false -->
+    <adh-edit-action
+        data-ng-if="edit && resourcePath"
+        data-class="action-bar-item"
+        data-resource-path="{{resourcePath}}"></adh-edit-action>
+    <adh-report-action
+        data-ng-if="report"
+        data-class="action-bar-item"></adh-report-action>
+    <adh-share-action
+        data-ng-if="share"
+        data-class="action-bar-item"></adh-share-action>
+    <adh-delete-action
+        data-ng-if="delete && resourcePath"
+        data-class="action-bar-item"
+        data-resource-path="{{resourcePath}}"></adh-delete-action>
+    <adh-print-action
+        data-ng-if="print"
+        data-class="action-bar-item"></adh-print-action>
+    <adh-cancel-action
+        data-ng-if="cancel && resourcePath"
+        data-class="action-bar-item"
+        data-resource-path="{{resourcePath}}"></adh-cancel-action>
+</div>
