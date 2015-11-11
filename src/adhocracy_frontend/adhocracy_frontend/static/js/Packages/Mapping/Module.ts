@@ -62,6 +62,7 @@ export var register = (angular) => {
         .directive("adhMapInput", ["adhConfig", "adhSingleClickWrapper", "adhMapData", "$timeout", "leaflet", AdhMapping.mapInput])
         .directive("adhMapDetail", ["adhMapData", "leaflet", "$timeout", AdhMapping.mapDetail])
         .directive("adhMapListingInternal", ["adhConfig", "adhHttp", AdhMapping.mapListingInternal])
+        .directive("adhMapSwitch", ["adhConfig", AdhMapping.mapSwitch])
         .directive("adhMapListing", ["adhConfig", "adhWebSocket", (adhConfig, adhWebSocket) =>
                 new AdhMapping.Listing(new AdhListing.ListingPoolAdapter()).createDirective(adhConfig, adhWebSocket)]);
 };

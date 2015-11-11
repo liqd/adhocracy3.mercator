@@ -65,14 +65,9 @@ export var processDetailColumnDirective = (
             scope.proposalType = RIGeoProposalVersion.content_type;
             scope.documentType = RIGeoDocumentVersion.content_type;
             scope.documentItemType = RIGeoDocument.content_type;
-            scope.shared.isShowMap = true;
 
             scope.setCameFrom = () => {
                 adhTopLevelState.setCameFrom();
-            };
-
-            scope.showMap = (isShowMap) => {
-                scope.shared.isShowMap = isShowMap;
             };
 
             scope.$watch("processUrl", (processUrl) => {

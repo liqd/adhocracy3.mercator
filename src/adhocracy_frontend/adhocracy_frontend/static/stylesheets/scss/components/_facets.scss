@@ -67,6 +67,12 @@
     @include rem(padding, 0 1rem);
 }
 
+.listing-results {
+    @include rem(padding-bottom, 1rem);
+    @include rem(padding-top, 1rem);
+    border-bottom: 2px solid $color-structure-normal;
+}
+
 .listing-action-bar,
 .listing-action-bar-link {
     line-height: 2;
@@ -114,10 +120,4 @@
             }
         }
     }
-}
-
-.listing-results {
-    @include rem(padding-bottom, 1rem);
-    @include rem(padding-top, 1rem);
-    border-bottom: 2px solid $color-structure-normal;
 }

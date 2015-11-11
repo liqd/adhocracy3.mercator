@@ -117,10 +117,6 @@ export var kiezkasseDetailColumnDirective = (
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["processUrl"]);
-            scope.shared = column.$scope.shared;
-            scope.showMap = (isShowMap) => {
-                scope.shared.isShowMap = isShowMap;
-            };
         }
     };
 };

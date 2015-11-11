@@ -1,10 +1,10 @@
 <div data-ng-switch="transclusionId" class="tabset m-full-width m-button-style">
     <div data-ng-switch-when="menu">
-        <div class="moving-column-tab" data-ng-if="!shared.isShowMap">
+        <div class="moving-column-tab" data-ng-if="!isShowMap">
             <i class="icon-list-column moving-column-icon"></i>
             {{ "TR__LIST" | translate }}
         </div>
-        <div class="moving-column-tab" data-ng-if="shared.isShowMap">
+        <div class="moving-column-tab" data-ng-if="isShowMap">
             <i class="icon-map-filled moving-column-icon"></i>
             {{ "TR__MAP" | translate }}
         </div>
@@ -14,31 +14,21 @@
             data-ng-click="setCameFrom()"
             href="{{ processUrl | adhResourceUrl:'create_document'}}"
             data-ng-if="processOptions.canPost(documentItemType) && tab === 'documents'">{{ "TR__CREATE_DOCUMENT" | translate }}</a>
-
-        <div class="moving-column-menu-switch">
-            <a
-                class="moving-column-menu-switch-item"
-                href=""
-                data-ng-click="showMap(false)"
-                data-ng-class="{ 'is-active': !shared.isShowMap }"><i class="icon-list-column"></i></a>
-            <a
-                class="moving-column-menu-switch-item"
-                href=""
-                data-ng-click="showMap(true)"
-                data-ng-class="{ 'is-active': shared.isShowMap }"><i class="icon-map-filled"></i></a>
-        </div>
     </div>
 
     <a class="moving-column-expand" data-ng-switch-when="collapsed" data-ng-href="{{ processUrl | adhResourceUrl }}">
-        <div class="moving-column-tab" data-ng-if="!shared.isShowMap">
+        <div class="moving-column-tab" data-ng-if="!isShowMap">
             <i class="icon-list-column moving-column-icon"></i>
         </div>
-        <div class="moving-column-tab" data-ng-if="shared.isShowMap">
+        <div class="moving-column-tab" data-ng-if="isShowMap">
             <i class="icon-map-filled moving-column-icon"></i>
         </div>
     </a>
 
     <div data-ng-switch-when="body">
+        <div class="listing-action-bar">
+            <adh-map-switch></adh-map-switch>
+        </div>
         <ul class="tabset-tabs">
             <li class="tab"
                 data-ng-class="{'is-active': tab === 'proposals'}">
@@ -57,17 +47,17 @@
         <div data-ng-if="tab === 'proposals'">
             <div
                 class="map-info-persistent"
-                data-ng-if="shared.isShowMap"
+                data-ng-if="isShowMap"
                 data-adh-html-translate="TR__MAP_INCOMPLETE"
                 data-translate-templates="{
                     link: '&lt;a href=&quot;&quot; data-ng-click=&quot;showMap(false)&quot;&gt;{{ content }}&lt;/a&gt;'
             }"></div>
-            <adh-wait condition="shared.isShowMap">
+            <adh-wait condition="isShowMap">
                 <adh-map-listing
                     data-ng-if="polygon"
                     data-path="{{processUrl}}"
                     data-polygon="polygon"
-                    data-ng-show="shared.isShowMap"
+                    data-ng-show="isShowMap"
                     data-no-create-form="true"
                     data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
                     data-params="{tag: 'LAST'}"
@@ -78,7 +68,7 @@
 
             <adh-listing
                 data-path="{{processUrl}}"
-                data-ng-show="!shared.isShowMap"
+                data-ng-show="!isShowMap"
                 data-no-create-form="true"
                 data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
                 data-params="{tag: 'LAST'}"
@@ -91,17 +81,17 @@
         <div data-ng-if="tab === 'documents'">
             <div
                 class="map-info-persistent"
-                data-ng-if="shared.isShowMap"
+                data-ng-if="isShowMap"
                 data-adh-html-translate="TR__MAP_INCOMPLETE_DOCUMENTS"
                 data-translate-templates="{
                     link: '&lt;a href=&quot;&quot; data-ng-click=&quot;showMap(false)&quot;&gt;{{ content }}&lt;/a&gt;'
             }"></div>
-            <adh-wait condition="shared.isShowMap">
+            <adh-wait condition="isShowMap">
                 <adh-map-listing
                     data-ng-if="polygon"
                     data-path="{{processUrl}}"
                     data-polygon="polygon"
-                    data-ng-show="shared.isShowMap"
+                    data-ng-show="isShowMap"
                     data-no-create-form="true"
                     data-empty-text="{{ 'TR__DOCUMENT_EMPTY_TEXT' | translate }}"
                     data-params="{tag: 'LAST'}"
@@ -114,7 +104,7 @@
 
             <adh-listing
                 data-path="{{processUrl}}"
-                data-ng-show="!shared.isShowMap"
+                data-ng-show="!isShowMap"
                 data-no-create-form="true"
                 data-sort="'title'"
                 data-empty-text="{{ 'TR__DOCUMENT_EMPTY_TEXT' | translate }}"

@@ -36,10 +36,6 @@ export var detailDirective = (
         },
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            scope.shared = column.$scope.shared;
-            scope.showMap = (isShowMap : boolean) => {
-                scope.shared.isShowMap = isShowMap;
-            };
             scope.$watch("path", (value : string) => {
                 if (value) {
                     adhHttp.get(value).then((resource) => {

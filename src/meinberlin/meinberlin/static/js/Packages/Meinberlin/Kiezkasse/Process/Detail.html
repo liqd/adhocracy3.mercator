@@ -1,4 +1,5 @@
 <div class="meinberlin-kiezkasse-detail">
+    <adh-map-switch></adh-map-switch>
     <div data-ng-switch="currentPhase.name">
         <div data-ng-switch-when="announce" class="meinberlin-kiezkasse-detail-announce">
             {{ currentPhase.description }}
@@ -6,7 +7,7 @@
         <div data-ng-switch-default="" class="meinberlin-kiezkasse-detail-listing">
             <adh-listing
                 data-path="{{path}}"
-                data-ng-show="!shared.isShowMap"
+                data-ng-show="!isShowMap"
                 data-no-create-form="true"
                 data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
                 data-params="{tag: 'LAST'}"
@@ -17,15 +18,15 @@
 
             <div
                 class="map-info-persistent"
-                data-ng-if="shared.isShowMap"
+                data-ng-if="isShowMap"
                 data-adh-html-translate="TR__MAP_INCOMPLETE"
                 data-translate-templates="{
                     link: '&lt;a href=&quot;&quot; data-ng-click=&quot;showMap(false)&quot;&gt;{{ content }}&lt;/a&gt;'
             }"></div>
-            <adh-wait condition="shared.isShowMap">
+            <adh-wait condition="isShowMap">
                 <adh-map-listing
                     data-path="{{path}}"
-                    data-ng-show="shared.isShowMap"
+                    data-ng-show="isShowMap"
                     data-polygon="polygon"
                     data-no-create-form="true"
                     data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"

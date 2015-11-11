@@ -1,0 +1,14 @@
+<div class="map-switch">
+    <a
+        class="map-switch-item"
+        href=""
+        title="{{ 'TR__LIST' | translate }}"
+        data-ng-click="showMap(false)"
+        data-ng-class="{ 'm-selected': !isShowMap }"><i class="icon-list-column"></i></a>
+    <a
+        class="map-switch-item"
+        href=""
+        title="{{ 'TR__MAP' | translate }}"
+        data-ng-click="showMap(true)"
+        data-ng-class="{ 'm-selected': isShowMap }"><i class="icon-map-filled"></i></a>
+</div>
