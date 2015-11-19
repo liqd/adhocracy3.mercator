@@ -76,8 +76,10 @@ export interface ListingScope<Container> extends angular.IScope {
     totalCount? : number;
     params? : any;
     emptyText? : string;
-    showFilter : boolean;
-    showSort : boolean;
+    data : {
+        showSort : boolean;
+        showFilter : boolean;
+    };
     container : Container;
     poolPath : string;
     poolOptions : AdhHttp.IOptions;
@@ -90,12 +92,18 @@ export interface ListingScope<Container> extends angular.IScope {
     wsOff : () => void;
     clear : () => void;
     onCreate : () => void;
-    toggleFilter : () => void;
-    toggleSort : () => void;
     setSort : (sort : string) => void;
 }
 
 export interface IFacetsScope extends angular.IScope {
+    facets : IFacet[];
+    update : () => angular.IPromise<void>;
+    enableItem : (facet : IFacet, item : IFacetItem) => void;
+    disableItem : (facet : IFacet, item : IFacetItem) => void;
+    toggleItem : (facet : IFacet, item : IFacetItem, event) => void;
+}
+
+export interface IFacetsShow extends angular.IScope {
     facets : IFacet[];
     update : () => angular.IPromise<void>;
     enableItem : (facet : IFacet, item : IFacetItem) => void;
@@ -138,7 +146,8 @@ export class Listing<Container extends ResourcesBase.Resource> {
                 params: "=?",
                 update: "=?",
                 noCreateForm: "=?",
-                emptyText: "@"
+                emptyText: "@",
+                data: "=?"
             },
             transclude: true,
             link: (scope, element, attrs, controller, transclude) => {
@@ -197,14 +206,10 @@ export class Listing<Container extends ResourcesBase.Resource> {
                     });
                 };
 
-                $scope.toggleFilter = () => {
-                    $scope.showSort = false;
-                    $scope.showFilter = !$scope.showFilter;
-                };
-
-                $scope.toggleSort = () => {
-                    $scope.showFilter = false;
-                    $scope.showSort = !$scope.showSort;
+                // See ResourceActions for control of showing and hiding of these
+                $scope.data = {
+                    showSort: false,
+                    showFilter: false
                 };
 
                 $scope.update = (warmup? : boolean) : angular.IPromise<void> => {

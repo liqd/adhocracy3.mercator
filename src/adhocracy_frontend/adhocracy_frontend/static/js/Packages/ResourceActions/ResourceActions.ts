@@ -14,17 +14,19 @@ export var resourceActionsDirective = (
         restrict: "E",
         scope: {
             resourcePath: "@",
-            parentPath: "=?",
-            share: "=?",
-            delete: "=?",
+            parentPath: "@",
+        	share: "=?",
+        	delete: "=?",
             print: "=?",
             report: "=?",
             cancel: "=?",
-            edit: "=?"
+            edit: "=?",
+            filterAndSort: "=?",
+            data: "=?"
         },
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceActions.html",
+		templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceActions.html",
         link: (scope, element) => {
-            adhPermissions.bindScope(scope, () => scope.resourcePath && AdhUtil.parentPath(scope.resourcePath), "proposalItemOptions");
+			adhPermissions.bindScope(scope, () => scope.resourcePath && AdhUtil.parentPath(scope.resourcePath), "proposalItemOptions");
         }
     };
 };
@@ -68,12 +70,12 @@ export var deleteActionDirective = () => {
         require: "^adhMovingColumn",
         scope: {
             resourcePath: "@",
-            parentPath: "=?",
+            parentPath: "@",
             class: "@"
         },
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             scope.delete = () => {
-                column.$broadcast("triggerDelete", scope.resourcePath);
+                column.$broadcast("triggerDelete", scope.proposalUrl);
             };
         }
     };
@@ -110,13 +112,12 @@ export var editActionDirective = (
         require: "^adhMovingColumn",
         scope: {
             resourcePath: "@",
-            parentPath: "=?",
+            parentPath: "@",
             class: "@"
         },
         link: (scope) => {
             scope.edit = () => {
-                var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
-                var url = adhResourceUrl(path, "edit");
+                var url = adhResourceUrl(scope.resourcePath, "edit");
                 $location.url(url);
             };
         }
@@ -132,7 +133,7 @@ export var cancelActionDirective = (
         template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"cancel();\">{{ \"TR__CANCEL\" | translate }}</a>",
         scope: {
             resourcePath: "@",
-            parentPath: "=?",
+            parentPath: "@",
             class: "@"
         },
         link: (scope) => {
@@ -143,6 +144,34 @@ export var cancelActionDirective = (
                 var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
                 var url = adhResourceUrl(path);
                 adhTopLevelState.goToCameFrom(url);
+            };
+        }
+    };
+};
+
+export var filterAndSortDirective = (
+    adhTopLevelState : AdhTopLevelState.Service,
+    adhResourceUrl
+) => {
+    return {
+        restrict: "E",
+        template: "<a data-ng-class=\"{ 'm-selected': data.showFilter }\" class=\"{{class}}\" href=\"\"\
+        data-ng-click=\"toggleFilter();\">Filter</a>\
+        <a data-ng-class=\"{ 'm-selected': data.showSort }\" class=\"{{class}}\" href=\"\"\
+        data-ng-click=\"toggleSort();\">Sort</a>",
+        scope: {
+            class: "@",
+            data: "=?"
+        },
+        link: (scope) => {
+            scope.toggleFilter = () => {
+                scope.data.showSort = false;
+                scope.data.showFilter = !scope.showFilter;
+            };
+
+            scope.toggleSort = () => {
+                scope.data.showFilter = false;
+                scope.data.showSort = !scope.showSort;
             };
         }
     };
