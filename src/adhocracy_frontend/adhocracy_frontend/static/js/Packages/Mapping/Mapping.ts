@@ -521,23 +521,6 @@ export var mapListingInternal = (
     };
 };
 
-export var mapSwitch = (
-    adhConfig : AdhConfig.IService
-) => {
-    return {
-        restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/MapSwitch.html",
-        scope: {
-            model: "="
-        },
-        link: (scope) => {
-            scope.showMap = (isShowMap) => {
-                scope.model = isShowMap;
-            };
-        }
-    };
-};
-
 export class Listing<Container extends ResourcesBase.Resource> extends AdhListing.Listing<Container> {
     public static templateUrl : string = pkgLocation + "/Listing.html";
 

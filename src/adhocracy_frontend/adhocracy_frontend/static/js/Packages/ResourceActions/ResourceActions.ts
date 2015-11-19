@@ -20,10 +20,12 @@ export var resourceActionsDirective = (
             print: "=?",
             report: "=?",
             cancel: "=?",
-            edit: "=?"
+            edit: "=?",
+            mapSwitch: "=?"
         },
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceActions.html",
         link: (scope, element) => {
+            console.log(scope);
             adhPermissions.bindScope(scope, () => scope.resourcePath && AdhUtil.parentPath(scope.resourcePath), "proposalItemOptions");
         }
     };

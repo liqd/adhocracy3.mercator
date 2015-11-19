@@ -294,6 +294,35 @@ export class Listing<Container extends ResourcesBase.Resource> {
     }
 }
 
+export var mapSwitchDirective = (
+    adhConfig : AdhConfig.IService
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/MapSwitch.html",
+        scope: {
+            model: "="
+        },
+        link: (scope) => {
+            scope.showMap = (isShowMap) => {
+                scope.model = isShowMap;
+            };
+        }
+    };
+};
+
+export var listingActionsDirective = (
+    adhConfig: AdhConfig.IService
+) => {
+    return {
+        restrict: "E",
+        scope: {
+            mapSwitch: "=?"
+        },
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ListingActions.html"
+    };
+};
+
 
 export var facets = (adhConfig : AdhConfig.IService) => {
     return {
