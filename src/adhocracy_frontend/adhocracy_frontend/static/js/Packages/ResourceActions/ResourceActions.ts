@@ -20,10 +20,12 @@ export var resourceActionsDirective = (
             print: "=?",
             report: "=?",
             cancel: "=?",
-            edit: "=?"
+            edit: "=?",
+            mapSwitch: "=?"
         },
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceActions.html",
         link: (scope, element) => {
+            console.log(scope);
             adhPermissions.bindScope(scope, () => scope.resourcePath && AdhUtil.parentPath(scope.resourcePath), "proposalItemOptions");
         }
     };
@@ -143,6 +145,23 @@ export var cancelActionDirective = (
                 var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
                 var url = adhResourceUrl(path);
                 adhTopLevelState.goToCameFrom(url);
+            };
+        }
+    };
+};
+
+export var mapSwitchDirective = (
+    adhConfig : AdhConfig.IService
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/MapSwitch.html",
+        scope: {
+            model: "="
+        },
+        link: (scope) => {
+            scope.showMap = (isShowMap) => {
+                scope.model = isShowMap;
             };
         }
     };
