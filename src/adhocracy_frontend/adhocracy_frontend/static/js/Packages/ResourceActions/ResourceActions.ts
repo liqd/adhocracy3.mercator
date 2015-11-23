@@ -20,7 +20,8 @@ export var resourceActionsDirective = (
             print: "=?",
             report: "=?",
             cancel: "=?",
-            edit: "=?"
+            edit: "=?",
+            mapSwitch: "=?"
         },
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceActions.html",
         link: (scope, element) => {
