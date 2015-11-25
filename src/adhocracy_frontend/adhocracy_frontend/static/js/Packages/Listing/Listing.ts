@@ -76,8 +76,10 @@ export interface ListingScope<Container> extends angular.IScope {
     totalCount? : number;
     params? : any;
     emptyText? : string;
-    showFilter : boolean;
-    showSort : boolean;
+    data : {
+        showSort : boolean;
+        showFilter : boolean;
+    };
     container : Container;
     poolPath : string;
     poolOptions : AdhHttp.IOptions;
@@ -90,8 +92,6 @@ export interface ListingScope<Container> extends angular.IScope {
     wsOff : () => void;
     clear : () => void;
     onCreate : () => void;
-    toggleFilter : () => void;
-    toggleSort : () => void;
     setSort : (sort : string) => void;
 }
 
@@ -142,6 +142,10 @@ export class Listing<Container extends ResourcesBase.Resource> {
             },
             transclude: true,
             link: (scope, element, attrs, controller, transclude) => {
+                scope.data = {
+                    showSort: false,
+                    showFilter: false
+                };
                 element.on("$destroy", () => {
                     unregisterWebsocket(scope);
                 });
@@ -195,16 +199,6 @@ export class Listing<Container extends ResourcesBase.Resource> {
                     return adhHttp.get($scope.path, params, {
                         warmupPoolCache: warmup
                     });
-                };
-
-                $scope.toggleFilter = () => {
-                    $scope.showSort = false;
-                    $scope.showFilter = !$scope.showFilter;
-                };
-
-                $scope.toggleSort = () => {
-                    $scope.showFilter = false;
-                    $scope.showSort = !$scope.showSort;
                 };
 
                 $scope.update = (warmup? : boolean) : angular.IPromise<void> => {
@@ -294,6 +288,50 @@ export class Listing<Container extends ResourcesBase.Resource> {
     }
 }
 
+export var filterAndSortDirective = () => {
+    return {
+        restrict: "E",
+        template: "<a data-ng-class=\"{ 'm-selected': data.showFilter }\" class=\"{{class}}\" href=\"\"\
+        data-ng-click=\"toggleFilter();\">{{ \"TR__FILTER\" | translate }}</a>\
+        <a data-ng-class=\"{ 'm-selected': data.showSort }\" class=\"{{class}}\" href=\"\"\
+        data-ng-click=\"toggleSort();\">{{ \"TR__SORT\" | translate }}</a>",
+        scope: {
+            class: "@",
+            data: "=?"
+        },
+        link: (scope) => {
+            scope.toggleFilter = () => {
+                scope.data.showSort = false;
+                scope.data.showFilter = !scope.showFilter;
+            };
+
+            scope.toggleSort = () => {
+                scope.data.showFilter = false;
+                scope.data.showSort = !scope.showSort;
+            };
+        }
+    };
+};
+
+export var listingActionsDirective = (
+    adhConfig: AdhConfig.IService
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ListingActions.html",
+        scope: {
+            mapSwitch: "=?",
+            model: "=?",
+            filterAndSort: "=?",
+            data: "=?"
+        },
+        link: (scope) => {
+            scope.showMap = (isShowMap) => {
+                scope.model = isShowMap;
+            };
+        }
+    };
+};
 
 export var facets = (adhConfig : AdhConfig.IService) => {
     return {
