@@ -27,7 +27,7 @@ class TestImageMetadataSheet:
     def test_validate_mime_type(self, meta, context):
         inst = meta.sheet_class(meta, context)
         validator = inst.schema['mime_type'].validator
-        assert validator.choices == ('image/gif', 'image/jpeg', 'image/png')
+        assert validator.choices == ('image/jpeg')
 
     @mark.usefixtures('integration')
     def test_includeme_register(self, meta):

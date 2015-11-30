@@ -19,7 +19,7 @@ class IImageMetadata(IAssetMetadata):
     """Marker interface for images."""
 
 
-image_mime_type_validator = OneOf(('image/gif', 'image/jpeg', 'image/png'))
+image_mime_type_validator = OneOf(('image/jpeg'))
 
 
 class ImageMetadataSchema(AssetMetadataSchema):
