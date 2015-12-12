@@ -391,6 +391,35 @@ export var indicatorDirective = (
                 adhTopLevelState.setCameFrom($location.url());
                 $location.url("/register");
             };
+
+
+
+            // thentos indicator [begin]
+            $scope.bootThentosIndicatorShouldRun = false;
+            $scope.bootThentosIndicatorRunning = false;
+
+            $scope.bootThentosIndicator = () => {
+                if ($scope.bootThentosIndicatorShouldRun) {
+                    if ($scope.bootThentosIndicatorRunning) {
+                        return true;
+                    } else {
+                        $scope.bootThentosIndicatorRunning = true;
+                        PS['Main'].indicator("#thentos-indicator")();
+                        return true;
+                    }
+                } else {
+                    return false;
+                }
+            };
+            // thentos indicator [end]
+
+            // (missing: register widget destructor with dom element
+            // so that it is called when elem is removed from dom.
+            // this is only necessary for some widgets, e.g. ones
+            // that have their own $timeout-based event loop.)
+
+
+
         }]
     };
 };

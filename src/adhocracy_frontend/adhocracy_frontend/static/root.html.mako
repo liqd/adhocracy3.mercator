@@ -9,6 +9,7 @@
         <base href="/" />
     </head>
     <body>
+        <script type="text/javascript" src="http://localhost:6546/js/thentos.js"></script>
         <!--[if gt IE 9]><!-->
         <adh-view></adh-view>
         % for url in js:

@@ -1,4 +1,10 @@
 <div class="user-indicator" data-ng-switch="credentials.loggedIn">
+
+
+    <div id="thentos-indicator"></div>  <!-- thentos: render here! -->
+    <div data-ng-if="!bootThentosIndicator()">  <!-- thentos-if: if disabled, render the built-in indicator widget -->
+
+
     <div data-ng-switch-when="true">
         <adh-user-profile-image data-path="{{credentials.userPath}}"></adh-user-profile-image>
         <a data-ng-if="!noLink" data-ng-href="{{ credentials.userPath | adhResourceUrl }}" class="user-indicator-name">{{user.data.name}}</a
@@ -15,4 +21,9 @@
             </span>
         </div>
     </div>
+
+
+    </div>  <!-- thentos-end-if -->
+
+
 </div>
