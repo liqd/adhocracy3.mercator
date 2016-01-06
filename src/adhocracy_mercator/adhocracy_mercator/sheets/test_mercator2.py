@@ -265,7 +265,7 @@ class TestTopicSchema:
 
     def test_serialize_empty(self, inst):
         assert inst.bind().serialize() == {'topic': [],
-                                           'other': ''}
+                                           'topic_other': ''}
 
     def test_deserialize_empty(self, inst):
         from colander import Invalid
@@ -299,7 +299,7 @@ class TestTopicSchema:
         cstruct['topic'] = ['other', 'urban_development']
         with raises(Invalid) as error:
             inst.deserialize(cstruct)
-        assert error.value.asdict() == {'other':
+        assert error.value.asdict() == {'topic_other':
                                         'Required if "other" in topic'}
 
 
@@ -307,10 +307,10 @@ class TestTopicSchema:
             self, inst, cstruct_required):
         cstruct = cstruct_required
         cstruct['topic'] = ['other', 'urban_development']
-        cstruct['other'] = 'Blabla'
+        cstruct['topic_other'] = 'Blabla'
         assert inst.deserialize(cstruct_required) == \
             {'topic': ['other', 'urban_development'],
-             'other': 'Blabla'}
+             'topic_other': 'Blabla'}
 
 
 class TestTopicSheet:

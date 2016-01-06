@@ -155,14 +155,14 @@ class ITopic(ISheet):
 
 class TopicSchema(colander.MappingSchema):
     topic = TopicEnums(validator=colander.Length(min=1, max=2))
-    other = Text()
+    topic_other = Text()
 
     def validator(self, node: colander.SchemaNode, value: dict):
         """Extra validation depending on the status of the topic."""
         topics = value.get('topic', [])
         if 'other' in topics:
-            if not value.get('other', None):
-                raise colander.Invalid(node['other'],
+            if not value.get('topic_other', None):
+                raise colander.Invalid(node['topic_other'],
                                        msg='Required if "other" in topic')
         if _has_duplicates(topics):
             raise colander.Invalid(node['topic'],
