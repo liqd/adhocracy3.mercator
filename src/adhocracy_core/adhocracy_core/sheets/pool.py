@@ -6,6 +6,7 @@ import colander
 
 from adhocracy_core.interfaces import ISheet
 from adhocracy_core.interfaces import SheetToSheet
+from adhocracy_core.interfaces import IServicePool
 from adhocracy_core.sheets import AnnotationRessourceSheet
 from adhocracy_core.sheets import sheet_meta
 from adhocracy_core.sheets import add_sheet_to_registry
@@ -95,6 +96,9 @@ class PoolSheet(AnnotationRessourceSheet):
             add 'aggregateby` field. defaults to False.
         """
         params = params or {}
+        is_service_pool = IServicePool.providedBy(self.context)
+        has_no_custom_filters = params == {'depth': 1,
+                                           'root': self.context}
         filter_view_permission = asbool(self.registry.settings.get(
             'adhocracy.filter_by_view_permission', True))
         if filter_view_permission:
@@ -105,6 +109,10 @@ class PoolSheet(AnnotationRessourceSheet):
             params['only_visible'] = True
         params_query = remove_keys_from_dict(params, self._additional_params)
         appstruct = self.get(params=params_query)
+        if is_service_pool and has_no_custom_filters:
+            # workaround to reduce needless but expensive listing of elements
+            params['serialization_form'] = 'omit'
+            params['show_count'] = True
         if params.get('serialization_form', False) == 'omit':
             appstruct['elements'] = []
         if params.get('show_frequency', False):
