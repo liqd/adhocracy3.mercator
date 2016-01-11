@@ -1,0 +1,20 @@
+<div data-ng-switch="transclusionId">
+    <div data-ng-switch-when="menu">
+        <i class="icon-document moving-column-icon"></i>
+    </div>
+
+    <adh-resource-wrapper
+        data-ng-switch-when="body"
+        data-on-submit="redirectAfterProposalSubmit(result)"
+        data-on-cancel="redirectAfterProposalCancel(proposalUrl)">
+        <adh-resource-actions
+            data-resource-path="{{proposalUrl}}"
+            data-cancel="true"></adh-resource-actions>
+        <adh-mercator-2016-proposal-create
+            data-ng-if="proposalUrl"
+            data-path="{{proposalUrl}}"
+            data-create="false"
+            data-pool-path="{{processUrl}}">
+        </adh-mercator-2016-proposal-create>
+    </adh-resource-wrapper>
+</div>

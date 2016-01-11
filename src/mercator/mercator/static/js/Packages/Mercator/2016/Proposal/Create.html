@@ -12,9 +12,12 @@
     <form
             novalidate="novalidate"
             class="mercator-proposal-form"
+            id="mercatorProposalForm"
             name="mercatorProposalForm"
             data-ng-submit="submitIfValid()"
             data-du-spy-context=""
+            data-ng-model="data"
+            data-data="data"
             data-ng-controller="mercatorProposalFormController2016 as form">
         <div class="form-error" data-ng-repeat="error in errors track by $index">
             <p>{{ error | adhFormatError | translate }}</p>
@@ -1313,7 +1316,7 @@
                             placeholder="{{ 'TR__MAX_CHARS_500' | translate }}"></textarea>
                     </label>
 
-                    <div data-ng-if="create === 'true'">
+                    <div data-ng-if="create === 'true' || edit === 'true'">
                         <span class="label-text">{{ "TR__MERCATOR_PROPOSAL_HEARD_FROM_LABEL" | translate }} *</span>
 
                         <div data-ng-class="{ 'ng-invalid': showHeardFromError() }">
