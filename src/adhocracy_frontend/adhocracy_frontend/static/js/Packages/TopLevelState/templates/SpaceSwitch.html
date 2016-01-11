@@ -9,9 +9,11 @@
             title="{{ 'TR__SPACE_CONTENT' | translate }}"
     ></i></a><span
         class="separator"
+        ng-if="!hideUser"
     ></span><a
         href=""
         class="space-switch-user"
+        ng-if="!hideUser"
         data-ng-click="setSpace('user')"
         data-ng-class="{'is-active': currentSpace === 'user'}"
         ><i
