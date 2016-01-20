@@ -29,13 +29,13 @@ adhocracy.frontend.rest_url = http://localhost:6541
 # backend behind varnish (default port)
 #adhocracy.frontend.rest_url = http://localhost:8088
 # Only accept registration requests with valid captcha solutions
-adhocracy.thentos_captcha.enabled = false
+adhocracy.thentos_captcha.enabled = true
 # Where the frontend sends captcha traffic
-adhocracy.thentos_captcha.backend_url = http://localhost:6542/
+adhocracy.thentos_captcha.backend_url = https://thentos-dev-backend1.liqd.net/
 # Where the backend sends captcha traffic (in development mode, this
 # is the same as captcha backend; if nginx is dispatching inbound
 # requests, this is just the frontend url)
-adhocracy.thentos_captcha.frontend_url = http://localhost:6542/
+adhocracy.thentos_captcha.frontend_url = https://thentos-dev-backend1.liqd.net/
 # The email address show to users seeking support
 adhocracy.frontend.support_email = support@unconfigured.domain
 # Default frontend locale

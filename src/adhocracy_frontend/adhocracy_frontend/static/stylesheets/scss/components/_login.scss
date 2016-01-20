@@ -148,3 +148,31 @@ Dialog for login related flow (login, register, password reset).
         color: $color-text-highlight-extrovert;
     }
 }
+
+.captcha-container {
+    @include rem(margin-bottom, 1rem);
+    border: 1px solid $color-structure-introvert;
+    min-height: 102px;
+    position: relative;
+}
+
+.captcha-image {
+    display: block;
+    margin: 0 auto;
+}
+
+.captcha-buttons {
+    @include rem(top, 10px);
+    @include rem(right, 10px);
+    position: absolute;
+}
+
+.captcha-button {
+    @include rem(font-size, $font-size-large);
+    @include rem(margin-left, 5px);
+    color: $color-text-normal;
+}
+
+.captcha-audio {
+    margin-top: 20px;
+}

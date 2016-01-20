@@ -70,24 +70,30 @@
         </label>
 
         <div data-ng-if="captcha.enabled">
-            <div>
-                <span>
-                    <img data-ng-src="{{ captcha.imageData }}" alt="TR__CAPTCHA_ALT" >
-                </span>
-                <span>
-                    <input type="checkbox" name="audioCaptchaCheck" data-ng-click="captcha.toggleAudio($event)" />
-                    <div data-ng-if="captcha.audioEnabled">
-                        <audio data-ng-src="{{ captcha.audioData }}" controls></audio>
-                    </div>
-                </span>
+            <div class="captcha-container">
+                <img
+                    data-ng-if="!captcha.audioEnabled"
+                    data-ng-src="{{ captcha.imageData }}"
+                    alt="TR__CAPTCHA_ALT"
+                    class="captcha-image" />
+                <audio
+                    data-ng-if="captcha.audioEnabled"
+                    data-ng-src="{{ captcha.audioData }}"
+                    class="captcha-audio" controls></audio>
+                <div class="captcha-buttons">
+                    <a href="" class="captcha-button" title="{{ 'TR__TOGGLE_AUDIO' | translate }}" data-ng-click="captcha.toggleAudio()"><i class="icon-volume"></i></a>
+                    <a href="" class="captcha-button" title="{{ 'TR__NEW_CAPTCHA' | translate }}" data-ng-click="captcha.refreshCaptcha()"><i class="icon-refresh"></i></a>
+                </div>
+
             </div>
-            <div>
+            <label>
+                <span class="label-text">{{ "TR__ENTER_CAPTCHA" | translate }}</span>
                 <input type="text" name="thentos_captcha_guess" required="required"
                        data-ng-model="input.captchaGuess" />
                 <span class="input-error" data-ng-show="showError(registerForm, registerForm.thentos_captcha_guess, 'required')">
                     {{ "TR__ERROR_REQUIRED_CAPTCHA" | translate }}
                 </span>
-            </div>
+            </label>
         </div>
         <input
             type="submit"

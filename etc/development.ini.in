@@ -43,13 +43,13 @@ adhocracy.abuse_handler_mail = abuse_handler@unconfigured.domain
 # usable variables: {site_name}, {sender_name}, {title})
 adhocracy.message_user_subject = [{site_name}] Message from {sender_name}: {title}
 # Only accept registration requests with valid captcha solutions
-adhocracy.thentos_captcha.enabled = false
+adhocracy.thentos_captcha.enabled = true
 # Where the frontend sends captcha traffic
-adhocracy.thentos_captcha.backend_url = http://localhost:6542/
+adhocracy.thentos_captcha.backend_url = https://thentos-dev-backend1.liqd.net/
 # Where the backend sends captcha traffic (in development mode, this
 # is the same as captcha backend; if nginx is dispatching inbound
 # requests, this is just the frontend url)
-adhocracy.thentos_captcha.frontend_url = http://localhost:6542/
+adhocracy.thentos_captcha.frontend_url = https://thentos-dev-backend1.liqd.net/
 # If true, new user accounts are activated immediately without email verification
 adhocracy.skip_registration_mail = false
 # Allows turning off user token validation if behind a validating proxy
