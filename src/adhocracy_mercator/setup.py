@@ -9,6 +9,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.rst')).read()
 
 requires = ['adhocracy_core',
+            'thentos_adhocracy',
             ]
 
 test_requires = ['adhocracy_core[test]',

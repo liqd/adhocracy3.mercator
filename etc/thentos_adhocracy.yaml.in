@@ -1,0 +1,78 @@
+# Sample config for running A3 with Thentos in proxy mode.
+# Used ports: A3 frontend on 6551, Thentos proxy on 6546, A3 backend on 6541.
+# Required changes in the A3 config:
+#
+# * Change the following line in etc/frontend_development.ini.in:
+#
+#       adhocracy.frontend.rest_url = http://localhost:6546
+#
+# * Change the following lines in etc/development.ini.in:
+#
+#       adhocracy.skip_registration_mail = true
+#       adhocracy.validate_user_token = false
+#
+# * Call bin/buildout
+
+backend:
+    bind_port: 6546
+    bind_host: localhost
+
+frontend:
+    bind_port: 6551
+    bind_host: localhost
+
+proxy:
+    service_id: qlX4MP7xEgtRng+8iNvMIcSo
+    endpoint: http://localhost:6541
+
+smtp:
+    sender_name: "Thentos"
+    sender_address: "thentos@thentos.org"
+    sendmail_path: "/usr/sbin/sendmail"    # (built-in default)
+    sendmail_args: ["-t"]                  # (built-in default)
+
+#default_user:
+#    name: "god"
+#    password: "god"
+#    email: "postmaster@localhost"
+#    roles: ["roleAdmin", "roleUser", "roleServiceAdmin", "roleUserAdmin"]
+
+user_reg_expiration: 1d
+pw_reset_expiration: 1d
+email_change_expiration: 1d
+captcha_expiration: 1h
+gc_interval: 30m
+
+log:
+    path: var/log/thentos_adhocracy.log
+    level: INFO
+#    level: DEBUG
+
+database:
+    name: "thentos_adhocracy"
+
+email_templates:
+    account_verification:
+        subject: "Thentos: Aktivierung Ihres Nutzerkontos"
+        # Supported variables: {{user_name}}, {{activation_url}}
+        body: |
+            Hallo {{user_name}},
+
+            vielen Dank für Ihre Registrierung bei Thentos.
+
+            Diese E-Mail dient der Validierung Ihrer Identität. Bitte
+            nutzen Sie den folgenden Link um das Nutzerkonto zu aktivieren.
+
+            {{activation_url}}
+
+            Wir wünschen Ihnen viel Spaß und Inspiration!
+
+            Das Thentos-Team
+    user_exists:
+        subject: "Thentos: Attempted Signup"
+        body: |
+            Someone tried to sign up to Thentos with your email address.
+
+            This is a reminder that you already have a Thentos account. If you
+            haven't tried to sign up to Thentos, you can just ignore this email.
+            If you have, you are hereby reminded that you already have an account.
