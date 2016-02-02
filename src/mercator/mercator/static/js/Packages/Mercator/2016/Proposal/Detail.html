@@ -72,17 +72,17 @@
 
             <div class="section-jump-main chapter-wrapper" data-du-spy-context="">
                 <section class="chapter" id="mercator-proposal-brief">
-                    <section class="commentable-section {{subResourceSelectedState('pitch')}}">
+                    <section class="action-section {{subResourceSelectedState('pitch')}}">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-proposal-brief"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_BRIEF" | translate }}</h2>
                         <p>{{ data.introduction.pitch }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:pitch'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:pitch'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.pitch }}
                         </a>
                     </section>
 
-                    <section class="non-commentable-section">
+                    <section class="non-action-section">
                         <div class="mercator-proposal-location">
                             <h3>{{ "TR__MERCATOR_PROPOSAL_LOCATION_LABEL" | translate }}:</h3>
                             <ul class="inline-boxes">
@@ -94,22 +94,22 @@
                         </div>
                     </section>
 
-                    <section class="commentable-section {{subResourceSelectedState('duration')}}">
+                    <section class="action-section {{subResourceSelectedState('duration')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_DURATION_LABEL" | translate }}</h3>
                         <p>{{ data.duration }} {{ "TR__MONTHS" | translate }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:duration'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:duration'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.duration }}
                         </a>
                     </section>
 
-                    <section class="commentable-section">
+                    <section class="action-section">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_STATUS_LABEL" | translate }}</h3>
                         <p>{{ data.status }}</p>
                     </section>
                 </section>
 
                 <section class="chapter" id="mercator-proposal-about-you">
-                    <section class="non-commentable-section">
+                    <section class="non-action-section">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-proposal-about-you"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_ABOUT_YOU" | translate }}</h2>
@@ -227,58 +227,58 @@
                 </section>
 
                 <section class="chapter" id="mercator-proposal-impact">
-                    <section class="commentable-section {{subResourceSelectedState('challenge')}}">
+                    <section class="action-section {{subResourceSelectedState('challenge')}}">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-proposal-impact"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_IMPACT" | translate }}</h2>
                         <h3>{{ "TR__MERCATOR_PROPOSAL_IMPACT_CHALLENGE_LABEL" | translate }}</h3>
                         <p>{{ data.impact.challenge }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:challenge'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:challenge'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.challenge }}
                         </a>
                     </section>
 
-                    <section class="commentable-section {{subResourceSelectedState('goal')}}">
+                    <section class="action-section {{subResourceSelectedState('goal')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_IMPACT_GOAL_LABEL" | translate }}</h3>
                         <p>{{ data.impact.goal }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:goal'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:goal'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.goal }}
                         </a>
                     </section>
 
-                    <section class="commentable-section {{subResourceSelectedState('plan')}}">
+                    <section class="action-section {{subResourceSelectedState('plan')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_IMPACT_PLAN_LABEL" | translate }}</h3>
                         <p>{{ data.impact.plan }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:plan'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:plan'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.plan }}
                         </a>
                     </section>
 
-                    <section class="commentable-section {{subResourceSelectedState('target')}}">
+                    <section class="action-section {{subResourceSelectedState('target')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_IMPACT_TARGETGROUP_LABEL" | translate }}</h3>
                         <p>{{ data.impact.target }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:target'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:target'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.target }}
                         </a>
                     </section>
 
-                    <section class="commentable-section {{subResourceSelectedState('team')}}">
+                    <section class="action-section {{subResourceSelectedState('team')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_IMPACT_TEAM_LABEL" | translate }}</h3>
                         <p>{{ data.impact.team }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:team'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:team'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.team }}
                         </a>
                     </section>
 
-                    <section data-ng-if="data.impact.extraInfo" class="commentable-section {{subResourceSelectedState('extrainfo')}}">
+                    <section data-ng-if="data.impact.extraInfo" class="action-section {{subResourceSelectedState('extrainfo')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_IMPACT_EXTRAINFO_LABEL" | translate }}</h3>
                         <p>{{ data.impact.extraInfo }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:extrainfo'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:extrainfo'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.extrainfo }}
                         </a>
                     </section>
 
-                    <section class="non-commentable-section">
+                    <section class="non-action-section">
                         <div class="mercator-proposal-budget-row">
                             <div class="mercator-proposal-budget-col requested">
                                 <strong>{{ data.finance.requestedFunding | number }} &euro;</strong>
@@ -307,36 +307,36 @@
                 </section>
 
                 <section class="chapter" id="mercator-proposal-criteria">
-                    <section class="commentable-section {{subResourceSelectedState('connectioncohesion')}}">
+                    <section class="action-section {{subResourceSelectedState('connectioncohesion')}}">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-proposal-criteria"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_CRITERIA" | translate }}</h2>
                         <h3>{{ "TR__MERCATOR_PROPOSAL_STRENGTHEN_LABEL" | translate }}</h3>
                         <p>{{ data.criteria.strengthen }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:connectioncohesion'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:connectioncohesion'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.connectioncohesion }}
                         </a>
                     </section>
 
-                    <section class="commentable-section {{subResourceSelectedState('difference')}}">
+                    <section class="action-section {{subResourceSelectedState('difference')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_DIFFERENCE_LABEL" | translate }}</h3>
                         <p>{{ data.criteria.difference }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:difference'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:difference'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.difference }}
                         </a>
                     </section>
 
-                    <section class="commentable-section {{subResourceSelectedState('practicalrelevance')}}">
+                    <section class="action-section {{subResourceSelectedState('practicalrelevance')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_PRACTICAL_LABEL" | translate }}</h3>
                         <p>{{ data.criteria.practical }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:practicalrelevance'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:practicalrelevance'}}">
                             <i class="icon-speechbubble"></i> {{ data.commentCounts.practicalrelevance }}
                         </a>
                     </section>
                 </section>
 
                 <section class="chapter" id="mercator-proposal-community" data-ng-if="data.experience || data.heardFrom">
-                    <section class="commentable-section {{subResourceSelectedState('experience')}}">
+                    <section class="action-section {{subResourceSelectedState('experience')}}">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-proposal-community"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_COMMUNITY" | translate }}</h2>

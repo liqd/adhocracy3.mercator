@@ -10,13 +10,11 @@ import * as AdhRate from "../../Rate/Rate";
 import * as AdhTopLevelState from "../../TopLevelState/TopLevelState";
 import * as AdhUtil from "../../Util/Util";
 
-import RICommentVersion from "../../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 import RIProposal from "../../../Resources_/adhocracy_s1/resources/s1/IProposal";
 import RIProposalVersion from "../../../Resources_/adhocracy_s1/resources/s1/IProposalVersion";
 import * as SICommentable from "../../../Resources_/adhocracy_core/sheets/comment/ICommentable";
 import * as SIDescription from "../../../Resources_/adhocracy_core/sheets/description/IDescription";
 import * as SIMetadata from "../../../Resources_/adhocracy_core/sheets/metadata/IMetadata";
-import * as SIPool from "../../../Resources_/adhocracy_core/sheets/pool/IPool";
 import * as SIRateable from "../../../Resources_/adhocracy_core/sheets/rate/IRateable";
 import * as SITitle from "../../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIVersionable from "../../../Resources_/adhocracy_core/sheets/versions/IVersionable";
@@ -63,19 +61,6 @@ var bindPath = (
     scope : IScope,
     pathKey : string = "path"
 ) : void => {
-    var getCommentCount = (resource) => {
-        var commentableSheet : SICommentable.Sheet = resource.data[SICommentable.nick];
-
-        return adhHttp.get(commentableSheet.post_pool, {
-            content_type: RICommentVersion.content_type,
-            depth: "all",
-            tag: "LAST",
-            count: true
-        }).then((pool) => {
-            return pool.data[SIPool.nick].count;
-        });
-    };
-
     scope.$watch(pathKey, (value : string) => {
         if (value) {
             // get resource
@@ -95,15 +80,13 @@ var bindPath = (
                 var workflowAssignmentSheet : SIWorkflowAssignment.Sheet = item.data[SIWorkflowAssignment.nick];
 
                 $q.all([
-                    getCommentCount(version),
                     adhGetBadges(version),
                     adhRate.fetchAggregatedRates(rateableSheet.post_pool, version.path)
                 ]).then((args : any) => {
-                    var commentCount = args[0];
-                    var badgeAssignments = args[1];
+                    var badgeAssignments = args[0];
                     // FIXME: an adapter should take care of this
-                    var ratesPro = args[2]["1"] || 0;
-                    var ratesContra = args[2]["-1"] || 0;
+                    var ratesPro = args[1]["1"] || 0;
+                    var ratesContra = args[1]["-1"] || 0;
 
                     scope.data = {
                         title: titleSheet.title,
@@ -111,7 +94,7 @@ var bindPath = (
                         rateCount: ratesPro - ratesContra,
                         creator: metadataSheet.creator,
                         creationDate: metadataSheet.item_creation_date,
-                        commentCount: commentCount,
+                        commentCount: resource.data[SICommentable.nick].comments_count,
                         assignments: badgeAssignments,
                         workflowState: workflowAssignmentSheet.workflow_state,
                         decisionDate: AdhProcess.getStateData(workflowAssignmentSheet, workflowAssignmentSheet.workflow_state).start_date

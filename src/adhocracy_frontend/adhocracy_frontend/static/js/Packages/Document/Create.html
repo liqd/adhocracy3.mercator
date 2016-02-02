@@ -64,7 +64,7 @@
     <div class="section-jump-body">
         <nav class="section-jump-navigation jump-navigation m-narrow m-unnumbered" data-adh-sticky="">
             <ol>
-                <li data-ng-repeat="paragraph in data.paragraphs">
+                <li data-ng-repeat="paragraph in data.paragraphs | filter:{deleted: false}">
                     <a
                         href="#section-jump-chapter-{{$index}}"
                         data-du-smooth-scroll=""
@@ -74,7 +74,7 @@
         </nav>
 
         <div class="section-jump-main chapter-wrapper" data-du-spy-context="">
-            <section data-ng-repeat="paragraph in data.paragraphs" id="section-jump-chapter-{{$index}}">
+            <section class="action-section chapter" data-ng-repeat="paragraph in data.paragraphs" data-ng-if="!paragraph.deleted" id="section-jump-chapter-{{$index}}">
                 <label>
                     <textarea
                         data-msd-elastic=""
@@ -82,6 +82,9 @@
                         name="paragraph-{{ $index }}"
                         placeholder="{{ 'TR__PARAGRAPH_PLACEHOLDER' | translate }}"
                         required="required"></textarea>
+                    <a class="action-section-button" data-ng-click="deleteParagraph($index)">
+                        <i class="button icon-x"></i>
+                    </a>
 
                     <span class="input-error" data-ng-show="showError(documentForm, documentForm['paragraph-' + $index], 'required')">
                         {{ "TR__ERROR_REQUIRED_PARAGRAPH" | translate }}

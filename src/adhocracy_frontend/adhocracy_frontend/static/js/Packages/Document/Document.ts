@@ -8,19 +8,18 @@ import * as AdhUtil from "../Util/Util";
 
 import * as ResourcesBase from "../ResourcesBase";
 
-import RICommentVersion from "../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 import RIDocument from "../../Resources_/adhocracy_core/resources/document/IDocument";
 import RIDocumentVersion from "../../Resources_/adhocracy_core/resources/document/IDocumentVersion";
 import RIGeoDocument from "../../Resources_/adhocracy_core/resources/document/IGeoDocument";
 import RIGeoDocumentVersion from "../../Resources_/adhocracy_core/resources/document/IGeoDocumentVersion";
 import RIParagraph from "../../Resources_/adhocracy_core/resources/paragraph/IParagraph";
 import RIParagraphVersion from "../../Resources_/adhocracy_core/resources/paragraph/IParagraphVersion";
+import * as SICommentable from "../../Resources_/adhocracy_core/sheets/comment/ICommentable";
 import * as SIDocument from "../../Resources_/adhocracy_core/sheets/document/IDocument";
 import * as SIImageReference from "../../Resources_/adhocracy_core/sheets/image/IImageReference";
 import * as SIMetadata from "../../Resources_/adhocracy_core/sheets/metadata/IMetadata";
 import * as SIParagraph from "../../Resources_/adhocracy_core/sheets/document/IParagraph";
 import * as SIPoint from "../../Resources_/adhocracy_core/sheets/geo/IPoint";
-import * as SIPool from "../../Resources_/adhocracy_core/sheets/pool/IPool";
 import * as SITitle from "../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIVersionable from "../../Resources_/adhocracy_core/sheets/versions/IVersionable";
 
@@ -29,6 +28,7 @@ var pkgLocation = "/Document";
 
 export interface IParagraph {
     body : string;
+    deleted : boolean;
     commentCount? : number;
     path? : string;
     selectedState? : string;
@@ -72,6 +72,7 @@ export interface IScope extends angular.IScope {
 export interface IFormScope extends IScope {
     showError;
     addParagraph() : void;
+    deleteParagraph(index : number) : void;
     submit() : angular.IPromise<any>;
     cancel() : void;
     documentForm : any;
@@ -111,30 +112,21 @@ export var bindPath = (
             adhHttp.get(path).then((documentVersion : RIDocumentVersion) => {
                 var paragraphPaths : string[] = documentVersion.data[SIDocument.nick].elements;
                 var paragraphPromises = _.map(paragraphPaths, (path) => {
-                    return $q.all([
-                        adhHttp.get(path),
-                        adhHttp.get(AdhUtil.parentPath(path), {
-                            content_type: RICommentVersion.content_type,
-                            depth: "all",
-                            tag: "LAST",
-                            count: true
-                        }).then((pool) => pool.data[SIPool.nick].count)
-                    ]);
+                    return adhHttp.get(path);
                 });
 
-                return $q.all(paragraphPromises).then((argss : any[][]) => {
-                    var paragraphs = _.map(argss, (args) => {
-                        var paragraphVersion : RIParagraphVersion = args[0];
-                        var commentCount : number = args[1];
+                return $q.all(paragraphPromises).then((paragraphVersions : RIParagraphVersion[]) => {
+                    var paragraphs = _.map(paragraphVersions, (paragraphVersion) => {
                         return {
                             body: paragraphVersion.data[SIParagraph.nick].text,
-                            commentCount: commentCount,
+                            deleted: false,
+                            commentCount: paragraphVersion.data[SICommentable.nick].comments_count,
                             path: paragraphVersion.path
                         };
                     });
 
                     scope.documentVersion = documentVersion;
-                    scope.paragraphVersions = _.map(argss, (args) => args[0]);
+                    scope.paragraphVersions = paragraphVersions;
 
                     scope.data = {
                         title: documentVersion.data[SITitle.nick].title,
@@ -187,20 +179,22 @@ export var postCreate = (
     var paragraphVersions = [];
 
     _.forEach(scope.data.paragraphs, (paragraph) => {
-        var item = new RIParagraph({preliminaryNames: adhPreliminaryNames});
-        item.parent = doc.path;
+        if (!paragraph.deleted) {
+            var item = new RIParagraph({preliminaryNames: adhPreliminaryNames});
+            item.parent = doc.path;
 
-        var version = new RIParagraphVersion({preliminaryNames: adhPreliminaryNames});
-        version.parent = item.path;
-        version.data[SIVersionable.nick] = new SIVersionable.Sheet({
-            follows: [item.first_version_path]
-        });
-        version.data[SIParagraph.nick] = new SIParagraph.Sheet({
-            text: paragraph.body
-        });
+            var version = new RIParagraphVersion({preliminaryNames: adhPreliminaryNames});
+            version.parent = item.path;
+            version.data[SIVersionable.nick] = new SIVersionable.Sheet({
+                follows: [item.first_version_path]
+            });
+            version.data[SIParagraph.nick] = new SIParagraph.Sheet({
+                text: paragraph.body
+            });
 
-        paragraphItems.push(item);
-        paragraphVersions.push(version);
+            paragraphItems.push(item);
+            paragraphVersions.push(version);
+        }
     });
 
     var documentVersion = new documentVersionClass({preliminaryNames: adhPreliminaryNames});
@@ -262,41 +256,46 @@ export var postEdit = (
     var paragraphVersion : RIParagraphVersion;
 
     _.forEach(scope.data.paragraphs, (paragraph : IParagraph, index : number) => {
-        if (index >= oldParagraphVersions.length) {
-            var item = new RIParagraph({preliminaryNames: adhPreliminaryNames});
-            item.parent = documentPath;
+        // currently, if a paragraph has been deleted, it doesn't get posted at all.
+        if (!paragraph.deleted) {
 
-            paragraphVersion = new RIParagraphVersion({preliminaryNames: adhPreliminaryNames});
-            paragraphVersion.parent = item.path;
-            paragraphVersion.data[SIVersionable.nick] = new SIVersionable.Sheet({
-                follows: [item.first_version_path]
-            });
-            paragraphVersion.data[SIParagraph.nick] = new SIParagraph.Sheet({
-                text: paragraph.body
-            });
-            paragraphVersion.root_versions = [oldVersion.path];
+            if (index >= oldParagraphVersions.length) {
+                var item = new RIParagraph({preliminaryNames: adhPreliminaryNames});
+                item.parent = documentPath;
 
-            paragraphItems.push(item);
-            paragraphVersions.push(paragraphVersion);
-            paragraphRefs.push(paragraphVersion.path);
-        } else {
-            var oldParagraphVersion = oldParagraphVersions[index];
-
-            if (paragraph.body !== oldParagraphVersion.data[SIParagraph.nick].text) {
                 paragraphVersion = new RIParagraphVersion({preliminaryNames: adhPreliminaryNames});
-                paragraphVersion.parent = AdhUtil.parentPath(oldParagraphVersion.path);
+                paragraphVersion.parent = item.path;
                 paragraphVersion.data[SIVersionable.nick] = new SIVersionable.Sheet({
-                    follows: [oldParagraphVersion.path]
+                    follows: [item.first_version_path]
                 });
                 paragraphVersion.data[SIParagraph.nick] = new SIParagraph.Sheet({
                     text: paragraph.body
                 });
                 paragraphVersion.root_versions = [oldVersion.path];
 
+                paragraphItems.push(item);
                 paragraphVersions.push(paragraphVersion);
                 paragraphRefs.push(paragraphVersion.path);
+
             } else {
-                paragraphRefs.push(oldParagraphVersion.path);
+                var oldParagraphVersion = oldParagraphVersions[index];
+
+                if (paragraph.body !== oldParagraphVersion.data[SIParagraph.nick].text) {
+                    paragraphVersion = new RIParagraphVersion({preliminaryNames: adhPreliminaryNames});
+                    paragraphVersion.parent = AdhUtil.parentPath(oldParagraphVersion.path);
+                    paragraphVersion.data[SIVersionable.nick] = new SIVersionable.Sheet({
+                        follows: [oldParagraphVersion.path]
+                    });
+                    paragraphVersion.data[SIParagraph.nick] = new SIParagraph.Sheet({
+                        text: paragraph.body
+                    });
+                    paragraphVersion.root_versions = [oldVersion.path];
+
+                    paragraphVersions.push(paragraphVersion);
+                    paragraphRefs.push(paragraphVersion.path);
+                } else {
+                    paragraphRefs.push(oldParagraphVersion.path);
+                }
             }
         }
     });
@@ -464,7 +463,8 @@ export var createDirective = (
             scope.data = {
                 title: "",
                 paragraphs: [{
-                    body: ""
+                    body: "",
+                    deleted: false
                 }],
                 coordinates: []
             };
@@ -472,8 +472,13 @@ export var createDirective = (
 
             scope.addParagraph = () => {
                 scope.data.paragraphs.push({
-                    body: ""
+                    body: "",
+                    deleted: false
                 });
+            };
+
+            scope.deleteParagraph = (index) => {
+                scope.data.paragraphs[index].deleted = true;
             };
 
             scope.cancel = () => {
@@ -523,8 +528,13 @@ export var editDirective = (
 
             scope.addParagraph = () => {
                 scope.data.paragraphs.push({
-                    body: ""
+                    body: "",
+                    deleted: false
                 });
+            };
+
+            scope.deleteParagraph = (index) => {
+                scope.data.paragraphs[index].deleted = true;
             };
 
             bindPath($q, adhHttp)(scope, undefined, scope.hasMap);

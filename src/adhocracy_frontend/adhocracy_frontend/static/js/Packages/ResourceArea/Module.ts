@@ -6,6 +6,8 @@ import * as AdhTopLevelStateModule from "../TopLevelState/Module";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 import * as AdhUtil from "../Util/Util";
 
+import RIRootPool from "../../Resources_/adhocracy_core/resources/root/IRootPool";
+
 import * as AdhResourceArea from "./ResourceArea";
 
 
@@ -22,6 +24,11 @@ export var register = (angular) => {
         .config(["adhTopLevelStateProvider", (adhTopLevelStateProvider : AdhTopLevelState.Provider) => {
             adhTopLevelStateProvider
                 .when("r", ["adhResourceArea", (adhResourceArea : AdhResourceArea.Service) => adhResourceArea]);
+        }])
+        .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
+            adhResourceAreaProvider.default(RIRootPool, "", "", "", {
+                space: "overview"
+            });
         }])
         .provider("adhResourceArea", AdhResourceArea.Provider)
         .directive("adhResourceArea", ["adhResourceArea", "$compile", AdhResourceArea.directive])

@@ -17,7 +17,6 @@ import * as AdhUtil from "../../../Util/Util";
 
 import * as ResourcesBase from "../../../../ResourcesBase";
 
-import RICommentVersion from "../../../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 import RIMercatorDescription from "../../../../Resources_/adhocracy_mercator/resources/mercator/IDescription";
 import RIMercatorDescriptionVersion from "../../../../Resources_/adhocracy_mercator/resources/mercator/IDescriptionVersion";
 import RIMercatorLocation from "../../../../Resources_/adhocracy_mercator/resources/mercator/ILocation";
@@ -209,35 +208,6 @@ export var countSupporters = (adhHttp : AdhHttp.Service<any>, postPoolPath : str
 };
 
 /**
- * promise recursive comments count.
- */
-export var countComments = (adhHttp : AdhHttp.Service<any>, postPoolPath : string) : angular.IPromise<number> => {
-
-    var query : any = {
-        content_type: RICommentVersion.content_type,
-        depth: "all",
-        tag: "LAST",
-        count: "true",
-        elements: "omit"
-    };
-
-    // NOTE (important for re-factorers): we could filter like this:
-    //
-    // | query[SIComment.nick + ":refers_to"] = commentableVersion.path;
-    //
-    // but that would only catch comments in one sub-tree level.
-    // so we must expect that each proposal has its own post pool,
-    // and just count all LAST versions in that pool, ignoring the
-    // refers_to.)
-
-    return adhHttp.get(postPoolPath, query)
-        .then((response) => {
-            var pool : SIPool.Sheet = response.data[SIPool.nick];
-            return parseInt((<any>pool).count, 10);  // see #261
-        });
-};
-
-/**
  * promise workflow state.
  */
 export var getWorkflowState = (
@@ -331,11 +301,6 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
         return this.$q.when();
     }
 
-    private countComments(commentableVersion : any) : angular.IPromise<number> {
-        var sheet : SICommentable.Sheet = commentableVersion.data[SICommentable.nick];
-        return countComments(this.adhHttp, sheet.post_pool);
-    }
-
     private initializeScope(scope : IScope) : IScopeData {
         if (!scope.hasOwnProperty("data")) {
             scope.data = <IScopeData>{};
@@ -397,10 +362,8 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
             };
         }
 
-        data.commentCountTotal = 0;
-        data.commentCount = mercatorProposalVersion.data[SICommentable.nick].comments.length;
-        this.countComments(mercatorProposalVersion)
-            .then((count : number) => { data.commentCount = count; data.commentCountTotal += count; });
+        data.commentCount = mercatorProposalVersion.data[SICommentable.nick].comments_count;
+        data.commentCountTotal = data.commentCount;
 
         data.supporterCount = 0;
         countSupporters(this.adhHttp, mercatorProposalVersion.data[SILikeable.nick].post_pool, mercatorProposalVersion.path)
@@ -448,8 +411,8 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
                         }
                         scope.how_can_we_help_you = res.help_request;
                         scope.status_other = res.status_other;
-                        scope.commentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { scope.commentCount = c; data.commentCountTotal += c; });
+                        scope.commentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += scope.commentCount;
                     })();
                     break;
                     case RIMercatorIntroductionVersion.content_type: (() => {
@@ -457,8 +420,8 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
                         var res : SIMercatorIntroduction.Sheet = subResource.data[SIMercatorIntroduction.nick];
                         scope.teaser = res.teaser;
                         scope.picture = res.picture;
-                        scope.commentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { scope.commentCount = c; data.commentCountTotal += c; });
+                        scope.commentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += scope.commentCount;
                     })();
                     break;
                     case RIMercatorDescriptionVersion.content_type: (() => {
@@ -466,8 +429,8 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
                         var res : SIMercatorDescription.Sheet = subResource.data[SIMercatorDescription.nick];
 
                         scope.description = res.description;
-                        scope.commentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { scope.commentCount = c; data.commentCountTotal += c; });
+                        scope.commentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += scope.commentCount;
                     })();
                     break;
                     case RIMercatorLocationVersion.content_type: (() => {
@@ -480,43 +443,43 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
                         scope.location_specific_3 = res.location_specific_3;
                         scope.location_is_online = res.location_is_online;
                         scope.location_is_linked_to_ruhr = res.location_is_linked_to_ruhr;
-                        scope.commentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { scope.commentCount = c; data.commentCountTotal += c; });
+                        scope.commentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += scope.commentCount;
                     })();
                     break;
                     case RIMercatorStoryVersion.content_type: (() => {
                         var res : SIMercatorStory.Sheet = subResource.data[SIMercatorStory.nick];
                         data.story = res.story;
-                        data.storyCommentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { data.storyCommentCount = c; data.commentCountTotal += c; });
+                        data.storyCommentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += data.storyCommentCount;
                     })();
                     break;
                     case RIMercatorOutcomeVersion.content_type: (() => {
                         var res : SIMercatorOutcome.Sheet = subResource.data[SIMercatorOutcome.nick];
                         data.outcome = res.outcome;
-                        data.outcomeCommentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { data.outcomeCommentCount = c; data.commentCountTotal += c; });
+                        data.outcomeCommentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += data.outcomeCommentCount;
                     })();
                     break;
                     case RIMercatorStepsVersion.content_type: (() => {
                         var res : SIMercatorSteps.Sheet = subResource.data[SIMercatorSteps.nick];
                         data.steps = res.steps;
-                        data.stepsCommentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { data.stepsCommentCount = c; data.commentCountTotal += c; });
+                        data.stepsCommentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += data.stepsCommentCount;
                     })();
                     break;
                     case RIMercatorValueVersion.content_type: (() => {
                         var res : SIMercatorValue.Sheet = subResource.data[SIMercatorValue.nick];
                         data.value = res.value;
-                        data.valueCommentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { data.valueCommentCount = c; data.commentCountTotal += c; });
+                        data.valueCommentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += data.valueCommentCount;
                     })();
                     break;
                     case RIMercatorPartnersVersion.content_type: (() => {
                         var res : SIMercatorPartners.Sheet = subResource.data[SIMercatorPartners.nick];
                         data.partners = res.partners;
-                        data.partnersCommentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { data.partnersCommentCount = c; data.commentCountTotal += c; });
+                        data.partnersCommentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += data.partnersCommentCount;
                     })();
                     break;
                     case RIMercatorFinanceVersion.content_type: (() => {
@@ -527,15 +490,15 @@ export class Widget<R extends ResourcesBase.Resource> extends AdhResourceWidgets
                         scope.requested_funding = res.requested_funding;
                         scope.other_sources = res.other_sources;
                         scope.granted = res.granted;
-                        scope.commentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { scope.commentCount = c; data.commentCountTotal += c; });
+                        scope.commentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += scope.commentCount;
                     })();
                     break;
                     case RIMercatorExperienceVersion.content_type: (() => {
                         var res : SIMercatorExperience.Sheet = subResource.data[SIMercatorExperience.nick];
                         data.experience = res.experience;
-                        data.experienceCommentCount = subResource.data[SICommentable.nick].comments.length;
-                        this.countComments(subResource).then((c) => { data.experienceCommentCount = c; data.commentCountTotal += c; });
+                        data.experienceCommentCount = subResource.data[SICommentable.nick].comments_count;
+                        data.commentCountTotal += data.experienceCommentCount;
                     })();
                     break;
                     default: {
@@ -979,13 +942,13 @@ export var listItem = (
                         scope.selectedState = "is-not-selected";
                     }
                 }));
+
+                // FIXME: does not count comments to sub-resources
+                scope.data.commentCountTotal = proposal.data[SICommentable.nick].comments_count;
             });
 
             countSupporters(adhHttp, AdhUtil.parentPath(scope.path) + "rates/", scope.path).then((count) => {
                 scope.data.supporterCount = count;
-            });
-            countComments(adhHttp, AdhUtil.parentPath(scope.path)).then((count) => {
-                scope.data.commentCountTotal = count;
             });
         }
     };

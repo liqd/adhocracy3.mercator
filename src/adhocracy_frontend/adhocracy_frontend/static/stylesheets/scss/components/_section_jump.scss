@@ -71,6 +71,7 @@ combination with `.jump-navigation.m-narrow.m-unnumbered`.
 }
 
 .section-jump-main {
+    @include clearfix;
     @include rem(margin-left, $section-jump-navigation-width);
     background-color: $color-background-base;
     border-left: 2px solid $color-structure-normal;

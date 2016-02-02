@@ -56,9 +56,6 @@ A form for creating documents. This contains a <a href="#section-jump">section j
 
     .form-footer {
         @include rem(margin-top, 113px);
-    }
-
-    .section-jump-main {
-        @include rem(padding, 1rem);
+        @include rem(padding, 0 1rem);
     }
 }

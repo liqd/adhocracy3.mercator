@@ -35,9 +35,9 @@ FIXME: reuse `.badge-description`
                 <i class="icon-star"></i>
             </div>
         </section>
-        <section class="commentable-section">
+        <section class="action-section">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor.</p>
-            <a class="commentable-section-show-comments"><i class="icon-speechbubble"></i>Comments</a>
+            <a class="action-section-button"><i class="icon-speechbubble"></i>Comments</a>
         </section>
     </section>
 </div>
@@ -45,11 +45,11 @@ FIXME: reuse `.badge-description`
 */
 
 .jury-decision-section {
-    @extend .commentable-section;
+    @extend .action-section;
     background: $color-brand-one-normal;
 
     .jury-decision-section-icon {
-        @extend .commentable-section-show-comments;
+        @extend .action-section-button;
         color: $color-text-inverted;
 
         &:hover, &:focus {

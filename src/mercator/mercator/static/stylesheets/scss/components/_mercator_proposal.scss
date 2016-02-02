@@ -191,7 +191,7 @@ $mercator-proposal-form-nav-width: 100% / 12 * 2;
 }
 
 .mercator-proposal-cover-show-comments {
-    @include show-comments;
+    @include action-section-button;
     float: right;
 
     &:hover, &:focus {

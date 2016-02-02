@@ -10,6 +10,7 @@ from adhocracy_core.sheets.asset import asset_metadata_meta
 from adhocracy_core.schema import Reference
 from adhocracy_core.schema import Resource
 from adhocracy_core.schema import SingleLine
+from adhocracy_core.schema import URL
 from adhocracy_core.interfaces import ISheet
 from adhocracy_core.interfaces import ISheetReferenceAutoUpdateMarker
 from adhocracy_core.interfaces import SheetToSheet
@@ -53,6 +54,8 @@ class ImageReferenceSchema(MappingSchema):
     """Data structure for the image reference sheet."""
 
     picture = Reference(reftype=ImageReference)
+    picture_description = SingleLine()
+    external_picture_url = URL()
 
 
 image_reference_meta = asset_metadata_meta._replace(

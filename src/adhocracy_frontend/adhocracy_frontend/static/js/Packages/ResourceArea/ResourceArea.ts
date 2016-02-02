@@ -306,6 +306,10 @@ export class Service implements AdhTopLevelState.IAreaInput {
         var self : Service = this;
         var segs : string[] = path.replace(/\/+$/, "").split("/");
 
+        if (path === "/") {
+            segs = ["", ""];
+        }
+
         if (segs.length < 2 || segs[0] !== "") {
             throw "bad path: " + path;
         }
@@ -323,7 +327,7 @@ export class Service implements AdhTopLevelState.IAreaInput {
             view = segs.pop().replace(/^@/, "");
         }
 
-        var resourceUrl : string = this.adhConfig.rest_url + segs.join("/") + "/";
+        var resourceUrl : string = this.adhConfig.rest_url + (segs.join("/") + "/").replace(/\/+$/, "/");
 
         return self.$q.all([
             self.adhHttp.get(resourceUrl),

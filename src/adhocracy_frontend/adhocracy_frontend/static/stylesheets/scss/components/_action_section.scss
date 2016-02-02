@@ -1,18 +1,18 @@
 /*doc
 ---
-title: Show comments mixin
-name: show-comments-mixin
+title: Action section button mixin
+name: action-section-button-mixin
 category: Widgets
 ---
 
-A mixin to show comments somewhere
+A mixin to style a button used with a section
 
 ```html_example
-<a class="show-comments"><i class="icon-speechbubble"></i>12</a>
+<a class="action-section-button"><i class="icon-speechbubble"></i>12</a>
 ```
 */
 
-@mixin show-comments {
+@mixin action-section-button {
     @include disguised-link;
     @include rem(font-size, $font-size-small);
     @include inline-block;
@@ -25,8 +25,8 @@ A mixin to show comments somewhere
     }
 }
 
-.show-comments {
-    @include show-comments;
+.action-section-button {
+    @include action-section-button;
 
     @media print {
         display: none;
@@ -35,15 +35,16 @@ A mixin to show comments somewhere
 
 /*doc
 ---
-title: Commentable section
-name: commentable-section
+title: Action section
+name: action-section
 category: Widgets
 ---
 
-A section of any content with a link to the respective comments, typically
-displayed as a button in a second column.
+A section of any content with a corresponding 'action button' EG Show Comments
+or Delete Section
 
-Some sections are not commentable within a form and these can be marked too.
+Some sections have no action within a block of action sections, these can be
+marked for consistent styling and highlighting.
 
 States:
 
@@ -51,19 +52,19 @@ States:
 -   is-not-selected
 
 ```html_example
-<div class="commentable-section">
+<div class="action-section">
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor.</p>
-    <a class="commentable-section-show-comments"><i class="icon-speechbubble"></i>Comments</a>
+    <a class="action-section-button"><i class="icon-speechbubble"></i>Comments</a>
 </div>
 
-<div class="non-commentable-section">
+<div class="non-action-section">
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor.</p>
 </div>
 ```
 */
 
-.commentable-section,
-.non-commentable-section {
+.action-section,
+.non-action-section {
     @include rem(padding, 1rem 48px 30px 1rem);
     position: relative;
 
@@ -79,8 +80,8 @@ States:
         background: $color-background-base-introvert;
     }
 
-    .commentable-section-show-comments {
-        @include show-comments;
+    .action-section-button {
+        @include action-section-button;
         @include rem(max-width, 36px);
         @include rem(right, 1rem);
         @include rem(top, 1rem);
@@ -90,7 +91,7 @@ States:
     @media print {
         @include rem(padding, 0 0 1rem);
 
-        .commentable-section-show-comments {
+        .action-section-button {
             display: none;
         }
     }

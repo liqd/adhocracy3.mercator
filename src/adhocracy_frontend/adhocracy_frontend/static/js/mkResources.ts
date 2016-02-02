@@ -500,14 +500,14 @@ mkFieldSignatures = (fields : MetaApi.ISheetField[], tab : string, separator : s
 mkFieldSignaturesSheetCons = (fields : MetaApi.ISheetField[], tab : string, separator : string) : string =>
     UtilR.mkThingList(
         fields,
-        (field) => field.name + (isWriteableField(field) ? "" : "?") + " : " + mkFieldType(field).resultType,
+        (field) => field.name + (field.create_mandatory ? "" : "?") + " : " + mkFieldType(field).resultType,
         tab, separator
     );
 
 mkFieldSignaturesSheetParse = (fields : MetaApi.ISheetField[], tab : string, separator : string) : string =>
     UtilR.mkThingList(
         fields,
-        (field) => field.name + (isWriteableField(field) ? "" : "?") + " : " + mkFieldType(field).jsonType,
+        (field) => field.name + (field.create_mandatory ? "" : "?") + " : " + mkFieldType(field).jsonType,
         tab, separator
     );
 

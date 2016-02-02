@@ -78,7 +78,7 @@ export class CommentAdapter implements AdhComment.ICommentAdapter<RICommentVersi
     }
 
     commentCount(resource : RICommentVersion) : number {
-        return AdhUtil.eachItemOnce(resource.data[SICommentable.nick].comments).length;
+        return resource.data[SICommentable.nick].comments_count;
     }
 
     edited(resource : RICommentVersion) : boolean {

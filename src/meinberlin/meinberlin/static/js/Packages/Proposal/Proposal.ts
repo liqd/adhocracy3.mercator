@@ -12,7 +12,6 @@ import * as AdhUtil from "../Util/Util";
 
 import RIBuergerhaushaltProposal from "../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposal";
 import RIBuergerhaushaltProposalVersion from "../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposalVersion";
-import RICommentVersion from "../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 import RIGeoProposal from "../../Resources_/adhocracy_core/resources/proposal/IGeoProposal";
 import RIGeoProposalVersion from "../../Resources_/adhocracy_core/resources/proposal/IGeoProposalVersion";
 import RIKiezkasseProposal from "../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProposal";
@@ -25,7 +24,6 @@ import * as SILocationReference from "../../Resources_/adhocracy_core/sheets/geo
 import * as SIMetadata from "../../Resources_/adhocracy_core/sheets/metadata/IMetadata";
 import * as SIMultiPolygon from "../../Resources_/adhocracy_core/sheets/geo/IMultiPolygon";
 import * as SIPoint from "../../Resources_/adhocracy_core/sheets/geo/IPoint";
-import * as SIPool from "../../Resources_/adhocracy_core/sheets/pool/IPool";
 import * as SIRateable from "../../Resources_/adhocracy_core/sheets/rate/IRateable";
 import * as SITitle from "../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIVersionable from "../../Resources_/adhocracy_core/sheets/versions/IVersionable";
@@ -88,19 +86,6 @@ var bindPath = (
         });
     };
 
-    var getCommentCount = (resource) : angular.IPromise<number> => {
-        var commentableSheet : SICommentable.Sheet = resource.data[SICommentable.nick];
-
-        return adhHttp.get(commentableSheet.post_pool, {
-            content_type: RICommentVersion.content_type,
-            depth: "all",
-            tag: "LAST",
-            count: true
-        }).then((pool) => {
-            return pool.data[SIPool.nick].count;
-        });
-    };
-
     scope.$watch(pathKey, (value : string) => {
         if (value) {
             adhHttp.get(value).then((resource) => {
@@ -119,15 +104,13 @@ var bindPath = (
                 }
 
                 $q.all([
-                    getCommentCount(resource),
                     adhRate.fetchAggregatedRates(rateableSheet.post_pool, resource.path),
                     getPolygon(),
                     adhGetBadges(resource)
                 ]).then((args : any[]) => {
-                    var commentCount = args[0];
-                    var rates = args[1];
-                    var polygon = args[2];
-                    var assignments = args[3];
+                    var rates = args[0];
+                    var polygon = args[1];
+                    var assignments = args[2];
 
                     // FIXME: an adapter should take care of this
                     var ratesPro = rates["1"] || 0;
@@ -139,7 +122,7 @@ var bindPath = (
                         rateCount: ratesPro - ratesContra,
                         creator: metadataSheet.creator,
                         creationDate: metadataSheet.item_creation_date,
-                        commentCount: commentCount,
+                        commentCount: resource.data[SICommentable.nick].comments_count,
                         lng: pointSheet.coordinates[0],
                         lat: pointSheet.coordinates[1],
                         polygon: polygon,

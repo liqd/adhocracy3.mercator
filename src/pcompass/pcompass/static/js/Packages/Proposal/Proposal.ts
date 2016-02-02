@@ -12,11 +12,9 @@ import * as AdhUtil from "../Util/Util";
 import * as SICommentable from "../../Resources_/adhocracy_core/sheets/comment/ICommentable";
 import * as SIDescription from "../../Resources_/adhocracy_core/sheets/description/IDescription";
 import * as SIMetadata from "../../Resources_/adhocracy_core/sheets/metadata/IMetadata";
-import * as SIPool from "../../Resources_/adhocracy_core/sheets/pool/IPool";
 import * as SIRateable from "../../Resources_/adhocracy_core/sheets/rate/IRateable";
 import * as SITitle from "../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIVersionable from "../../Resources_/adhocracy_core/sheets/versions/IVersionable";
-import RICommentVersion from "../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 import RIProposal from "../../Resources_/adhocracy_core/resources/proposal/IProposal";
 import RIProposalVersion from "../../Resources_/adhocracy_core/resources/proposal/IProposalVersion";
 
@@ -51,19 +49,6 @@ var bindPath = (
     scope : IScope,
     pathKey : string = "path"
 ) : void => {
-    var getCommentCount = (resource) : angular.IPromise<number> => {
-        var commentableSheet : SICommentable.Sheet = resource.data[SICommentable.nick];
-
-        return adhHttp.get(commentableSheet.post_pool, {
-            content_type: RICommentVersion.content_type,
-            depth: "all",
-            tag: "LAST",
-            count: true
-        }).then((pool) => {
-            return pool.data[SIPool.nick].count;
-        });
-    };
-
     scope.$watch(pathKey, (value : string) => {
         if (value) {
             adhHttp.get(value).then((resource) => {
@@ -75,13 +60,11 @@ var bindPath = (
                 var rateableSheet : SIRateable.Sheet = resource.data[SIRateable.nick];
 
                 $q.all([
-                    getCommentCount(resource),
                     adhRate.fetchAggregatedRates(rateableSheet.post_pool, resource.path),
                     adhGetBadges(resource)
                 ]).then((args : any[]) => {
-                    var commentCount = args[0];
-                    var rates = args[1];
-                    var assignments = args[2];
+                    var rates = args[0];
+                    var assignments = args[1];
 
                     // FIXME: an adapter should take care of this
                     var ratesPro = rates["1"] || 0;
@@ -93,7 +76,7 @@ var bindPath = (
                         rateCount: ratesPro - ratesContra,
                         creator: metadataSheet.creator,
                         creationDate: metadataSheet.item_creation_date,
-                        commentCount: commentCount,
+                        commentCount: resource.data[SICommentable.nick].comments_count,
                         assignments: assignments
                     };
                 });

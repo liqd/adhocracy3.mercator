@@ -108,17 +108,17 @@
                     </section>
                 </section>
                 <section class="chapter" id="mercator-detail-view-brief-proposal">
-                    <section class="commentable-section {{subResourceSelectedState('introduction')}}">
+                    <section class="action-section {{subResourceSelectedState('introduction')}}">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-detail-view-brief-proposal"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_PITCH" | translate }}</h2>
                         <p>{{ data.introduction.teaser }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:introduction'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:introduction'}}">
                             <i class="icon-speechbubble"></i> {{ data.introduction.commentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
 
-                    <section class="commentable-section {{subResourceSelectedState('finance')}}">
+                    <section class="action-section {{subResourceSelectedState('finance')}}">
                         <div class="mercator-proposal-budget-row">
                             <div class="mercator-proposal-budget-col requested">
                                 <strong>{{ data.finance.requested_funding | number }} &euro;</strong>
@@ -146,14 +146,14 @@
                             <li data-ng-if="data.finance.other_sources">{{ data.finance.other_sources }}</li>
                         </ul>
 
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:finance'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:finance'}}">
                             <i class="icon-speechbubble"></i> {{ data.finance.commentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
                 </section><!-- /.chapter -->
 
                 <section class="chapter" id="mercator-proposal-detail-whos">
-                    <section class="commentable-section {{subResourceSelectedState('organization_info')}}">
+                    <section class="action-section {{subResourceSelectedState('organization_info')}}">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-proposal-detail-whos"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_WHO_BEHIND" | translate }}</h2>
@@ -234,75 +234,75 @@
                                 <p>{{ data.organization_info.status_other }}</p>
                             </div>
                         </div>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:organization_info'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:organization_info'}}">
                             <i class="icon-speechbubble"></i> {{ data.organization_info.commentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
 
                 </section><!-- /chapter -->
 
                 <section class="chapter" id="mercator-detail-view-detailed-proposal">
-                    <section class="commentable-section {{subResourceSelectedState('description')}}">
+                    <section class="action-section {{subResourceSelectedState('description')}}">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-detail-view-detailed-proposal"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_DETAIL" | translate }}</h2>
                         <h3>{{ "TR__DESCRIPTION" | translate }}</h3>
                         <p>{{ data.description.description }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:description'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:description'}}">
                             <i class="icon-speechbubble"></i> {{ data.description.commentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
 
-                    <section class="commentable-section {{subResourceSelectedState('story')}}">
+                    <section class="action-section {{subResourceSelectedState('story')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_STORY_LABEL" | translate }}</h3>
                         <p>{{ data.story }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:story'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:story'}}">
                             <i class="icon-speechbubble"></i> {{ data.storyCommentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
 
                 </section><!-- /chapter -->
 
                 <section class="chapter" id="mercator-detail-view-goals-and-vision">
-                    <section class="commentable-section {{subResourceSelectedState('outcome')}}">
+                    <section class="action-section {{subResourceSelectedState('outcome')}}">
                         <h2 class="chapter-header m-counted"
                             data-du-scrollspy="mercator-detail-view-goals-and-vision"
                             data-offset="50">{{ "TR__MERCATOR_PROPOSAL_MOTIVATION" | translate }}</h2>
                         <h3>{{ "TR__MERCATOR_PROPOSAL_OUTCOME_LABEL" | translate }}</h3>
                         <p>{{ data.outcome }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:outcome'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:outcome'}}">
                             <i class="icon-speechbubble"></i> {{ data.outcomeCommentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
 
-                    <section class="commentable-section {{subResourceSelectedState('steps')}}">
+                    <section class="action-section {{subResourceSelectedState('steps')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_STEPS_LABEL" | translate }}</h3>
                         <p>{{ data.steps }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:steps'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:steps'}}">
                             <i class="icon-speechbubble"></i> {{ data.stepsCommentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
 
-                    <section class="commentable-section {{subResourceSelectedState('value')}}">
+                    <section class="action-section {{subResourceSelectedState('value')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_VALUE_LABEL" | translate }}</h3>
                         <p>{{ data.value }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:value'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:value'}}">
                             <i class="icon-speechbubble"></i> {{ data.valueCommentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
 
-                    <section class="commentable-section {{subResourceSelectedState('partners')}}">
+                    <section class="action-section {{subResourceSelectedState('partners')}}">
                         <h3>{{ "TR__MERCATOR_PROPOSAL_PARTNERS_LABEL" | translate }}</h3>
                         <p>{{ data.partners }}</p>
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:partners'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:partners'}}">
                             <i class="icon-speechbubble"></i> {{ data.partnersCommentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
 
                 </section>
 
                 <section class="chapter" id="mercator-detail-view-additional">
-                    <section class="commentable-section {{subResourceSelectedState('experience')}}">
+                    <section class="action-section {{subResourceSelectedState('experience')}}">
                         <div data-ng-if="data.experience">
                             <h2 class="chapter-header m-counted"
                                 data-du-scrollspy="mercator-detail-view-additional"
@@ -321,10 +321,10 @@
                             </p>
                         </div><!-- /.if=data.heard_from -->
 
-                        <a class="commentable-section-show-comments" data-ng-href="{{ path | adhResourceUrl:'comments:experience'}}">
+                        <a class="action-section-button" data-ng-href="{{ path | adhResourceUrl:'comments:experience'}}">
                             <i class="icon-speechbubble"></i> {{ data.experienceCommentCount }}
                         </a>
-                    </section><!-- /.commentable-section -->
+                    </section><!-- /.action-section -->
                 </section>
 
                 <footer class="mercator-proposal-detail-footer">

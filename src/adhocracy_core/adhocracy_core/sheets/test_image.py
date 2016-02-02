@@ -58,7 +58,9 @@ class TestImageReference:
 
     def test_get_empty(self, meta, context):
         inst = meta.sheet_class(meta, context)
-        assert inst.get() == {'picture': None}
+        assert inst.get() == {'picture': None,
+                              'picture_description': '',
+                              'external_picture_url': ''}
 
     @mark.usefixtures('integration')
     def test_includeme_register(self, meta, registry):
