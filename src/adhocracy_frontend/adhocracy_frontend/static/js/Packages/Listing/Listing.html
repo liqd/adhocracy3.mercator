@@ -1,5 +1,5 @@
 <div class="listing">
-    <div class="action-bar" data-ng-if="facets || sorts">
+    <div class="action-bar" data-ng-if="facets || sorts.length > 1">
         <a data-ng-if="facets" class="action-bar-item" data-ng-class="{ 'm-selected': showFilter }" data-ng-click="toggleFilter();" href="">Filter</a>
         <span class="facet-group" data-ng-repeat="facet in facets">
             <a
@@ -13,7 +13,7 @@
                 <span class="facet-cancel">x</span>
             </a>
         </span>
-        <a data-ng-if="sorts" class="action-bar-item" data-ng-class="{ 'm-selected': showSort }" data-ng-click="toggleSort();" href="">Sort</a>
+        <a data-ng-if="sorts.length > 1" class="action-bar-item" data-ng-class="{ 'm-selected': showSort }" data-ng-click="toggleSort();" href="">Sort</a>
     </div>
     <div class="listing-results" data-ng-if="showFilter || showSort">
         <adh-facets data-ng-if="showFilter" data-facets="facets" data-update="update" data-toggle-item="toggleItem" data-enable-item="enableItem" data-disable-item="disableItem"></adh-facets>
@@ -22,9 +22,9 @@
             <a
                 href=""
                 class="button-cta-secondary sort-item"
-                data-ng-repeat="(key, name) in sorts"
-                data-ng-click="setSort(key)"
-                data-ng-class="{'is-active': sort === key }">{{ name | uppercase | translate }}
+                data-ng-repeat="sortItem in sorts"
+                data-ng-click="setSort(sortItem.key)"
+                data-ng-class="{'is-active': sortItem.key === sort }">{{ sortItem.name | uppercase | translate }}
             </a>
         </div>
     </div>

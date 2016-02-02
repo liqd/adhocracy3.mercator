@@ -126,17 +126,24 @@ export var proposalListingColumnDirective = (
             column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
             scope.contentType = RIProposal.content_type;
 
-            scope.sorts = {
-                rates: "TR__RATES",
-                item_creation_date: "TR__CREATION_DATE"
-            };
+            scope.sorts = [{
+                key: "rates",
+                name: "TR__RATES",
+                index: "rates",
+                reverse: true
+            }, {
+                key: "item_creation_date",
+                name: "TR__CREATION_DATE",
+                index: "item_creation_date",
+                reverse: true
+            }];
 
             var processUrl = adhTopLevelState.get("processUrl");
             adhHttp.get(processUrl).then((resource) => {
                 var currentPhase = resource.data[SIWorkflow.nick].workflow_state;
 
-                if (typeof scope.shared.facets === "undefined") {
-                    scope.shared.facets = [{
+                if (typeof scope.facets === "undefined") {
+                    scope.facets = [{
                         key: "mercator_location",
                         name: "TR__MERCATOR_PROPOSAL_LOCATION_LABEL",
                         items: [
@@ -171,7 +178,7 @@ export var proposalListingColumnDirective = (
                     }];
 
                     if (currentPhase === "result") {
-                        scope.shared.facets.push({
+                        scope.facets.push({
                             key: "badge",
                             name: "TR__MERCATOR_BADGE_AWARDS_LABEL",
                             items: [
@@ -182,10 +189,9 @@ export var proposalListingColumnDirective = (
                     }
                 }
 
-                scope.shared.sort = "item_creation_date";
-                scope.shared.reverse = true;
-                scope.shared.setSort = (sort : string) => {
-                    scope.shared.sort = sort;
+                scope.sort = "item_creation_date";
+                scope.setSort = (sort : string) => {
+                    scope.sort = sort;
                 };
                 scope.initialLimit = 50;
 

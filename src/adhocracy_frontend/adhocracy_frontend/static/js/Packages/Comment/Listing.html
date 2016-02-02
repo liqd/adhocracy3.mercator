@@ -9,11 +9,9 @@
             </adh-comment-create>
         </div>
         <ol class="listing-elements">
-            <li class="listing-element" data-ng-repeat="element in elements">
+            <li class="listing-element" data-ng-repeat="element in elements | orderBy:'-'">
                 <adh-comment
                     data-path="{{element}}"
-                    data-frontend-order-predicate="frontendOrderPredicate"
-                    data-frontend-order-reverse="frontendOrderReverse"
                     data-on-submit="update">
                 </adh-comment>
             </li>

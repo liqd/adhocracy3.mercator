@@ -58,6 +58,13 @@ export interface IFacet {
     items : IFacetItem[];
 }
 
+export interface ISortItem {
+    key : string;
+    name : string;
+    index : string;
+    reverse? : boolean;
+}
+
 export type IPredicate = string | {[key : string]: string}
 
 export interface ListingScope<Container> extends angular.IScope {
@@ -65,8 +72,7 @@ export interface ListingScope<Container> extends angular.IScope {
     contentType? : string;
     facets? : IFacet[];
     sort? : string;
-    sorts? : string[];
-    reverse? : boolean;
+    sorts? : ISortItem[];
     initialLimit? : number;
     currentLimit? : number;
     totalCount? : number;
@@ -79,8 +85,6 @@ export interface ListingScope<Container> extends angular.IScope {
     poolOptions : AdhHttp.IOptions;
     createPath? : string;
     elements : string[];
-    frontendOrderPredicate : IPredicate;
-    frontendOrderReverse : boolean;
     update : (boolean?) => angular.IPromise<void>;
     loadMore : () => void;
     wsOff : () => void;
@@ -130,12 +134,8 @@ export class Listing<Container extends ResourcesBase.Resource> {
                 facets: "=?",
                 sort: "=?",
                 sorts: "=?",
-                reverse: "=?",
                 initialLimit: "=?",
-                frontendOrderPredicate: "=?",
-                frontendOrderReverse: "=?",
                 params: "=?",
-                update: "=?",
                 noCreateForm: "=?",
                 emptyText: "@"
             },
@@ -157,7 +157,8 @@ export class Listing<Container extends ResourcesBase.Resource> {
                 $scope.createPath = adhPreliminaryNames.nextPreliminary();
 
                 var getElements = (count? : boolean, limit? : number, offset? : number) : angular.IPromise<Container> => {
-                    var params = <any>_.extend({}, $scope.params);
+                    var params = <any>{};
+
                     if (typeof $scope.contentType !== "undefined") {
                         params.content_type = $scope.contentType;
                         if (_.endsWith($scope.contentType, "Version")) {
@@ -165,6 +166,9 @@ export class Listing<Container extends ResourcesBase.Resource> {
                             params.tag = "LAST";
                         }
                     }
+
+                    _.extend(params, $scope.params);
+
                     if ($scope.facets) {
                         $scope.facets.forEach((facet : IFacet) => {
                             facet.items.forEach((item : IFacetItem) => {
@@ -174,20 +178,36 @@ export class Listing<Container extends ResourcesBase.Resource> {
                             });
                         });
                     }
-                    if ($scope.sort) {
-                        params["sort"] = $scope.sort;
-                        if ($scope.reverse) {
-                            params["reverse"] = $scope.reverse;
+
+                    var sortItem;
+                    if ($scope.sorts && $scope.sorts.length > 0) {
+                        if ($scope.sort) {
+                            sortItem = _.find($scope.sorts, (sortItem) => {
+                                return sortItem.key === $scope.sort;
+                            });
+                            if (!sortItem) {
+                                console.log("Unknown listing sort '" + $scope.sort + "'. Switching to default.");
+                                sortItem = $scope.sorts[0];
+                                $scope.sort = sortItem.key;
+                            }
+                        } else {
+                            sortItem = $scope.sorts[0];
+                            $scope.sort = sortItem.key;
                         }
                     }
+                    if (sortItem) {
+                        params.sort = sortItem.index;
+                        params.reverse = !!sortItem.reverse;
+                    }
+
                     if (limit) {
-                        params["limit"] = limit;
+                        params.limit = limit;
                         if (offset) {
-                            params["offset"] = offset;
+                            params.offset = offset;
                         }
                     }
                     if (count) {
-                        params["count"] = "true";
+                        params.count = "true";
                     }
                     return adhHttp.get($scope.path, params, {
                         warmupPoolCache: true
@@ -239,23 +259,14 @@ export class Listing<Container extends ResourcesBase.Resource> {
                         $scope.poolPath = _self.containerAdapter.poolPath($scope.container);
                         $scope.totalCount = _self.containerAdapter.totalCount($scope.container);
 
-                        // FIXME: Sorting direction should be implemented in backend, working on a copy is used,
-                        // because otherwise sometimes the already reversed sorted list (from cache) would be
-                        // reversed again
-                        var elements = _.clone(_self.containerAdapter.elemRefs($scope.container));
+                        // avoid modifying the cached result
+                        $scope.elements = _.clone(_self.containerAdapter.elemRefs($scope.container));
 
-                        // trying to maintain compatible with builtin orderBy functionality, but
-                        // allow to not specify predicate or reverse.
-                        if ($scope.frontendOrderPredicate) {
-                            $scope.elements = $filter("orderBy")(
-                                elements,
-                                $scope.frontendOrderPredicate,
-                                $scope.frontendOrderReverse
-                            );
-                        } else if ($scope.frontendOrderReverse) {
-                            $scope.elements = elements.reverse();
-                        } else {
-                            $scope.elements = elements;
+                        if (!$scope.sorts || $scope.sorts.length === 0) {
+                            // If no backend based sorting is used, we
+                            // apply some sorting to get consistent
+                            // results across requests.
+                            $scope.elements = _.sortBy($scope.elements).reverse();
                         }
                     });
                 };

@@ -170,7 +170,7 @@ export var register = () => {
 
                         it("updates scope.elements using adapter from container", () => {
                             expect(adapter.elemRefs).toHaveBeenCalledWith(container);
-                            expect(scope.elements).toEqual(elements);
+                            expect(scope.elements).toEqual(["foo", "baz", "bar"]);
                         });
                     });
 

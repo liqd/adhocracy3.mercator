@@ -587,8 +587,6 @@ export var userListDirective = (adhCredentials : AdhCredentials.Service, adhConf
             scope.contentType = RIUser.content_type;
             scope.credentials = adhCredentials;
             scope.initialLimit = 50;
-            scope.frontendOrderPredicate = (id) => id;
-            scope.frontendOrderReverse = true;
         }
     };
 };
