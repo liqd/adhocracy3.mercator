@@ -667,9 +667,6 @@ export var listing = (adhConfig : AdhConfig.IService) => {
             facets: "=?",
             sort: "=?",
             sorts: "=?",
-            reverse: "=?",
-            frontendOrderPredicate: "=?",
-            frontendOrderReverse: "=?",
             initialLimit: "=?",
             params: "=?"
         },

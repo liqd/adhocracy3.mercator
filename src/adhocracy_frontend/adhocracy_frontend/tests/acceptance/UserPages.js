@@ -126,6 +126,11 @@ var loginOtherParticipant = function() {
 
 var UserPage = function() {
 
+    this.get = function(usernumber) {
+        browser.get("/r/principals/users/" + usernumber);
+        return this;
+    };
+
     this.getUserName = function() {
         return element(by.css(".user-profile-info-name-text")).getText();
     };
@@ -166,6 +171,7 @@ module.exports = {
     ResetPasswordCreatePage: ResetPasswordCreatePage,
     ResetPasswordPage: ResetPasswordPage,
     UsersListing: UsersListing,
+    UserPage: UserPage,
     login: login,
     logout: logout,
     isLoggedIn: isLoggedIn,

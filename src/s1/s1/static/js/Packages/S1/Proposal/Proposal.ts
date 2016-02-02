@@ -94,7 +94,7 @@ var bindPath = (
                         rateCount: ratesPro - ratesContra,
                         creator: metadataSheet.creator,
                         creationDate: metadataSheet.item_creation_date,
-                        commentCount: resource.data[SICommentable.nick].comments_count,
+                        commentCount: version.data[SICommentable.nick].comments_count,
                         assignments: badgeAssignments,
                         workflowState: workflowAssignmentSheet.workflow_state,
                         decisionDate: AdhProcess.getStateData(workflowAssignmentSheet, workflowAssignmentSheet.workflow_state).start_date

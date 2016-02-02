@@ -852,13 +852,10 @@ export var listing = (adhConfig : AdhConfig.IService) => {
         scope: {
             path: "@",
             contentType: "@",
-            update: "=?",
             facets: "=?",
             sort: "=?",
             sorts: "=?",
             reverse: "=?",
-            frontendOrderPredicate: "=?",
-            frontendOrderReverse: "=?",
             initialLimit: "=?",
             params: "=?"
         }
@@ -876,8 +873,7 @@ export var userListing = (adhConfig : AdhConfig.IService) => {
             scope.poolUrl = adhConfig.rest_url + adhConfig.custom["mercator_platform_path"];
             scope.contentType = RIMercatorProposalVersion.content_type;
             scope.params = {
-                creator: scope.path.replace(adhConfig.rest_url, "").replace(/\/+$/, ""),
-                depth: 2
+                creator: scope.path.replace(adhConfig.rest_url, "").replace(/\/+$/, "")
             };
         }
     };

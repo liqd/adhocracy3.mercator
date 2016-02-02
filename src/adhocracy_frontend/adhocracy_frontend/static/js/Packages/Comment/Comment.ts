@@ -267,8 +267,6 @@ export var commentDetailDirective = (
         require: "?^adhMovingColumn",
         scope: {
             path: "@",
-            frontendOrderPredicate: "=?",
-            frontendOrderReverse: "=?",
             onSubmit: "=?"
         },
         compile: (element) => {
@@ -327,9 +325,7 @@ export var adhCommentListing = (
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Listing.html",
         scope: {
-            path: "@",
-            frontendOrderReverse: "=?",
-            frontendOrderPredicate: "=?"
+            path: "@"
         },
         link: (scope) => {
             adhTopLevelState.setCameFrom($location.url());
@@ -424,8 +420,6 @@ export var commentColumnDirective = (
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["commentCloseUrl", "commentableUrl"]);
-            scope.frontendOrderPredicate = (id) => id;
-            scope.frontendOrderReverse = true;
         }
     };
 };

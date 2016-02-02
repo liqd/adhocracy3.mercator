@@ -9,15 +9,14 @@ var _ = require("lodash");
 
 describe("user page", function() {
     it("displays the correct name for each user", function() {
-        var usersListing = new UserPages.UsersListing().get();
+        var annotatorPage = new UserPages.UserPage().get("0000001");
 
-        var annotatorPage = usersListing.getUserPage("participant");
         expect(annotatorPage.getUserName()).toBe("participant");
 
-        var contributorPage = usersListing.getUserPage("moderator");
+        var contributorPage = new UserPages.UserPage().get("0000002");
         expect(contributorPage.getUserName()).toBe("moderator");
 
-        var reviewerPage = usersListing.getUserPage("admin");
+        var reviewerPage = new UserPages.UserPage().get("0000004");
         expect(reviewerPage.getUserName()).toBe("admin");
     });
 
@@ -27,8 +26,7 @@ describe("user page", function() {
         var mailsBeforeMessaging =
             fs.readdirSync(browser.params.mail.queue_path + "/new");
 
-        var usersListing = new UserPages.UsersListing();
-        var annotatorPage = usersListing.getUserPage("participant");
+        var annotatorPage = new UserPages.UserPage().get("0000001");
         var currentDate = Date.now().toString();
         var subject = "title" + currentDate;
         var content = "content" + currentDate;
