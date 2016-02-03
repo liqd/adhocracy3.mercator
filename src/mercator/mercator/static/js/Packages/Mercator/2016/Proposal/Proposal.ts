@@ -699,7 +699,7 @@ export var listItem = (
                     user_info: {
                         first_name: data.userInfo.firstName,
                         last_name: data.userInfo.lastName,
-                        item_creation_date: data.creationDate,
+                        createtime: data.creationDate,
                         path: data.creator
                     },
                     organization_info: data.organizationInfo,
