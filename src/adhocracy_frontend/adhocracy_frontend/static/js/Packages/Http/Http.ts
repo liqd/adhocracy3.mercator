@@ -56,6 +56,7 @@ export interface IOptions {
     delete : boolean;
     hide : boolean;
     canPost(contentType : string) : boolean;
+    canPut(sheetNick : string) : boolean;
 }
 
 
@@ -67,7 +68,8 @@ export var emptyOptions : IOptions = {
     HEAD: false,
     delete: false,
     hide: false,
-    canPost: (contentType) => false
+    canPost: (contentType) => false,
+    canPut: (sheetNick) => false
 };
 
 
@@ -148,6 +150,14 @@ export class Service<Content extends ResourcesBase.Resource> {
                 if (raw.data.POST) {
                     var postOptions = raw.data.POST.request_body;
                     return _.any(postOptions, { "content_type": contentType });
+                } else {
+                    return false;
+                }
+            },
+            canPut: (sheetNick : string) => {
+                if (raw.data.PUT) {
+                    var putOptions = raw.data.PUT.request_body.data;
+                    return _.has(putOptions, sheetNick);
                 } else {
                     return false;
                 }

@@ -124,9 +124,9 @@ export var fill = (resource, scope, userPath : string) => {
         description: scope.data.description
     };
     clone.data[SIBadgeAssignment.nick] = {
-        badge : scope.data.badge,
-        object : scope.badgeablePath,
-        subject : userPath
+        badge: scope.data.badge,
+        object: scope.badgeablePath,
+        subject: userPath
     };
     return clone;
 };

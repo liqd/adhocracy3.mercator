@@ -1,0 +1,15 @@
+<div data-ng-switch="transclusionId">
+    <div data-ng-switch-when="menu">
+        <i class="icon-document moving-column-icon"></i>
+    </div>
+
+    <div data-ng-switch-when="body">
+        <adh-resource-actions
+            data-resource-path="{{proposalUrl}}"
+            data-cancel="true"></adh-resource-actions>
+        <adh-mercator-2016-proposal-moderate
+            data-ng-if="proposalUrl"
+            data-path="{{proposalUrl}}">
+        </adh-mercator-2016-proposal-moderate>
+    </div>
+</div>

@@ -16,6 +16,7 @@ import RIProcess from "../../../../Resources_/adhocracy_mercator/resources/merca
 import RIProposal from "../../../../Resources_/adhocracy_mercator/resources/mercator2/IMercatorProposal";
 import * as SIComment from "../../../../Resources_/adhocracy_core/sheets/comment/IComment";
 import * as SIMercatorSubResources from "../../../../Resources_/adhocracy_mercator/sheets/mercator2/IMercatorSubResources";
+import * as SIWinnerInfo from "../../../../Resources_/adhocracy_mercator/sheets/mercator2/IWinnerInfo";
 import * as SIWorkflow from "../../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
 var pkgLocation = "/Mercator/2016/Workbench";
@@ -81,10 +82,13 @@ export var proposalDetailColumnDirective = (
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
             adhPermissions.bindScope(scope, () => scope.proposalUrl && AdhUtil.parentPath(scope.proposalUrl), "proposalItemOptions");
+            adhPermissions.bindScope(scope, () => scope.proposalUrl, "proposalOptions");
 
             scope.delete = () => {
                 column.$broadcast("triggerDelete", scope.proposalUrl);
             };
+
+            scope.canModerate = () => scope.proposalOptions.canPut(SIWinnerInfo.nick);
 
             scope.print = () => {
                 // only the focused column is printed
@@ -104,6 +108,23 @@ export var proposalEditColumnDirective = (
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalEditColumn.html",
+        require: "^adhMovingColumn",
+        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
+            column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
+            bindRedirectsToScope(scope, adhConfig, adhResourceUrlFilter, $location);
+        }
+    };
+};
+
+
+export var proposalModerateColumnDirective = (
+    adhConfig : AdhConfig.IService,
+    adhResourceUrlFilter : (path : string) => string,
+    $location : angular.ILocationService
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalModerateColumn.html",
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
@@ -278,6 +299,23 @@ export var registerRoutes = (
                 proposalUrl: resource.path
             };
         })
+        .default(RIProposal, "moderate", processType, context, {
+            space: "content",
+            movingColumns: "is-collapse-show-hide"
+        })
+        .specific(RIProposal, "moderate", processType, context, ["adhHttp", (adhHttp : AdhHttp.Service<any>) => {
+            return (resource : RIProposal) => {
+                return adhHttp.options(resource.path).then((options : AdhHttp.IOptions) => {
+                    if (!options.canPut(SIWinnerInfo.nick)) {
+                        throw 401;
+                    } else {
+                        return {
+                            proposalUrl: resource.path
+                        };
+                    }
+                });
+            };
+        }])
         .default(RIProposal, "edit", processType, context, {
             space: "content",
             movingColumns: "is-collapse-show-hide"

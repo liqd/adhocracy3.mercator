@@ -4,6 +4,11 @@
         data-class="action-bar-item"
         data-parent-path="parentPath"
         data-resource-path="{{resourcePath}}"></adh-edit-action>
+    <adh-moderate-action
+        data-ng-if="moderate && resourcePath"
+        data-class="action-bar-item"
+        data-parent-path="parentPath"
+        data-resource-path="{{resourcePath}}"></adh-moderate-action>
     <adh-report-action
         data-ng-if="report"
         data-class="action-bar-item"></adh-report-action>

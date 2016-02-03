@@ -67,6 +67,17 @@ export var register = (angular) => {
         }])
         .directive("adhMercator2016ProposalCreate", [
             "$location", "adhConfig", "adhHttp", "adhPreliminaryNames", "adhResourceUrlFilter", Proposal.createDirective])
+        .directive("adhMercator2016ProposalModerate", [
+            "$q",
+            "$location",
+            "adhConfig",
+            "adhHttp",
+            "adhTopLevelState",
+            "adhPreliminaryNames",
+            "adhResourceUrlFilter",
+            "adhGetBadges",
+            "adhCredentials",
+            Proposal.moderateDirective])
         .directive("adhMercator2016ProposalEdit", [
             "$q",
             "$location",
@@ -75,6 +86,7 @@ export var register = (angular) => {
             "adhTopLevelState",
             "adhPreliminaryNames",
             "adhResourceUrlFilter",
+            "adhGetBadges",
             Proposal.editDirective])
         .directive("adhMercator2016ProposalListing", ["adhConfig", Proposal.listing])
         .directive("adhMercator2016ProposalListitem", ["$q", "adhConfig", "adhHttp", "adhTopLevelState", "adhGetBadges", Proposal.listItem])
@@ -90,5 +102,5 @@ export var register = (angular) => {
             "$translate",
             Proposal.mercatorProposalFormController2016])
         .directive("adhMercator2016ProposalDetail", [
-            "$q", "adhConfig", "adhHttp", "adhTopLevelState", "adhPermissions", "$translate", Proposal.detailDirective]);
+            "$q", "adhConfig", "adhHttp", "adhTopLevelState", "adhPermissions", "adhGetBadges", "$translate", Proposal.detailDirective]);
 };

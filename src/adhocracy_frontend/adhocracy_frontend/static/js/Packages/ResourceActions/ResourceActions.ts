@@ -20,7 +20,8 @@ export var resourceActionsDirective = (
             print: "=?",
             report: "=?",
             cancel: "=?",
-            edit: "=?"
+            edit: "=?",
+            moderate: "=?",
         },
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceActions.html",
         link: (scope, element) => {
@@ -117,6 +118,30 @@ export var editActionDirective = (
             scope.edit = () => {
                 var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
                 var url = adhResourceUrl(path, "edit");
+                $location.url(url);
+            };
+        }
+    };
+};
+
+export var moderateActionDirective = (
+    adhTopLevelState : AdhTopLevelState.Service,
+    adhResourceUrl,
+    $location : angular.ILocationService
+) => {
+    return {
+        restrict: "E",
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"moderate();\">{{ 'TR__MODERATE' | translate }}</a>",
+        require: "^adhMovingColumn",
+        scope: {
+            resourcePath: "@",
+            parentPath: "=?",
+            class: "@"
+        },
+        link: (scope) => {
+            scope.moderate = () => {
+                var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
+                var url = adhResourceUrl(path, "moderate");
                 $location.url(url);
             };
         }

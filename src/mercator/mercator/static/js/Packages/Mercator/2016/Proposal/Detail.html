@@ -71,6 +71,16 @@
             </nav>
 
             <div class="section-jump-main chapter-wrapper" data-du-spy-context="">
+                <section data-ng-if="data.winner.name" class="chapter m-jury-decision" id="jury-decision">
+                    <section class="jury-decision-section">
+                        <h2 class="chapter-header">{{ "TR__MERCATOR_JURY_STATEMENT" | translate }}</h2>
+                        <p>{{ "TR__MERCATOR_FUNDING" | translate }}: {{ data.winner.funding }} &euro;</p>
+                        <p>{{ data.winner.description }}</p>
+                        <div class="jury-decision-section-icon">
+                            <i class="icon-star"></i>
+                        </div>
+                    </section>
+                </section>
                 <section class="chapter" id="mercator-proposal-brief">
                     <section class="action-section {{subResourceSelectedState('pitch')}}">
                         <h2 class="chapter-header m-counted"
