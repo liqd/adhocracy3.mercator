@@ -8,10 +8,9 @@ import * as AdhResourceArea from "../ResourceArea/ResourceArea";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 import * as AdhUtil from "../Util/Util";
 
-import * as ResourcesBase from "../../ResourcesBase";
-
 import RIComment from "../../Resources_/adhocracy_core/resources/comment/IComment";
 import RICommentVersion from "../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
+import RIDigitalLebenProcess from "../../Resources_/adhocracy_spd/resources/digital_leben/IProcess";
 import RIDocument from "../../Resources_/adhocracy_core/resources/document/IDocument";
 import RIDocumentVersion from "../../Resources_/adhocracy_core/resources/document/IDocumentVersion";
 import RIParagraph from "../../Resources_/adhocracy_core/resources/paragraph/IParagraph";
@@ -19,10 +18,10 @@ import RIParagraphVersion from "../../Resources_/adhocracy_core/resources/paragr
 import * as SIComment from "../../Resources_/adhocracy_core/sheets/comment/IComment";
 import * as SIParagraph from "../../Resources_/adhocracy_core/sheets/document/IParagraph";
 
-var pkgLocation = "/DebateWorkbench";
+var pkgLocation = "/spdWorkbench";
 
 
-export var debateWorkbenchDirective = (
+export var spdWorkbenchDirective = (
     adhConfig : AdhConfig.IService,
     adhTopLevelState : AdhTopLevelState.Service
 ) => {
@@ -103,20 +102,20 @@ export var processDetailAnnounceColumnDirective = (
 
 
 export var registerRoutes = (
-    processType : ResourcesBase.IResourceClass,
+    processType : string = "",
     context : string = ""
 ) => (adhResourceAreaProvider : AdhResourceArea.Provider) => {
     adhResourceAreaProvider
-        .default(processType, "", processType.content_type, context, {
+        .default(RIDigitalLebenProcess, "", processType, context, {
             space: "content",
             movingColumns: "is-show-hide-hide"
         })
-        .default(processType, "create_document", processType.content_type, context, {
+        .default(RIDigitalLebenProcess, "create_document", processType, context, {
             space: "content",
             movingColumns: "is-show-hide-hide"
         })
-        .specific(processType, "create_document", processType.content_type, context, [
-            "adhHttp", (adhHttp : AdhHttp.Service<any>) => (resource) => {
+        .specific(RIDigitalLebenProcess, "create_document", processType, context, [
+            "adhHttp", (adhHttp : AdhHttp.Service<any>) => (resource : RIDigitalLebenProcess) => {
                 return adhHttp.options(resource.path).then((options : AdhHttp.IOptions) => {
                     if (!options.POST) {
                         throw 401;
@@ -125,21 +124,21 @@ export var registerRoutes = (
                     }
                 });
             }])
-        .defaultVersionable(RIDocument, RIDocumentVersion, "", processType.content_type, context, {
+        .defaultVersionable(RIDocument, RIDocumentVersion, "", processType, context, {
             space: "content",
             movingColumns: "is-show-show-hide"
         })
-        .specificVersionable(RIDocument, RIDocumentVersion, "", processType.content_type, context, [
+        .specificVersionable(RIDocument, RIDocumentVersion, "", processType, context, [
             () => (item : RIDocument, version : RIDocumentVersion) => {
                 return {
                     documentUrl: version.path
                 };
             }])
-        .defaultVersionable(RIDocument, RIDocumentVersion, "edit", processType.content_type, context, {
+        .defaultVersionable(RIDocument, RIDocumentVersion, "edit", processType, context, {
             space: "content",
             movingColumns: "is-show-show-hide"
         })
-        .specificVersionable(RIDocument, RIDocumentVersion, "edit", processType.content_type, context, [
+        .specificVersionable(RIDocument, RIDocumentVersion, "edit", processType, context, [
             "adhHttp", (adhHttp : AdhHttp.Service<any>) => (item : RIDocument, version : RIDocumentVersion) => {
                 return adhHttp.options(item.path).then((options : AdhHttp.IOptions) => {
                     if (!options.POST) {
@@ -151,11 +150,11 @@ export var registerRoutes = (
                     }
                 });
             }])
-        .defaultVersionable(RIParagraph, RIParagraphVersion, "comments", processType.content_type, context, {
+        .defaultVersionable(RIParagraph, RIParagraphVersion, "comments", processType, context, {
             space: "content",
             movingColumns: "is-collapse-show-show"
         })
-        .specificVersionable(RIParagraph, RIParagraphVersion, "comments", processType.content_type, context, [
+        .specificVersionable(RIParagraph, RIParagraphVersion, "comments", processType, context, [
             () => (item : RIParagraph, version : RIParagraphVersion) => {
                 var documentUrl = _.last(_.sortBy(version.data[SIParagraph.nick].documents));
                 return {
@@ -164,11 +163,11 @@ export var registerRoutes = (
                     documentUrl: documentUrl
                 };
             }])
-        .defaultVersionable(RIComment, RICommentVersion, "", processType.content_type, context, {
+        .defaultVersionable(RIComment, RICommentVersion, "", processType, context, {
             space: "content",
             movingColumns: "is-collapse-show-show"
         })
-        .specificVersionable(RIComment, RICommentVersion, "", processType.content_type, context, ["adhHttp", "$q", (
+        .specificVersionable(RIComment, RICommentVersion, "", processType, context, ["adhHttp", "$q", (
             adhHttp : AdhHttp.Service<any>,
             $q : angular.IQService
         ) => {
