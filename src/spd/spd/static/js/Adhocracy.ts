@@ -50,7 +50,7 @@ import * as AdhRateModule from "./Packages/Rate/Module";
 import * as AdhResourceAreaModule from "./Packages/ResourceArea/Module";
 import * as AdhResourceWidgetsModule from "./Packages/ResourceWidgets/Module";
 import * as AdhShareSocialModule from "./Packages/ShareSocial/Module";
-import * as AdhDebateWorkbenchModule from "./Packages/DebateWorkbench/Module";
+import * as AdhSPDWorkbenchModule from "./Packages/spdWorkbench/Module";
 import * as AdhStickyModule from "./Packages/Sticky/Module";
 import * as AdhTopLevelStateModule from "./Packages/TopLevelState/Module";
 import * as AdhTrackingModule from "./Packages/Tracking/Module";
@@ -59,12 +59,7 @@ import * as AdhUserViewsModule from "./Packages/User/ViewsModule";
 import * as AdhWebSocketModule from "./Packages/WebSocket/Module";
 
 import * as AdhConfig from "./Packages/Config/Config";
-import * as AdhDebateWorkbench from "./Packages/DebateWorkbench/DebateWorkbench";
-import * as AdhProcess from "./Packages/Process/Process";
 import * as AdhTopLevelState from "./Packages/TopLevelState/TopLevelState";
-
-import RIDigitalLebenProcess from "./Resources_/adhocracy_spd/resources/digital_leben/IProcess";
-
 import * as AdhTemplates from "adhTemplates";  if (AdhTemplates) { ; };
 
 webshim.setOptions("basePath", "/static/lib/webshim/js-webshim/minified/shims/");
@@ -98,10 +93,9 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "flow",
         AdhCommentModule.moduleName,
         AdhCrossWindowMessagingModule.moduleName,
-        AdhDebateWorkbenchModule.moduleName,
         AdhEmbedModule.moduleName,
-        AdhProcessModule.moduleName,
         AdhResourceAreaModule.moduleName,
+        AdhSPDWorkbenchModule.moduleName,
         AdhTrackingModule.moduleName,
         AdhUserViewsModule.moduleName
     ];
@@ -159,14 +153,6 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         });
     }]);
 
-    // register workbench
-    app.config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
-        adhProcessProvider.templateFactories[RIDigitalLebenProcess.content_type] = ["$q", ($q : angular.IQService) => {
-            return $q.when("<adh-debate-workbench></adh-debate-workbench>");
-        }];
-    }]);
-    app.config(["adhResourceAreaProvider", AdhDebateWorkbench.registerRoutes(RIDigitalLebenProcess)]);
-
     app.value("markdownit", markdownit);
     app.value("angular", angular);
     app.value("modernizr", modernizr);
@@ -180,7 +166,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     AdhCommentModule.register(angular);
     AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
     AdhDateTimeModule.register(angular);
-    AdhDebateWorkbenchModule.register(angular);
+    AdhSPDWorkbenchModule.register(angular);
     AdhDoneModule.register(angular);
     AdhEmbedModule.register(angular);
     AdhEventManagerModule.register(angular);
