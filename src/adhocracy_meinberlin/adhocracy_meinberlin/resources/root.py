@@ -6,6 +6,7 @@ from substanced.util import find_service
 
 from adhocracy_core.resources.organisation import IOrganisation
 from adhocracy_core.interfaces import IPool
+from adhocracy_core.resources.process import IProcess
 from adhocracy_core.resources import add_resource_type_to_registry
 from adhocracy_core.resources.geo import IMultiPolygon
 from adhocracy_core.resources.root import create_initial_content_for_app_root
@@ -40,6 +41,14 @@ def add_example_process(context: IPool, registry: Registry, options: dict):
                             registry=registry)
 
 
+def add_debate_process(context: IPool, registry: Registry, options: dict):
+    """Add spd specific process."""
+    appstructs = {adhocracy_core.sheets.name.IName.__identifier__:
+                  {'name': 'engagement_landschaft'}}
+    registry.content.create(IProcess.__identifier__,
+                            parent=context,
+                            appstructs=appstructs)
+
 meinberlin_acm = ACM().deserialize(
     {'principals': ['anonymous',
                     'participant',
@@ -53,6 +62,7 @@ meinberlin_acm = ACM().deserialize(
 meinberlin_root_meta = root_meta._replace(
     after_creation=(create_initial_content_for_app_root,
                     add_example_process,
+                    add_debate_process,
                     adhocracy_core.resources.root.add_example_process
                     ))
 

@@ -56,8 +56,12 @@ import * as AdhUserViewsModule from "./Packages/User/ViewsModule";
 import * as AdhWebSocketModule from "./Packages/WebSocket/Module";
 
 import * as AdhConfig from "./Packages/Config/Config";
+import * as AdhDebateWorkbench from "./Packages/DebateWorkbench/DebateWorkbench";
+import * as AdhProcess from "./Packages/Process/Process";
 import * as AdhTopLevelState from "./Packages/TopLevelState/TopLevelState";
 import * as AdhTemplates from "adhTemplates";  if (AdhTemplates) { ; };
+
+import RIEngagementLandschaftProcess from "./Resources_/adhocracy_meinberlin/resources/engagement_landschaft/IProcess";
 
 webshim.setOptions("basePath", "/static/lib/webshim/js-webshim/minified/shims/");
 webshim.setOptions("forms-ext", {"replaceUI": true});
@@ -145,6 +149,14 @@ export var init = (config : AdhConfig.IService, metaApi) => {
             tabindex: false
         });
     }]);
+
+    // register workbench
+    app.config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
+        adhProcessProvider.templateFactories[RIEngagementLandschaftProcess.content_type] = ["$q", ($q : angular.IQService) => {
+            return $q.when("<adh-debate-workbench></adh-debate-workbench>");
+        }];
+    }]);
+    app.config(["adhResourceAreaProvider", AdhDebateWorkbench.registerRoutes(RIEngagementLandschaftProcess)]);
 
     app.value("angular", angular);
     app.value("modernizr", modernizr);

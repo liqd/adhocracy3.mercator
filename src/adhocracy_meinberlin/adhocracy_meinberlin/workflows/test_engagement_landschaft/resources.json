@@ -1,0 +1,9 @@
+[ {"path": "/organisation/",
+   "creator": "god",
+   "content_type": "adhocracy_meinberlin.resources.engagement_landschaft.IProcess",
+   "data": {"adhocracy_core.sheets.name.IName":
+            {"name": "engagement_landschaft"},
+            "adhocracy_core.sheets.title.ITitle":
+            {"title": "Engagement Landschaft process"}
+           }}
+]

@@ -5,7 +5,6 @@ import * as AdhMeinberlinBuergerhaushaltModule from "./Buergerhaushalt/Module";
 import * as AdhMeinberlinPhaseModule from "./Phase/Module";
 import * as AdhMeinberlinStadtforumModule from "./Stadtforum/Module";
 
-
 export var moduleName = "adhMeinberlin";
 
 export var register = (angular) => {
@@ -22,6 +21,6 @@ export var register = (angular) => {
             AdhMeinberlinBplanModule.moduleName,
             AdhMeinberlinKiezkasseModule.moduleName,
             AdhMeinberlinBuergerhaushaltModule.moduleName,
-            AdhMeinberlinStadtforumModule.moduleName
+            AdhMeinberlinStadtforumModule.moduleName,
         ]);
 };

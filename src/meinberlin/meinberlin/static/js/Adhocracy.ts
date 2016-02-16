@@ -30,6 +30,7 @@ import * as AdhBadgeModule from "./Packages/Badge/Module";
 import * as AdhCommentModule from "./Packages/Comment/Module";
 import * as AdhCrossWindowMessagingModule from "./Packages/CrossWindowMessaging/Module";
 import * as AdhDateTimeModule from "./Packages/DateTime/Module";
+import * as AdhDebateWorkbenchModule from "./Packages/DebateWorkbench/Module";
 import * as AdhDocumentModule from "./Packages/Document/Module";
 import * as AdhDoneModule from "./Packages/Done/Module";
 import * as AdhEmbedModule from "./Packages/Embed/Module";
@@ -61,7 +62,11 @@ import * as AdhUserViewsModule from "./Packages/User/ViewsModule";
 import * as AdhWebSocketModule from "./Packages/WebSocket/Module";
 
 import * as AdhConfig from "./Packages/Config/Config";
+import * as AdhDebateWorkbench from "./Packages/DebateWorkbench/DebateWorkbench";
+import * as AdhProcess from "./Packages/Process/Process";
 import * as AdhTopLevelState from "./Packages/TopLevelState/TopLevelState";
+
+import RIEngagementLandschaftProcess from "./Resources_/adhocracy_meinberlin/resources/engagement_landschaft/IProcess";
 
 import * as AdhTemplates from "adhTemplates";  if (AdhTemplates) { ; };
 
@@ -95,6 +100,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "flow",
         AdhCommentModule.moduleName,
         AdhCrossWindowMessagingModule.moduleName,
+        AdhDebateWorkbenchModule.moduleName,
         AdhEmbedModule.moduleName,
         AdhMeinberlinModule.moduleName,
         AdhResourceAreaModule.moduleName,
@@ -158,6 +164,14 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         });
     }]);
 
+    // configure workbench
+    app.config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
+        adhProcessProvider.templateFactories[RIEngagementLandschaftProcess.content_type] = ["$q", ($q : angular.IQService) => {
+            return $q.when("<adh-debate-workbench></adh-debate-workbench>");
+        }];
+    }]);
+    app.config(["adhResourceAreaProvider", AdhDebateWorkbench.registerRoutes(RIEngagementLandschaftProcess)]);
+
     app.value("angular", angular);
 
     app.value("markdownit", markdownit);
@@ -171,6 +185,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     AdhBadgeModule.register(angular);
     AdhCommentModule.register(angular);
     AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
+    AdhDebateWorkbenchModule.register(angular);
     AdhDateTimeModule.register(angular);
     AdhDocumentModule.register(angular);
     AdhDoneModule.register(angular);
