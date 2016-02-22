@@ -28,6 +28,7 @@ export class Provider implements angular.IServiceProvider {
         type? : string;
     }};
     public templates : {[embedContext : string]: any};
+    public customHeaderTemplateUrls : {[processType : string]: any};
 
     constructor() {
         var self = this;
@@ -106,6 +107,11 @@ export class Provider implements angular.IServiceProvider {
 
     public template(embedContext : string, templateFn : any) : Provider {
         this.templates[embedContext] = templateFn;
+        return this;
+    }
+
+    public customHeaderTemplateUrl(processType : string, templateUrl : string) : Provider {
+        this.customHeaderTemplateUrls[processType] = templateUrl;
         return this;
     }
 }
@@ -352,6 +358,7 @@ export class Service implements AdhTopLevelState.IAreaInput {
                 var defaults : Dict = self.getDefaults(resource.content_type, view, processType, embedContext);
 
                 var meta : Dict = {
+                    customHeaderTemplateUrl: self.provider.customHeaderTemplateUrls[processType],
                     embedContext: embedContext,
                     processType: processType,
                     processUrl: processUrl,
