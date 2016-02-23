@@ -28,6 +28,7 @@ import * as AdhAbuseModule from "./Packages/Abuse/Module";
 import * as AdhAngularHelpersModule from "./Packages/AngularHelpers/Module";
 import * as AdhBadgeModule from "./Packages/Badge/Module";
 import * as AdhCommentModule from "./Packages/Comment/Module";
+import * as AdhConfigModule from "./Packages/Config/Module";
 import * as AdhCrossWindowMessagingModule from "./Packages/CrossWindowMessaging/Module";
 import * as AdhDateTimeModule from "./Packages/DateTime/Module";
 import * as AdhDebateWorkbenchModule from "./Packages/DebateWorkbench/Module";
@@ -99,6 +100,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "ngMessages",
         "flow",
         AdhCommentModule.moduleName,
+        AdhConfigModule.moduleName,
         AdhCrossWindowMessagingModule.moduleName,
         AdhDebateWorkbenchModule.moduleName,
         AdhEmbedModule.moduleName,
@@ -180,10 +182,10 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     app.value("leaflet", leaflet);
 
     // register our modules
-    app.value("adhConfig", config);
     AdhAbuseModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhCommentModule.register(angular);
+    AdhConfigModule.register(angular, config);
     AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
     AdhDebateWorkbenchModule.register(angular);
     AdhDateTimeModule.register(angular);

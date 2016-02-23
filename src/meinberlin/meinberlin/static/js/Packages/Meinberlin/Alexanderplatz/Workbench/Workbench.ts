@@ -19,7 +19,7 @@ import * as SIParagraph from "../../../../Resources_/adhocracy_core/sheets/docum
 import * as SILocationReference from "../../../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
 import * as SIMultiPolygon from "../../../../Resources_/adhocracy_core/sheets/geo/IMultiPolygon";
 
-var pkgLocation = "/Meinberlin/Alexanderplatz/Workbench";
+export var pkgLocation = "/Meinberlin/Alexanderplatz/Workbench";
 
 
 export var workbenchDirective = (
@@ -362,4 +362,19 @@ export var registerRoutes = (
                     proposalUrl: version.path
                 };
             }]);
+};
+
+export var addProposalButton = (
+    adhConfig : AdhConfig.IService,
+    adhPermissions : AdhPermissions.Service,
+    adhTopLevelState : AdhTopLevelState.Service
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/AddProposalButton.html",
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            adhPermissions.bindScope(scope, () => scope.processUrl, "processOptions");
+        }
+    };
 };

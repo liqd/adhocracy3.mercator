@@ -36,7 +36,13 @@ export var register = (angular) => {
                 return $q.when("<adh-meinberlin-alexanderplatz-workbench></adh-meinberlin-alexanderplatz-workbench>");
             }];
         }])
-        .config(["adhResourceAreaProvider", Workbench.registerRoutes(processType)])
+        .config(["adhResourceAreaProvider", "adhConfigProvider", (adhResourceAreaProvider, adhConfigProvider) => {
+            var adhConfig = adhConfigProvider.config;
+            var processType = RIAlexanderplatzProcess.content_type;
+            var customHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/CustomHeader.html";
+            adhResourceAreaProvider.customHeader(processType, customHeader);
+            Workbench.registerRoutes(processType)(adhResourceAreaProvider);
+        }])
         .config(["adhMapDataProvider", (adhMapDataProvider : AdhMapping.MapDataProvider) => {
             adhMapDataProvider.icons["document"] = {
                 className: "icon-board-pin",
@@ -71,5 +77,7 @@ export var register = (angular) => {
         .directive("adhMeinberlinAlexanderplatzDocumentEditColumn", [
             "adhConfig", "adhHttp", "adhTopLevelState", "adhResourceUrlFilter", Workbench.documentEditColumnDirective])
         .directive("adhMeinberlinAlexanderplatzProposalEditColumn", [
-            "adhConfig", "adhTopLevelState", "adhResourceUrlFilter", Workbench.proposalEditColumnDirective]);
+            "adhConfig", "adhTopLevelState", "adhResourceUrlFilter", Workbench.proposalEditColumnDirective])
+        .directive("adhMeinberlinAlexanderplatzAddProposalButton", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.addProposalButton]);
 };

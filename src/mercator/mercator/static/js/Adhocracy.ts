@@ -27,6 +27,7 @@ import * as AdhAngularHelpersModule from "./Packages/AngularHelpers/Module";
 import * as AdhBadgeModule from "./Packages/Badge/Module";
 import * as AdhBlogModule from "./Packages/Blog/Module";
 import * as AdhCommentModule from "./Packages/Comment/Module";
+import * as AdhConfigModule from "./Packages/Config/Module";
 import * as AdhCrossWindowMessagingModule from "./Packages/CrossWindowMessaging/Module";
 import * as AdhDateTimeModule from "./Packages/DateTime/Module";
 import * as AdhDoneModule from "./Packages/Done/Module";
@@ -90,6 +91,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "duScroll",
         "flow",
         AdhCommentModule.moduleName,
+        AdhConfigModule.moduleName,
         AdhCrossWindowMessagingModule.moduleName,
         AdhEmbedModule.moduleName,
         AdhMercatorModule.moduleName,
@@ -161,11 +163,11 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     app.value("moment", moment);
 
     // register our modules
-    app.value("adhConfig", config);
     AdhAbuseModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhBlogModule.register(angular);
     AdhCommentModule.register(angular);
+    AdhConfigModule.register(angular, config);
     AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
     AdhDateTimeModule.register(angular);
     AdhDoneModule.register(angular);

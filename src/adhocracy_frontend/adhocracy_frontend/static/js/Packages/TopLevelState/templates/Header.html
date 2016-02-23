@@ -1,5 +1,8 @@
-<header class="l-header main-header">
-    <div ng-hide="hide_header === 'true'" class="l-header-right">
+<header data-ng-hide="hide_header === 'true'" class="l-header main-header">
+    <div class="l-header-left">
+        <ng-include data-ng-if="customHeader" src="customHeader"></ng-include>
+    </div>
+    <div class="l-header-right">
         <adh-user-indicator></adh-user-indicator>
         <adh-help-link></adh-help-link>
     </div>

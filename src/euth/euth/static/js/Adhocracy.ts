@@ -93,6 +93,7 @@ export var init = (config: AdhConfig.IService, metaApi) => {
         "ngMessages",
         "flow",
         AdhCommentModule.moduleName,
+        AdhConfigModule.moduleName,
         AdhCrossWindowMessagingModule.moduleName,
         AdhEmbedModule.moduleName,
         AdhEuthModule.moduleName,
@@ -165,10 +166,10 @@ export var init = (config: AdhConfig.IService, metaApi) => {
     app.value("leaflet", leaflet);
 
     // register our modules
-    app.value("adhConfig", config);
     AdhAbuseModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhCommentModule.register(angular);
+    AdhConfigModule.register(angular, config);
     AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
     AdhDateTimeModule.register(angular);
     AdhDocumentModule.register(angular);

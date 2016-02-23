@@ -97,6 +97,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "duScroll",
         "flow",
         AdhCommentModule.moduleName,
+        AdhConfigModule.moduleName,
         AdhCrossWindowMessagingModule.moduleName,
         AdhDebateWorkbenchModule.moduleName,
         AdhEmbedModule.moduleName,
@@ -174,10 +175,10 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     app.value("leaflet", leaflet);
 
     // register our modules
-    app.value("adhConfig", config);
     AdhAbuseModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhCommentModule.register(angular);
+    AdhConfigModule.register(angular, config);
     AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
     AdhDateTimeModule.register(angular);
     AdhDebateWorkbenchModule.register(angular);

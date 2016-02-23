@@ -89,6 +89,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "ngAria",
         "ngMessages",
         AdhCommentModule.moduleName,
+        AdhConfigModule.moduleName,
         AdhCrossWindowMessagingModule.moduleName,
         AdhDocumentWorkbenchModule.moduleName,
         AdhEmbedModule.moduleName,
@@ -162,11 +163,11 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     app.value("markdownit", markdownit);
 
     // register our modules
-    app.value("adhConfig", config);
     AdhAbuseModule.register(angular);
     AdhAngularHelpersModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhCommentModule.register(angular);
+    AdhConfigModule.register(angular, config);
     AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
     AdhDateTimeModule.register(angular);
     AdhDocumentWorkbenchModule.register(angular);

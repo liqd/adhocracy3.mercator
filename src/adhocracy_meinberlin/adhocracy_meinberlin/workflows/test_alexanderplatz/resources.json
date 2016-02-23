@@ -1,0 +1,8 @@
+[{"path": "/",
+  "content_type": "adhocracy_meinberlin.resources.alexanderplatz.IProcess",
+  "data": {"adhocracy_core.sheets.name.IName":
+           {"name": "alexanderplatz"},
+           "adhocracy_core.sheets.title.ITitle":
+           {"title": "Alexanderplatz participation process"}
+          }}
+]

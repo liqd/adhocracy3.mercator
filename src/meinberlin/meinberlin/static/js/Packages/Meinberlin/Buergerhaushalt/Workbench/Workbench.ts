@@ -16,7 +16,7 @@ import RIProposalVersion from "../../../../Resources_/adhocracy_meinberlin/resou
 import * as SIComment from "../../../../Resources_/adhocracy_core/sheets/comment/IComment";
 import * as SIWorkflow from "../../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
-var pkgLocation = "/Meinberlin/Buergerhaushalt/Workbench";
+export var pkgLocation = "/Meinberlin/Buergerhaushalt/Workbench";
 
 
 export var buergerhaushaltWorkbenchDirective = (
@@ -209,4 +209,19 @@ export var registerRoutes = (
                 });
             };
         }]);
+};
+
+export var addProposalButton = (
+    adhConfig : AdhConfig.IService,
+    adhPermissions : AdhPermissions.Service,
+    adhTopLevelState : AdhTopLevelState.Service
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/AddProposalButton.html",
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            adhPermissions.bindScope(scope, () => scope.processUrl, "processOptions");
+        }
+    };
 };

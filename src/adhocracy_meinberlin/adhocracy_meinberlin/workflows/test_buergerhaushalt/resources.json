@@ -1,0 +1,8 @@
+[{"path": "/organisation/",
+  "content_type": "adhocracy_meinberlin.resources.burgerhaushalt.IProcess",
+  "data": {"adhocracy_core.sheets.name.IName":
+           {"name": "buergerhaushalt"},
+           "adhocracy_core.sheets.title.ITitle":
+           {"title": "Buergerhaushalt participation process"}
+          }}
+]

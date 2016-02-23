@@ -91,6 +91,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "ngMessages",
         "flow",
         AdhCommentModule.moduleName,
+        AdhConfigModule.moduleName,
         AdhDocumentWorkbenchModule.moduleName,
         AdhDoneModule.moduleName,
         AdhCrossWindowMessagingModule.moduleName,
@@ -167,10 +168,10 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     app.value("angularFlow", angularFlow);
 
     // register our modules
-    app.value("adhConfig", config);
     AdhAbuseModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhCommentModule.register(angular);
+    AdhConfigModule.register(angular, config);
     AdhCrossWindowMessagingModule.register(angular, config.trusted_domains !== []);
     AdhDateTimeModule.register(angular);
     AdhDocumentWorkbenchModule.register(angular);

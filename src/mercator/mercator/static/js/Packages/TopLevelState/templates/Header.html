@@ -1,13 +1,11 @@
 <h1 class="mercator-print-header" data-aria-hidden="true"><img src="/static/icons/png/favicon.png" alt=""/> {{ "TR__ADVOCATE_EUROPE" | translate }}</h1>
 
-<header class="l-header main-header">
+<header data-ng-hide="hide_header === 'true'" class="l-header main-header">
     <div class="l-header-left">
-        <adh-mercator-2015-proposal-add-button></adh-mercator-2015-proposal-add-button>
+        <ng-include data-ng-if="customHeader" src="customHeader"></ng-include>
     </div>
     <div class="l-header-right">
         <adh-user-indicator></adh-user-indicator>
         <adh-help-link></adh-help-link>
     </div>
 </header>
-
-<adh-http-busy></adh-http-busy>

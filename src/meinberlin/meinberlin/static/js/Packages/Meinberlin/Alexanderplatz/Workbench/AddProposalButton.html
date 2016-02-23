@@ -1,0 +1,6 @@
+<a
+    href="{{processUrl | adhResourceUrl:'create_proposal'}}"
+    class="button-cta"
+    data-ng-click="setCameFrom()"
+    data-ng-if="!(!processOptions.POST && processOptions.loggedIn)">
+    {{ "TR__CREATE_PROPOSAL" | translate }}</a>

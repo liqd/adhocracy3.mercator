@@ -33,7 +33,13 @@ export var register = (angular) => {
             AdhResourceAreaModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
-        .config(["adhResourceAreaProvider", Workbench.registerRoutes(RIBuergerhaushaltProcess.content_type)])
+        .config(["adhResourceAreaProvider", "adhConfigProvider", (adhResourceAreaProvider, adhConfigProvider) => {
+            var adhConfig = adhConfigProvider.config;
+            var processType = RIBuergerhaushaltProcess.content_type;
+            var customHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/CustomHeader.html";
+            adhResourceAreaProvider.customHeader(processType, customHeader);
+            Workbench.registerRoutes(processType)(adhResourceAreaProvider);
+        }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templateFactories[RIBuergerhaushaltProcess.content_type] = ["$q", ($q : angular.IQService) => {
                 return $q.when("<adh-meinberlin-buergerhaushalt-workbench></adh-meinberlin-buergerhaushalt-workbench>");
@@ -45,6 +51,10 @@ export var register = (angular) => {
             "adhConfig", "adhPermissions", Workbench.buergerhaushaltProposalDetailColumnDirective])
         .directive("adhMeinberlinBuergerhaushaltProposalCreateColumn", [
             "adhConfig", Workbench.buergerhaushaltProposalCreateColumnDirective])
-        .directive("adhMeinberlinBuergerhaushaltProposalEditColumn", ["adhConfig", Workbench.buergerhaushaltProposalEditColumnDirective])
-        .directive("adhMeinberlinBuergerhaushaltDetailColumn", ["adhConfig", Workbench.buergerhaushaltDetailColumnDirective]);
+        .directive("adhMeinberlinBuergerhaushaltProposalEditColumn", [
+            "adhConfig", Workbench.buergerhaushaltProposalEditColumnDirective])
+        .directive("adhMeinberlinBuergerhaushaltDetailColumn", [
+            "adhConfig", Workbench.buergerhaushaltDetailColumnDirective])
+        .directive("adhMeinberlinBuergerhaushaltAddProposalButton", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.addProposalButton]);
 };
