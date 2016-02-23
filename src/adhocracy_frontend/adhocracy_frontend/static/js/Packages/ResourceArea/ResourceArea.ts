@@ -28,6 +28,7 @@ export class Provider implements angular.IServiceProvider {
         type? : string;
     }};
     public templates : {[embedContext : string]: any};
+    public customHeaderTemplateUrls : {[processType : string]: any};
 
     constructor() {
         var self = this;
@@ -108,6 +109,11 @@ export class Provider implements angular.IServiceProvider {
         this.templates[embedContext] = templateFn;
         return this;
     }
+
+    public customHeaderTemplateUrl(processType : string, templateUrl : string) : Provider {
+        this.customHeaderTemplateUrls[processType] = templateUrl;
+        return this;
+    }
 }
 
 
@@ -124,7 +130,7 @@ export class Provider implements angular.IServiceProvider {
  * and view `"edit"`. If no view is provided, it defaults to `""`.
  *
  * Additionally, resources typically belong to a specific *process*. resourceArea
- * automatically finds that process and extracts it `processType`. If a resource is
+ * automatically finds that process and extracts its `processType`. If a resource is
  * not part of a process, `processType` defaults to `""`.
  *
  * The state `data` object as used by resourceArea consists of three different parts:
@@ -137,7 +143,7 @@ export class Provider implements angular.IServiceProvider {
  * and are generally not of interest outside of resourceArea.
  *
  * Defaults can be configured per contentType/view combination. They can be
- * overwritten in `search`. Any parameters from search that do not exists in defaults
+ * overwritten in `search`. Any parameters from search that do not exist in defaults
  * are removed. Defaults can be configured like this:
  *
  *     resourceAreaProvider.default("<contentType>", "<view>", "<processType>", {
@@ -146,7 +152,7 @@ export class Provider implements angular.IServiceProvider {
  *     });
  *
  * Specifics are also configured per contentType/view/processType combination. But they
- * are not provided as a plain object. Instead, they are provided in form of a injectable
+ * are not provided as a plain object. Instead, they are provided in form of an injectable
  * factory that returns a function that takes the actual resource as a parameter and
  * returns the specifics (that may optionally be wrapped in a promise). This sounds
  * complex, but it allows for a great deal of flexibility. Specifics can be configured
@@ -352,6 +358,7 @@ export class Service implements AdhTopLevelState.IAreaInput {
                 var defaults : Dict = self.getDefaults(resource.content_type, view, processType, embedContext);
 
                 var meta : Dict = {
+                    customHeaderTemplateUrl: self.provider.customHeaderTemplateUrls[processType],
                     embedContext: embedContext,
                     processType: processType,
                     processUrl: processUrl,
