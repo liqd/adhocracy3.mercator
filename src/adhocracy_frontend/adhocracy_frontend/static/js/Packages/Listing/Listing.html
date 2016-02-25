@@ -19,7 +19,7 @@
                 <span class="facet-cancel">x</span>
             </a>
         </span>
-        <a data-ng-if="sorts.length > 1" class="action-bar-item" data-ng-class="{ 'm-selected': showSort }" data-ng-click="toggleSort();" href="">{{ "TR__SORT" | translate }}</a>
+        <a data-ng-if="sorts.length > 1" class="action-bar-item" data-ng-class="{ 'm-selected': showSort }" data-ng-click="toggleSort();" href="">Sort</a>
     </div>
     <div class="listing-results" data-ng-if="showFilter || showSort">
         <adh-facets data-ng-if="showFilter" data-facets="facets" data-update="update" data-toggle-item="toggleItem" data-enable-item="enableItem" data-disable-item="disableItem"></adh-facets>

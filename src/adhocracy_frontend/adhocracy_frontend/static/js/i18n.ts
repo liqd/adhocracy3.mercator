@@ -56,6 +56,7 @@ translateMe = [
     "TR__PUBLISH",
     "TR__RATES",
     "TR__SHARE",
+    "TR__SORT_BY",
     "TR__SUPPORTERS",
     "TR__WEBSITE",
     "TR__YES"
