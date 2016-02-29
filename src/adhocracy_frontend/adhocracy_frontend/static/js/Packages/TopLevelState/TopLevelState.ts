@@ -440,7 +440,10 @@ export var spaceDirective = (adhTopLevelState : Service) => {
 };
 
 
-export var pageWrapperDirective = (adhConfig : AdhConfig.IService) => {
+export var pageWrapperDirective = (
+    adhConfig : AdhConfig.IService,
+    adhTopLevelState : Service
+) => {
     return {
         restrict: "E",
         transclude: true,
@@ -448,6 +451,7 @@ export var pageWrapperDirective = (adhConfig : AdhConfig.IService) => {
         link: (scope) => {
             scope.hideHeader = adhConfig.custom["hide_header"];
             scope.headerTemplateUrl = adhConfig.pkg_path + pkgLocation + "/templates/" + "Header.html";
+            scope.$on("$destroy", adhTopLevelState.bind("customHeader", scope));
         }
     };
 };

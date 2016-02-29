@@ -33,8 +33,12 @@ export var register = (angular) => {
             AdhResourceAreaModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
-        .config(["adhResourceAreaProvider", (adhResourceAreaProvider) => {
-            Workbench.registerRoutes(RIKiezkasseProcess.content_type)(adhResourceAreaProvider);
+        .config(["adhResourceAreaProvider", "adhConfigProvider", (adhResourceAreaProvider, adhConfigProvider) => {
+            var adhConfig = adhConfigProvider.config;
+            var processType = RIKiezkasseProcess.content_type;
+            var customHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/CustomHeader.html";
+            adhResourceAreaProvider.customHeader(processType, customHeader);
+            Workbench.registerRoutes(processType)(adhResourceAreaProvider);
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templateFactories[RIKiezkasseProcess.content_type] = ["$q", ($q : angular.IQService) => {

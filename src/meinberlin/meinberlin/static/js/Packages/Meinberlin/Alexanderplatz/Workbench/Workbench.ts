@@ -19,7 +19,7 @@ import * as SIParagraph from "../../../../Resources_/adhocracy_core/sheets/docum
 import * as SILocationReference from "../../../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
 import * as SIMultiPolygon from "../../../../Resources_/adhocracy_core/sheets/geo/IMultiPolygon";
 
-var pkgLocation = "/Meinberlin/Alexanderplatz/Workbench";
+export var pkgLocation = "/Meinberlin/Alexanderplatz/Workbench";
 
 
 export var workbenchDirective = (

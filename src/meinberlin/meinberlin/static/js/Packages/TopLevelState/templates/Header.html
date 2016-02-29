@@ -1,8 +1,9 @@
-<header class="l-header main-header">
+<header data-ng-hide="hide_header === 'true'" class="l-header main-header">
     <div class="l-header-left">
         <a href="https://mein.berlin.de/" target="_top"><i class="header-logo icon-meinberlin-logo" title="mein Berlin"></i></a>
     </div>
     <div class="l-header-right">
+        <ng-include data-ng-if="customHeader" src="customHeader"></ng-include>
         <adh-user-indicator></adh-user-indicator>
         <adh-help-link></adh-help-link>
     </div>

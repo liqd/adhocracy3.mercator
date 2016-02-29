@@ -33,7 +33,13 @@ export var register = (angular) => {
             AdhResourceAreaModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
-        .config(["adhResourceAreaProvider", Workbench.registerRoutes(RIBuergerhaushaltProcess.content_type)])
+        .config(["adhResourceAreaProvider", "adhConfigProvider", (adhResourceAreaProvider, adhConfigProvider) => {
+            var adhConfig = adhConfigProvider.config;
+            var processType = RIBuergerhaushaltProcess.content_type;
+            var customHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/CustomHeader.html";
+            adhResourceAreaProvider.customHeader(processType, customHeader);
+            Workbench.registerRoutes(processType)(adhResourceAreaProvider);
+        }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templateFactories[RIBuergerhaushaltProcess.content_type] = ["$q", ($q : angular.IQService) => {
                 return $q.when("<adh-meinberlin-buergerhaushalt-workbench></adh-meinberlin-buergerhaushalt-workbench>");

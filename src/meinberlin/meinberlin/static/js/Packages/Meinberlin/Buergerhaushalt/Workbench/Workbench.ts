@@ -16,7 +16,7 @@ import RIProposalVersion from "../../../../Resources_/adhocracy_meinberlin/resou
 import * as SIComment from "../../../../Resources_/adhocracy_core/sheets/comment/IComment";
 import * as SIWorkflow from "../../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
-var pkgLocation = "/Meinberlin/Buergerhaushalt/Workbench";
+export var pkgLocation = "/Meinberlin/Buergerhaushalt/Workbench";
 
 
 export var buergerhaushaltWorkbenchDirective = (

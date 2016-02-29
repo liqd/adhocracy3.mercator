@@ -5,7 +5,7 @@ import * as AdhProcessModule from "../../../Process/Module";
 import * as AdhResourceAreaModule from "../../../ResourceArea/Module";
 import * as AdhTopLevelStateModule from "../../../TopLevelState/Module";
 
-import RIProcess from "../../../../Resources_/adhocracy_mercator/resources/mercator2/IProcess";
+import RIMercator2016Process from "../../../../Resources_/adhocracy_mercator/resources/mercator2/IProcess";
 
 import * as AdhMercator2015WorkbenchModule from "../../2015/Workbench/Module";
 import * as AdhMercator2016ProposalModule from "../Proposal/Module";
@@ -16,7 +16,7 @@ import * as Workbench from "./Workbench";
 export var moduleName = "adhMercator2016Workbench";
 
 export var register = (angular) => {
-    var processType = RIProcess.content_type;
+    var processType = RIMercator2016Process.content_type;
 
     angular
         .module(moduleName, [
@@ -29,7 +29,13 @@ export var register = (angular) => {
             AdhResourceAreaModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
-        .config(["adhResourceAreaProvider", Workbench.registerRoutes(RIProcess.content_type)])
+        .config(["adhResourceAreaProvider", "adhConfigProvider", (adhResourceAreaProvider, adhConfigProvider) => {
+            var adhConfig = adhConfigProvider.config;
+            var processType = RIMercator2016Process.content_type;
+            var customHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/CustomHeader.html";
+            adhResourceAreaProvider.customHeader(processType, customHeader);
+            Workbench.registerRoutes(processType)(adhResourceAreaProvider);
+        }])
         .config(["adhProcessProvider", (adhProcessProvider) => {
             adhProcessProvider.templateFactories[processType] = ["$q", ($q : angular.IQService) => {
                 return $q.when("<adh-mercator-2016-workbench></adh-mercator-2016-workbench>");
@@ -45,5 +51,7 @@ export var register = (angular) => {
         .directive("adhMercator2016ProposalEditColumn", [
             "adhConfig", "adhResourceUrlFilter", "$location", Workbench.proposalEditColumnDirective])
         .directive("adhMercator2016ProposalListingColumn",
-            ["adhConfig", "adhHttp", "adhTopLevelState", Workbench.proposalListingColumnDirective]);
+            ["adhConfig", "adhHttp", "adhTopLevelState", Workbench.proposalListingColumnDirective])
+        .directive("adhMercator2016AddProposalButton", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.addProposalButton]);
 };

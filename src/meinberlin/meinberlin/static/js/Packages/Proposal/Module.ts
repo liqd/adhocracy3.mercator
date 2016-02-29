@@ -12,6 +12,7 @@ import * as AdhTopLevelStateModule from "../TopLevelState/Module";
 import * as AdhEmbed from "../Embed/Embed";
 
 import * as Proposal from "./Proposal";
+import * as AddProposalButton from "./AddProposalButton";
 
 
 export var moduleName = "adhMeinberlinProposal";
@@ -69,5 +70,7 @@ export var register = (angular) => {
             "$location",
             "$q",
             Proposal.editDirective
-        ]);
+        ])
+        .directive("adhMeinberlinAddProposalButton", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", AddProposalButton.addProposalButton]);
 };

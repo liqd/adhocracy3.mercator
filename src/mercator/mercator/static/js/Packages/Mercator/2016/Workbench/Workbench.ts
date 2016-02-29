@@ -7,7 +7,6 @@ import * as AdhPermissions from "../../../Permissions/Permissions";
 import * as AdhResourceArea from "../../../ResourceArea/ResourceArea";
 import * as AdhTopLevelState from "../../../TopLevelState/TopLevelState";
 import * as AdhUtil from "../../../Util/Util";
-import * as AdhUserViews from "../../../User/Views";
 
 import * as AdhMercator2015Workbench from "../../2015/Workbench/Workbench";
 
@@ -19,7 +18,7 @@ import * as SIMercatorSubResources from "../../../../Resources_/adhocracy_mercat
 import * as SIWinnerInfo from "../../../../Resources_/adhocracy_mercator/sheets/mercator2/IWinnerInfo";
 import * as SIWorkflow from "../../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
-var pkgLocation = "/Mercator/2016/Workbench";
+export var pkgLocation = "/Mercator/2016/Workbench";
 
 
 export var workbenchDirective = (
@@ -374,5 +373,19 @@ export var registerRoutes = (
             );
     }).value();
 
-    AdhUserViews.registerRoutes(context)(adhResourceAreaProvider);
+};
+
+export var addProposalButton = (
+    adhConfig : AdhConfig.IService,
+    adhPermissions : AdhPermissions.Service,
+    adhTopLevelState : AdhTopLevelState.Service
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/AddProposalButton.html",
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            adhPermissions.bindScope(scope, () => scope.processUrl, "processOptions");
+        }
+    };
 };

@@ -68,7 +68,7 @@ import * as SITitle from "../../../../Resources_/adhocracy_core/sheets/title/ITi
 import * as SIVersionable from "../../../../Resources_/adhocracy_core/sheets/versions/IVersionable";
 import * as SIWorkflow from "../../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
-var pkgLocation = "/Mercator/2015/Proposal";
+export var pkgLocation = "/Mercator/2015/Proposal";
 
 
 export interface IScopeData {
@@ -954,8 +954,7 @@ export var listItem = (
     };
 };
 
-
-export var addButton = (
+export var addProposalButton = (
     adhConfig : AdhConfig.IService,
     adhHttp : AdhHttp.Service<any>,
     adhTopLevelState : AdhTopLevelState.Service,
@@ -965,16 +964,15 @@ export var addButton = (
 ) => {
     return {
         restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/AddButton.html",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/AddProposalButton.html",
         link: (scope) => {
             getWorkflowState(adhHttp, adhTopLevelState, $q)().then((workflowState) => {
                 scope.loggedOutAndParticipate = (!adhCredentials.loggedIn && workflowState === "participate");
             });
-            adhPermissions.bindScope(scope, adhConfig.rest_url + adhConfig.custom["mercator_platform_path"], "poolOptions");
-        }
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            adhPermissions.bindScope(scope, () => scope.processUrl, "processOptions");        }
     };
 };
-
 
 export var mercatorProposalFormController = ($scope : IControllerScope, $element, $window, adhShowError, adhSubmitIfValid) => {
     var heardFromCheckboxes = [
