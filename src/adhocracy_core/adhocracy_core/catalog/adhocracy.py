@@ -15,6 +15,8 @@ from adhocracy_core.sheets.metadata import IMetadata
 from adhocracy_core.sheets.rate import IRate
 from adhocracy_core.sheets.rate import IRateable
 from adhocracy_core.sheets.tags import ITags
+from adhocracy_core.sheets.rate import ILike
+from adhocracy_core.sheets.rate import ILikeable
 from adhocracy_core.sheets.title import ITitle
 from adhocracy_core.sheets.badge import IBadgeAssignment
 from adhocracy_core.sheets.badge import IBadgeable
@@ -46,6 +48,8 @@ class AdhocracyCatalogIndexes:
     title = catalog.Field()
     rate = catalog.Field()
     rates = catalog.Field()
+    like = catalog.Field()
+    likes = catalog.Field()
     creator = catalog.Field()
     item_creation_date = catalog.Field()
     workflow_state = catalog.Field()
@@ -100,6 +104,19 @@ def index_rate(resource, default) -> int:
     return rate
 
 
+def index_like(resource, default) -> int:
+    """Return the value of field name `like` for :class:`ILike` resources."""
+    like = get_sheet_field(resource, ILike, 'like')
+    return like
+
+
+def _sum_items(result) -> int:
+    items_sum = 0
+    for value, count in result.frequency_of.items():
+        items_sum += value * count
+    return items_sum
+
+
 def index_rates(resource, default) -> int:
     """
     Return aggregated values of referenceing :class:`IRate` resources.
@@ -114,17 +131,31 @@ def index_rates(resource, default) -> int:
                                               ],
                                   )
     result = catalogs.search(query)
-    rate_sum = 0
-    for value, count in result.frequency_of.items():
-        rate_sum += value * count
-    return rate_sum
+    return _sum_items(result)
+
+
+def index_likes(resource, default) -> int:
+    """
+    Return aggregated values of referenceing :class:`ILike` resources.
+
+    Only the LAST version of each like is counted.
+    """
+    catalogs = find_service(resource, 'catalogs')
+    query = search_query._replace(interfaces=ILike,
+                                  frequency_of='like',
+                                  indexes={'tag': 'LAST'},
+                                  references=[(None, ILike, 'object', resource)
+                                              ],
+                                  )
+    result = catalogs.search(query)
+    return _sum_items(result)
 
 
 def index_comments(resource, default) -> int:
     """
     Return aggregated values of comments below the `item` parent of `resource`.
 
-    Only the LAST version of each rate is counted.
+    Only the LAST version of each like is counted.
     """
     item = find_interface(resource, IItem)
     catalogs = find_service(resource, 'catalogs')
@@ -242,6 +273,14 @@ def includeme(config):
                          catalog_name='adhocracy',
                          index_name='rates',
                          context=IRateable)
+    config.add_indexview(index_like,
+                         catalog_name='adhocracy',
+                         index_name='like',
+                         context=ILike)
+    config.add_indexview(index_likes,
+                         catalog_name='adhocracy',
+                         index_name='likes',
+                         context=ILikeable)
     config.add_indexview(index_tag,
                          catalog_name='adhocracy',
                          index_name='tag',

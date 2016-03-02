@@ -1057,6 +1057,14 @@ it's not possible to vote for other users::
     '; Must be the currently logged-in user'
 
 
+Likes
+-----
+
+Similar to rates, we can 'like' objects that provide the
+`adhocracy_core.sheets.rate.ILikeable` sheet to represent a support
+vote.
+
+
 Batch requests
 --------------
 

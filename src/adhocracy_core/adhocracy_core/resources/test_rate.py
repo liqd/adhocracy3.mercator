@@ -56,3 +56,35 @@ class TestRate:
         rate_index.reindex_resource(rate)
         search_result = set(rate_index.eq(0).execute())
         assert rate in search_result
+
+
+@mark.usefixtures('integration')
+class TestLike:
+
+    def test_register_factories(self, registry):
+        from adhocracy_core.resources.rate import ILike
+        from adhocracy_core.resources.rate import ILikeVersion
+        content_types = registry.content.factory_types
+        assert ILike.__identifier__ in content_types
+        assert ILikeVersion.__identifier__ in content_types
+
+    def test_create_like(self, registry, pool_with_catalogs):
+        from adhocracy_core.resources.rate import ILike
+        pool = pool_with_catalogs
+        assert registry.content.create(ILike.__identifier__, parent=pool)
+
+    def test_create_likeversion(self, registry, pool_with_catalogs):
+        from adhocracy_core.resources.rate import ILikeVersion
+        pool = pool_with_catalogs
+        assert registry.content.create(ILikeVersion.__identifier__, parent=pool)
+
+    def test_create_likesservice(self, registry, pool):
+        from adhocracy_core.resources.rate import ILikesService
+        from substanced.util import find_service
+        assert registry.content.create(ILikesService.__identifier__, parent=pool)
+        assert find_service(pool, 'likes')
+
+    def test_add_likesservice(self, registry, pool):
+        from adhocracy_core.resources.rate import add_likesservice
+        add_likesservice(pool, registry, {})
+        assert pool['likes']

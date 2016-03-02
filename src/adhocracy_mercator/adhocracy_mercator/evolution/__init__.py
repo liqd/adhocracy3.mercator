@@ -13,16 +13,22 @@ from adhocracy_core.interfaces import search_query
 from adhocracy_core.resources.badge import add_badge_assignments_service
 from adhocracy_core.resources.badge import add_badges_service
 from adhocracy_core.resources.logbook import add_logbook_service
+from adhocracy_core.resources.rate import add_likesservice
 from adhocracy_core.sheets.badge import IBadgeable
 from adhocracy_core.sheets.badge import IHasBadgesPool
 from adhocracy_core.sheets.logbook import IHasLogbookPool
 from adhocracy_core.sheets.metadata import IMetadata
+from adhocracy_core.sheets.rate import ILikeable
+from adhocracy_core.sheets.rate import IRate
+from adhocracy_core.sheets.rate import IRateable
+from adhocracy_core.utils import get_sheet
 from adhocracy_core.utils import get_sheet_field
 from adhocracy_mercator.resources.mercator import IMercatorProposal
 from adhocracy_mercator.resources.mercator import IMercatorProposalVersion
 from adhocracy_mercator.sheets.mercator import IIntroduction
 from adhocracy_mercator.sheets.mercator import IMercatorSubResources
 from adhocracy_mercator.sheets.mercator import ITitle
+import adhocracy_core.resources.rate
 
 logger = logging.getLogger(__name__)  # pragma: no cover
 
@@ -182,6 +188,57 @@ def reindex_requested_funding(root):  # pragma: no cover
         catalogs.reindex_index(proposal, 'mercator_requested_funding')
 
 
+def _convert_rate_version(rate_version, likes, registry):   # pragma: no cover
+    values = get_sheet(rate_version, IRate).get()
+    if values['rate'] > 0:
+        appstructs = {'adhocracy_core.sheets.rate.ILike':
+                      {'object': values['object'],
+                       'subject': values['subject'],
+                       'like': 1}}
+        like = registry.content.create(
+            adhocracy_core.resources.rate.ILike.__identifier__,
+            parent=likes)
+        registry.content.create(
+            adhocracy_core.resources.rate.ILikeVersion.__identifier__,
+            parent=like,
+            appstructs=appstructs)
+
+
+def _convert_rates_to_likes(root):   # pragma: no cover
+    catalogs = find_service(root, 'catalogs')
+    query = search_query._replace(interfaces=IMercatorProposal)
+    proposals = catalogs.search(query).elements
+    registry = get_current_registry(root)
+    for proposal in proposals:
+        if find_service(proposal, 'likes') is None:
+            logger.info('add likes service to {0}'.format(proposal))
+            add_likesservice(proposal, registry, options={})
+        likes = find_service(proposal, 'likes')
+        rates = find_service(proposal, 'rates')
+        if rates:
+            query = search_query._replace(interfaces=IRate,
+                                          frequency_of='rate',
+                                          indexes={'tag': 'LAST'},
+                                          root=proposal,)
+            result = catalogs.search(query)
+            for rate_version in result.elements:
+                _convert_rate_version(rate_version, likes, registry)
+        proposal.remove(rates.__name__)
+        catalogs.reindex_index(proposal, 'rates')
+        catalogs.reindex_index(proposal, 'likes')
+
+
+@log_migration
+def convert_rates_to_likes(root):   # pragma: no cover
+    """Convert rates to likes."""
+    migrate_new_sheet(root,
+                      IMercatorProposal,
+                      ILikeable,
+                      IRateable,
+                      remove_isheet_old=True)
+    _convert_rates_to_likes(root)
+
+
 def includeme(config):  # pragma: no cover
     """Register evolution utilities and add evolution steps."""
     config.add_evolution_step(evolve1_add_ititle_sheet_to_proposals)
@@ -197,3 +254,4 @@ def includeme(config):  # pragma: no cover
     config.add_evolution_step(remove_mercator_workflow_assignment_sheet)
     config.add_evolution_step(make_mercator_proposals_badgeable)
     config.add_evolution_step(reindex_requested_funding)
+    config.add_evolution_step(convert_rates_to_likes)

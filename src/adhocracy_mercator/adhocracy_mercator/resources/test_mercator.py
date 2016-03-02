@@ -12,7 +12,7 @@ class TestMercatorProposal:
     def test_meta(self, meta):
         from adhocracy_mercator.resources import mercator
         from adhocracy_core.resources.comment import add_commentsservice
-        from adhocracy_core.resources.rate import add_ratesservice
+        from adhocracy_core.resources.rate import add_likesservice
         from adhocracy_core.resources.logbook import add_logbook_service
         from adhocracy_core.sheets.badge import IBadgeable
         assert meta.iresource == mercator.IMercatorProposal
@@ -32,7 +32,7 @@ class TestMercatorProposal:
         assert meta.extended_sheets == (IBadgeable,)
         assert meta.is_implicit_addable
         assert meta.item_type == mercator.IMercatorProposalVersion
-        assert add_ratesservice in meta.after_creation
+        assert add_likesservice in meta.after_creation
         assert add_commentsservice in meta.after_creation
         assert add_logbook_service in meta.after_creation
         assert meta.permission_create == 'create_mercator_proposal'

@@ -9,6 +9,7 @@ from adhocracy_core.resources.itemversion import itemversion_meta
 from adhocracy_core.resources.item import item_meta
 from adhocracy_core.resources.comment import add_commentsservice
 from adhocracy_core.resources.rate import add_ratesservice
+from adhocracy_core.resources.rate import add_likesservice
 from adhocracy_core.resources.logbook import add_logbook_service
 from adhocracy_core.resources import process
 from adhocracy_core.sheets.rate import ILikeable
@@ -395,7 +396,7 @@ mercator_proposal_meta = item_meta._replace(
     permission_create='create_mercator_proposal',
     autonaming_prefix='proposal_',
 )._add(after_creation=(add_commentsservice,
-                       add_ratesservice,
+                       add_likesservice,
                        add_badge_assignments_service,
                        add_logbook_service))
 

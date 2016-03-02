@@ -42,7 +42,9 @@ from adhocracy_core.sheets.badge import IHasBadgesPool
 from adhocracy_core.sheets.description import IDescription
 from adhocracy_core.sheets.image import IImageReference
 from adhocracy_core.sheets.pool import IPool
+from adhocracy_core.sheets.principal import IUserBasic
 from adhocracy_core.sheets.principal import IUserExtended
+from adhocracy_core.sheets.rate import ICanLike
 from adhocracy_core.sheets.relation import ICanPolarize
 from adhocracy_core.sheets.relation import IPolarizable
 from adhocracy_core.sheets.title import ITitle
@@ -513,6 +515,11 @@ def update_asset_download_children(root):  # pragma: no cover
 
 
 @log_migration
+def add_icanlike_sheet_to_users(root):  # pragma: no cover
+    """Add ICanLike sheets to users."""
+    migrate_new_sheet(root, IUserBasic, ICanLike)
+
+
 def recreate_all_image_size_downloads(root):  # pragma: no cover
     """Recreate all image size downloads to optimize file size."""
     from adhocracy_core.sheets.asset import IAssetMetadata
@@ -652,6 +659,7 @@ def includeme(config):  # pragma: no cover
     config.add_evolution_step(add_icanpolarize_sheet_to_comments)
     config.add_evolution_step(add_image_reference_to_users)
     config.add_evolution_step(update_asset_download_children)
+    config.add_evolution_step(add_icanlike_sheet_to_users)
     config.add_evolution_step(recreate_all_image_size_downloads)
     config.add_evolution_step(reindex_interfaces_catalog_for_root)
     config.add_evolution_step(remove_tag_resources)

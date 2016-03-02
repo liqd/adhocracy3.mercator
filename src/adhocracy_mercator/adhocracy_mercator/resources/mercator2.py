@@ -16,7 +16,7 @@ from adhocracy_core.sheets.rate import ILikeable
 from adhocracy_core.sheets.title import ITitle
 from adhocracy_core.sheets.image import IImageReference
 from adhocracy_core.resources.comment import add_commentsservice
-from adhocracy_core.resources.rate import add_ratesservice
+from adhocracy_core.resources.rate import add_likesservice
 from adhocracy_core.resources.badge import add_badge_assignments_service
 
 import adhocracy_mercator.sheets.mercator2
@@ -227,7 +227,7 @@ proposal_meta = proposal.proposal_meta._replace(
                    IPracticalRelevance,),
     after_creation=(
         add_commentsservice,
-        add_ratesservice,
+        add_likesservice,
         add_badge_assignments_service,
         add_logbook_service,)
 )._add(extended_sheets=
