@@ -5,6 +5,20 @@ from pytest import fixture
 from pytest import mark
 
 
+class UrlOriginTest(unittest.TestCase):
+    def test_full_url(self):
+        from adhocracy_frontend import url_origin
+        url = 'https://example.com:123/some/path?query#hash'
+        expected = 'https://example.com:123'
+        assert url_origin(url) == expected
+
+    def test_no_port(self):
+        from adhocracy_frontend import url_origin
+        url = 'https://example.com/some/path?query#hash'
+        expected = 'https://example.com'
+        assert url_origin(url) == expected
+
+
 class ConfigViewTest(unittest.TestCase):
 
     def call_fut(self, request):
