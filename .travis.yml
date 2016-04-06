@@ -17,10 +17,6 @@ notifications:
   email: false
 after_success:
   - "bin/coveralls"
-cache:
-  directories:
-    - eggs
-    - node_modules
 addons:
   sauce_connect: true
 env:
