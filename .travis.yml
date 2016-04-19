@@ -8,7 +8,7 @@ python:
 install:
   - "git fetch --unshallow"
   - "python bootstrap.py --setuptools-version=12.0.4"
-  - "PATH=${TRAVIS_BUILD_DIR}/bin:${PATH} ./bin/buildout -c buildout-${BUILDOUT_TARGET}.cfg 2>/dev/null"
+  - "PATH=${TRAVIS_BUILD_DIR}/bin:${PATH} ./bin/buildout -c buildout-${BUILDOUT_TARGET}.cfg -vvvvvv"
 script:
   - "./bin/ad_check_code -a"
   - "./bin/polytester -v pyunit,pyfunc,jsunit,jsint"
