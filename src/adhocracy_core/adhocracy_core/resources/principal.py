@@ -378,7 +378,11 @@ def groups_and_roles_finder(userid: str, request: Request) -> list:
                                                        IRolesUserLocator)
         groupids = userlocator.get_groupids(userid) or []
         roleids = userlocator.get_role_and_group_roleids(userid) or []
-    return groupids + roleids
+        principals = groupids + roleids
+    if not principals:
+        return None
+    else:
+        return principals
 
 
 def delete_not_activated_users(request: Request, age_in_days: int):
