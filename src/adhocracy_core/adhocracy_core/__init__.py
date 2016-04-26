@@ -91,6 +91,7 @@ def includeme(config):
     settings = config.registry.settings
     config.include('pyramid_zodbconn')
     config.include('pyramid_mako')
+    config.include('pyramid_jwt')
     config.hook_zca()  # global adapter lookup (used by adhocracy_core.utils)
     authz_policy = RoleACLAuthorizationPolicy()
     config.set_authorization_policy(authz_policy)
@@ -98,11 +99,10 @@ def includeme(config):
     authn_timeout = 60 * 60 * 24 * 30
     authn_policy = TokenHeaderAuthenticationPolicy(
         authn_secret,
-        groupfinder=groups_and_roles_finder,
+        callback=groups_and_roles_finder,
         timeout=authn_timeout)
     config.set_authentication_policy(authn_policy)
     config.include('.renderers')
-    config.include('.authentication')
     config.include('.authorization')
     config.include('.evolution')
     config.include('.events')

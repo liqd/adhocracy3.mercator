@@ -52,8 +52,6 @@ adhocracy.thentos_captcha.backend_url = http://localhost:6542/
 adhocracy.thentos_captcha.frontend_url = http://localhost:6542/
 # If true, new user accounts are activated immediately without email verification
 adhocracy.skip_registration_mail = false
-# Allows turning off user token validation if behind a validating proxy
-adhocracy.validate_user_token = true
 # URL of the Varnish cache
 #adhocracy.varnish_url = http://127.0.0.1:8088
 

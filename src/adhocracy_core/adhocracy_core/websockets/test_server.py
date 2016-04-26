@@ -563,8 +563,14 @@ class TestFunctionalClientCommunicator:
     def _add_pool(self, rest_url, path, name):
         import json
         import requests
+        from adhocracy_core.authentication import UserTokenHeader
+        from adhocracy_core.testing import admin_password
+        from adhocracy_core.testing import admin_login
         from adhocracy_core.resources.pool import IBasicPool
-        from adhocracy_core.testing import god_header
+        resp = requests.post(rest_url + '/login_username',
+                             json={'name': admin_login,
+                                   'password': admin_password})
+        god_header = {UserTokenHeader: resp['user_token']}
         url = rest_url + 'adhocracy' + path
         data = {'content_type': IBasicPool.__identifier__,
                 'data': {'adhocracy_core.sheets.name.IName': {'name': name}}}
@@ -574,7 +580,7 @@ class TestFunctionalClientCommunicator:
         assert resp.status_code == 200
 
     @pytest.mark.xfail
-    @pytest.mark.timeout(60)
+    @pytest.mark.timeout(30)
     def test_send_child_notification(
             self, backend_with_ws, settings, connection):
         rest_url = 'http://{}:{}/'.format(settings['host'], settings['port'])
