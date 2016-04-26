@@ -7,11 +7,9 @@ import argparse
 import inspect
 import logging
 
-from pyramid.interfaces import IAuthenticationPolicy
 from pyramid.paster import bootstrap
 from pyramid.request import Request
 
-from adhocracy_core.authentication import get_tokenmanager
 from adhocracy_core.resources.principal import delete_password_resets
 from adhocracy_core.resources.principal import delete_not_activated_users
 
@@ -60,7 +58,3 @@ def _delete_stale_login_data(root,
     request.root = root
     delete_not_activated_users(request, not_active_users_max_age)
     delete_password_resets(request, resets_max_age)
-    auth = request.registry.queryUtility(IAuthenticationPolicy)
-    token_manger = get_tokenmanager(request)
-    if token_manger:  # pragma: no branch
-        token_manger.delete_expired_tokens(auth.timeout)

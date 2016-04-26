@@ -1,8 +1,4 @@
 """Authentication with support for token http headers."""
-import hashlib
-from datetime import datetime
-
-from persistent.dict import PersistentDict
 from pyramid.authentication import CallbackAuthenticationPolicy
 from pyramid.interfaces import IAuthenticationPolicy
 from pyramid.interfaces import IRequest
@@ -25,97 +21,6 @@ UserTokenHeader = 'X-User-Token'
 UserPathHeader = 'X-User-Path'
 """Deprecated: The optional request header to set the userid."""
 
-
-@implementer(ITokenManger)
-class TokenMangerAnnotationStorage:
-    """Manage authentication tokens and use object annotation to store them.
-
-    Constructor arguments:
-
-    :param context: the object to annotate the authentication token storage.
-    """
-
-    annotation_key = '_tokenmanager_storage'
-
-    def __init__(self, context):
-        """Initialize self."""
-        self.context = context
-
-    @property
-    def token_to_user_id_timestamp(self):
-        tokens = getattr(self.context, self.annotation_key, None)
-        if tokens is None:
-            tokens = PersistentDict()
-            setattr(self.context, self.annotation_key, tokens)
-        return tokens
-
-    def create_token(self, userid: str, secret='', hashalg='sha512') -> str:
-        """Create authentication token for user_id.
-
-        :param secret:  the secret used to salt the generated token.
-        :param hashalg: Any hash algorithm supported by :func: `hashlib.new`.
-                        This is used to create the authentication token.
-        """
-        timestamp = datetime.now()
-        value = self._build_token_value(userid, timestamp, secret)
-        token = hashlib.new(hashalg, value).hexdigest()
-        self.token_to_user_id_timestamp[token] = (userid, timestamp)
-        return token
-
-    def _build_token_value(self, user_id: str, timestamp: datetime,
-                           secret: '') -> str:
-        time_bytes = timestamp.isoformat().encode('UTF-8')
-        secret_bytes = secret.encode('UTF-8', 'replace')
-        user_bytes = user_id.encode('UTF-8', 'replace')
-        return time_bytes + secret_bytes + user_bytes
-
-    def get_user_id(self, token: str, timeout: float=None) -> str:
-        """Get user_id for authentication token or None.
-
-        :param timeout:  Maximum number of seconds which a newly create token
-                        will be considered valid.
-                        The `None` value is allowed to disable the timeout.
-        :returns: user id for `token` or None.
-        """
-        userid, timestamp = self.token_to_user_id_timestamp.get(token,
-                                                                (None, None))
-        if userid is None:
-            return userid
-        if self._is_expired(timestamp, timeout):
-            del self.token_to_user_id_timestamp[token]
-            userid = None
-        return userid
-
-    def _is_expired(self, timestamp: datetime, timeout: float=None) -> bool:
-        if timeout is None:
-            return False
-        now = datetime.now()
-        delta = now - timestamp
-        return delta.total_seconds() >= timeout
-
-    def delete_token(self, token: str):
-        """Delete authentication token."""
-        if token in self.token_to_user_id_timestamp:
-
-            del self.token_to_user_id_timestamp[token]
-
-    def delete_expired_tokens(self, timeout: float):
-        all = self.token_to_user_id_timestamp.items()
-        expired = [t for t, (u, date) in all if self._is_expired(date,
-                                                                 timeout)]
-        for token in expired:
-            self.delete_token(token)
-
-
-def get_tokenmanager(request: IRequest) -> ITokenManger:
-    """Adapt request.root to ITokenmanager and return it or None."""
-    if getattr(request, 'root', None) is None:
-        # allow to run pyramid scripts without authentication
-        return None
-    try:
-        return request.registry.getAdapter(request.root, ITokenManger)
-    except (ComponentLookupError, TypeError):
-        return None
 
 
 @implementer(IAuthenticationPolicy)
@@ -247,7 +152,3 @@ def validate_user_headers(view: callable):
 
 def includeme(config):
     """Register the TokenManger adapter."""
-    config.registry.registerAdapter(TokenMangerAnnotationStorage,
-                                    required=(Interface,),
-                                    provided=ITokenManger,
-                                    )
