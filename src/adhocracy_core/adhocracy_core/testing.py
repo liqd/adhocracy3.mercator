@@ -839,18 +839,38 @@ class AppUser:
                                   expect_errors=True)
         return resp
 
-    def put(self, path: str, cstruct: dict={}) -> TestResponse:
+    def put(self,
+            path: str,
+            cstruct: dict={},
+            upload_files: [(str, str, bytes)]=None,
+            ) -> TestResponse:
         """Put request to modify a resource."""
         url = self._build_url(path)
-        resp = self.app.put_json(url, cstruct, headers=self.header,
-                                 expect_errors=True)
+        kwargs = {'headers': self.header,
+                  'expect_errors': True,
+                  }
+        if upload_files:
+            kwargs['upload_files'] = upload_files
+            resp = self.app.put(url, cstruct, **kwargs)
+        else:
+            resp = self.app.put_json(url, cstruct, **kwargs)
         return resp
 
-    def post(self, path: str, cstruct: dict={}) -> TestResponse:
+    def post(self,
+             path: str,
+             cstruct: dict={},
+             upload_files: [(str, str, bytes)]=None,
+             ) -> TestResponse:
         """Post request to create a new resource."""
         url = self._build_url(path)
-        resp = self.app.post_json(url, cstruct, headers=self.header,
-                                  expect_errors=True)
+        kwargs = {'headers': self.header,
+                  'expect_errors': True,
+                  }
+        if upload_files:
+            kwargs['upload_files'] = upload_files
+            resp = self.app.post(url, cstruct, **kwargs)
+        else:
+            resp = self.app.post_json(url, cstruct, **kwargs)
         return resp
 
     def _build_post_body(self, iresource: IInterface, cstruct: dict) -> dict:
@@ -950,6 +970,13 @@ def app_initiator(app_router):
 def app_admin(app_router):
     """Return backend test app wrapper with admin authentication."""
     return AppUser(app_router, header=admin_header, user_path=admin_path)
+@fixture(scope='class')
+def app_admin_filestorage(app_with_filestorage):
+    """Return backend test app wrapper with admin authentication."""
+    return AppUser(app_with_filestorage,
+                   user_login=admin_login,
+                   user_password=admin_password,
+                   user_path=admin_path)
 
 
 @fixture(scope='class')

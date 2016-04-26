@@ -49,29 +49,24 @@ sheets:
   This sheet is POST/PUT-only, see below on how to download/view the binary
   data.
 
-For testing, we import the needed stuff and start the Adhocracy testapp::
+For testing, we import the needed stuff and start the Adhocracy app::
 
     >>> from pprint import pprint
-    >>> from adhocracy_core.testing import god_header
-    >>> from webtest import TestApp
-    >>> app = getfixture('app_with_filestorage')
-    >>> testapp = TestApp(app)
-    >>> rest_url = 'http://localhost'
+    >>> admin = getfixture('app_admin_filestorage')
 
 We need a pool with an asset pool::
 
     >>> data = {'content_type': 'adhocracy_core.resources.process.IProcess',
     ...        'data': {'adhocracy_core.sheets.name.IName': {
     ...                     'name':  'process'}}}
-    >>> resp_data = testapp.post_json(rest_url + '/', data,
-    ...                               headers=god_header).json
+    >>> resp_data = admin.post('/', data).json
     >>> proposal_pool_path = resp_data['path']
     >>> proposal_pool_path
     'http://localhost/process/'
 
 We can ask the pool for the location of the asset pool::
 
-    >>> resp_data = testapp.get(proposal_pool_path).json
+    >>> resp_data = admin.get(proposal_pool_path).json
     >>> asset_pool_path = resp_data['data'][
     ...         'adhocracy_core.sheets.asset.IHasAssetPool']['asset_pool']
     >>> asset_pool_path
@@ -129,7 +124,7 @@ references it. But first we have to create a proposal::
 
     >>> prop_data = {'content_type': 'adhocracy_core.resources.document.IDocument',
     ...              'data': {}}
-    >>> resp = testapp.post_json(proposal_pool_path, prop_data, headers=god_header)
+    >>> resp = admin.post(proposal_pool_path, prop_data)
     >>> prop_path = resp.json["path"]
     >>> prop_v0_path = resp.json['first_version_path']
 
@@ -141,8 +136,8 @@ Now we can upload a sample picture::
     ...    'content_type': 'adhocracy_core.resources.image.IImage',
     ...    'data:adhocracy_core.sheets.image.IImageMetadata:mime_type':
     ...        'image/jpeg'}
-    >>> resp_data = testapp.post(asset_pool_path, request_body,
-    ...             headers=god_header, upload_files=upload_files).json
+    >>> resp_data = admin.post(asset_pool_path, request_body,
+    ...                        upload_files=upload_files).json
 
 In response, the backend sends a JSON document with the resource type and
 path of the new resource (just as with other resource types)::
@@ -170,7 +165,7 @@ Assets can be downloaded in different ways:
 The frontend can retrieve the JSON metadata by GETting the resource path of
 the asset::
 
-    >>> resp_data = testapp.get(pic_path).json
+    >>> resp_data = admin.get(pic_path).json
     >>> resp_data['content_type']
     'adhocracy_core.resources.image.IImage'
     >>> resp_data['data']['adhocracy_core.sheets.metadata.IMetadata']['modification_date']
@@ -193,12 +188,12 @@ In case of images, it can retrieve the image binary data in one of the predefine
 cropped sizes by asking for one of the keys defined by the ImageSizeMapper as
 child element::
 
-    >>> resp_data = testapp.get(resp_image_meta['detail'])
+    >>> resp_data = admin.get(resp_image_meta['detail'])
     >>> resp_data.content_type
     'image/jpeg'
     >>> detail_size = len(resp_data.body)
 
-    >>> resp_data = testapp.get(resp_image_meta['thumbnail'])
+    >>> resp_data = admin.get(resp_image_meta['thumbnail'])
     >>> thumbnail_size = len(resp_data.body)
     >>> thumbnail_size > 2000
     True
@@ -227,7 +222,7 @@ Lets post a new proposal version that refers to the image::
     ...                  'adhocracy_core.sheets.versions.IVersionable': {
     ...                     'follows': [prop_v0_path]}},
     ...          'root_versions': [prop_v0_path]}
-    >>> resp = testapp.post_json(prop_path, vers_data, headers=god_header)
+    >>> resp = admin.post(prop_path, vers_data)
     >>> prop_v1_path = resp.json["path"]
     >>> prop_v1_path
     '...0/VERSION_0000001/'
@@ -235,7 +230,7 @@ Lets post a new proposal version that refers to the image::
 If we re-download the image metadata, we see that it is now attached to the
 proposal version::
 
-    >>> resp_data = testapp.get(pic_path).json
+    >>> resp_data = admin.get(pic_path).json
     >>> resp_data['data']['adhocracy_core.sheets.image.IImageMetadata']['attached_to']
     [...0/VERSION_0000001/']
 
@@ -271,8 +266,8 @@ Lets replace the uploaded python with another one::
     ...    'content_type': 'adhocracy_core.resources.image.IImage',
     ...    'data:adhocracy_core.sheets.image.IImageMetadata:mime_type':
     ...        'image/jpeg'}
-    >>> resp_data = testapp.put(pic_path, request_body,
-    ...             headers=god_header, upload_files=upload_files).json
+    >>> resp_data = admin.put(pic_path, request_body,
+    ...                       upload_files=upload_files).json
 
 As usual, the response lists the resources affected by the transaction::
 
@@ -287,14 +282,14 @@ As usual, the response lists the resources affected by the transaction::
 If we download the image metadata again, we see that filename and size have
 changed accordingly::
 
-    >>> resp_data = testapp.get(pic_path).json
+    >>> resp_data = admin.get(pic_path).json
     >>> resp_data['data']['adhocracy_core.sheets.image.IImageMetadata']['size']
     '112107'
 
 Predefined scaled+cropped views are automatically updated as well::
 
     >>> thumbnail = resp_data['data']['adhocracy_core.sheets.image.IImageMetadata']['thumbnail']
-    >>> resp_data = testapp.get(thumbnail)
+    >>> resp_data = admin.get(thumbnail)
     >>> len(resp_data.body) > 2000
     True
     >>> len(resp_data.body) == thumbnail_size
