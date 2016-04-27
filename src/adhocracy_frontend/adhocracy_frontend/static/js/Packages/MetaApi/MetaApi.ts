@@ -53,54 +53,58 @@ export var feedFieldDicts = (data : IMetaApi) : void => {
 };
 
 
-export class MetaApiQuery {
+export class Service {
     constructor(public data : IMetaApi) {
         feedFieldDicts(data);
     }
 
+    public $get() : Service {
+        return this;
+    }
+
     public resource(name : string) : IResource {
-        var _self : MetaApiQuery = this;
+        var _self : Service = this;
 
         if (_self.data.resources.hasOwnProperty(name)) {
             return _self.data.resources[name];
         } else {
-            throw "MetaApiQuery: unknown resource named " + name;
+            throw "Service: unknown resource named " + name;
         }
     }
 
     public resourceExists(name : string) : boolean {
-        var _self : MetaApiQuery = this;
+        var _self : Service = this;
         return _self.data.resources.hasOwnProperty(name);
     }
 
     public sheet(name : string) : ISheet {
-        var _self : MetaApiQuery = this;
+        var _self : Service = this;
 
         if (_self.data.sheets.hasOwnProperty(name)) {
             return _self.data.sheets[name];
         } else {
-            throw "MetaApiQuery: unknown sheet named " + name;
+            throw "Service: unknown sheet named " + name;
         }
     }
 
     public sheetExists(name : string) : boolean {
-        var _self : MetaApiQuery = this;
+        var _self : Service = this;
         return _self.data.sheets.hasOwnProperty(name);
     }
 
     public field(sheetName : string, fieldName : string) : ISheetField {
-        var _self : MetaApiQuery = this;
+        var _self : Service = this;
 
         var fieldDict = _self.sheet(sheetName).fieldDict;
         if (fieldDict.hasOwnProperty(fieldName)) {
             return fieldDict[fieldName];
         } else {
-            throw "MetaApiQuery: unknown field named " + fieldName + " in sheet " + sheetName;
+            throw "Service: unknown field named " + fieldName + " in sheet " + sheetName;
         }
     }
 
     public fieldExists(sheetName : string, fieldName : string) : boolean {
-        var _self : MetaApiQuery = this;
-        return this.sheetExists(sheetName) && _self.sheet(sheetName).fieldDict.hasOwnProperty(fieldName);
+        var _self : Service = this;
+        return _self.sheetExists(sheetName) && _self.sheet(sheetName).fieldDict.hasOwnProperty(fieldName);
     }
 }

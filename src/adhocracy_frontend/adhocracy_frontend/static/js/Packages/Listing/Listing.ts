@@ -32,15 +32,15 @@ export interface IListingContainerAdapter {
 
 export class ListingPoolAdapter implements IListingContainerAdapter {
     // NOTE: container *must* have been requested with `elements=paths`
-    public elemRefs(container : ResourcesBase.Resource) {
+    public elemRefs(container : ResourcesBase.IResource) {
         return container.data[SIPool.nick].elements;
     }
 
-    public totalCount(container : ResourcesBase.Resource) {
+    public totalCount(container : ResourcesBase.IResource) {
         return container.data[SIPool.nick].count;
     }
 
-    public poolPath(container : ResourcesBase.Resource) {
+    public poolPath(container : ResourcesBase.IResource) {
         return container.path;
     }
 }
@@ -109,7 +109,7 @@ export interface IFacetsScope extends angular.IScope {
 // FIXME: as the listing elements are tracked by their $id (the element path) in the listing template, we don't allow duplicate elements
 // in one listing. We should add a proper warning if that occurs or handle that case properly.
 
-export class Listing<Container extends ResourcesBase.Resource> {
+export class Listing<Container extends ResourcesBase.IResource> {
     public static templateUrl : string = pkgLocation + "/Listing.html";
 
     public createDirective(adhConfig : AdhConfig.IService, adhWebSocket: AdhWebSocket.Service) {

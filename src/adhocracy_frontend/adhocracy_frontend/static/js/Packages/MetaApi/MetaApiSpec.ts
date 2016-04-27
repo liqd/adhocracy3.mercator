@@ -79,10 +79,10 @@ var sampleMetaApi : AdhMetaApi.IMetaApi = {
 
 export var register = () => {
     describe("MetaApi", () => {
-        var adhMetaApi : AdhMetaApi.MetaApiQuery;
+        var adhMetaApi : AdhMetaApi.Service;
 
         beforeEach(() => {
-            adhMetaApi = new AdhMetaApi.MetaApiQuery(sampleMetaApi);
+            adhMetaApi = new AdhMetaApi.Service(sampleMetaApi);
         });
 
         it("returns the right resource meta data.", () => {

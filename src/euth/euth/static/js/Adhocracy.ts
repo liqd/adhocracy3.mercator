@@ -40,6 +40,7 @@ import * as AdhListingModule from "./Packages/Listing/Module";
 import * as AdhLocaleModule from "./Packages/Locale/Module";
 import * as AdhMappingModule from "./Packages/Mapping/Module";
 import * as AdhMarkdownModule from "./Packages/Markdown/Module";
+import * as AdhMetaApiModule from "./Packages/MetaApi/Module";
 import * as AdhEuthModule from "./Packages/Euth/Module";
 import * as AdhMovingColumnsModule from "./Packages/MovingColumns/Module";
 import * as AdhPermissionsModule from "./Packages/Permissions/Module";
@@ -173,7 +174,7 @@ export var init = (config: AdhConfig.IService, metaApi) => {
     AdhDoneModule.register(angular);
     AdhEmbedModule.register(angular);
     AdhEventManagerModule.register(angular);
-    AdhHttpModule.register(angular, config, metaApi);
+    AdhHttpModule.register(angular, config);
     AdhImageModule.register(angular);
     AdhInjectModule.register(angular);
     AdhListingModule.register(angular);
@@ -181,6 +182,7 @@ export var init = (config: AdhConfig.IService, metaApi) => {
     AdhEuthModule.register(angular);
     AdhMappingModule.register(angular);
     AdhMarkdownModule.register(angular);
+    AdhMetaApiModule.register(angular, metaApi);
     AdhMovingColumnsModule.register(angular);
     AdhPermissionsModule.register(angular);
     AdhPreliminaryNamesModule.register(angular);

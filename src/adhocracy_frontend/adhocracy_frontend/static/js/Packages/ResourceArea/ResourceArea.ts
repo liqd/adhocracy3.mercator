@@ -6,6 +6,8 @@ import * as AdhConfig from "../Config/Config";
 import * as AdhEmbed from "../Embed/Embed";
 import * as AdhHttp from "../Http/Http";
 import * as AdhHttpError from "../Http/Error";
+import * as AdhMetaApi from "../MetaApi/MetaApi";
+import * as AdhResourceUtil from "../Util/ResourceUtil";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 import * as AdhUtil from "../Util/Util";
 import * as AdhCredentials from "../User/Credentials";
@@ -39,9 +41,17 @@ export class Provider implements angular.IServiceProvider {
         this.specifics = {};
         this.templates = {};
         this.customHeaders = {};
-        this.$get = ["$q", "$injector", "$location", "adhHttp", "adhConfig", "adhCredentials", "adhEmbed", "adhResourceUrlFilter",
-            ($q, $injector, $location, adhHttp, adhConfig, adhCredentials, adhEmbed, adhResourceUrlFilter) => new Service(
-                self, $q, $injector, $location, adhHttp, adhConfig, adhCredentials, adhEmbed, adhResourceUrlFilter)];
+        this.$get = [
+            "$q",
+            "$injector",
+            "$location",
+            "adhHttp",
+            "adhConfig",
+            "adhCredentials",
+            "adhEmbed",
+            "adhMetaApi",
+            "adhResourceUrlFilter",
+            (...args) => AdhUtil.construct(Service, [self].concat(args))];
     }
 
     public default(
@@ -187,8 +197,9 @@ export class Service implements AdhTopLevelState.IAreaInput {
         private $location : angular.ILocationService,
         private adhHttp : AdhHttp.Service<any>,
         private adhConfig : AdhConfig.IService,
-        private adhcredentials : AdhCredentials.Service,
+        private adhCredentials : AdhCredentials.Service,
         private adhEmbed : AdhEmbed.Service,
+        private adhMetaApi : AdhMetaApi.Service,
         private adhResourceUrlFilter
     ) {
         this.template = "<adh-resource-area></adh-resource-area>";
@@ -239,7 +250,7 @@ export class Service implements AdhTopLevelState.IAreaInput {
      *
      * If `fail` is false, it promises undefined instead of failing.
      */
-    public getProcess(resourceUrl : string, fail = true) : angular.IPromise<ResourcesBase.Resource> {
+    public getProcess(resourceUrl : string, fail = true) : angular.IPromise<ResourcesBase.IResource> {
         var paths = [];
         var path = resourceUrl;
 
@@ -256,9 +267,9 @@ export class Service implements AdhTopLevelState.IAreaInput {
 
         return this.$q.all(_.map(paths, (path) => {
             return this.adhHttp.get(this.adhConfig.rest_url + path);
-        })).then((resources : ResourcesBase.Resource[]) => {
+        })).then((resources : ResourcesBase.IResource[]) => {
             for (var i = 0; i < resources.length; i++) {
-                if (resources[i].isInstanceOf(RIProcess.content_type)) {
+                if (AdhResourceUtil.isInstanceOf(resources[i], RIProcess.content_type, this.adhMetaApi)) {
                     return resources[i];
                 }
             }
@@ -274,7 +285,7 @@ export class Service implements AdhTopLevelState.IAreaInput {
         return self.$q.all([
             self.adhHttp.get(resourceUrl),
             self.adhHttp.get(AdhUtil.parentPath(resourceUrl))
-        ]).then((args : ResourcesBase.Resource[]) => {
+        ]).then((args : ResourcesBase.IResource[]) => {
             var version = args[0];
             var item = args[1];
             if (version.data.hasOwnProperty(SIVersionable.nick) && item.data.hasOwnProperty(SITags.nick)) {
@@ -387,7 +398,7 @@ export class Service implements AdhTopLevelState.IAreaInput {
 
             _.forEach(errors, (error) => {
                 if (error.code === 403) {
-                    if (self.adhcredentials.loggedIn) {
+                    if (self.adhCredentials.loggedIn) {
                         throw 403;
                     } else {
                         throw 401;

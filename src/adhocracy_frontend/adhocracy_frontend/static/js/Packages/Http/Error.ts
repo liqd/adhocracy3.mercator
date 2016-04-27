@@ -62,7 +62,7 @@ export var logBackendError = (response : angular.IHttpPromiseCallbackArg<IBacken
  * contained in the last element of the array.  All other elements are
  * ignored by this function.
  *
- * NOTE: See documentation of `importBatchContent`.
+ * NOTE: See documentation of `importBatchResources`.
  */
 export var logBackendBatchError = (
     response : angular.IHttpPromiseCallbackArg<IBackendBatchError>) : void => {

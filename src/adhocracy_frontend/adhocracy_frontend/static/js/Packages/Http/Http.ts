@@ -6,6 +6,7 @@ import * as _ from "lodash";
 
 import * as AdhConfig from "../Config/Config";
 import * as AdhCredentials from "../User/Credentials";
+import * as AdhMetaApi from "../MetaApi/MetaApi";
 import * as AdhPreliminaryNames from "../PreliminaryNames/PreliminaryNames";
 import * as AdhResourceUtil from "../Util/ResourceUtil";
 import * as AdhUtil from "../Util/Util";
@@ -19,7 +20,6 @@ import * as SIVersionable from "../../Resources_/adhocracy_core/sheets/versions/
 import * as AdhCache from "./Cache";
 import * as AdhConvert from "./Convert";
 import * as AdhError from "./Error";
-import * as AdhMetaApi from "./MetaApi";
 import * as AdhTransaction from "./Transaction";
 
 // re-exports
@@ -94,17 +94,17 @@ export var nonResourcePaths : string[] = [
  * wire (such as during user login), use $http.
  */
 
-// FIXME: This service should be able to handle any type, not just subtypes of
-// ``Resources.Content``.  Methods like ``postNewVersion`` may need additional
+// FIXME: This service should be able to handle any type, not just instances of
+// ``Resources.IResource``.  Methods like ``postNewVersion`` may need additional
 // constraints (e.g. by moving them to subclasses).
-export class Service<Content extends ResourcesBase.Resource> {
+export class Service<R extends ResourcesBase.IResource> {
 
     constructor(
         private $http : angular.IHttpService,
         private $q : angular.IQService,
         private $timeout : angular.ITimeoutService,
         private adhCredentials : AdhCredentials.Service,
-        private adhMetaApi : AdhMetaApi.MetaApiQuery,
+        private adhMetaApi : AdhMetaApi.Service,
         private adhPreliminaryNames : AdhPreliminaryNames.Service,
         private adhConfig : AdhConfig.IService,
         private adhCache? : AdhCache.Service
@@ -210,7 +210,7 @@ export class Service<Content extends ResourcesBase.Resource> {
         path : string,
         params?,
         config : IHttpGetConfig = {}
-    ) : angular.IPromise<Content> {
+    ) : angular.IPromise<R> {
         var query = (typeof params === "undefined") ? "" : "?" + $.param(params);
 
         var originalElements = (params || {}).elements || "omit";
@@ -220,12 +220,12 @@ export class Service<Content extends ResourcesBase.Resource> {
 
         return this.adhCache.memoize(path, query,
             () => this.getRaw(path, params, config).then(
-                (response) => AdhConvert.importContent(
+                (response) => AdhConvert.importResource(
                     <any>response, this.adhMetaApi, this.adhPreliminaryNames, this.adhCache, config.warmupPoolCache, originalElements),
                 AdhError.logBackendError));
     }
 
-    public putRaw(path : string, obj : Content, config : IHttpConfig = {}) : angular.IPromise<any> {
+    public putRaw(path : string, obj : R, config : IHttpConfig = {}) : angular.IPromise<any> {
         if (this.adhPreliminaryNames.isPreliminary(path)) {
             throw "attempt to http-put preliminary path: " + path;
         }
@@ -238,18 +238,18 @@ export class Service<Content extends ResourcesBase.Resource> {
         }));
     }
 
-    public put(path : string, obj : Content, config : IHttpPutConfig = {}) : angular.IPromise<Content> {
+    public put(path : string, obj : R, config : IHttpPutConfig = {}) : angular.IPromise<R> {
         var _self = this;
 
         if (!config.noExport) {
-            obj = AdhConvert.exportContent(_self.adhMetaApi, obj, config.keepMetadata);
+            obj = AdhConvert.exportResource(_self.adhMetaApi, obj, config.keepMetadata);
         }
 
         return this.putRaw(path, obj, config)
             .then(
                 (response) => {
                     _self.adhCache.invalidateUpdated(response.data.updated_resources);
-                    return AdhConvert.importContent(<any>response, _self.adhMetaApi, _self.adhPreliminaryNames, this.adhCache);
+                    return AdhConvert.importResource(<any>response, _self.adhMetaApi, _self.adhPreliminaryNames, this.adhCache);
                 },
                 AdhError.logBackendError);
     }
@@ -278,7 +278,7 @@ export class Service<Content extends ResourcesBase.Resource> {
         return this.put(path, <any>obj, _.extend({}, config, {keepMetadata: true}));
     }
 
-    public postRaw(path : string, obj : Content, config : IHttpConfig = {}) : angular.IPromise<any> {
+    public postRaw(path : string, obj : R, config : IHttpConfig = {}) : angular.IPromise<any> {
         var _self = this;
 
         if (_self.adhPreliminaryNames.isPreliminary(path)) {
@@ -304,18 +304,18 @@ export class Service<Content extends ResourcesBase.Resource> {
         });
     }
 
-    public post(path : string, obj : Content, config : IHttpConfig = {}) : angular.IPromise<Content> {
+    public post(path : string, obj : R, config : IHttpConfig = {}) : angular.IPromise<R> {
         var _self = this;
 
         if (!config.noExport) {
-            obj = AdhConvert.exportContent(_self.adhMetaApi, obj);
+            obj = AdhConvert.exportResource(_self.adhMetaApi, obj);
         }
 
         return _self.postRaw(path, obj, config)
             .then(
                 (response) => {
                     this.adhCache.invalidateUpdated(response.data.updated_resources);
-                    return AdhConvert.importContent(<any>response, _self.adhMetaApi, _self.adhPreliminaryNames, this.adhCache);
+                    return AdhConvert.importResource(<any>response, _self.adhMetaApi, _self.adhPreliminaryNames, this.adhCache);
                 },
                 AdhError.logBackendError);
     }
@@ -366,14 +366,15 @@ export class Service<Content extends ResourcesBase.Resource> {
      * errors) are passed back to the caller.
      */
     public deepPost(
-        resources : ResourcesBase.Resource[],
+        resources : ResourcesBase.IResource[],
         config : IHttpConfig = {}
-    ) : angular.IPromise<ResourcesBase.Resource[]> {
+    ) : angular.IPromise<ResourcesBase.IResource[]> {
 
-        var sortedResources : ResourcesBase.Resource[] = AdhResourceUtil.sortResourcesTopologically(resources, this.adhPreliminaryNames);
+        var sortedResources : ResourcesBase.IResource[] = AdhResourceUtil.sortResourcesTopologically(
+            resources, this.adhPreliminaryNames, this.adhMetaApi);
 
         // post stuff
-        return this.withTransaction((transaction) : angular.IPromise<ResourcesBase.Resource[]> => {
+        return this.withTransaction((transaction) : angular.IPromise<ResourcesBase.IResource[]> => {
             _.forEach(sortedResources, (resource) => {
                 transaction.post(resource.parent, resource);
             });
@@ -411,8 +412,9 @@ export class Service<Content extends ResourcesBase.Resource> {
      */
     public postNewVersionNoFork(
         oldVersionPath : string,
-        obj : Content, rootVersions? : string[]
-    ) : angular.IPromise<{ value: Content; parentChanged: boolean; }> {
+        obj : R,
+        rootVersions? : string[]
+    ) : angular.IPromise<{ value: R; parentChanged: boolean; }> {
         var _self = this;
 
         var timeoutRounds : number = 5;
@@ -428,7 +430,7 @@ export class Service<Content extends ResourcesBase.Resource> {
             nextOldVersionPath : string,
             parentChanged : boolean,
             roundsLeft : number
-        ) : angular.IPromise<{ value : Content; parentChanged : boolean; }> => {
+        ) : angular.IPromise<{ value : R; parentChanged : boolean; }> => {
             if (roundsLeft === 0) {
                 throw "Tried to post new version of " + dagPath + " " + timeoutRounds.toString() + " times, giving up.";
             }
@@ -437,8 +439,8 @@ export class Service<Content extends ResourcesBase.Resource> {
                 follows: [nextOldVersionPath]
             };
 
-            var handleSuccess = (content) => {
-                return { value: content, parentChanged: parentChanged };
+            var handleSuccess = (resource) => {
+                return { value: resource, parentChanged: parentChanged };
             };
 
             var handleConflict = (msg) => {
@@ -473,23 +475,23 @@ export class Service<Content extends ResourcesBase.Resource> {
         return retry(oldVersionPath, false, timeoutRounds);
     }
 
-    public postToPool(poolPath : string, obj : Content) : angular.IPromise<Content> {
+    public postToPool(poolPath : string, obj : R) : angular.IPromise<R> {
         return this.post(poolPath, obj);
     }
 
     /**
-     * Resolve a path or content to content
+     * Resolve a path or resource to resource
      *
-     * If you do not know if a reference is already resolved to the corresponding content
-     * you can use this function to be sure.
+     * If you do not know if a reference is already resolved to the
+     * corresponding resource you can use this function to be sure.
      */
-    public resolve(path : string) : angular.IPromise<Content>;
-    public resolve(content : Content) : angular.IPromise<Content>;
-    public resolve(pathOrContent) {
-        if (typeof pathOrContent === "string") {
-            return this.get(pathOrContent);
+    public resolve(path : string) : angular.IPromise<R>;
+    public resolve(resource : R) : angular.IPromise<R>;
+    public resolve(pathOrResource) {
+        if (typeof pathOrResource === "string") {
+            return this.get(pathOrResource);
         } else {
-            return this.$q.when(pathOrContent);
+            return this.$q.when(pathOrResource);
         }
     }
 

@@ -1,19 +1,20 @@
 import * as AdhCredentialsModule from "../User/CredentialsModule";
+import * as AdhMetaApiModule from "../MetaApi/Module";
 import * as AdhPreliminaryNamesModule from "../PreliminaryNames/Module";
 import * as AdhWebSocketModule from "../WebSocket/Module";
 
 import * as AdhCache from "./Cache";
 import * as AdhError from "./Error";
 import * as AdhHttp from "./Http";
-import * as AdhMetaApi from "./MetaApi";
 
 
 export var moduleName = "adhHttp";
 
-export var register = (angular, config, metaApi) => {
+export var register = (angular, config) => {
     angular
         .module(moduleName, [
             AdhCredentialsModule.moduleName,
+            AdhMetaApiModule.moduleName,
             AdhPreliminaryNamesModule.moduleName,
             AdhWebSocketModule.moduleName,
             "angular-cache",
@@ -26,6 +27,5 @@ export var register = (angular, config, metaApi) => {
         .service("adhHttp", [
             "$http", "$q", "$timeout", "adhCredentials", "adhMetaApi", "adhPreliminaryNames", "adhConfig", "adhCache", AdhHttp.Service])
         .service("adhCache", ["$q", "adhConfig", "adhWebSocket", "CacheFactory", AdhCache.Service])
-        .factory("adhMetaApi", () => new AdhMetaApi.MetaApiQuery(metaApi))
         .filter("adhFormatError", () => AdhError.formatError);
 };

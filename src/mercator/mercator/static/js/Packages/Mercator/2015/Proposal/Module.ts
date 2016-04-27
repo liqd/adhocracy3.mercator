@@ -5,6 +5,7 @@ import * as AdhHttpModule from "../../../Http/Module";
 import * as AdhImageModule from "../../../Image/Module";
 import * as AdhInjectModule from "../../../Inject/Module";
 import * as AdhLocaleModule from "../../../Locale/Module";
+import * as AdhMetaApiModule from "../../../MetaApi/Module";
 import * as AdhPermissionsModule from "../../../Permissions/Module";
 import * as AdhPreliminaryNamesModule from "../../../PreliminaryNames/Module";
 import * as AdhResourceAreaModule from "../../../ResourceArea/Module";
@@ -33,6 +34,7 @@ export var register = (angular) => {
             AdhImageModule.moduleName,
             AdhInjectModule.moduleName,
             AdhLocaleModule.moduleName,
+            AdhMetaApiModule.moduleName,
             AdhPermissionsModule.moduleName,
             AdhPreliminaryNamesModule.moduleName,
             AdhResourceAreaModule.moduleName,
@@ -40,12 +42,16 @@ export var register = (angular) => {
             AdhStickyModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
-        .config(["adhResourceAreaProvider", "adhConfigProvider", (adhResourceAreaProvider, adhConfigProvider) => {
+        .config(["adhResourceAreaProvider", "adhConfigProvider", "adhMetaApiProvider", (
+            adhResourceAreaProvider,
+            adhConfigProvider,
+            adhMetaApi
+        ) => {
             var adhConfig = adhConfigProvider.config;
             var processType = RIMercator2015Process.content_type;
             var customHeader = adhConfig.pkg_path + Proposal.pkgLocation + "/CustomHeader.html";
             adhResourceAreaProvider.customHeader(processType, customHeader);
-            Proposal.registerRoutes(processType)(adhResourceAreaProvider);
+            Proposal.registerRoutes(processType)(adhResourceAreaProvider, adhMetaApi);
         }])
         .config(["flowFactoryProvider", (flowFactoryProvider) => {
             if (typeof flowFactoryProvider.defaults === "undefined") {

@@ -1,5 +1,7 @@
 import * as _ from "lodash";
 
+import * as AdhMetaApi from "../MetaApi/MetaApi";
+
 import * as ResourcesBase from "../../ResourcesBase";
 
 import * as SIVersionable from "../../Resources_/adhocracy_core/sheets/versions/IVersionable";
@@ -10,7 +12,7 @@ import * as AdhUtil from "./Util";
 /**
  * Create a new version following an existing one.
  */
-export var derive = function<R extends ResourcesBase.Resource>(oldVersion : R, settings) : R {
+export var derive = <R extends ResourcesBase.IResource>(oldVersion : R, settings) : R => {
     var resource = new (<any>oldVersion).constructor(settings);
 
     _.forOwn(oldVersion.data, (sheet, key) => {
@@ -27,7 +29,7 @@ export var derive = function<R extends ResourcesBase.Resource>(oldVersion : R, s
 };
 
 
-export var hasEqualContent = function<R extends ResourcesBase.Resource>(resource1 : R, resource2 : R) : boolean {
+export var hasEqualContent = (resource1 : ResourcesBase.IResource, resource2 : ResourcesBase.IResource) : boolean => {
     // note: this assumes that both resources share the same set of sheets, as it's currently
     // always used after derive.
 
@@ -47,25 +49,55 @@ export var hasEqualContent = function<R extends ResourcesBase.Resource>(resource
 };
 
 
+export var isInstanceOf = (
+    resource : ResourcesBase.IResource,
+    resourceType : string,
+    adhMetaApi : AdhMetaApi.Service
+) : boolean => {
+    var resourceMeta = adhMetaApi.resource(resource.content_type);
+    return resourceType === resource.content_type || _.includes(resourceMeta.super_types, resourceType);
+};
+
+
+export var getReferences = (resource : ResourcesBase.IResource, adhMetaApi : AdhMetaApi.Service) : string[] => {
+    var results : string[] = [];
+
+    _.forOwn(resource.data, (sheet, sheetName : string) => {
+        _.forOwn(sheet, (value, fieldName : string) => {
+            if (adhMetaApi.fieldExists(sheetName, fieldName)) {
+                var fieldMeta = adhMetaApi.field(sheetName, fieldName);
+                if (fieldMeta.valuetype === "adhocracy_core.schema.AbsolutePath") {
+                    results.push(value);
+                }
+            }
+        });
+    });
+
+    return results;
+};
+
+
 /**
  * Create an IDag<Resource> out of given resources.
  *
  * FIXME: this should probably go into something like ResourcesUtil or Packages/Resources/Util
  */
-export function sortResourcesTopologically(resources : ResourcesBase.Resource[], adhPreliminaryNames) : ResourcesBase.Resource[] {
-    "use strict";
-
+export var sortResourcesTopologically = (
+    resources : ResourcesBase.IResource[],
+    adhPreliminaryNames,
+    adhMetaApi : AdhMetaApi.Service
+) : ResourcesBase.IResource[] => {
     // prepare DAG
     // sources are resource paths without incoming references
     // FIXME: DefinitelyTyped
-    var dag : AdhUtil.IDag<ResourcesBase.Resource> = (<any>_).fromPairs(_.map(resources, (resource) => [resource.path, {
+    var dag : AdhUtil.IDag<ResourcesBase.IResource> = (<any>_).fromPairs(_.map(resources, (resource) => [resource.path, {
             content: resource, incoming: [], outgoing: [], done: false
     }]));
     var sources : string[] = [];
 
     // fill edges, determine possible starter sources
-    _.forEach(dag, (vertex : AdhUtil.IVertex<ResourcesBase.Resource>, key, l) => {
-        var references = vertex.content.getReferences();
+    _.forEach(dag, (vertex : AdhUtil.IVertex<ResourcesBase.IResource>, key, l) => {
+        var references = getReferences(vertex.content, adhMetaApi);
 
         if (typeof vertex.content.parent !== "undefined") {
             references.push(vertex.content.parent);
@@ -86,4 +118,4 @@ export function sortResourcesTopologically(resources : ResourcesBase.Resource[],
     });
 
     return AdhUtil.sortDagTopologically(dag, sources);
-}
+};

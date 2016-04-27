@@ -3,41 +3,25 @@ export interface ISheetMetaApi {
     readable : string[];
     editable : string[];
     creatable : string[];
-    /* tslint:disable:variable-name */
     create_mandatory : string[];
-    /* tslint:enable:variable-name */
 
     // computed information
     references : string[];
 }
 
 
-export class Sheet {
-    public getMeta() : ISheetMetaApi {
-        return (<any>this).constructor._meta;
-    }
-}
-
-
 export interface IResourceClass {
-    /* tslint:disable:variable-name */
     content_type : string;
-    super_types : string[];
-    sheets : string[];
-    /* tslint:enable:variable-name */
 }
 
 
 export interface IResource {
     data : Object;
     path : string;
-    parent : string;
-    first_version_path : string;
-    root_versions : string[];
-
-    getReferences() : string[];
-    isInstanceOf(resourceType : string) : boolean;
-    hasSheet(sheet : string) : boolean;
+    content_type : string;
+    parent? : string;
+    first_version_path? : string;
+    root_versions? : string[];
 }
 
 
@@ -57,36 +41,4 @@ export class Resource implements IResource {
         this.data = {};
     }
     /* tslint:enable:variable-name */
-
-    public getReferences() : string[] {
-        var _self = this;
-        var result : string[] = [];
-
-        for (var x in _self.data) {
-            if (_self.data.hasOwnProperty(x)) {
-                var sheet = _self.data[x];
-                result.push.apply(result, sheet.getMeta().references);
-            }
-        }
-
-        return result;
-    }
-
-    public isInstanceOf(resourceType : string) : boolean {
-        var _class : IResourceClass = <any>this.constructor;
-
-        if (resourceType === this.content_type) {
-            return true;
-        } else if (_.includes(_class.super_types, resourceType)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public hasSheet(sheet : string) : boolean {
-        var _class : IResourceClass = <any>this.constructor;
-
-        return _.includes(_class.sheets, sheet);
-    }
 }

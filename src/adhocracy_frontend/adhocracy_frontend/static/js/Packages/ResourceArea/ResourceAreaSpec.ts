@@ -23,7 +23,7 @@ export var register = () => {
                     defaults: {},
                     specifics: {},
                     templates: {},
-                    customHeaders: {},
+                    customHeaders: {}
                 };
 
                 adhHttpMock = jasmine.createSpyObj("adhHttp", ["get", "withTransaction"]);
@@ -56,8 +56,9 @@ export var register = () => {
                     adhHttpMock,
                     adhConfigMock,
                     adhCredentialsMock,
-                    adhEmbedMock, adhResourceUrlFilterMock
-                );
+                    adhEmbedMock,
+                    null,
+                    adhResourceUrlFilterMock);
             });
 
             describe("route", () => {

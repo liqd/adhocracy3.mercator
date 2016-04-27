@@ -43,7 +43,7 @@ export enum Mode {display, edit};
  * parent scope.
  */
 export class ResourceWrapperController {
-    private resourcePromises : angular.IPromise<ResourcesBase.Resource[]>[];
+    private resourcePromises : angular.IPromise<ResourcesBase.IResource[]>[];
 
     constructor(
         private $scope : angular.IScope,
@@ -97,7 +97,7 @@ export class ResourceWrapperController {
      * registers a promise that will eventually be resolved with a list of
      * resources on submit.
      */
-    public registerResourceDirective(promise : angular.IPromise<ResourcesBase.Resource[]>) {
+    public registerResourceDirective(promise : angular.IPromise<ResourcesBase.IResource[]>) {
         this.resourcePromises.push(promise);
     }
 
@@ -189,7 +189,7 @@ export interface IResourceWidgetScope extends angular.IScope {
     clear() : void;
 }
 
-export interface IResourceWidgetInstance<R extends ResourcesBase.Resource, S extends IResourceWidgetScope> {
+export interface IResourceWidgetInstance<R extends ResourcesBase.IResource, S extends IResourceWidgetScope> {
     scope : S;
     wrapper : ResourceWrapperController;
     deferred : angular.IDeferred<R[]>;
@@ -215,7 +215,7 @@ export interface IResourceWidgetInstance<R extends ResourcesBase.Resource, S ext
  * resourceWidget will detect that and behave accordingly (e.g. it will not try
  * to load the resource from the server).
  */
-export class ResourceWidget<R extends ResourcesBase.Resource, S extends IResourceWidgetScope> {
+export class ResourceWidget<R extends ResourcesBase.IResource, S extends IResourceWidgetScope> {
     public templateUrl : string;
 
     constructor(
