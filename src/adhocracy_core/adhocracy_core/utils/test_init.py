@@ -182,37 +182,6 @@ def test_exception_to_str_runtime_error():
     assert err_string == 'RuntimeError'
 
 
-class GetUserUnitTest(unittest.TestCase):
-
-    def make_one(self, request):
-        from adhocracy_core.utils import get_user
-        return get_user(request)
-
-    def setUp(self):
-        user = testing.DummyResource()
-        context = testing.DummyResource()
-        context['user'] = user
-        self.context = context
-
-        class DummyRequest(testing.DummyRequest):
-            @property
-            def authenticated_userid(self):
-                return self._dummy_userid
-        self.request = DummyRequest(root=context,
-                                    _dummy_userid=None)
-
-    def test_with_user_id_is_None(self):
-        assert self.make_one(self.request) is None
-
-    def test_with_user_id_is_not_resource_path(self):
-        assert self.make_one(self.request) is None
-
-    def test_with_user_id(self):
-        user = self.context['user']
-        self.request._dummy_userid = '/user'
-        assert self.make_one(self.request) == user
-
-
 class TestNormalizeToTuple:
 
     def call_fut(self, value):

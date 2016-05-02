@@ -1,6 +1,7 @@
 """Authentication with support for token http headers."""
 import hashlib
 from datetime import datetime
+from collections import OrderedDict
 
 from persistent.dict import PersistentDict
 from pyramid.authentication import CallbackAuthenticationPolicy
@@ -8,6 +9,7 @@ from pyramid.interfaces import IAuthenticationPolicy
 from pyramid.interfaces import IRequest
 from pyramid.httpexceptions import HTTPBadRequest
 from pyramid.traversal import resource_path
+from pyramid.security import Everyone
 from pyramid.settings import asbool
 from zope.interface import implementer
 from zope.interface import Interface
@@ -243,6 +245,57 @@ def validate_user_headers(view: callable):
             raise HTTPBadRequest()
         return view(context, request)
     return wrapped_view
+
+
+@implementer(IAuthenticationPolicy)
+class MultiRouteAuthenticationPolicy(CallbackAuthenticationPolicy):
+    """Use different policy to authenticate depending on the request route."""
+
+    def __init__(self):
+        self.policies = OrderedDict()
+
+    def add_policy(self, route_name: str, policy: IAuthenticationPolicy):
+        """Add `policy` for `route_name`."""
+        self.policies[route_name] = policy
+
+    def unauthenticated_userid(self, request: IRequest) -> str:
+        """Return unauthenticated_userid of policy with matching route name."""
+        policy = self._get_matching_policy(request)
+        if policy:
+            return policy.unauthenticated_userid(request)
+        else:
+            return None
+
+    def effective_principals(self, request: IRequest):
+        """Return principals of policy with matching route name."""
+        policy = self._get_matching_policy(request)
+        if policy:
+            return policy.effective_principals(request)
+        else:
+            return [Everyone]
+
+    def _get_matching_policy(self, request: IRequest) -> IAuthenticationPolicy:
+        route_name = getattr(request.matched_route, 'name', None)
+        for policy_route_name, policy in self.policies.items():
+            if policy_route_name == route_name:
+                return policy
+        return None
+
+    def remember(self, request: IRequest, principal, **kwargs) -> [tuple]:
+        """Return headers to remember authenticated user for all policies."""
+        headers = []
+        for policy in self.policies.values():
+            policy_headers = policy.remember(request, principal, **kwargs)
+            headers.extend(policy_headers)
+        return headers
+
+    def forget(self, request: IRequest) -> [tuple]:
+        """Return headers to forget authenticated user for all policies."""
+        headers = []
+        for policy in self.policies.values():
+            policy_headers = policy.forget(request)
+            headers.extend(policy_headers)
+        return headers
 
 
 def includeme(config):

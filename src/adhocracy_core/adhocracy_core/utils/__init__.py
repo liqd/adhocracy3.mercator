@@ -16,7 +16,6 @@ from pyramid.compat import is_nonstr_iter
 from pyramid.location import lineage
 from pyramid.request import Request
 from pyramid.registry import Registry
-from pyramid.traversal import find_resource
 from pyramid.traversal import resource_path
 from substanced.util import acquire
 from substanced.util import find_catalog
@@ -196,19 +195,6 @@ def exception_to_str(err: Exception):
         return '{}: {}'.format(name, desc)
     else:
         return name
-
-
-def get_user(request: Request) -> object:
-    """Return resource object of the authenticated user.
-
-    This requires that :func:`pyramid.request.Request.authenticated_userid`
-    returns a resource path.
-    """
-    user_path = request.authenticated_userid
-    try:
-        return find_resource(request.root, str(user_path))
-    except KeyError:
-        return None
 
 
 def normalize_to_tuple(context) -> tuple:

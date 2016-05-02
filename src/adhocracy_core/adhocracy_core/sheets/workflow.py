@@ -3,6 +3,8 @@ from colander import deferred
 from colander import null
 from colander import OneOf
 from colander import drop
+from deform.widget import SelectWidget
+from deform.widget import Widget
 from pyramid.testing import DummyRequest
 from zope.deprecation import deprecated
 from zope.interface import implementer
@@ -48,10 +50,20 @@ def deferred_state_validator(node, kw: dict) -> OneOf:
     workflow = kw['workflow']
     request = kw['request']
     if workflow is None:
-        next_states = []
+        allowed = []
     else:
-        next_states = workflow.get_next_states(context, request)
-    return OneOf(next_states)
+        nexts = workflow.get_next_states(context, request)
+        current = workflow.state_of(context)
+        allowed = [current] + nexts
+    return OneOf(allowed)
+
+
+@deferred
+def deferred_state_widget(node, kw: dict) -> Widget:
+    """Workflow state widget."""
+    validator = deferred_state_validator(node, kw)
+    states = [(x, x) for x in validator.choices]
+    return SelectWidget(values=states)
 
 
 class StateName(SingleLine):
@@ -68,17 +80,22 @@ class StateName(SingleLine):
             states = []
         else:
             states = workflow._states.keys()  # TODO don't use private attr
+        return OneOf(states)
 
-        def validate_state_name(node, value):
-            return OneOf(states)(node, value)
-        return validate_state_name
+    @deferred
+    def widget(self, kw: dict) -> Widget:
+        states = [(x, x) for x in self.validator.choices]
+        return SelectWidget(values=states)
 
 
 class StateData(MappingSchema):
     """Resource specific data for a workflow state."""
 
     missing = drop
-    default = None
+
+    @deferred
+    def default(self, kw):
+        return {}
 
     name = StateName()
     description = Text(missing='',
@@ -105,7 +122,9 @@ class WorkflowAssignmentSchema(MappingSchema):
     """
 
     workflow_state = SingleLine(missing=drop,
-                                validator=deferred_state_validator)
+                                validator=deferred_state_validator,
+                                widget=deferred_state_widget,
+                                )
     """Workflow state of the sheet context resource.
 
     Setting this executes a transition to the new state value.

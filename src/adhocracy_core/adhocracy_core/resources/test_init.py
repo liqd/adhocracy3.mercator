@@ -1,3 +1,4 @@
+from mock import MagicMock
 from pyramid import testing
 from pytest import raises
 from pytest import fixture
@@ -31,10 +32,12 @@ class TestAddResourceTypeToRegistry:
         from adhocracy_core.resources import add_resource_type_to_registry
         return add_resource_type_to_registry(*args)
 
-    def test_add_iresource_but_missing_content_registry(self, config, resource_meta):
+    def test_raise_if_duplicated_sheets(self, config, resource_meta):
+        from adhocracy_core.exceptions import ConfigurationError
         config.include('adhocracy_core.content')
-        del config.registry.content
-        with raises(AssertionError):
+        resource_meta = resource_meta._replace(basic_sheets=(ISheet,),
+                                               extended_sheets=(ISheet,))
+        with raises(ConfigurationError):
             self.make_one(resource_meta, config)
 
     def test_add_resource_type(self, config, resource_meta):
@@ -59,6 +62,18 @@ class TestAddResourceTypeToRegistry:
         metadata_a = resource_meta._replace(content_name='Name')
         self.make_one(metadata_a, config)
         assert config.registry.content.meta[type_id]['content_name'] == 'Name'
+
+    def test_add_sdi_view_name_if_is_sdi_addable(self, config, resource_meta):
+        from adhocracy_core.sdi import add_sdi_add_view
+        config.include('adhocracy_core.content')
+        config.add_sdi_add_view = MagicMock(spec=add_sdi_add_view)
+        type_id = IResource.__identifier__
+        resource_meta = resource_meta._replace(is_sdi_addable=True)
+        self.make_one(resource_meta, config)
+        assert config.registry.content.meta[type_id]['add_view']\
+               == 'add_' + type_id
+        config.add_sdi_add_view.assert_called_with(resource_meta.iresource,
+                                                   'add_' + type_id)
 
 
 class TestResourceFactory:

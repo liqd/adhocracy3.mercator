@@ -16,6 +16,7 @@ class IProcess(IPool):
 process_meta = pool_meta._replace(
     iresource=IProcess,
     permission_create='create_process',
+    is_sdi_addable=True,
     after_creation=(add_assets_service,
                     add_badges_service,
                     ),

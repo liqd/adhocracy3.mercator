@@ -416,16 +416,14 @@ class TestUpdateModificationDate:
         from adhocracy_core.sheets.metadata import IMetadata
         now = datetime.now()
         monkeypatch.setattr(subscriber, 'get_modification_date', lambda x: now)
-        user = object()
-        monkeypatch.setattr(subscriber, 'get_user', lambda x: user)
         register_sheet(context, mock_sheet, registry, isheet=IMetadata)
-        request = testing.DummyResource()
+        request = testing.DummyResource(user=object())
         event = testing.DummyResource(object=context,
                                       registry=registry,
                                       request=request)
         self.call_fut(event)
         assert mock_sheet.set.call_args[0][0] == {'modification_date': now,
-                                                  'modified_by': user}
+                                                  'modified_by': request.user}
         assert mock_sheet.set.call_args[1] == {'send_event': False,
                                                'omit_readonly': False}
 

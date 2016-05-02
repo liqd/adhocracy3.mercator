@@ -1,8 +1,9 @@
-import unittest
 from unittest.mock import Mock
+import unittest
 
 from pyramid import testing
-import pytest
+from pytest import raises
+from pytest import fixture
 
 
 class TokenManagerUnitTest(unittest.TestCase):
@@ -375,8 +376,115 @@ def test_validate_user_headers_raise_if_authentication_failed(context,
     view = Mock()
     request_.headers['X-User-Token'] = 2
     request_.authenticated_userid = None
-    with pytest.raises(HTTPBadRequest):
+    with raises(HTTPBadRequest):
         validate_user_headers(view)(context, request_)
+
+
+class TestMultiRouteAuthenticationPolicy:
+
+    @fixture
+    def inst(self):
+        from . import MultiRouteAuthenticationPolicy
+        return MultiRouteAuthenticationPolicy()
+
+    @fixture
+    def policy(self, mocker):
+        from pyramid.interfaces import IAuthenticationPolicy
+        return mocker.Mock(spec=IAuthenticationPolicy)()
+
+    @fixture
+    def other_policy(self, mocker):
+        from pyramid.interfaces import IAuthenticationPolicy
+        return mocker.Mock(spec=IAuthenticationPolicy)()
+
+    @fixture
+    def route(self, mocker):
+        from pyramid.interfaces import IRoute
+        return mocker.Mock(spec=IRoute,
+                           name='route_name')()
+
+    def test_is_authentication_policy(self, inst):
+        from pyramid.interfaces import IAuthenticationPolicy
+        from zope.interface.verify import verifyObject
+        assert IAuthenticationPolicy.providedBy(inst)
+        assert verifyObject(IAuthenticationPolicy, inst)
+
+    def test_is_subclass_of_callback_policy(self, inst):
+        from pyramid.authentication import CallbackAuthenticationPolicy
+        assert isinstance(inst, CallbackAuthenticationPolicy)
+
+    def test_add_policy(self, inst, policy):
+        inst.add_policy('route_name', policy)
+        assert inst.policies['route_name'] is policy
+
+    def test_get_matching_policy_return_none_if_no_policy(self, request_, inst):
+        request_.matched_route = None
+        inst.policies = {}
+        assert inst._get_matching_policy(request_) is None
+
+    def test_get_matching_policy_return_none_if_wrong_policy(
+        self, request_, inst, policy):
+        request_.matched_route = None
+        inst.policies = {'other_policy': policy}
+        assert inst._get_matching_policy(request_) is None
+
+    def test_get_matching_policy_return_policy_if_none_matches(
+        self, request_, inst, policy):
+        request_.matched_route = None
+        inst.policies = {None: policy}
+        assert inst._get_matching_policy(request_) is policy
+
+    def test_get_matching_policy_return_policy_if_route_name_matches(
+        self, request_, inst, policy, other_policy, route):
+        request_.matched_route = route
+        inst.policies = {route.name: policy,
+                         'other_route': other_policy}
+        assert inst._get_matching_policy(request_) is policy
+
+    def test_unauthenticated_userid_return_none_if_no_policy_policy_machted(
+        self, request_, inst, mocker):
+        inst._get_matching_policy = mocker.Mock(return_value=None)
+        assert inst.unauthenticated_userid(request_) is None
+
+    def test_unauthenticated_userid_return_userid_of_matched_policy(
+        self, inst, request_, policy, mocker):
+        inst._get_matching_policy = mocker.Mock(return_value=policy)
+        policy.unauthenticated_userid.return_value = 'userid'
+        assert inst.unauthenticated_userid(request_) == 'userid'
+
+    def test_effective_principals_return_everyone_if_no_policy_policy_machted(
+        self, request_, inst, mocker):
+        from pyramid.security import Everyone
+        inst._get_matching_policy = mocker.Mock(return_value=None)
+        assert inst.effective_principals(request_) == [Everyone]
+
+    def test_effective_principals_return_principals_of_matched_policy(
+        self, inst, request_, policy, mocker):
+        inst._get_matching_policy = mocker.Mock(return_value=policy)
+        policy.effective_principals.return_value = ['Group1']
+        assert inst.effective_principals(request_) == ['Group1']
+
+    def test_remember_return_empty_list_if_no_policies(self, inst, request_):
+        assert inst.remember(request_, 'principal') == []
+
+    def test_remember_return_headers_of_all_policies(
+        self, inst, request_, policy, other_policy):
+        inst.policies['route1'] = policy
+        policy.remember.return_value = [('1', '1')]
+        inst.policies['route2'] = other_policy
+        other_policy.remember.return_value = [('2', '2')]
+        assert inst.remember(request_, 'principal') == [('1','1'), ('2', '2')]
+
+    def test_forget_return_empty_list_if_no_policies(self, inst, request_):
+        assert inst.forget(request_) == []
+
+    def test_forget_return_headers_of_all_policies(
+        self, inst, request_, policy, other_policy):
+        inst.policies['route1'] = policy
+        policy.forget.return_value = [('1', '1')]
+        inst.policies['route2'] = other_policy
+        other_policy.forget.return_value = [('2', '2')]
+        assert inst.forget(request_) == [('1','1'), ('2', '2')]
 
 
 class IncludemeIntegrationTest(unittest.TestCase):

@@ -9,16 +9,22 @@ from adhocracy_core.interfaces import ChangelogMetadata
 from adhocracy_core.interfaces import VisibilityChange
 
 
-@fixture()
+@fixture
 def integration(integration):
     integration.include('adhocracy_core.changelog')
 
 
 @fixture
+def registry(registry_with_content):
+    return registry_with_content
+
+
+@fixture
 def user():
     from adhocracy_core.sheets.principal import IUserBasic
-    user = testing.DummyResource(__provides__=IUserBasic)
-    user.name = 'god'
+    user = testing.DummyResource(__provides__=IUserBasic,
+                                 __name__='user1',
+                                 name='god')
     return user
 
 
@@ -60,13 +66,6 @@ def context(context):
     return context
 
 
-@fixture()
-def request_(registry, context):
-    request = testing.DummyResource(registry=registry)
-    request.context = context
-    return request
-
-
 def test_set_auditlog_no_audit_connection(context):
     from . import get_auditlog
     from . import set_auditlog
@@ -79,31 +78,32 @@ def test_set_auditlog_no_audit_connection(context):
     assert get_auditlog(context) is None
 
 
-@mark.usefixtures('integration')
-def test_audit_resources_changes_callback_empty_changelog(registry, request_):
+def test_audit_resources_changes_callback_empty_changelog(request_, context,
+                                                          changelog):
     from . import audit_resources_changes_callback
     from . import get_auditlog
     from . import set_auditlog
 
-    request_.registry = registry
-
-    set_auditlog(request_.context)
+    request_.context = context
+    request_.registry.changelog = changelog
+    set_auditlog(context)
     response = Mock()
+
     audit_resources_changes_callback(request_, response)
 
     all_entries = get_auditlog(request_.context).values()
     assert len(all_entries) == 0
 
 
-@mark.usefixtures('integration')
-def test_audit_resource_changes_callback(registry, request_, changelog,
+def test_audit_resource_changes_callback(request_, context, changelog,
                                          mock_get_user_info):
     from . import audit_resources_changes_callback
     from . import get_auditlog
     from . import set_auditlog
 
-    request_.registry = registry
-    changelog = registry.changelog
+    request_.context = context
+    request_.registry.changelog = changelog
+    registry.changelog = changelog
     set_auditlog(request_.context)
 
     changelog['/blublu'] \
@@ -121,43 +121,23 @@ def test_audit_resource_changes_callback(registry, request_, changelog,
 
 
 @mark.usefixtures('integration')
-def test_get_user_info(context, registry, request_, user):
+def test_get_user_info(request_, user):
+    from pyramid.traversal import resource_path
     from adhocracy_core.auditing import _get_user_info
+    request_.user = user
 
-    request_.root = context
-    request_.root['user1'] = user
-    request_.registry = registry
-    request_.authenticated_userid = '/user1'
+    user_name, user_path = _get_user_info(request_)
 
-    (user_name, user_path) = _get_user_info(request_)
-    assert user_name == 'god'
-    assert user_path == '/user1'
+    assert user_name == user.name
+    assert user_path == resource_path(user)
 
 
-@mark.usefixtures('integration')
-def test_get_user_info_nouser_in_request(context, registry, request_, user):
+def test_get_user_info_nouser_in_request(request_):
     from adhocracy_core.auditing import _get_user_info
+    request_.user = None
 
-    request_.root = context
-    request_.registry = registry
+    user_name, user_path = _get_user_info(request_)
 
-    (user_name, user_path) = _get_user_info(request_)
-    assert user_name == ''
-    assert user_path == ''
-
-
-@mark.usefixtures('integration')
-def test_get_user_info_no_associated_user_in_request(context,
-                                                     registry,
-                                                     request_,
-                                                     user):
-    from adhocracy_core.auditing import _get_user_info
-
-    request_.root = context
-    request_.registry = registry
-    request_.authenticated_userid = None
-
-    (user_name, user_path) = _get_user_info(request_)
     assert user_name == ''
     assert user_path == ''
 

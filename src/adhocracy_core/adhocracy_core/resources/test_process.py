@@ -16,6 +16,7 @@ class TestProcess:
         from adhocracy_core.interfaces import IPool
         from adhocracy_core import sheets
         assert meta.iresource is IProcess
+        assert meta.is_sdi_addable
         assert IProcess.isOrExtends(IPool)
         assert meta.is_implicit_addable is False
         assert meta.permission_create == 'create_process'

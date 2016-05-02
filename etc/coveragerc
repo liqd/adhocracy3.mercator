@@ -14,6 +14,7 @@ omit =
     src/adhocracy_core/adhocracy_core/__init__.py
     src/adhocracy_core/adhocracy_core/scripts/import_resources.py
     src/adhocracy_core/adhocracy_core/scripts/import_local_roles.py
+    src/adhocracy_core/adhocracy_core/sdi/*
     src/adhocracy/adhocracy/scaffolds/__init__
     src/adhocracy_sample/adhocracy_sample/__init__.py
     src/adhocracy_frontend/adhocracy_frontend/__init__.py

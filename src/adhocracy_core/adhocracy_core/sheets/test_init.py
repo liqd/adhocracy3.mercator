@@ -101,6 +101,23 @@ class TestBaseResourceSheet:
                                    'creating': inst.creating,
                                    }
 
+    def test_get_schema_with_bindings_add_name(self, inst):
+        schema = inst.get_schema_with_bindings()
+        assert schema.name == inst.meta.isheet.__identifier__
+
+    def test_get_schema_with_bindings_add_required_if_create_mandatory(
+        self, inst):
+        from adhocracy_core.interfaces import IResource
+        inst.creating = IResource
+        inst.meta = inst.meta._replace(create_mandatory=True)
+        schema = inst.get_schema_with_bindings()
+        assert schema.missing is colander.required
+
+    def test_get_schema_with_bindings_add_dropt_if_not_create_mandatory(
+        self, inst):
+        schema = inst.get_schema_with_bindings()
+        assert schema.missing is colander.drop
+
     def test_get_with_default(self, inst):
         assert inst.get() == {'count': 0}
 
@@ -140,6 +157,13 @@ class TestBaseResourceSheet:
     def test_set(self, inst):
         assert inst.set({'count': 11}) is True
         inst._store_data.assert_called_with({'count': 11})
+
+    def test_set_ignore_not_changed_valued(self, inst):
+        inst._get_data_appstruct.return_value = {'count': 11,
+                                                 'count2': None}
+        inst.set({'count': 11,
+                  'count2': 2})
+        inst._store_data.assert_called_with({'count2': 2})
 
     def test_set_empty(self, inst):
         assert inst.set({}) is False

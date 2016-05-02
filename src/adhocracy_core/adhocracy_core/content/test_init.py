@@ -105,6 +105,28 @@ class TestResourceContentRegistry:
         sheet = inst.get_sheet(context, ISheet, creating=resource_meta)
         assert sheet.creating == resource_meta
 
+    def test_get_sheet_cache_args(self, inst, context, sheet_meta):
+        from copy import copy
+        from adhocracy_core.sheets import BaseResourceSheet
+        sheet_meta = sheet_meta._replace(sheet_class=BaseResourceSheet)
+        inst.sheets_meta[ISheet] = sheet_meta
+        sheet1 = inst.get_sheet(context, ISheet)
+        sheet2 = inst.get_sheet(context, ISheet)
+        assert sheet1 is sheet2
+        sheet3 = inst.get_sheet(copy(context), ISheet)
+        assert sheet1 is not sheet3
+
+    def test_get_sheet_cache_kwargs(self, inst, context, sheet_meta, request_):
+        from copy import copy
+        from adhocracy_core.sheets import BaseResourceSheet
+        sheet_meta = sheet_meta._replace(sheet_class=BaseResourceSheet)
+        inst.sheets_meta[ISheet] = sheet_meta
+        sheet1 = inst.get_sheet(context, ISheet, request=request_)
+        sheet2 = inst.get_sheet(context, ISheet, request=request_)
+        assert sheet1 is sheet2
+        sheet3 = inst.get_sheet(context, ISheet, request=copy(request_))
+        assert sheet1 is not sheet3
+
     def test_get_sheet_isheet_not_provided(self, inst, sheet_meta):
         from adhocracy_core.exceptions import RuntimeConfigurationError
         context_no_isheet = testing.DummyResource()

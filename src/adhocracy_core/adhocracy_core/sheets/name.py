@@ -1,4 +1,5 @@
 """Name Sheet."""
+from colander import required
 from adhocracy_core.interfaces import ISheet
 from adhocracy_core.sheets import add_sheet_to_registry
 from adhocracy_core.sheets import sheet_meta
@@ -16,7 +17,7 @@ class NameSchema(MappingSchema):
     `name`: a human readable resource Identifier
     """
 
-    name = Name()
+    name = Name(missing=required)
 
 
 name_meta = sheet_meta._replace(isheet=IName,

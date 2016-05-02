@@ -209,7 +209,9 @@ def create_fake_god_request(registry):
 
 
 def includeme(config):
-    """Register adapter to extend the root acm."""
+    """Register adapter to extend the root acm and add authorization policy."""
     config.registry.registerAdapter(acm_extension_adapter,
                                     (Interface,),
                                     IRootACMExtension)
+    authz_policy = RoleACLAuthorizationPolicy()
+    config.set_authorization_policy(authz_policy)

@@ -21,7 +21,6 @@ from adhocracy_core.schema import Integer
 from adhocracy_core.schema import Reference as ReferenceSchema
 from adhocracy_core.schema import PostPool
 from adhocracy_core.sheets import sheet_meta
-from adhocracy_core.utils import get_user
 
 
 class IRate(IPredicateSheet, ISheetReferenceAutoUpdateMarker):
@@ -120,7 +119,7 @@ class RateSchema(MappingSchema):
 def create_validate_subject(request) -> callable:
     """Create validator to ensure value['subject'] is current user."""
     def validator(node, value):
-        user = get_user(request)
+        user = request.user
         if user is None or user != value['subject']:
             error = Invalid(node, msg='')
             error.add(Invalid(node['subject'],

@@ -643,6 +643,12 @@ class TextUnitTest(unittest.TestCase):
         with raises(colander.Invalid):
             inst.deserialize(1)
 
+    def test_bind_and_setup_text_widget(self):
+        from deform.widget import TextAreaWidget
+        inst = self.make_one().bind()
+        widget = inst.widget
+        assert isinstance(widget, TextAreaWidget)
+
 
 class PasswordUnitTest(unittest.TestCase):
 
@@ -704,6 +710,15 @@ class DateTimeUnitTest(unittest.TestCase):
         # we want an iso 8601 string with the current datetime
         today = datetime.utcnow().strftime('%Y-%m-%d')
         assert today in result
+
+    def test_bind_and_setup_datetime_widget(self):
+        from deform.widget import DateTimeInputWidget
+        inst = self.make_one().bind()
+        widget = inst.widget
+        assert isinstance(widget, DateTimeInputWidget)
+        schema = widget._pstruct_schema
+        assert schema['date_submit'].missing is colander.null
+        assert schema['time_submit'].missing is colander.null
 
 
 class TestBoolean:

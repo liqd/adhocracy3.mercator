@@ -141,22 +141,15 @@ class TestCreateValidateSubject:
         from .rate import create_validate_subject
         return create_validate_subject(*args)
 
-    @fixture
-    def mock_get_user(self, mocker):
-        from . import rate
-        mock_get_user = mocker.patch.object(rate, 'get_user')
-        return mock_get_user
-
-    def test_ignore_if_subject_is_loggedin_user(self, node, request_, mock_get_user):
+    def test_ignore_if_subject_is_loggedin_user(self, node, request_):
         user = testing.DummyResource()
-        mock_get_user.return_value = user
+        request_.user = user
         validator = self.call_fut(request_)
         assert validator(node, {'subject': user}) is None
 
-    def test_ignore_if_subject_is_not_loggedin_user(self, node, request_,
-                                                    mock_get_user):
+    def test_ignore_if_subject_is_not_loggedin_user(self, node, request_):
         user = testing.DummyResource()
-        mock_get_user.return_value = None
+        request_.user = None
         validator = self.call_fut(request_)
         with raises(colander.Invalid):
             node['subject'] = Mock()

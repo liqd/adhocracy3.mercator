@@ -3,19 +3,28 @@ from pytest import fixture
 from pytest import mark
 
 
-def test_add_cors_headers(context):
+def test_add_cors_headers(request_):
     from .subscriber import add_cors_headers
-    headers = {}
-    response = testing.DummyResource(headers=headers)
-    event = testing.DummyResource(response=response)
-
+    response = testing.DummyResource(headers={})
+    event = testing.DummyResource(response=response,
+                                  request=request_)
     add_cors_headers(event)
-
-    assert headers == \
+    assert response.headers == \
         {'Access-Control-Allow-Origin': '*',
-         'Access-Control-Allow-Headers':
-         'Origin, Content-Type, Accept, X-User-Path, X-User-Token',
+         'Access-Control-Allow-Headers': 'Origin, Content-Type, Accept,'
+                                         ' X-User-Path, X-User-Token',
+         'Access-Control-Allow-Credentials': 'true',
          'Access-Control-Allow-Methods': 'POST,GET,DELETE,PUT,OPTIONS'}
+
+
+def test_add_cors_headers_use_request_origin_as_allow_origin(request_):
+    from .subscriber import add_cors_headers
+    response = testing.DummyResource(headers={})
+    request_.headers = {'Origin': 'http://x.org'}
+    event = testing.DummyResource(response=response,
+                                  request=request_)
+    add_cors_headers(event)
+    assert response.headers['Access-Control-Allow-Origin'] == 'http://x.org'
 
 
 @fixture()

@@ -8,7 +8,6 @@ from pyramid.response import Response
 from BTrees.OOBTree import OOBTree
 from datetime import datetime
 from logging import getLogger
-from adhocracy_core.utils import get_user
 from adhocracy_core.sheets.principal import IUserBasic
 from adhocracy_core.interfaces import IResource
 from adhocracy_core.interfaces import ChangelogMetadata
@@ -98,10 +97,8 @@ def audit_resources_changes_callback(request: Request,
 
 
 def _get_user_info(request: Request) -> (str, str):
-    if not hasattr(request, 'authenticated_userid'):
-        return ('', '')  # ease scripting without user and testing
-    user = get_user(request)
-    if user is None:
+    user = request.user
+    if user is None:  # ease scripting without user and testing
         return ('', '')
     else:
         user_name = request.registry.content.get_sheet_field(user,

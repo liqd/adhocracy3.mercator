@@ -124,6 +124,7 @@ class TestUser:
 
     @mark.usefixtures('integration')
     def test_create(self, meta, registry, principals):
+        from pytz import timezone
         from zope.interface.verify import verifyObject
         from adhocracy_core import sheets
         appstructs = {
@@ -144,6 +145,7 @@ class TestUser:
         assert user.password.startswith('$2')
         assert user.tzname == 'UTC'
         assert user.roles == []
+        assert user.timezone == timezone(user.tzname)
 
 
 class TestGroups:
@@ -590,3 +592,24 @@ class TestDeletePasswordResets:
         mock_is_older.return_value = False
         self.call_fut(request_, 7)
         assert 'reset' in resets
+
+
+class TestGetUser:
+
+    def call_fut(self, *args):
+        from .principal import get_user
+        return get_user(*args)
+
+    def test_return_none_if_no_authenticated_user(self, request_):
+        request_.authenticated_userid = None
+        assert self.call_fut(request_) is None
+
+    def test_return_none_if_user_no_locator(self, request_):
+        request_.authenticated_userid = 'userid'
+        assert self.call_fut(request_) is None
+
+    def test_return_user_resource(self, request_, mock_user_locator):
+        user = testing.DummyResource()
+        request_.authenticated_userid = 'userid'
+        mock_user_locator.get_user_by_userid.return_value = user
+        assert self.call_fut(request_) == user

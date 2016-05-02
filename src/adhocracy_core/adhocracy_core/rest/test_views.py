@@ -920,6 +920,26 @@ class TestLoginUserName:
                                'user_path': 'http://example.com/',
                                'user_token': 'token'}
 
+    def test_post_with_cookie_authentication_policy(
+        self, request, context, mock_authpolicy):
+        mock_authpolicy.remember.return_value = [('Set-Cookie', 'value;'),
+                                                 ('X-User-Token', 'token')]
+        inst = self.make_one(context, request)
+        inst.post()
+        assert ('X-User-Token', 'token') not in request.response.headers.items()
+        assert ('Set-Cookie', 'value;') in request.response.headers.items()
+
+    def test_post_with_cookie_authentication_policy_and_https(
+        self, request, context, mock_authpolicy):
+        request.scheme = 'https'
+        mock_authpolicy.remember.return_value = [('Set-Cookie', 'value;'),
+                                                 ('X-User-Token', 'token')]
+        inst = self.make_one(context, request)
+        inst = self.make_one(context, request)
+        inst.post()
+        assert ('Set-Cookie', 'value;Secure;') in request.response.headers.items()
+
+
     def test_options(self, request, context):
         inst = self.make_one(context, request)
         assert inst.options() == {}

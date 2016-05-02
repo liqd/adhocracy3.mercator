@@ -63,6 +63,7 @@ def test_state_data_create():
     assert isinstance(inst['start_date'], schema.DateTime)
     assert isinstance(inst['end_date'], schema.DateTime)
     assert isinstance(inst['description'], schema.Text)
+    assert inst.bind(workflow=None).default == {}
 
 
 def test_state_data_list():
@@ -102,9 +103,10 @@ class TestDeferredStateValidator:
         assert validator.choices == []
 
     def test_return_next_states_list_if_workflow(self, node, kw):
-        kw['workflow'].get_next_states.return_value = ['state1']
+        kw['workflow'].get_next_states.return_value = ['state2']
+        kw['workflow'].state_of.return_value = 'state1'
         validator = self.call_fut(node, kw)
-        assert validator.choices == ['state1']
+        assert validator.choices == ['state1', 'state2']
         kw['workflow'].get_next_states.assert_called_with(kw['context'],
                                                           kw['request'])
 

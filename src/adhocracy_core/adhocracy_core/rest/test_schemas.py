@@ -36,6 +36,12 @@ def registry(registry_with_content):
     return registry_with_content
 
 
+@fixture
+def sub_node(node):
+    from copy import deepcopy
+    return deepcopy(node)
+
+
 def test_validate_request_data_decorator(context, request_, mocker):
     from . import validate_request_data
     schema_class = colander.MappingSchema
@@ -407,11 +413,6 @@ class TestAddPostRequestSubSchemas:
         request_.body = '{}'
         return request_
 
-    @fixture
-    def sub_node(self, node):
-        from copy import deepcopy
-        return deepcopy(node)
-
     def call_fut(self, node, kw):
         from adhocracy_core.rest.schemas import add_post_data_subschemas
         return add_post_data_subschemas(node, kw)
@@ -433,26 +434,15 @@ class TestAddPostRequestSubSchemas:
         kw['request'].body = json.dumps(data)
         self.call_fut(node, kw)
         assert node.children[0] is sub_node
-        assert node.children[0].name == ISheet.__identifier__
-        assert node.children[0].missing == colander.drop
 
-    def test_data_and_mandatory_sheets(self, node, kw, mock_sheet, sub_node):
-        mock_sheet.meta = mock_sheet.meta._replace(create_mandatory=True)
+    def test_multipart_formdata_request(self, node, kw, mock_sheet, sub_node):
         mock_sheet.get_schema_with_bindings.return_value = sub_node
-        kw['registry'].content.get_sheets_create.return_value = [mock_sheet]
-        data = {'content_type': IResource.__identifier__,
-                'data': {ISheet.__identifier__: {}}}
-        kw['request'].body = json.dumps(data)
-        self.call_fut(node, kw)
-        assert node.children[0].missing == colander.required
-
-    def test_multipart_formdata_request(self, node, kw, mock_sheet):
         kw['request'].content_type = 'multipart/form-data'
         kw['registry'].content.get_sheets_create.return_value = [mock_sheet]
         kw['request'].POST['content_type'] = IResource.__identifier__
         kw['request'].POST['data:' + ISheet.__identifier__] = {}
         self.call_fut(node, kw)
-        assert node.children[0].name == ISheet.__identifier__
+        assert node.children[0] is sub_node
 
     def test_invalid_request_content_type(self, node, kw):
         kw['request'].content_type = 'text/plain'
@@ -619,11 +609,12 @@ class TestAddPutRequestSubSchemasUnitTest:
         self.call_fut(node, kw)
         assert node.children == []
 
-    def test_data_and_sheets(self, node, kw, mock_sheet):
+    def test_data_and_sheets(self, node, kw, mock_sheet, sub_node):
+        mock_sheet.get_schema_with_bindings.return_value = sub_node
         kw['registry'].content.get_sheets_edit.return_value = [mock_sheet]
         kw['request'].body = json.dumps({'data': {ISheet.__identifier__: {}}})
         self.call_fut(node, kw)
-        assert node.children[0].name == ISheet.__identifier__
+        assert node.children[0] == sub_node
 
     def test_data_and_missing_sheet_data(self, node, kw, mock_sheet):
         kw['registry'].content.get_sheets_edit.return_value = [mock_sheet]
@@ -631,12 +622,13 @@ class TestAddPutRequestSubSchemasUnitTest:
         self.call_fut(node, kw)
         assert len(node.children) == 0
 
-    def test_multipart_formdata_request(self, node, kw, mock_sheet):
+    def test_multipart_formdata_request(self, node, kw, mock_sheet, sub_node):
+        mock_sheet.get_schema_with_bindings.return_value = sub_node
         kw['request'].content_type = 'multipart/form-data'
         kw['request'].registry.content.get_sheets_edit.return_value = [mock_sheet]
         kw['request'].POST['data:' + ISheet.__identifier__] = {}
         self.call_fut(node, kw)
-        assert node.children[0].name == ISheet.__identifier__
+        assert node.children[0] == sub_node
 
 
 class TestBatchRequestPath:

@@ -50,10 +50,6 @@ class TestCommentableSheet:
         setattr(inst.context, inst._annotation_key, data)
         assert inst.get()['comments_count'] == 4
 
-    def test_set_with_comments(self, inst):
-        inst.set({'comments': []})
-        assert not 'comments' in getattr(inst.context, inst._annotation_key)
-
     def test_set_initial_comments_count(self, inst):
         inst._get_data_appstruct = Mock(return_value={})
         inst.set({'comments_count': 4}, omit_readonly=False)

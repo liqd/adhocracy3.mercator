@@ -6,6 +6,7 @@ from collections import defaultdict
 from colander import deferred
 from colander import drop
 from colander import null
+from colander import required
 from persistent.mapping import PersistentMapping
 from pyramid.decorator import reify
 from pyramid.registry import Registry
@@ -50,6 +51,7 @@ class BaseResourceSheet:
         self.request = request
         self.creating = creating
         self.schema = meta.schema_class()
+        self.extra_js_url = ''  # used for html forms :mod:`adhocracy_core.sdi`
 
     def get_schema_with_bindings(self) -> colander.MappingSchema:
         schema = create_schema(self.meta.schema_class,
@@ -58,6 +60,9 @@ class BaseResourceSheet:
                                registry=self.registry,
                                creating=self.creating
                                )
+        schema.name = self.meta.isheet.__identifier__
+        is_mandatory = self.creating and self.meta.create_mandatory
+        schema.missing = required if is_mandatory else drop
         return schema
 
     @reify
@@ -179,6 +184,7 @@ class BaseResourceSheet:
         appstruct = self._omit_omit_keys(appstruct, omit)
         if omit_readonly:
             appstruct = self._omit_readonly_keys(appstruct)
+        appstruct = self._filter_unchanged_data(appstruct, appstruct_old)
         self._store_data(appstruct)
         self._store_references(appstruct,
                                self.registry,
@@ -192,7 +198,13 @@ class BaseResourceSheet:
                                           self.request)
             self.registry.notify(event)
         return bool(appstruct)
-        # TODO: only store struct if values have changed
+
+    def _filter_unchanged_data(self, new: dict, old: dict) -> dict:
+        changed = {}
+        for key, value in new.items():
+            if value != old[key]:
+                changed[key] = value
+        return changed
 
     def _omit_readonly_keys(self, appstruct: dict):
         omit_keys = tuple(self._fields['readonly'])
