@@ -30,18 +30,25 @@ export class Provider implements angular.IServiceProvider {
         factory : (resource) => any;  // values return either Dict or angular.IPromise<Dict>
         type? : string;
     }};
-    public templates : {[embedContext : string]: any};
     public customHeaders : {[processType : string]: string};
 
     constructor() {
         var self = this;
         this.defaults = {};
         this.specifics = {};
-        this.templates = {};
         this.customHeaders = {};
-        this.$get = ["$q", "$injector", "$location", "adhHttp", "adhConfig", "adhCredentials", "adhEmbed", "adhResourceUrlFilter",
-            ($q, $injector, $location, adhHttp, adhConfig, adhCredentials, adhEmbed, adhResourceUrlFilter) => new Service(
-                self, $q, $injector, $location, adhHttp, adhConfig, adhCredentials, adhEmbed, adhResourceUrlFilter)];
+        this.$get = [
+            "$q",
+            "$injector",
+            "$location",
+            "$templateRequest",
+            "adhHttp",
+            "adhConfig",
+            "adhCredentials",
+            "adhEmbed",
+            "adhResourceUrlFilter",
+            (...args) => AdhUtil.construct(Service, [self].concat(args))
+            ];
     }
 
     public default(
@@ -109,11 +116,6 @@ export class Provider implements angular.IServiceProvider {
             .specific(versionType, view, processType, embedContext, factory, "version");
     }
 
-    public template(embedContext : string, templateFn : any) : Provider {
-        this.templates[embedContext] = templateFn;
-        return this;
-    }
-
     public customHeader(processType : string, templateUrl : string) : Provider {
         this.customHeaders[processType] = templateUrl;
         return this;
@@ -177,14 +179,13 @@ export class Provider implements angular.IServiceProvider {
  */
 export class Service implements AdhTopLevelState.IAreaInput {
     public template : string;
-    private hasRun : boolean;
-    private templateDeferred;
 
     constructor(
         private provider : Provider,
         private $q : angular.IQService,
         private $injector : angular.auto.IInjectorService,
         private $location : angular.ILocationService,
+        private $templateRequest : angular.ITemplateRequestService,
         private adhHttp : AdhHttp.Service<any>,
         private adhConfig : AdhConfig.IService,
         private adhcredentials : AdhCredentials.Service,
@@ -192,8 +193,6 @@ export class Service implements AdhTopLevelState.IAreaInput {
         private adhResourceUrlFilter
     ) {
         this.template = "<adh-resource-area></adh-resource-area>";
-        this.hasRun = false;
-        this.templateDeferred = this.$q.defer();
     }
 
     private getDefaults(resourceType : string, view : string, processType : string, embedContext : string) : Dict {
@@ -291,29 +290,9 @@ export class Service implements AdhTopLevelState.IAreaInput {
         });
     }
 
-    private resolveTemplate(embedContext) : void {
-        var templateFn;
-        if (this.provider.templates.hasOwnProperty(embedContext)) {
-            templateFn = this.provider.templates[embedContext];
-        } else {
-            var templateUrl = this.adhConfig.pkg_path + pkgLocation + "/ResourceArea.html";
-            templateFn = ["$templateRequest", ($templateRequest) => $templateRequest(templateUrl)];
-        }
-
-        if (typeof templateFn === "string") {
-            var templateString = templateFn;
-            templateFn = () => templateString;
-        }
-
-        this.$q.when(this.$injector.invoke(templateFn)).then((template) => {
-            this.templateDeferred.resolve(template);
-        }, (reason) => {
-            this.templateDeferred.reject(reason);
-        });
-    }
-
     public getTemplate() : angular.IPromise<string> {
-        return this.templateDeferred.promise;
+        var templateUrl = this.adhConfig.pkg_path + pkgLocation + "/ResourceArea.html";
+        return this.$templateRequest(templateUrl);
     }
 
     public has(resourceType : string, view : string = "", processType : string = "") : boolean {
@@ -336,11 +315,6 @@ export class Service implements AdhTopLevelState.IAreaInput {
 
         var view : string = "";
         var embedContext = this.adhEmbed.getContext();
-
-        if (!this.hasRun) {
-            this.hasRun = true;
-            this.resolveTemplate(embedContext);
-        }
 
         // if path has a view segment
         if (_.last(segs).match(/^@/)) {

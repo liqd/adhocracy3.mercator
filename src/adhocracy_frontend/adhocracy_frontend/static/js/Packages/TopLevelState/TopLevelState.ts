@@ -440,7 +440,7 @@ export var spaceDirective = (adhTopLevelState : Service) => {
 };
 
 
-export var headerDirective = (
+export var defaultHeaderDirective = (
     adhConfig : AdhConfig.IService,
     adhTopLevelState : Service
 ) => {
