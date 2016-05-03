@@ -15,7 +15,7 @@ export var register = (angular) => {
             AdhTrackingModule.moduleName
         ])
         .provider("adhTopLevelState", AdhTopLevelState.Provider)
-        .directive("adhHeader", ["adhConfig", "adhTopLevelState", AdhTopLevelState.headerDirective])
+        .directive("adhHeader", ["adhConfig", "adhEmbed", "adhTopLevelState", AdhTopLevelState.headerDirective])
         .directive("adhPageWrapper", ["adhConfig", AdhTopLevelState.pageWrapperDirective])
         .directive("adhRoutingError", ["adhConfig", AdhTopLevelState.routingErrorDirective])
         .directive("adhSpace", ["adhTopLevelState", AdhTopLevelState.spaceDirective])

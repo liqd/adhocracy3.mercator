@@ -19,6 +19,7 @@ export class Provider {
     protected contextAliases : {[key : string]: string};
     protected directiveAliases : {[key : string]: string};
     public $get;
+    public headerUrl;
 
     /**
      * List of directive names that can be embedded.  names must be in
@@ -44,6 +45,8 @@ export class Provider {
         this.contextAliases = {};
 
         this.$get = ["adhConfig", (adhConfig) => new Service(this, adhConfig)];
+
+        this.headerUrl = ["adhConfig", (adhConfig) => adhConfig.pkg_path + "TopLevelState/templates/Header.html"];
     }
 
     public registerDirective(name : string, aliases : string[] = []) : Provider {

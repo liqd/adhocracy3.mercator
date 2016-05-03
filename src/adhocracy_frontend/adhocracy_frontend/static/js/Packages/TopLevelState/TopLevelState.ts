@@ -21,6 +21,7 @@ import * as _ from "lodash";
 
 import * as AdhConfig from "../Config/Config";
 import * as AdhCredentials from "../User/Credentials";
+import * as AdhEmbed from "../Embed/Embed";
 import * as AdhEventManager from "../EventManager/EventManager";
 import * as AdhTracking from "../Tracking/Tracking";
 
@@ -442,11 +443,12 @@ export var spaceDirective = (adhTopLevelState : Service) => {
 
 export var headerDirective = (
     adhConfig : AdhConfig.IService,
+    adhEmbedProvider : AdhEmbed.Provider,
     adhTopLevelState : Service
 ) => {
     return {
         restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/templates/Header.html",
+        templateUrl: adhEmbedProvider.headerUrl,
         scope: {},
         link: (scope) => {
             scope.hideHeader = adhConfig.custom["hide_header"];
