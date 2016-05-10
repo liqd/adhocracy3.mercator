@@ -4,7 +4,7 @@ import * as AdhTopLevelStateModule from "../../TopLevelState/Module";
 
 import * as AdhDebateWorkbenchModule from "../../DebateWorkbench/Module";
 import * as AdhMeinberlinAlexanderplatzWorkbenchModule from "../Alexanderplatz/Workbench/Module";
-import * as AdhMeinberlinBuergerhaushaltWorkbenchModule from "../Buergerhaushalt/Workbench/Module";
+import * as AdhMeinberlinIdeaCollectionModule from "../IdeaCollection/Module";
 import * as AdhMeinberlinKiezkasseWorkbenchModule from "../Kiezkasse/Workbench/Module";
 
 import * as AdhEmbed from "../../Embed/Embed";
@@ -12,7 +12,7 @@ import * as AdhResourceArea from "../../ResourceArea/ResourceArea";
 
 import * as AdhDebateWorkbench from "../../DebateWorkbench/DebateWorkbench";
 import * as AdhMeinberlinAlexanderplatzWorkbench from "../Alexanderplatz/Workbench/Workbench";
-import * as AdhMeinberlinBuergerhaushaltWorkbench from "../Buergerhaushalt/Workbench/Workbench";
+import * as AdhMeinberlinIdeaCollection from "../IdeaCollection/IdeaCollection";
 import * as AdhMeinberlinKiezkasseWorkbench from "../Kiezkasse/Workbench/Workbench";
 
 import RIAlexanderplatzProcess from "../../../Resources_/adhocracy_meinberlin/resources/alexanderplatz/IProcess";
@@ -31,7 +31,7 @@ export var register = (angular) => {
             AdhDebateWorkbenchModule.moduleName,
             AdhEmbedModule.moduleName,
             AdhMeinberlinAlexanderplatzWorkbenchModule.moduleName,
-            AdhMeinberlinBuergerhaushaltWorkbenchModule.moduleName,
+            AdhMeinberlinIdeaCollectionModule.moduleName,
             AdhMeinberlinKiezkasseWorkbenchModule.moduleName,
             AdhResourceAreaModule.moduleName,
             AdhTopLevelStateModule.moduleName
@@ -45,7 +45,7 @@ export var register = (angular) => {
                 RICollaborativeTextProcess, "mein.berlin.de")(adhResourceAreaProvider);
             AdhMeinberlinAlexanderplatzWorkbench.registerRoutes(
                 RIAlexanderplatzProcess.content_type, "mein.berlin.de")(adhResourceAreaProvider);
-            AdhMeinberlinBuergerhaushaltWorkbench.registerRoutes(
+            AdhMeinberlinIdeaCollection.registerRoutes(
                 RIBuergerhaushaltProcess.content_type, "mein.berlin.de")(adhResourceAreaProvider);
             AdhMeinberlinKiezkasseWorkbench.registerRoutes(
                 RIKiezkasseProcess.content_type, "mein.berlin.de")(adhResourceAreaProvider);

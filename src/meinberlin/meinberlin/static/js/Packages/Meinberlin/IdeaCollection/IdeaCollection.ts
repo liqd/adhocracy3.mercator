@@ -1,32 +1,32 @@
-/// <reference path="../../../../../lib2/types/angular.d.ts"/>
+/// <reference path="../../../../lib2/types/angular.d.ts"/>
 
-import * as AdhConfig from "../../../Config/Config";
-import * as AdhHttp from "../../../Http/Http";
-import * as AdhMovingColumns from "../../../MovingColumns/MovingColumns";
-import * as AdhPermissions from "../../../Permissions/Permissions";
-import * as AdhResourceArea from "../../../ResourceArea/ResourceArea";
-import * as AdhTopLevelState from "../../../TopLevelState/TopLevelState";
-import * as AdhUtil from "../../../Util/Util";
+import * as AdhConfig from "../../Config/Config";
+import * as AdhHttp from "../../Http/Http";
+import * as AdhMovingColumns from "../../MovingColumns/MovingColumns";
+import * as AdhPermissions from "../../Permissions/Permissions";
+import * as AdhResourceArea from "../../ResourceArea/ResourceArea";
+import * as AdhTopLevelState from "../../TopLevelState/TopLevelState";
+import * as AdhUtil from "../../Util/Util";
 
-import RIComment from "../../../../Resources_/adhocracy_core/resources/comment/IComment";
-import RICommentVersion from "../../../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
-import RIBuergerhaushaltProcess from "../../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProcess";
-import RIProposal from "../../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposal";
-import RIProposalVersion from "../../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposalVersion";
-import * as SIComment from "../../../../Resources_/adhocracy_core/sheets/comment/IComment";
-import * as SIWorkflow from "../../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
+import RIComment from "../../../Resources_/adhocracy_core/resources/comment/IComment";
+import RICommentVersion from "../../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
+import RIBuergerhaushaltProcess from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProcess";
+import RIProposal from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposal";
+import RIProposalVersion from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposalVersion";
+import * as SIComment from "../../../Resources_/adhocracy_core/sheets/comment/IComment";
+import * as SIWorkflow from "../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
-export var pkgLocation = "/Meinberlin/Buergerhaushalt/Workbench";
+export var pkgLocation = "/Meinberlin/IdeaCollection";
 
 
-export var buergerhaushaltWorkbenchDirective = (
+export var workbenchDirective = (
     adhTopLevelState : AdhTopLevelState.Service,
     adhConfig : AdhConfig.IService,
     adhHttp : AdhHttp.Service<any>
 ) => {
     return {
         restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/Workbench.html",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/IdeaCollection.html",
         link: (scope) => {
             scope.$on("$destroy", adhTopLevelState.bind("view", scope));
             scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
@@ -67,13 +67,13 @@ export var buergerhaushaltWorkbenchDirective = (
     };
 };
 
-export var buergerhaushaltProposalDetailColumnDirective = (
+export var proposalDetailColumnDirective = (
     adhConfig : AdhConfig.IService,
     adhPermissions : AdhPermissions.Service
 ) => {
     return {
         restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/BuergerhaushaltProposalDetailColumn.html",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalDetailColumn.html",
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
@@ -82,12 +82,12 @@ export var buergerhaushaltProposalDetailColumnDirective = (
     };
 };
 
-export var buergerhaushaltProposalCreateColumnDirective = (
+export var proposalCreateColumnDirective = (
     adhConfig : AdhConfig.IService
 ) => {
     return {
         restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/BuergerhaushaltProposalCreateColumn.html",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalCreateColumn.html",
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["processUrl"]);
@@ -95,12 +95,12 @@ export var buergerhaushaltProposalCreateColumnDirective = (
     };
 };
 
-export var buergerhaushaltProposalEditColumnDirective = (
+export var proposalEditColumnDirective = (
     adhConfig : AdhConfig.IService
 ) => {
     return {
         restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/BuergerhaushaltProposalEditColumn.html",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalEditColumn.html",
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
@@ -108,12 +108,12 @@ export var buergerhaushaltProposalEditColumnDirective = (
     };
 };
 
-export var buergerhaushaltDetailColumnDirective = (
+export var detailColumnDirective = (
     adhConfig : AdhConfig.IService
 ) => {
     return {
         restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/BuergerhaushaltDetailColumn.html",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/DetailColumn.html",
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["processUrl"]);

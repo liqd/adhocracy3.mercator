@@ -1,0 +1,13 @@
+<div data-adh-moving-columns="" class="moving-columns">
+    <adh-moving-column>
+        <adh-meinberlin-idea-collection-detail-column></adh-meinberlin-idea-collection-detail-column>
+    </adh-moving-column>
+    <adh-moving-column>
+        <adh-meinberlin-idea-collection-proposal-create-column data-ng-if="views.process === 'create_proposal'"></adh-meinberlin-idea-collection-proposal-create-column>
+        <adh-meinberlin-idea-collection-proposal-edit-column data-ng-if="views.proposal === 'edit'"></adh-meinberlin-idea-collection-proposal-edit-column>
+        <adh-meinberlin-idea-collection-proposal-detail-column data-ng-if="views.process !== 'create_proposal' && views.proposal !== 'edit'"></adh-meinberlin-idea-collection-proposal-detail-column>
+    </adh-moving-column>
+    <adh-moving-column>
+        <adh-comment-column></adh-comment-column>
+    </adh-moving-column>
+</div>
