@@ -13,6 +13,7 @@ import * as AdhMeinberlinProposalModule from "../Proposal/Module";
 import * as AdhProcess from "../../Process/Process";
 
 import RIBuergerhaushaltProcess from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProcess";
+import RIIdeaCollectionProcess from "../../../Resources_/adhocracy_meinberlin/resources/idea_collection/IProcess";
 import RIKiezkasseProcess from "../../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProcess";
 
 import * as IdeaCollection from "./IdeaCollection";
@@ -38,11 +39,15 @@ export var register = (angular) => {
         ])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider, adhConfig) => {
             var buergerhaushaltType : string = RIBuergerhaushaltProcess.content_type;
+            var ideaCollectionType: string = RIIdeaCollectionProcess.content_type;
             var kiezkasseType : string = RIKiezkasseProcess.content_type;
             var customHeader = adhConfig.pkg_path + IdeaCollection.pkgLocation + "/CustomHeader.html";
 
             adhResourceAreaProvider.customHeader(buergerhaushaltType, customHeader);
             IdeaCollection.registerRoutesFactory(buergerhaushaltType)(buergerhaushaltType)(adhResourceAreaProvider);
+
+            adhResourceAreaProvider.customHeader(ideaCollectionType, customHeader);
+            IdeaCollection.registerRoutesFactory(ideaCollectionType)(ideaCollectionType)(adhResourceAreaProvider);
 
             adhResourceAreaProvider.customHeader(kiezkasseType, customHeader);
             IdeaCollection.registerRoutesFactory(kiezkasseType)(kiezkasseType)(adhResourceAreaProvider);
@@ -52,7 +57,11 @@ export var register = (angular) => {
                 return $q.when("<adh-meinberlin-idea-collection-workbench data-is-buergerhaushalt=\"true\">" +
                     "</adh-meinberlin-idea-collection-workbench>");
             }];
-            adhProcessProvider.templateFactories[RIKiezkasseProcess.content_type] = ["$q", ($q : angular.IQService) => {
+            adhProcessProvider.templateFactories[RIIdeaCollectionProcess.content_type] = ["$q", ($q : angular.IQService) => {
+                return $q.when("<adh-meinberlin-idea-collection-workbench>" +
+                    "</adh-meinberlin-idea-collection-workbench>");
+            }];
+            adhProcessProvider.templateFactories[RIKiezkasseProcess.content_type] = ["$q", ($q: angular.IQService) => {
                 return $q.when("<adh-meinberlin-idea-collection-workbench data-is-kiezkasse=\"true\">" +
                     "</adh-meinberlin-idea-collection-workbench>");
             }];

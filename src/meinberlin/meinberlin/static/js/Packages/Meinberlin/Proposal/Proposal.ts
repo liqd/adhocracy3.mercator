@@ -346,6 +346,7 @@ export var createDirective = (
     return {
         restrict: "E",
         scope: {
+            path: "@",
             isKiezkasse: "=?",
             isBuergerhaushalt: "=?"
         },
@@ -359,7 +360,7 @@ export var createDirective = (
             scope.data.lat = undefined;
             scope.data.lng = undefined;
 
-            var processUrl = adhTopLevelState.get("processUrl");
+            var processUrl = scope.path;
             adhHttp.get(processUrl).then((process) => {
                 var locationUrl = process.data[SILocationReference.nick]["location"];
                 adhHttp.get(locationUrl).then((location) => {

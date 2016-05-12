@@ -11,6 +11,7 @@ import * as AdhProcess from "../../../Process/Process";
 import * as AdhUtil from "../../../Util/Util";
 
 import RIBuergerhaushaltProposalVersion from "../../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposalVersion";
+import RIGeoProposalVersion from "../../../../Resources_/adhocracy_core/resources/proposal/IGeoProposalVersion";
 import RIKiezkasseProposalVersion from "../../../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProposalVersion";
 
 import * as SIImageReference from "../../../../Resources_/adhocracy_core/sheets/image/IImageReference";
@@ -53,8 +54,10 @@ export var detailDirective = (
 
                         if (scope.isBuergerhaushalt) {
                             scope.contentType = RIBuergerhaushaltProposalVersion.content_type;
-                        } else {
+                        } else if (scope.isKiezkasse) {
                             scope.contentType = RIKiezkasseProposalVersion.content_type;
+                        } else {
+                            scope.contentType = RIGeoProposalVersion.content_type;
                         }
                     });
                 }
