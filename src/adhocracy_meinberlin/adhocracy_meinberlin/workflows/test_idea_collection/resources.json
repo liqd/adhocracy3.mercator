@@ -3,6 +3,8 @@
   "data": {"adhocracy_core.sheets.name.IName":
            {"name": "idea_collection"},
            "adhocracy_core.sheets.title.ITitle":
-           {"title": "Idea collection participation process"}
+           {"title": "Idea collection participation process"},
+           "adhocracy_core.sheets.geo.ILocationReference":
+           {"location": "/locations/alt-treptow"}
           }}
 ]
