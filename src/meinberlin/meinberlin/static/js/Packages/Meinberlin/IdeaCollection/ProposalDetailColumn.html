@@ -3,12 +3,15 @@
         <div class="moving-column-tab">
             <i class="icon-document moving-column-icon"></i>
         </div>
-
         <div class="moving-column-menu-nav">
             <a class="moving-column-menu-nav-button" data-ng-href="{{ processUrl | adhResourceUrl }}" title="{{ 'TR__CLOSE' | translate }}"><i class="icon-x moving-column-menu-nav-icon"></i></a>
         </div>
     </div>
-
+    <div class="moving-column-tab" data-ng-switch-when="abuse">
+        <span >
+            <i class="icon-flag moving-column-icon"></i>
+        </span>
+    </div>
     <a class="moving-column-expand" data-ng-switch-when="collapsed" data-ng-href="{{ proposalUrl | adhParentPath | adhResourceUrl }}">
         <div class="moving-column-tab">
             <i class="icon-document moving-column-icon"></i>
@@ -16,15 +19,15 @@
     </a>
 
     <div data-ng-switch-when="body">
-        <adh-resource-actions
-            data-resource-path="{{proposalUrl}}"
-            data-parent-path="true"
-            data-edit="true"
-            data-print="true">
-        </adh-resource-actions>
-
         <adh-recompile-on-change
             data-value="{{proposalUrl}}">
+            <adh-resource-actions
+                data-resource-path="{{proposalUrl}}"
+                data-parent-path="true"
+                data-edit="true"
+                data-print="true"
+                data-report="true">
+            </adh-resource-actions>
             <adh-meinberlin-proposal-detail
                 data-ng-if="proposalUrl"
                 data-is-buergerhaushalt="isBuergerhaushalt"
@@ -33,4 +36,11 @@
             </adh-meinberlin-proposal-detail>
         </adh-recompile-on-change>
     </div>
+
+    <adh-report-abuse
+        class="report-abuse"
+        data-ng-switch-when="overlays"
+        data-ng-if="overlay === 'abuse'"
+        data-url="{{ proposalUrl | adhResourceUrl | adhCanonicalUrl }}">
+    </adh-report-abuse>
 </div>
