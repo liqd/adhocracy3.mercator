@@ -2,6 +2,8 @@
 
 import * as AdhResourceUtil from "./ResourceUtil";
 
+import RIProcess from "../../Resources_/adhocracy_core/resources/process/IProcess";
+import RIPool from "../../Resources_/adhocracy_core/interfaces/IPool";
 
 export var register = () => {
     describe("ResourceUtil", () => {
@@ -145,5 +147,34 @@ export var register = () => {
                 expect(resource.data["adhocracy_core.sheets.versions.IVersionable"].follows).toEqual(["/old/path"]);
             });
         });
+
+        describe("isInstanceOf", () => {
+            var mockMetaApiData = {};
+            mockMetaApiData[RIProcess.content_type] = RIProcess;
+            mockMetaApiData[RIPool.content_type] = RIPool;
+
+            var adhMetaApiMock = jasmine.createSpyObj("adhMetaApi", ["resource"]);
+            adhMetaApiMock.resource.and.callFake((name) => mockMetaApiData[name]);
+
+            it("checks if the provided object is an instance", () => {
+                var resource = {
+                    content_type: RIProcess.content_type,
+                    path: "",
+                    data: {}
+                };
+                AdhResourceUtil.isInstanceOf(resource, RIProcess.content_type, adhMetaApiMock);
+            });
+
+            it("checks if provide object is a sub type", () => {
+                var resource = {
+                    content_type: RIPool.content_type,
+                    path: "",
+                    data: {}
+                };
+                AdhResourceUtil.isInstanceOf(resource, RIPool.content_type, adhMetaApiMock);
+            });
+        });
+
+
     });
 };
