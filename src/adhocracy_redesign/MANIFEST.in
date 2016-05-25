@@ -1,0 +1,3 @@
+include RELEASE-VERSION version.py
+include *.txt *.ini *.cfg *.rst
+recursive-include adhocracy_redesign *.ico *.png *.css *.gif *.jpg *.pt *.txt *.mak *.mako *.js *.html *.xml *.mo *.po
