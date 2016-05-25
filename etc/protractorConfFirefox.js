@@ -2,7 +2,7 @@ var common = require("./protractorCommon.js");
 
 var local = {
     capabilities: {
-        browserName: "chrome"
+        browserName: "firefox"
     }
 };
 
