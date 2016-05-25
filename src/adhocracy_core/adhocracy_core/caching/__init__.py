@@ -15,9 +15,11 @@ from adhocracy_core.interfaces import IHTTPCacheStrategy
 from adhocracy_core.interfaces import IResource
 from adhocracy_core.exceptions import ConfigurationError
 from adhocracy_core.resources.asset import IAssetDownload
+from adhocracy_core.sheets.workflow import IWorkflowAssignment
 from adhocracy_core.utils import get_reason_if_blocked
 from adhocracy_core.utils import exception_to_str
 from adhocracy_core.utils import extract_events_from_changelog_metadata
+from adhocracy_core.utils import get_sheet_field
 
 
 DISABLED_VIEWS_OR_METHODS = ['PATCH', 'POST', 'PUT']
@@ -237,6 +239,15 @@ def etag_blocked(context: IResource, request: IRequest) -> str:
     return str(reason)
 
 
+def etag_workflow(context: IResource, request: IRequest) -> str:
+    """Return `resource` workflow status."""
+    status = None
+    if IWorkflowAssignment.providedBy(context):
+        status = get_sheet_field(context, IWorkflowAssignment,
+                                 'workflow_state', registry=request.registry)
+    return str(status)
+
+
 @implementer(IHTTPCacheStrategy)
 class HTTPCacheStrategyWeakAdapter(HTTPCacheStrategyBaseAdapter):
     """Weak strategy adapter to set http cache header.
@@ -251,7 +262,7 @@ class HTTPCacheStrategyWeakAdapter(HTTPCacheStrategyBaseAdapter):
     proxy_max_age = 60 * 60 * 24 * 30 * 12
     vary = ('Accept-Encoding', 'X-User-Path', 'X-User-Token')
     etags = (etag_backrefs, etag_descendants, etag_modified, etag_userid,
-             etag_blocked)
+             etag_blocked, etag_workflow)
 
 
 @implementer(IHTTPCacheStrategy)

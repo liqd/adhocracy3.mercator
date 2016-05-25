@@ -266,6 +266,21 @@ def test_etag_changed_backrefs_without_counter(context):
     assert etag_backrefs(context, None) == 'None'
 
 
+def test_etag_workflow_without_workflow(context):
+    from . import etag_workflow
+    assert etag_workflow(context, None) == 'None'
+
+
+def test_etag_workflow(registry_with_content, mock_sheet, request_):
+    from . import etag_workflow
+    from adhocracy_core.sheets.workflow import IWorkflowAssignment
+    context = testing.DummyResource(__provides__=IWorkflowAssignment)
+    request_.registry = registry_with_content
+    mock_sheet.get.return_value = {'workflow_state': 'draft'}
+    registry_with_content.content.get_sheet.return_value = mock_sheet
+    assert etag_workflow(context, request_) == 'draft'
+
+
 class TestHTTPCacheStrategyWeakAdapter:
 
     @fixture
@@ -277,13 +292,13 @@ class TestHTTPCacheStrategyWeakAdapter:
         from zope.interface.verify import verifyObject
         from adhocracy_core.interfaces import IHTTPCacheStrategy
         from . import etag_backrefs, etag_descendants, etag_modified, \
-            etag_userid, etag_blocked
+            etag_userid, etag_blocked, etag_workflow
         assert verifyObject(IHTTPCacheStrategy, inst)
         assert inst.browser_max_age == 0
         assert inst.proxy_max_age == 31104000
         assert inst.vary == ('Accept-Encoding', 'X-User-Path', 'X-User-Token')
         assert inst.etags == (etag_backrefs, etag_descendants, etag_modified,
-                              etag_userid, etag_blocked)
+                              etag_userid, etag_blocked, etag_workflow)
 
 
 class TestHTTPCacheStrategyStrongAdapter:
@@ -379,7 +394,7 @@ class TestIntegrationCaching:
              HTTPCacheMode.without_proxy_cache.name
         resp = app_user.get('/', status=200)
         assert resp.headers['Cache-control'] == 'max-age=0, must-revalidate'
-        assert resp.headers['etag'] == '"None|None|None|None|None"'
+        assert resp.headers['etag'] == '"None|None|None|None|None|None"'
 
     def test_strategy_with_mode_proxy_cache_get(self, app_user, registry):
         from adhocracy_core.interfaces import HTTPCacheMode
@@ -389,7 +404,7 @@ class TestIntegrationCaching:
         assert resp.headers['Cache-control'] ==\
                'max-age=0, proxy-revalidate, s-maxage=31104000'
         assert resp.headers['Vary'] == 'Accept-Encoding, X-User-Path, X-User-Token'
-        assert resp.headers['etag'] == '"None|None|None|None|None"'
+        assert resp.headers['etag'] == '"None|None|None|None|None|None"'
 
     def test_strategy_modified_if_modified_since_request(self, app_user,
                                                          context):
@@ -416,14 +431,14 @@ class TestIntegrationCaching:
 
     def test_strategy_not_modified_if_none_match_request(self, app_user):
         resp = app_user.get('/', status=304, headers={'If-None-Match':
-                                                      'None|None|None|None|None'})
+                                                      'None|None|None|None|None|None'})
         assert resp.status == '304 Not Modified'
 
     def test_strategy_ok_if_none_match_request_without_etag(self, app_user):
         from adhocracy_core.caching import HTTPCacheStrategyWeakAdapter
         HTTPCacheStrategyWeakAdapter.etags = tuple()  # braking test isolation
         resp = app_user.get('/', status=200, headers={'If-None-Match':
-                                                      'None|None|None|None|None'})
+                                                      'None|None|None|None|None|None'})
         assert resp.status == '200 OK'
 
 
