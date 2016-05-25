@@ -1,5 +1,6 @@
 {
-    "TR__ACTIVATION_CLOSE_THIS_TAB_AND_PROCEED": "Thank you for your registration. Your account has been activated. You can now close this tab and go back to {{siteName}}.",
+    "TR__ACTIVATION_CLOSE_THIS_TAB_AND_PROCEED": "Thank you for your registration. Your account has been activated. You can now close this tab and go back to [[link:{{siteName}}]].",
+    "TR__ACTIVATION_SUCCESS_GO_HOME": "Thank you for your registration. Your account has been activated. You may now proceed to [[link:{{siteName}}]].",
     "TR__ACTIVATION_ERROR_1": "We will send you a new authentification link within the next 24h. Please check your mail and SPAM meanwhile.",
     "TR__ACTIVATION_ERROR_2": "Please excuse the inconvience and make sure you activate your account within the next 6 days.",
     "TR__ACTIVATION_ERROR_3": "Thanks!",
