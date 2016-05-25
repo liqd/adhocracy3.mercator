@@ -15,6 +15,7 @@ requires = [
     'pyramid_debugtoolbar',
     'pyramid_exclog',
     'pyramid_bpython',
+    'pyramid_jwt',
     'gunicorn',
     'substanced',
     'pyramid_tm',

@@ -676,6 +676,13 @@ def add_canbadge_sheet_to_users(root, registry):  # pragma: no cover
 
 
 @log_migration
+def remove_token_storage(root, registry):  # pragma: no cover
+    """Remove storage for authentication tokens, not used anymore."""
+    if hasattr(root, '_tokenmanager_storage'):
+        delattr(root, '_tokenmanager_storage')
+
+
+@log_migration
 def allow_create_asset_for_users(root, registry):  # pragma: no cover
     """Allow all users to create_assets inside the users service."""
     users = find_service(root, 'principals', 'users')
@@ -725,3 +732,4 @@ def includeme(config):  # pragma: no cover
     config.add_evolution_step(add_canbadge_sheet_to_users)
     config.add_evolution_step(allow_create_asset_for_users)
     config.add_evolution_step(update_workflow_state_acl_for_all_resources)
+    config.add_evolution_step(remove_token_storage)

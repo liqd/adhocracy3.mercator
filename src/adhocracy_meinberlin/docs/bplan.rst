@@ -64,24 +64,22 @@ The following API calls are required to implement the process:
 
 **Initialization**
 
-For the example API calls an organisation "orga" is created.
-The organization for the B-Plan needs to exist beforehand in the a3
-platform.
+
+Start Adhocracy test application::
 
     >>> from webtest import TestApp
-    >>> from adhocracy_core.testing import god_header
-    >>> app_router = getfixture('app_router')
+    >>> from adhocracy_core.testing import god_login
+    >>> from adhocracy_core.testing import god_password
+    >>> log = getfixture('log')
+    >>> app_router = getfixture('app_router_filestorage')
     >>> testapp = TestApp(app_router)
     >>> rest_url = 'http://localhost'
-    >>> data = {'content_type':
-    ...                'adhocracy_core.resources.organisation.IOrganisation',
-    ...         'data': {
-    ...             'adhocracy_core.sheets.name.IName':
-    ...                 {'name': 'orga'}
-    ...         }}
-    >>> resp = testapp.post_json(rest_url + '/', data, headers=god_header)
+    >>> data = {'name': god_login,
+    ...         'password': god_password}
+    >>> resp = testapp.post_json(rest_url + '/login_username', data).json
+    >>> god_header = {'X-User-Token': resp['user_token']}
 
-A working image url is needed to test referencing external images.
+A working image url is needed to test referencing external images::
 
     >>> import os
     >>> import adhocracy_core
@@ -91,6 +89,18 @@ A working image url is needed to test referencing external images.
     >>> httpserver.serve_content(open(test_image_path, 'rb').read())
     >>> httpserver.headers['ContentType'] = 'image/png'
     >>> test_image_url = httpserver.url
+
+For the example API calls an organisation "orga" is created.
+The organization for the B-Plan needs to exist beforehand in the a3
+platform::
+
+    >>> data = {'content_type':
+    ...                'adhocracy_core.resources.organisation.IOrganisation',
+    ...         'data': {
+    ...             'adhocracy_core.sheets.name.IName':
+    ...                 {'name': 'orga'}
+    ...         }}
+    >>> resp = testapp.post_json(rest_url + '/', data, headers=god_header)
 
 
 **Login**::

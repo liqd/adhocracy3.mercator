@@ -3,7 +3,7 @@ from pytest import fixture
 
 
 @fixture(scope='class', autouse=True)  # autouse needed to make the doctest run
-def app_router(app_settings_filestorage):
+def app_router_filestorage(app_settings_filestorage):
     """Return the test wsgi application using a DB with file storage."""
     import adhocracy_meinberlin
     from adhocracy_core.testing import make_configurator

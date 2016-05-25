@@ -7,16 +7,9 @@ Abuse and Censorship
 Prerequisites
 -------------
 
-Some imports to work with rest api calls::
-
-    >>> from adhocracy_core.testing import god_header
-
 Start Adhocracy testapp::
 
-    >>> from webtest import TestApp
-    >>> app_router = getfixture('app_router')
-    >>> testapp = TestApp(app_router)
-    >>> rest_url = 'http://localhost'
+    >>> anonymous = getfixture('app_anonymous')
     >>> log = getfixture('log')
 
 Reporting bad content
@@ -27,7 +20,7 @@ a URL and a remark::
 
     >>> a = {'url': 'http://localhost/frontend/adhocracy',
     ...      'remark': 'i don\'t like the way this pool contains everything.'}
-    >>> resp_data = testapp.post_json(rest_url + "/report_abuse", a)
+    >>> resp_data = anonymous.post('/report_abuse', a)
     >>> resp_data.status_code
     200
     >>> resp_data.text

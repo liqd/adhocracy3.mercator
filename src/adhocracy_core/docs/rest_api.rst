@@ -15,8 +15,9 @@ Some imports to work with rest api calls::
     >>> import os
     >>> import requests
     >>> from pprint import pprint
-    >>> from adhocracy_core.testing import god_header
     >>> from adhocracy_core.testing import god_path
+    >>> from adhocracy_core.testing import god_login
+    >>> from adhocracy_core.testing import god_password
 
 Start Adhocracy testapp::
 
@@ -25,6 +26,14 @@ Start Adhocracy testapp::
     >>> app_router = getfixture('app_router')
     >>> testapp = TestApp(app_router)
     >>> rest_url = 'http://localhost'
+
+
+Login::
+
+    >>> data = {'name': god_login,
+    ...         'password': god_password}
+    >>> resp = testapp.post_json(rest_url + '/login_username', data).json
+    >>> god_header = {'X-User-Token': resp['user_token']}
 
 .. _api-resource-structure:
 
