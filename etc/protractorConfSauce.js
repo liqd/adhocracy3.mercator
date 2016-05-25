@@ -15,23 +15,23 @@ exports.config = {
     sauceKey: "77600374-1617-4d7b-b1b6-9fd82ddfe89c",
 
     capabilities: {
-        "browserName": "chrome",
+        browserName: "chrome",
         "tunnel-identifier": process.env.TRAVIS_JOB_NUMBER,
-        "build": process.env.TRAVIS_BUILD_NUMBER,
-        "name": name
+        build: process.env.TRAVIS_BUILD_NUMBER,
+        name: name
     },
     beforeLaunch: function() {
         exec("bin/supervisord");
-        exec("bin/supervisorctl restart adhocracy_test:test_zeo test_backend_with_ws adhocracy_test:test_autobahn adhocracy_test:test_frontend");
+        exec("bin/supervisorctl restart adhocracy_test:");
         exec("src/current/current/tests/acceptance/setup_test.sh");
     },
     afterLaunch: function() {
-        exec("bin/supervisorctl stop adhocracy_test:test_zeo test_backend_with_ws adhocracy_test:test_autobahn adhocracy_test:test_frontend");
-        exec("rm -rf var/test_zeodata/Data.fs* var/test_zeodata/blobs");
+        exec("bin/supervisorctl stop adhocracy_test:");
+        exec("rm -rf var/db/test/Data.fs* var/db/test/blobs/* var/mail/new/* ");
     },
     onPrepare: function() {
         var getMailQueuePath = function() {
-            var testConf = ini.parse(fs.readFileSync("etc/test_with_ws.ini", "utf-8"));
+            var testConf = ini.parse(fs.readFileSync("etc/test.ini", "utf-8"));
             return testConf["app:main"]["mail.queue_path"]
                    .replace("%(here)s", process.cwd() + "/etc");
         };
@@ -40,11 +40,11 @@ exports.config = {
             queue_path: getMailQueuePath()
         }
     },
-    allScriptsTimeout: 21000,
-    getPageTimeout: 20000,
+    getPageTimeout: 30000,
+    framework: "jasmine",
     jasmineNodeOpts: {
         showColors: true,
-        defaultTimeoutInterval: 120000,
+        defaultTimeoutInterval: 60000,
         isVerbose: true,
         includeStackTrace: true
     }

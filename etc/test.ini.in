@@ -5,17 +5,14 @@
 
 [app:main]
 use = egg:${adhocracy:backend_package_name}
-pyramid.prevent_http_cache = true
 pyramid.includes =
-    pyramid_exclog
     pyramid_tm
     pyramid_mailer
-zodbconn.uri = memory://
-zodbconn.uri.audit = memory://auditlog
+zodbconn.uri = zeo://localhost:9999?cache_size=200MB&connection_cache_size=50000&storage=main&blob_dir=var/db/test/blobs&shared_blob_dir=True
 adhocracy.add_test_users = true
 substanced.secret = seekri1
 substanced.autosync_catalogs = true
-adhocracy.ws_url =
+adhocracy.ws_url = ws://localhost:8081
 
 mail.queue_path = %(here)s/../var/mail
 mail.default_sender = support@unconfigured.domain
@@ -37,6 +34,12 @@ adhocracy.frontend_url = http://localhost:9090
 use = egg:gunicorn#main
 host = localhost
 port = 9080
+workers = 2
+
+[websockets]
+port = 8081
+pid_file = var/WS_TEST_SERVER.pid
+rest_url = http://localhost:9080
 
 # Begin logging configuration
 

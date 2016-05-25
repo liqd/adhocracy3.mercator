@@ -41,6 +41,7 @@ adhocracy.custom.mercator_platform_path = /mercator/advocate/
 use = egg:gunicorn#main
 host = localhost
 port = 9090
+workers = 4
 
 [loggers]
 keys = root, adhocracy_frontend

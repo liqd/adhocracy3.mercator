@@ -10,26 +10,26 @@ exports.config = {
     },
     baseUrl: "http://localhost:9090",
     getPageTimeout: 30000,
+    framework: "jasmine",
     directConnect: true,
     capabilities: {
-        "browserName": "chrome"
+        browserName: "chrome"
     },
     beforeLaunch: function() {
         exec("bin/supervisord");
-        exec("bin/supervisorctl restart  adhocracy_test:test_zeo test_backend_with_ws adhocracy_test:test_autobahn adhocracy_test:test_frontend");
+        exec("bin/supervisorctl restart adhocracy_test:");
         exec("src/current/current/tests/acceptance/setup_tests.sh");
     },
     afterLaunch: function() {
-        exec("bin/supervisorctl stop adhocracy_test:test_zeo test_backend_with_ws adhocracy_test:test_autobahn adhocracy_test:test_frontend");
+        exec("bin/supervisorctl stop adhocracy_test:");
         exec("rm -rf var/db/test/Data.fs* var/db/test/blobs/* var/mail/new/* ");
     },
     onPrepare: function() {
         var getMailQueuePath = function() {
-            var testConf = ini.parse(fs.readFileSync("etc/test_with_ws.ini", "utf-8"));
+            var testConf = ini.parse(fs.readFileSync("etc/test.ini", "utf-8"));
             return testConf["app:main"]["mail.queue_path"]
                    .replace("%(here)s", process.cwd() + "/etc");
         };
-
         browser.params.mail = {
             queue_path: getMailQueuePath()
         }

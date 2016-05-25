@@ -101,6 +101,7 @@ cachebust.method = init
 use = egg:gunicorn#main
 host = 0.0.0.0
 port = 6551
+workers = 4
 
 [loggers]
 keys = root, adhocracy_frontend
