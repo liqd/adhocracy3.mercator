@@ -14,10 +14,13 @@ import RIBuergerhaushaltProposalVersion from "../../../../Resources_/adhocracy_m
 import RIGeoProposalVersion from "../../../../Resources_/adhocracy_core/resources/proposal/IGeoProposalVersion";
 import RIKiezkasseProposalVersion from "../../../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProposalVersion";
 
+
+import * as SIBadge from "../../../../Resources_/adhocracy_core/sheets/badge/IBadge";
 import * as SIImageReference from "../../../../Resources_/adhocracy_core/sheets/image/IImageReference";
 import * as SILocationReference from "../../../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
 import * as SIMultiPolygon from "../../../../Resources_/adhocracy_core/sheets/geo/IMultiPolygon";
 import * as SIName from "../../../../Resources_/adhocracy_core/sheets/name/IName";
+import * as SIPool from "../../../../Resources_/adhocracy_core/sheets/pool/IPool";
 import * as SITitle from "../../../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIWorkflow from "../../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
@@ -27,8 +30,39 @@ var pkgLocation = "/Meinberlin/IdeaCollection/Process";
 export var detailDirective = (
     adhConfig : AdhConfig.IService,
     adhHttp : AdhHttp.Service<any>,
-    adhPermissions : AdhPermissions.Service
+    adhPermissions : AdhPermissions.Service,
+    $q : angular.IQService
 ) => {
+    var extractBadge = (badge) => {
+        return {
+            name: badge.data[SIName.nick].name,
+            title: badge.data[SITitle.nick].title,
+            path: badge.path,
+            groups: badge.data[SIBadge.nick].groups
+        };
+    };
+
+    var extractGroup = (group) => {
+        return {
+            name: group.data[SIName.nick].name,
+            title: group.data[SITitle.nick].title,
+            path: group.path
+        };
+    };
+
+    var collectBadgesByGroup = (groupPaths, badges) => {
+        var badgesByGroup = {};
+        _.forEach(groupPaths, (groupPath) => {
+            badgesByGroup[groupPath] = [];
+            _.forOwn(badges, (badge) => {
+                if (_.includes(badge.groups, groupPath)) {
+                    badgesByGroup[groupPath].push(badge.path);
+                }
+            });
+        });
+        return badgesByGroup;
+    };
+
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Detail.html",
@@ -41,7 +75,43 @@ export var detailDirective = (
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             if (scope.hasSwotLabels) {
-                scope.facets = [{
+                scope.facets = [];
+                var params = {
+                    elements: "content",
+                    depth: 4,
+                    content_type: "adhocracy_core.resources.badge.IBadge"
+                };
+                adhHttp.get(scope.path, params).then((response) => {
+                    var badgePaths = _.map(response.data[SIPool.nick].elements, "path");
+                    $q.all(_.map(badgePaths, (b : string) => adhHttp.get(b).then(extractBadge))).then((badges : any) => {
+                        scope.badges = _.keyBy(badges, "path");
+                        var groupPaths: string[] = _.union.apply(_, _.map(badges, "groups"));
+                        return $q.all(_.map(groupPaths, (g) => adhHttp.get(g))).then((result) => {
+                            scope.badgeGroups = _.keyBy(_.map(result, extractGroup), "path");
+                            scope.badgesByGroup = collectBadgesByGroup(groupPaths, badges);
+                            _.forOwn(scope.badgeGroups, (v, group) => {
+                                adhHttp.get(group).then((g) => {
+                                    var items = [];
+                                    _.forOwn(scope.badgesByGroup[group], (badge) => {
+                                        adhHttp.get(badge).then((b) => {
+                                            items.push({
+                                                key: extractBadge(b).name,
+                                                name: extractBadge(b).title
+                                            });
+                                        });
+                                    });
+                                    scope.facets.push({
+                                        key: extractGroup(g).name,
+                                        name: extractGroup(g).title,
+                                        items: items
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+
+/*                scope.facets = [{
                     key: "badge",
                     name: "TR__MEINBERLIN_IDEA_COLLECTION_CATEGORIES_LABEL",
                     items: [
@@ -50,7 +120,7 @@ export var detailDirective = (
                         { key: "proposals", name: "TR__MEINBERLIN_IDEA_COLLECTION_CATEGORIES_PROPOSALS" },
                         { key: "visions", name: "TR__MEINBERLIN_IDEA_COLLECTION_CATEGORIES_VISIONS" }
                     ]
-                }];
+                }];*/
             }
 
             scope.sorts = [{
