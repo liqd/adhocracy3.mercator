@@ -14,6 +14,10 @@ class ConfigurationError(Exception):
         """Return the representation of self."""
         return self.details
 
+    def __str__(self):
+        """Return the string of self."""
+        return self.details
+
 
 class RuntimeConfigurationError(ConfigurationError):
     """Raise when the ConfigurationError is detected during runtime."""

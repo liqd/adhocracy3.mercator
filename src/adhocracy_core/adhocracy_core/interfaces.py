@@ -899,3 +899,7 @@ class IAdhocracyWorkflow(IWorkflow):  # pragma: no cover
 
 
 error_entry = namedtuple('ErrorEntry', ['location', 'name', 'description'])
+
+
+class IFixtureAsset(Interface):
+    """Marker to register :term:`asset` specs for fixtures directories."""

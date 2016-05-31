@@ -1,0 +1,51 @@
+[{"path": "/",
+  "content_type": "adhocracy_core.resources.organisation.IOrganisation",
+  "data": {"adhocracy_core.sheets.name.IName":
+           {"name": "opin"}
+          }},
+ {"path": "/opin",
+  "content_type": "adhocracy_euth.resources.idea_collection.IProcess",
+  "data": {"adhocracy_core.sheets.name.IName":
+           {"name": "idea_collection"},
+           "adhocracy_core.sheets.title.ITitle":
+           {"title": "Idea collection participation process"}
+          }},
+ {"path": "/opin/idea_collection",
+  "content_type": "adhocracy_core.resources.badge.IBadgesService",
+  "data": {"adhocracy_core.sheets.name.IName":
+            {"name": "badges"}
+           }
+ },
+ {"path": "/opin/idea_collection/badges",
+  "content_type": "adhocracy_core.resources.badge.IParticipantsAssignableBadgeGroup",
+  "data": {"adhocracy_core.sheets.name.IName":
+            {"name": "categories"}
+           },
+           "adhocracy_core.sheets.title.ITitle":
+           {"title": "Categories"}
+ },
+ {"path": "/opin/idea_collection/badges/categories",
+  "creator": "/principals/users/0000000",
+  "content_type": "adhocracy_core.resources.badge.IBadge",
+  "data": {"adhocracy_core.sheets.name.IName":
+           {"name": "culture"},
+           "adhocracy_core.sheets.title.ITitle":
+           {"title": "Culture"}
+          }
+ },
+ {"path": "/opin/idea_collection/badges/categories",
+  "creator": "/principals/users/0000000",
+  "content_type": "adhocracy_core.resources.badge.IBadge",
+  "data": {"adhocracy_core.sheets.name.IName":
+           {"name": "nature"},
+           "adhocracy_core.sheets.title.ITitle":
+           {"title": "Nature"}
+          }
+ },
+ {"path": "/opin/idea_collection/badges",
+  "content_type": "adhocracy_core.resources.badge.IBadgeGroup",
+  "data": {"adhocracy_core.sheets.name.IName":
+            {"name": "winning"}
+           }
+ }
+]

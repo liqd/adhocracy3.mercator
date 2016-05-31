@@ -17,6 +17,7 @@ from adhocracy_core.resources.principal import groups_and_roles_finder
 from adhocracy_core.resources.principal import get_user
 from adhocracy_core.auditing import set_auditlog
 from adhocracy_core.auditing import get_auditlog
+from adhocracy_core.interfaces import IFixtureAsset
 
 
 logger = getLogger(__name__)
@@ -120,6 +121,8 @@ def includeme(config):
     config.include('.websockets')
     config.include('.rest')
     config.include('.stats')
+    config.registry.registerUtility('', IFixtureAsset,
+                                    name='adhocracy_core:fixture')
     if settings.get('adhocracy.add_test_users', False):
         from adhocracy_core.testing import add_create_test_users_subscriber
         add_create_test_users_subscriber(config)

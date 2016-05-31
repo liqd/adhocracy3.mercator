@@ -30,17 +30,40 @@ from adhocracy_core.sheets.name import IName
 logger = logging.getLogger(__name__)
 
 
+users_epilog = """The JSON file contains the name identifier of the user
+to create and a simplified serialization of the sheets data.
+Already existing users will have their groups, roles and emails updated.
+
+In addition you can enable sending an inviation email
+
+Example::
+
+[
+  {
+    "name": "user0",
+    "email": "test@test.de",
+    "initial-password": "secret",
+    "roles": [],
+    "groups": ["gods"],
+    "badges": ["god"],
+    "send_invitation_mail": true,
+    "subject_tmpl_invitation_mail": "adhocracy_core:templates/invite_subject_sample.txt.mako",
+    "body_tmpl_invitation_mail": "adhocracy_core:templates/invite_body_sample.txt.mako"
+  },
+]
+"""  # flake8: noqa
+
+
 def import_users():  # pragma: no cover
     """Import users from a JSON file.
-
-    Already existing users will have their groups, roles and emails updated.
 
     usage::
 
         bin/import_users etc/development.ini  <filename>
     """
     docstring = inspect.getdoc(import_users)
-    parser = argparse.ArgumentParser(description=docstring)
+    parser = argparse.ArgumentParser(description=docstring,
+                                     epilog=users_epilog)
     parser.add_argument('ini_file',
                         help='path to the adhocracy backend ini file')
     parser.add_argument('filename',

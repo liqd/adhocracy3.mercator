@@ -51,6 +51,7 @@ test_requires = [
     'sphinx-autodoc-annotation',
     'sphinxcontrib-blockdiag',
     'sphinxcontrib-actdiag',
+    'sphinxcontrib-programoutput',
     'sphinx-rtd-theme',
 ]
 
@@ -110,6 +111,8 @@ setup(name='adhocracy_core',
           adhocracy_core.scripts.export_users:export_users
       ad_auto_transition_process_workflow=\
           adhocracy_core.scripts.auto_transition_process_workflow:auto_transition_process_workflow
+      ad_fixtures =\
+        adhocracy_core.scripts.fixtures:import_fixtures
       [pyramid.scaffold]
       adhocracy=adhocracy_core.scaffolds:AdhocracyExtensionTemplate
       """,

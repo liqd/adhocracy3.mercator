@@ -2,10 +2,10 @@ from pyramid.traversal import find_resource
 from pyramid import testing
 from pytest import fixture
 from pytest import mark
+from pytest import raises
 from tempfile import mkstemp
 import os
 import json
-import pytest
 from adhocracy_core.resources.badge import add_badges_service
 from adhocracy_core.resources.organisation import IOrganisation
 from adhocracy_core.resources.root import IRootPool
@@ -64,7 +64,7 @@ class TestImportResources:
             ]))
 
         root = registry.content.create(IRootPool.__identifier__)
-        with pytest.raises(colander.Invalid):
+        with raises(colander.Invalid):
             import_resources(root, registry, filename)
 
 
@@ -228,7 +228,7 @@ class TestImportResources:
                                 orga['badges'],
                                 appstructs=badge_appstructs,
                                 registry=registry)
-        with pytest.raises(ValueError):
+        with raises(ValueError):
             import_resources(root, registry, filename)
 
     def teardown_method(self, method):
@@ -276,4 +276,94 @@ def test_get_sheet_field_for_partial(context, registry, mocker):
     registry.content.get_sheet_field.assert_called_with(context, ISheet,
                                                         'field')
 
+
+@mark.usefixtures('integration')
+class TestImportFixture:
+
+    def call_fut(self, *args, **kwargs):
+        from . import import_fixture
+        return import_fixture(*args, **kwargs)
+
+    @fixture
+    def asset(self, tmpdir) -> str:
+        """Asset specification, package or absolute path."""
+        return str(tmpdir)
+
+    def create_import_file(self, asset: str, import_type: str,
+                           data=None) -> str:
+        os.mkdir(asset + '/' + import_type)
+        import_file = asset + '/' + import_type + '/file.json'
+        with open(import_file, 'w') as f:
+            f.write(data or 'import')
+        return import_file
+
+    def test_raise_if_not_directory_package_path(self):
+        from adhocracy_core.exceptions import ConfigurationError
+        asset_file = 'adhocracy_core:' + 'interfaces.py'
+        with raises(ConfigurationError):
+            self.call_fut(asset_file, None, None)
+
+    def test_raise_if_not_directory_absolute_path(self, asset):
+        from adhocracy_core.exceptions import ConfigurationError
+        asset_file = asset + '/file'
+        with open(asset_file, 'w') as f:
+            f.write('File')
+        with raises(ConfigurationError):
+            self.call_fut(asset_file, None, None)
+
+    def test_ignore_if_no_subdirs(self, asset):
+        assert self.call_fut(asset, None, None) is None
+
+    def test_raise_if_wrong_subdirs(self, asset):
+        from adhocracy_core.exceptions import ConfigurationError
+        os.mkdir(asset + '/wrong_import_type')
+        with raises(ConfigurationError):
+            self.call_fut(asset, None, None)
+
+    def test_ignore_if_log_only(self, asset, mocker, context, registry, log):
+        import_file = self.create_import_file(asset, 'groups')
+        mock = mocker.patch('adhocracy_core.scripts._import_groups')
+        self.call_fut(asset, context, registry, log_only=True)
+        assert not mock.called
+
+    def test_import_groups(self, asset, mocker, context, registry, log):
+        import_file = self.create_import_file(asset, 'groups')
+        mock = mocker.patch('adhocracy_core.scripts._import_groups')
+        self.call_fut(asset, context, registry)
+        mock.assert_called_with(context, registry, import_file)
+
+    def test_import_users(self, asset, mocker, context, registry, log):
+        import_file = self.create_import_file(asset, 'users')
+        mock = mocker.patch('adhocracy_core.scripts._import_users')
+        self.call_fut(asset, context, registry)
+        mock.assert_called_with(context, registry, import_file)
+
+    def test_import_local_groups(self, asset, mocker, context, registry, log):
+        import_file = self.create_import_file(asset, 'local_roles')
+        mock = mocker.patch('adhocracy_core.scripts.import_local_roles')
+        self.call_fut(asset, context, registry)
+        mock.assert_called_with(context, registry, import_file)
+
+    def test_import_resources(self, asset, mocker, context, registry):
+        import_file = self.create_import_file(asset, 'resources')
+        mock = mocker.patch('adhocracy_core.scripts.import_resources')
+        self.call_fut(asset, context, registry)
+        mock.assert_called_with(context, registry, import_file)
+
+    def test_import_workflow_state(self, asset, mocker, context, registry):
+        import_data = 'process/proposal:announce->participate'
+        self.create_import_file(asset, 'states', import_data)
+        mock = mocker.patch('adhocracy_core.scripts._set_workflow_state')
+        self.call_fut(asset, context, registry)
+        mock.assert_called_with(context, registry, 'process/proposal',
+                                ['announce', 'participate'],
+                                absolute=True,
+                                reset=True)
+
+    def test_ignore_if_empty_workflow_state(
+        self, asset, mocker, context, registry):
+        os.mkdir(asset + '/' + 'states')
+        mock = mocker.patch('adhocracy_core.scripts._set_workflow_state')
+        self.call_fut(asset, context, registry)
+        assert not mock.called
 

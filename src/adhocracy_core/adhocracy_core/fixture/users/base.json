@@ -1,0 +1,8 @@
+[
+  { "name": "user",
+    "email": "user@liqd.de",
+    "initial-password": "secret",
+    "roles": [],
+    "groups": []
+  }
+]

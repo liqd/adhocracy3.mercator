@@ -37,6 +37,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.pngmath',
               'repoze.sphinx.autointerface',
               'sphinx_autodoc_annotation',
+              'sphinxcontrib.programoutput',
               'sphinx.ext.graphviz']
 blockdiag_debug = True
 actdiag_debug = True

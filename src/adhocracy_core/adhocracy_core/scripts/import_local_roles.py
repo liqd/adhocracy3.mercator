@@ -12,6 +12,21 @@ from pyramid.paster import bootstrap
 from . import import_local_roles as main_import_local_roles
 
 
+roles_epilog = """The JSON file contains the resource path and the wanted
+local :term:`roles` for principals.
+
+.. WARN:: This overrides the existing local roles like for the `creator`.
+
+Example::
+
+[
+ {"path": "/organisation/alt-treptow",
+  "roles": {"initiators-treptow-koepenick": ["role:initiator"]}
+ },
+]
+"""
+
+
 def import_local_roles():  # pragma: no cover
     """Import/set local roles from a JSON file.
 
@@ -20,7 +35,8 @@ def import_local_roles():  # pragma: no cover
         bin/import_local_roles etc/development.ini  <filename>
     """
     docstring = inspect.getdoc(import_local_roles)
-    parser = argparse.ArgumentParser(description=docstring)
+    parser = argparse.ArgumentParser(description=docstring,
+                                     epilog=roles_epilog)
     parser.add_argument('ini_file',
                         help='path to the adhocracy backend ini file')
     parser.add_argument('filename',

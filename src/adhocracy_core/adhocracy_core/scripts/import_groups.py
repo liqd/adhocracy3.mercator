@@ -21,6 +21,17 @@ from adhocracy_core.resources.principal import IGroup
 logger = logging.getLogger(__name__)
 
 
+groups_epilog = """The JSON file contains the name identifier of the user
+group to create and a simplified serialization of the sheets data.
+
+Example::
+
+[
+  {"name": "Alice", "roles": ["contributor"], "groups": ["gods"]},
+]
+"""
+
+
 def import_groups():  # pragma: no cover
     """Import groups from a JSON file.
 
@@ -31,7 +42,8 @@ def import_groups():  # pragma: no cover
         bin/import_groups etc/development.ini  <filename>
     """
     docstring = inspect.getdoc(import_groups)
-    parser = argparse.ArgumentParser(description=docstring)
+    parser = argparse.ArgumentParser(description=docstring,
+                                     epilog=groups_epilog)
     parser.add_argument('ini_file',
                         help='path to the adhocracy backend ini file')
     parser.add_argument('filename',
