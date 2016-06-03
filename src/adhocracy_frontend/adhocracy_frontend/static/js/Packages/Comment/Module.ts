@@ -41,8 +41,6 @@ export var register = (angular) => {
             "adhTopLevelState",
             "$location",
             AdhComment.adhCommentListing])
-        .directive("adhCreateOrShowCommentListing", [
-            "adhConfig", "adhDone", "adhHttp", "adhPreliminaryNames", "adhCredentials", AdhComment.adhCreateOrShowCommentListing])
         .directive("adhComment", [
             "adhConfig",
             "adhHttp",
