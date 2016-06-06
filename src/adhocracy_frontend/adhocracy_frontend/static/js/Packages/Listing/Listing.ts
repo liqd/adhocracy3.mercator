@@ -69,6 +69,7 @@ export type IPredicate = string | {[key : string]: string}
 
 export interface ListingScope<Container> extends angular.IScope {
     path : string;
+    refersTo? : string;
     contentType? : string;
     facets? : IFacet[];
     sort? : string;
@@ -149,6 +150,7 @@ export class Listing<Container extends ResourcesBase.IResource> {
             templateUrl: adhConfig.pkg_path + _class.templateUrl,
             scope: {
                 path: "@",
+                refersTo: "@",
                 contentType: "@",
                 facets: "=?",
                 sort: "=?",
@@ -322,6 +324,7 @@ export class Listing<Container extends ResourcesBase.IResource> {
 
                 $scope.$watch("path", () => adaptListingToParameter($scope.poolPath, $scope));
 
+                $scope.$watch("refersTo", () => adaptListingToParameter($scope.refersTo, $scope));
             }]
         };
     }
