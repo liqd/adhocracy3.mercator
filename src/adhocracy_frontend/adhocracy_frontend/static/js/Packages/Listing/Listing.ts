@@ -318,9 +318,7 @@ export class Listing<Container extends ResourcesBase.IResource> {
                     $scope.createPath = adhPreliminaryNames.nextPreliminary();
                 };
 
-                $scope.$watch("sort", (sort : string) => {
-                    $scope.update();
-                });
+                $scope.$watch("sort", () => $scope.update());
 
                 $scope.$watch("path", () => adaptListingToParameter($scope.poolPath, $scope));
 
