@@ -69,6 +69,7 @@ export type IPredicate = string | {[key : string]: string}
 
 export interface ListingScope<Container> extends angular.IScope {
     path : string;
+    refersTo? : string;
     contentType? : string;
     facets? : IFacet[];
     sort? : string;
@@ -123,11 +124,33 @@ export class Listing<Container extends ResourcesBase.IResource> {
             }
         };
 
+        var adaptListingToParameter = (parameter: any, $scope: ListingScope<Container>) => {
+            unregisterWebsocket($scope);
+            if (parameter) {
+                // NOTE: Ideally we would like to first subscribe to
+                // websocket messages and only then get the resource in
+                // order to not miss any messages in between. But in
+                // order to subscribe we already need the resource. So
+                // that is not possible.
+                $scope.update().then(() => {
+                    try {
+                        $scope.wsOff = adhWebSocket.register(parameter, () => $scope.update());
+                    } catch (e) {
+                        console.log(e);
+                        console.log("Will continue on resource " + parameter + " without server bind.");
+                    }
+                });
+            } else {
+                $scope.clear();
+            }
+        };
+
         return {
             restrict: "E",
             templateUrl: adhConfig.pkg_path + _class.templateUrl,
             scope: {
                 path: "@",
+                refersTo: "@",
                 contentType: "@",
                 facets: "=?",
                 sort: "=?",
@@ -295,31 +318,11 @@ export class Listing<Container extends ResourcesBase.IResource> {
                     $scope.createPath = adhPreliminaryNames.nextPreliminary();
                 };
 
-                $scope.$watch("sort", (sort : string) => {
-                    $scope.update();
-                });
+                $scope.$watch("sort", () => $scope.update());
 
-                $scope.$watch("path", (newPath : string) => {
-                    unregisterWebsocket($scope);
+                $scope.$watch("path", () => adaptListingToParameter($scope.poolPath, $scope));
 
-                    if (newPath) {
-                        // NOTE: Ideally we would like to first subscribe to
-                        // websocket messages and only then get the resource in
-                        // order to not miss any messages in between. But in
-                        // order to subscribe we already need the resource. So
-                        // that is not possible.
-                        $scope.update().then(() => {
-                            try {
-                                $scope.wsOff = adhWebSocket.register($scope.poolPath, () => $scope.update());
-                            } catch (e) {
-                                console.log(e);
-                                console.log("Will continue on resource " + $scope.poolPath + " without server bind.");
-                            }
-                        });
-                    } else {
-                        $scope.clear();
-                    }
-                });
+                $scope.$watch("refersTo", () => adaptListingToParameter($scope.refersTo, $scope));
             }]
         };
     }

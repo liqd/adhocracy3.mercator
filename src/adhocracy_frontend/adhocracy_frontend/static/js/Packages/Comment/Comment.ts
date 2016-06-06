@@ -1,7 +1,4 @@
-import * as _ from "lodash";
-
 import * as AdhConfig from "../Config/Config";
-import * as AdhCredentials from "../User/Credentials";
 import * as AdhHttp from "../Http/Http";
 import * as AdhMovingColumns from "../MovingColumns/MovingColumns";
 import * as AdhPermissions from "../Permissions/Permissions";
@@ -12,7 +9,6 @@ import * as AdhUtil from "../Util/Util";
 
 import RIComment from "../../Resources_/adhocracy_core/resources/comment/IComment";
 import RICommentVersion from "../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
-import RIExternalResource from "../../Resources_/adhocracy_core/resources/external_resource/IExternalResource";
 import * as SICommentable from "../../Resources_/adhocracy_core/sheets/comment/ICommentable";
 import * as SIComment from "../../Resources_/adhocracy_core/sheets/comment/IComment";
 import * as SIMetadata from "../../Resources_/adhocracy_core/sheets/metadata/IMetadata";
@@ -353,75 +349,6 @@ export var adhCommentListing = (
             };
 
             scope.$watch("path", update);
-        }
-    };
-};
-
-/**
- * Directive which checks whether an ExternalResource exists for the given
- * poolPath and key. ExternalResource is a commentable.
- *
- * If not, it is created on the fly.
- *
- * If it exists, the corresponding comment listing is created.
- */
-export var adhCreateOrShowCommentListing = (
-    adhConfig : AdhConfig.IService,
-    adhDone,
-    adhHttp : AdhHttp.Service<any>,
-    adhPreliminaryNames : AdhPreliminaryNames.Service,
-    adhCredentials : AdhCredentials.Service
-) => {
-    return {
-        restrict: "E",
-        template: "<adh-comment-listing data-ng-if=\"display\" data-path=\"{{commentablePath}}\"></adh-comment-listing>"
-                  + "<div data-ng-if=\"display === false\">{{ 'TR__COMMENT_EMPTY_TEXT' | translate }}</div>",
-        scope: {
-            poolPath: "@",
-            key: "@"
-        },
-        link: (scope) => {
-            scope.display = undefined;
-            var commentablePath = scope.poolPath + scope.key + "/";
-
-            var setScope = (path) => {
-                scope.display = true;
-                scope.commentablePath = path;
-            };
-
-            // create commentable if it doesn't exist yet
-            // REFACT: Add Filter "name": scope.key - this requires name index to be enabled in the backend
-            adhHttp.get(scope.poolPath, {
-                elements: "paths",
-                "content_type": RIExternalResource.content_type
-            }).then(
-                (result) => {
-                    if (_.includes(result.data[SIPool.nick].elements, commentablePath)) {
-                        setScope(commentablePath);
-                    } else {
-                        var unwatch = scope.$watch(() => adhCredentials.loggedIn, (loggedIn) => {
-                            if (loggedIn) {
-                                var externalResource = new RIExternalResource({preliminaryNames: adhPreliminaryNames, name: scope.key});
-                                return adhHttp.post(scope.poolPath, externalResource).then((obj) => {
-                                    if (obj.path !== commentablePath) {
-                                        console.log("Created object has wrong path (internal error)");
-                                    }
-                                })["finally"](() => {
-                                    // If the post didn't succeed, somebody else will probably already
-                                    // have posted the resource. The error can thus be ignored.
-                                    setScope(commentablePath);
-                                    unwatch();
-                                });
-                            } else {
-                                scope.display = false;
-                            }
-                        });
-                    }
-                },
-                (msg) => {
-                    console.log("Could not query given postPool");
-                }
-            ).then(adhDone);
         }
     };
 };
