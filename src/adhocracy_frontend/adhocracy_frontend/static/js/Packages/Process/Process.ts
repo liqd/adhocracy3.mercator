@@ -36,10 +36,12 @@ export var getStateData = (sheet : SIWorkflow.Sheet, name : string) : IStateData
 
 export class Provider implements angular.IServiceProvider {
     public templateFactories : {[processType : string]: any};
+    public processButtonSlots : {[processType : string]: any};
     public $get;
 
     constructor () {
         this.templateFactories = {};
+        this.processButtonSlots = {};
 
         this.$get = ["$injector", ($injector) => {
             return new Service(this, $injector);
@@ -59,6 +61,15 @@ export class Service {
         }
 
         var fn = this.provider.templateFactories[processType];
+        return this.$injector.invoke(fn);
+    }
+
+    public getProcessButtonSlot(processType : string) : angular.IPromise<string> {
+        if (!this.provider.processButtonSlots.hasOwnProperty(processType)) {
+            return;
+        }
+
+        var fn = this.provider.processButtonSlots[processType];
         return this.$injector.invoke(fn);
     }
 }
@@ -130,6 +141,34 @@ export var processViewDirective = (
         }
     };
 };
+
+
+export var processButtonSlot = (
+    adhTopLevelState : AdhTopLevelState.Service,
+    adhProcess : Service,
+    $compile : angular.ICompileService
+) => {
+    return {
+        restrict: "E",
+        link: (scope, element) => {
+            var childScope : angular.IScope;
+
+            adhTopLevelState.on("processType", (processType) => {
+                if (processType) {
+                    adhProcess.getProcessButtonSlot(processType).then((template) => {
+                        if (childScope) {
+                            childScope.$destroy();
+                        }
+                        childScope = scope.$new();
+                        element.html(template);
+                        $compile(element.contents())(childScope);
+                    });
+                }
+            });
+        }
+    };
+};
+
 
 export var listItemDirective = () => {
     return {

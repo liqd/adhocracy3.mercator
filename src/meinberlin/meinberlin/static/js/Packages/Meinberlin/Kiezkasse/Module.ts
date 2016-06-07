@@ -32,14 +32,14 @@ export var register = (angular) => {
             var registerRoutes = AdhMeinberlinIdeaCollection.registerRoutesFactory(processType);
             registerRoutes(processType)(adhResourceAreaProvider);
             registerRoutes(processType, "kiezkasse")(adhResourceAreaProvider);
-
-            var customHeader = adhConfig.pkg_path + AdhMeinberlinIdeaCollection.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templateFactories[processType] = ["$q", ($q : angular.IQService) => {
                 return $q.when("<adh-meinberlin-idea-collection-workbench data-is-kiezkasse=\"true\">" +
                     "</adh-meinberlin-idea-collection-workbench>");
+            }];
+            adhProcessProvider.processButtonSlots[processType] = ["$q", ($q: angular.IQService) => {
+                return $q.when("<adh-meinberlin-add-proposal-button></adh-meinberlin-add-proposal-button>");
             }];
         }]);
 };

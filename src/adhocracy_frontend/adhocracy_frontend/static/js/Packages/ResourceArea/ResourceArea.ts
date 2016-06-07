@@ -32,13 +32,11 @@ export class Provider implements angular.IServiceProvider {
         factory : (resource) => any;  // values return either Dict or angular.IPromise<Dict>
         type? : string;
     }};
-    public customHeaders : {[processType : string]: string};
 
     constructor() {
         var self = this;
         this.defaults = {};
         this.specifics = {};
-        this.customHeaders = {};
         this.$get = [
             "$q",
             "$injector",
@@ -117,11 +115,6 @@ export class Provider implements angular.IServiceProvider {
         return this
             .specific(itemType, view, processType, embedContext, factory, "item")
             .specific(versionType, view, processType, embedContext, factory, "version");
-    }
-
-    public customHeader(processType : string, templateUrl : string) : Provider {
-        this.customHeaders[processType] = templateUrl;
-        return this;
     }
 }
 
@@ -348,7 +341,6 @@ export class Service implements AdhTopLevelState.IAreaInput {
                 var defaults : Dict = self.getDefaults(resource.content_type, view, processType, embedContext);
 
                 var meta : Dict = {
-                    customHeader: self.provider.customHeaders[processType],
                     embedContext: embedContext,
                     processType: processType,
                     processUrl: processUrl,

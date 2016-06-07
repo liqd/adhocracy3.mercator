@@ -14,6 +14,9 @@ import * as AdhStickyModule from "../../../Sticky/Module";
 import * as AdhTopLevelStateModule from "../../../TopLevelState/Module";
 
 import * as AdhEmbed from "../../../Embed/Embed";
+import * as AdhProcess from "../../../Process/Process";
+
+import RIMercator2016Process from "../../../../Resources_/adhocracy_mercator/resources/mercator2/IProcess";
 
 import * as Proposal from "./Proposal";
 
@@ -21,6 +24,8 @@ import * as Proposal from "./Proposal";
 export var moduleName = "adhMercator2016Proposal";
 
 export var register = (angular) => {
+    var processType = RIMercator2016Process.content_type;
+
     angular
         .module(moduleName, [
             "duScroll",
@@ -64,6 +69,11 @@ export var register = (angular) => {
             adhEmbedProvider.registerDirective("mercator-2016-proposal-create");
             adhEmbedProvider.registerDirective("mercator-2016-proposal-detail");
             adhEmbedProvider.registerDirective("mercator-2016-proposal-listitem");
+        }])
+        .config(["adhProcessProvider", (adhProcessProvider: AdhProcess.Provider) => {
+            adhProcessProvider.processButtonSlots[processType] = ["$q", ($q: angular.IQService) => {
+                return $q.when("<adh-mercator-2015-add-proposal-button></adh-mercator-2015-add-proposal-button>");
+            }];
         }])
         .directive("adhMercator2016ProposalCreate", [
             "$location",
