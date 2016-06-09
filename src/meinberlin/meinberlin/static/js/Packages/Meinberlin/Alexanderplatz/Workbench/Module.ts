@@ -53,6 +53,7 @@ export var register = (angular) => {
             "adhResourceUrlFilter",
             "$location",
             "$window",
+            "$translate",
             Workbench.documentDetailColumnDirective])
         .directive("adhMeinberlinAlexanderplatzProposalDetailColumn", [
             "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.proposalDetailColumnDirective])

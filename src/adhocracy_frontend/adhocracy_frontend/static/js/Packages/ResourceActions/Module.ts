@@ -21,5 +21,6 @@ export var register = (angular) => {
         .directive("adhModerateAction", [
             "adhTopLevelState", "adhResourceUrlFilter", "$location", AdhResourceActions.moderateActionDirective])
         .directive("adhPrintAction", ["adhTopLevelState", "$window", AdhResourceActions.printActionDirective])
-        .directive("adhCancelAction", ["adhTopLevelState", "adhResourceUrlFilter", AdhResourceActions.cancelActionDirective]);
+        .directive("adhCancelAction", ["adhTopLevelState", "adhResourceUrlFilter", AdhResourceActions.cancelActionDirective])
+        .directive("adhHideAction", ["adhHttp", "adhTopLevelState", "$q", "$translate", "$window", AdhResourceActions.hideActionDirective]);
 };

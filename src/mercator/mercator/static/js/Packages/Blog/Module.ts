@@ -31,8 +31,6 @@ export var register = (angular) => {
                 .registerDirective("blog");
         }])
         .directive("adhBlogPost", [
-            "$q",
-            "$window",
             "adhConfig",
             "adhHttp",
             "adhPermissions",
@@ -40,6 +38,9 @@ export var register = (angular) => {
             "adhShowError",
             "adhSubmitIfValid",
             "adhUploadImage",
+            "$q",
+            "$window",
+            "$translate",
             Blog.detailDirective])
         .directive("adhBlog", ["adhConfig", Blog.listingDirective])
         .directive("adhBlogPostCreate", [
