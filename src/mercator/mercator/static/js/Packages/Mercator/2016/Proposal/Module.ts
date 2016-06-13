@@ -21,6 +21,7 @@ import * as Proposal from "./Proposal";
 export var moduleName = "adhMercator2016Proposal";
 
 export var register = (angular) => {
+
     angular
         .module(moduleName, [
             "duScroll",

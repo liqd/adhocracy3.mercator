@@ -6,6 +6,8 @@ import * as AdhProcessModule from "../../../Process/Module";
 import * as AdhResourceAreaModule from "../../../ResourceArea/Module";
 import * as AdhTopLevelStateModule from "../../../TopLevelState/Module";
 
+import * as AdhProcess from "../../../Process/Process";
+
 import RIMercator2016Process from "../../../../Resources_/adhocracy_mercator/resources/mercator2/IProcess";
 
 import * as AdhMercator2015WorkbenchModule from "../../2015/Workbench/Module";
@@ -31,17 +33,18 @@ export var register = (angular) => {
             AdhResourceAreaModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
-        .config(["adhResourceAreaProvider", "adhConfig", "adhMetaApiProvider", (
+        .config(["adhResourceAreaProvider", "adhMetaApiProvider", (
             adhResourceAreaProvider,
-            adhConfig,
             adhMetaApi
         ) => {
-            var customHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
             Workbench.registerRoutes(processType)(adhResourceAreaProvider, adhMetaApi);
         }])
         .config(["adhProcessProvider", (adhProcessProvider) => {
             adhProcessProvider.templates[processType] = "<adh-mercator-2016-workbench></adh-mercator-2016-workbench>";
+        }])
+        .config(["adhProcessProvider", (adhProcessProvider: AdhProcess.Provider) => {
+            adhProcessProvider.buttonFactories[processType] = "<adh-mercator-2015-add-proposal-button>" +
+                "</adh-mercator-2015-add-proposal-button>";
         }])
         .directive("adhMercator2016Workbench", ["adhConfig", "adhTopLevelState", Workbench.workbenchDirective])
         .directive("adhMercator2016ProposalCreateColumn", [

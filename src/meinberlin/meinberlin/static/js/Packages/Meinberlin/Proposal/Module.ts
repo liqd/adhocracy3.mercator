@@ -69,5 +69,7 @@ export var register = (angular) => {
             "$location",
             "$q",
             Proposal.editDirective
-        ]);
+        ])
+        .directive("adhMeinberlinAddProposalButton", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", Proposal.addProposalButtonDirective]);
 };

@@ -24,8 +24,7 @@ export var register = () => {
                 providerMock = {
                     defaults: {},
                     specifics: {},
-                    templates: {},
-                    customHeaders: {},
+                    templates: {}
                 };
 
                 adhHttpMock = jasmine.createSpyObj("adhHttp", ["get", "withTransaction"]);

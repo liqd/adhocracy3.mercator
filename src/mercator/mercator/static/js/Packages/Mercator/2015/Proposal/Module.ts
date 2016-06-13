@@ -13,6 +13,7 @@ import * as AdhResourceWidgetsModule from "../../../ResourceWidgets/Module";
 import * as AdhStickyModule from "../../../Sticky/Module";
 import * as AdhTopLevelStateModule from "../../../TopLevelState/Module";
 
+import * as AdhProcess from "../../../Process/Process";
 import * as AdhUtil from "../../../Util/Util";
 
 import RIMercator2015Process from "../../../../Resources_/adhocracy_mercator/resources/mercator/IProcess";
@@ -23,6 +24,8 @@ import * as Proposal from "./Proposal";
 export var moduleName = "adhMercator2015Proposal";
 
 export var register = (angular) => {
+    var processType = RIMercator2015Process.content_type;
+
     angular
         .module(moduleName, [
             "duScroll",
@@ -42,14 +45,11 @@ export var register = (angular) => {
             AdhStickyModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
-        .config(["adhResourceAreaProvider", "adhConfig", "adhMetaApiProvider", (
+        .config(["adhResourceAreaProvider", "adhMetaApiProvider", (
             adhResourceAreaProvider,
-            adhConfig,
             adhMetaApi
         ) => {
             var processType = RIMercator2015Process.content_type;
-            var customHeader = adhConfig.pkg_path + Proposal.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
             Proposal.registerRoutes(processType)(adhResourceAreaProvider, adhMetaApi);
         }])
         .config(["flowFactoryProvider", (flowFactoryProvider) => {
@@ -71,6 +71,10 @@ export var register = (angular) => {
                     "png"
                 ]  // correspond to exact mime types EG image/png
             };
+        }])
+        .config(["adhProcessProvider", (adhProcessProvider: AdhProcess.Provider) => {
+            adhProcessProvider.buttonFactories[processType] = "<adh-mercator-2015-add-proposal-button>" +
+                "</adh-mercator-2015-add-proposal-button>";
         }])
         // NOTE: we do not use a Widget based directive here for performance reasons
         .directive("adhMercator2015Proposal", ["adhConfig", "adhHttp", "adhTopLevelState", "adhGetBadges", Proposal.listItem])

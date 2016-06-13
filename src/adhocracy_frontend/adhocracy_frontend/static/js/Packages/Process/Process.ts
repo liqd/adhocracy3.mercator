@@ -36,10 +36,12 @@ export var getStateData = (sheet : SIWorkflow.Sheet, name : string) : IStateData
 
 export class Provider implements angular.IServiceProvider {
     public templates : {[processType : string]: string};
+    public buttons : {[processType : string]: string};
     public $get;
 
     constructor () {
         this.templates = {};
+        this.buttons = {};
 
         this.$get = ["$injector", ($injector) => {
             return new Service(this, $injector);
@@ -58,6 +60,13 @@ export class Service {
             throw "No template for process type \"" + processType + "\" has been configured.";
         }
         return this.provider.templates[processType];
+    }
+
+    public getButton(processType : string) : string {
+        if (!this.provider.buttons.hasOwnProperty(processType)) {
+            return "";
+        }
+        return this.provider.buttons[processType];
     }
 }
 
@@ -103,7 +112,7 @@ export var workflowSwitchDirective = (
     };
 };
 
-export var processViewDirective = (
+export var viewDirective = (
     adhTopLevelState : AdhTopLevelState.Service,
     adhProcess : Service,
     $compile : angular.ICompileService
@@ -121,6 +130,27 @@ export var processViewDirective = (
         }
     };
 };
+
+
+export var buttonSlotDirective = (
+    adhTopLevelState : AdhTopLevelState.Service,
+    adhProcess : Service,
+    $compile : angular.ICompileService
+) => {
+    return {
+        restrict: "E",
+        link: (scope, element) => {
+            adhTopLevelState.on("processType", (processType) => {
+                if (processType) {
+                    var template : string = adhProcess.getButton(processType);
+                    element.html(template);
+                    $compile(element.contents())(scope);
+                }
+            });
+        }
+    };
+};
+
 
 export var listItemDirective = () => {
     return {

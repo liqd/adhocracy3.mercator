@@ -28,16 +28,15 @@ export var register = (angular) => {
         .config(["adhEmbedProvider", (adhEmbedProvider : AdhEmbed.Provider) => {
             adhEmbedProvider.registerContext("kiezkasse", ["kiezkassen"]);
         }])
-        .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider : AdhResourceArea.Provider, adhConfig) => {
+        .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
             var registerRoutes = AdhMeinberlinIdeaCollection.registerRoutesFactory(processType);
             registerRoutes(processType)(adhResourceAreaProvider);
             registerRoutes(processType, "kiezkasse")(adhResourceAreaProvider);
-
-            var customHeader = adhConfig.pkg_path + AdhMeinberlinIdeaCollection.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templates[processType] =
                 "<adh-meinberlin-idea-collection-workbench data-is-kiezkasse=\"true\"></adh-meinberlin-idea-collection-workbench>";
+            adhProcessProvider.buttons[processType] = "<adh-meinberlin-add-proposal-button>" +
+                "</adh-meinberlin-add-proposal-button>";
         }]);
 };

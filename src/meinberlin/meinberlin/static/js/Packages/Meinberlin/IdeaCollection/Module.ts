@@ -56,17 +56,14 @@ export var register = (angular) => {
         .directive("adhMeinberlinIdeaCollectionProposalEditColumn", ["adhConfig", IdeaCollection.proposalEditColumnDirective])
         .directive("adhMeinberlinIdeaCollectionDetailColumn", ["adhConfig", IdeaCollection.detailColumnDirective])
         .directive("adhMeinberlinIdeaCollectionEditColumn", ["adhConfig", IdeaCollection.editColumnDirective])
-        .directive("adhMeinberlinIdeaCollectionAddProposalButton", [
-            "adhConfig", "adhPermissions", "adhTopLevelState", IdeaCollection.addProposalButtonDirective])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider: AdhResourceArea.Provider, adhConfig) => {
             var registerRoutes = IdeaCollection.registerRoutesFactory(processType);
             registerRoutes(processType)(adhResourceAreaProvider);
-
-            var customHeader = adhConfig.pkg_path + IdeaCollection.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templates[processType] =
                 "<adh-meinberlin-idea-collection-workbench></adh-meinberlin-idea-collection-workbench>";
+            adhProcessProvider.buttons[processType] = "<adh-meinberlin-add-proposal-button>" +
+                "</adh-meinberlin-add-proposal-button>";
         }]);
 };

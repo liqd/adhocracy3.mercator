@@ -33,11 +33,11 @@ export var register = (angular) => {
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templates[processType] =
                 "<adh-meinberlin-alexanderplatz-workbench></adh-meinberlin-alexanderplatz-workbench>";
+            adhProcessProvider.buttons[processType] = "<adh-meinberlin-add-proposal-button>" +
+                "</adh-meinberlin-add-proposal-button>";
         }])
-        .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider, adhConfig) => {
+        .config(["adhResourceAreaProvider", (adhResourceAreaProvider) => {
             var processType = RIAlexanderplatzProcess.content_type;
-            var customHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
             Workbench.registerRoutes(processType)(adhResourceAreaProvider);
         }])
         .directive("adhMeinberlinAlexanderplatzWorkbench", [
@@ -62,7 +62,5 @@ export var register = (angular) => {
         .directive("adhMeinberlinAlexanderplatzDocumentEditColumn", [
             "adhConfig", "adhHttp", "adhTopLevelState", "adhResourceUrlFilter", Workbench.documentEditColumnDirective])
         .directive("adhMeinberlinAlexanderplatzProposalEditColumn", [
-            "adhConfig", "adhTopLevelState", "adhResourceUrlFilter", Workbench.proposalEditColumnDirective])
-        .directive("adhMeinberlinAlexanderplatzAddProposalButton", [
-            "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.addProposalButtonDirective]);
+            "adhConfig", "adhTopLevelState", "adhResourceUrlFilter", Workbench.proposalEditColumnDirective]);
 };
