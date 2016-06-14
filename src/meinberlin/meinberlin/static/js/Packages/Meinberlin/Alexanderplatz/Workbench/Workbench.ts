@@ -236,26 +236,6 @@ export var proposalEditColumnDirective = (
     };
 };
 
-export var addProposalButtonDirective = (
-    adhConfig : AdhConfig.IService,
-    adhPermissions : AdhPermissions.Service,
-    adhTopLevelState : AdhTopLevelState.Service
-) => {
-    return {
-        restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/AddProposalButton.html",
-        link: (scope) => {
-            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
-            adhPermissions.bindScope(scope, () => scope.processUrl, "processOptions");
-            scope.proposalItemType = RIGeoProposal.content_type;
-
-            scope.setCameFrom = () => {
-                adhTopLevelState.setCameFrom();
-            };
-        }
-    };
-};
-
 export var registerRoutes = (
     processType : string = "",
     context : string = ""

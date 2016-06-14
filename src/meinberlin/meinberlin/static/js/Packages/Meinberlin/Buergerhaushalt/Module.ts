@@ -33,8 +33,8 @@ export var register = (angular) => {
             registerRoutes(processType)(adhResourceAreaProvider);
             registerRoutes(processType, "buergerhaushalt")(adhResourceAreaProvider);
 
-            var customHeader = adhConfig.pkg_path + AdhMeinberlinIdeaCollection.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
+            var processHeader = adhConfig.pkg_path + AdhMeinberlinIdeaCollection.pkgLocation + "/ProcessHeader.html";
+            adhResourceAreaProvider.processHeaders[processType] = processHeader;
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templates[processType] =

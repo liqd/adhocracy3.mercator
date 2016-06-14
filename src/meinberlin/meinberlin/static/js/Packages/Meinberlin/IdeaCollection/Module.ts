@@ -62,8 +62,8 @@ export var register = (angular) => {
             var registerRoutes = IdeaCollection.registerRoutesFactory(processType);
             registerRoutes(processType)(adhResourceAreaProvider);
 
-            var customHeader = adhConfig.pkg_path + IdeaCollection.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
+            var processHeader = adhConfig.pkg_path + IdeaCollection.pkgLocation + "/ProcessHeader.html";
+            adhResourceAreaProvider.processHeaders[processType] = processHeader;
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templates[processType] =

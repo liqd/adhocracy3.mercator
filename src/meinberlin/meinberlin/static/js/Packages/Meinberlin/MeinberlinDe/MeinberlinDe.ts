@@ -17,7 +17,7 @@ export var headerDirective = (
         scope: {},
         link: (scope) => {
             scope.hideHeader = adhConfig.custom["hide_header"];
-            scope.$on("$destroy", adhTopLevelState.bind("customHeader", scope));
+            scope.$on("$destroy", adhTopLevelState.bind("areaHeader", scope));
         }
     };
 };

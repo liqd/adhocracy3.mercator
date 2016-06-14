@@ -36,8 +36,8 @@ export var register = (angular) => {
             adhConfig,
             adhMetaApi
         ) => {
-            var customHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/CustomHeader.html";
-            adhResourceAreaProvider.customHeader(processType, customHeader);
+            var processHeader = adhConfig.pkg_path + Workbench.pkgLocation + "/ProcessHeader.html";
+            adhResourceAreaProvider.processHeaders[processType] = processHeader;
             Workbench.registerRoutes(processType)(adhResourceAreaProvider, adhMetaApi);
         }])
         .config(["adhProcessProvider", (adhProcessProvider) => {
