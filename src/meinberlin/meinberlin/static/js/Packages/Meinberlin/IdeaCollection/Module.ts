@@ -50,6 +50,7 @@ export var register = (angular) => {
             "adhTopLevelState",
             "$location",
             "$window",
+            "$translate",
             IdeaCollection.proposalDetailColumnDirective])
         .directive("adhMeinberlinIdeaCollectionProposalCreateColumn", [
             "adhConfig", IdeaCollection.proposalCreateColumnDirective])

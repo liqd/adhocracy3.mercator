@@ -72,15 +72,16 @@ export var bindPath = (
 
 
 export var detailDirective = (
-    $q : angular.IQService,
-    $window : angular.IWindowService,
     adhConfig : AdhConfig.IService,
     adhHttp : AdhHttp.Service<any>,
     adhPermissions : AdhPermissions.Service,
     adhPreliminaryNames : AdhPreliminaryNames.Service,
     adhShowError,
     adhSubmitIfValid,
-    adhUploadImage
+    adhUploadImage,
+    $q: angular.IQService,
+    $window: angular.IWindowService,
+    $translate
 ) => {
     return {
         restrict: "E",
@@ -98,17 +99,7 @@ export var detailDirective = (
             adhPermissions.bindScope(scope, () => scope.path);
             adhPermissions.bindScope(scope, () => AdhUtil.parentPath(scope.path), "itemOptions");
 
-            scope.delete = () => {
-                if ($window.confirm("Do you really want to delete this?")) {
-                    var itemPath = AdhUtil.parentPath(scope.path);
-                    adhHttp.delete(itemPath)
-                        .then(() => {
-                            if (typeof scope.onChange !== "undefined") {
-                                scope.onChange();
-                            }
-                        });
-                }
-            };
+            scope.contentType = RIDocumentVersion.content_type;
 
             scope.edit = () => {
                 scope.mode = "edit";

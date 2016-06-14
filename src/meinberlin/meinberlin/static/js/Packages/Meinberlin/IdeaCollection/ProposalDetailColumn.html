@@ -33,12 +33,12 @@
                     class="action-bar-item"
                     data-ng-click="ctrl.toggleOverlay('badges')"
                     data-ng-if="badgeAssignmentPoolOptions.POST && badgesExist">{{ "TR__MANAGE_BADGE_ASSIGNMENTS" | translate }}</a>
-                <a
-                    href=""
-                    data-ng-click="hide()"
-                    data-ng-if="proposalItemOptions.hide"
-                    class="action-bar-item"
-                    title="{{ 'TR__DELETE' | translate }}">{{ 'TR__DELETE' | translate }}</a>
+                <adh-hide-action
+                    data-ng-if="proposalUrl && proposalItemOptions.hide"
+                    data-class="action-bar-item"
+                    data-parent-path="true"
+                    data-resource-path="{{proposalUrl}}"
+                    data-content-type="{{contentType}}"></adh-hide-action>
                 <adh-print-action
                     data-class="action-bar-item"></adh-print-action>
             </div>

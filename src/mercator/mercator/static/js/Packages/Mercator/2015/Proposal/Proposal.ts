@@ -262,21 +262,6 @@ export class Widget<R extends ResourcesBase.IResource> extends AdhResourceWidget
         return instance;
     }
 
-    public _handleDelete(
-        instance : AdhResourceWidgets.IResourceWidgetInstance<R, IScope>,
-        path : string
-    ) : angular.IPromise<void> {
-        var itemPath = AdhUtil.parentPath(path);
-        // FIXME: translate
-        if (this.$window.confirm("Do you really want to delete this?")) {
-            return this.adhHttp.hide(itemPath, RIMercatorProposal.content_type)
-                .then(() => {
-                    this.$location.url("/r/mercator");
-                });
-        }
-        return this.$q.when();
-    }
-
     private initializeScope(scope : IScope) : IScopeData {
         if (!scope.hasOwnProperty("data")) {
             scope.data = <IScopeData>{};

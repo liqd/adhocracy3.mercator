@@ -9,11 +9,12 @@
             data-ng-if="documentItemOptions.POST"
             data-ng-click="setCameFrom()"
             data-ng-href="{{ documentUrl | adhParentPath | adhResourceUrl:'edit' }}">{{ "TR__EDIT" | translate }}</a>
-        <a
-            class="moving-column-menu-button"
-            data-ng-if="documentItemOptions.hide"
-            data-ng-click="hide()"
-            href="">{{ "TR__HIDE" | translate }}</a>
+        <adh-hide-action
+            data-ng-if="proposalUrl && proposalItemOptions.hide"
+            data-class="action-bar-item"
+            data-parent-path="true"
+            data-resource-path="{{proposalUrl}}"
+            data-content-type="{{contentType}}"></adh-hide-action>
 
         <div class="moving-column-menu-nav">
             <a class="moving-column-menu-nav-button" data-ng-href="{{ processUrl | adhResourceUrl }}" title="{{ 'TR__CLOSE' | translate }}"><i class="icon-x moving-column-menu-nav-icon"></i></a>

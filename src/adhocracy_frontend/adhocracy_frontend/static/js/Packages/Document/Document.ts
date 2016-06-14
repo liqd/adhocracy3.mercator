@@ -242,8 +242,11 @@ export var postEdit = (
     oldParagraphVersions : RIParagraphVersion[],
     hasMap : boolean = false
 ) : angular.IPromise<RIDocumentVersion> => {
-    // This function assumes that paragraphs can not be reordered or deleted
-    // and that new paragraphs are always appended to the end.
+    // This function assumes the following:
+    // - paragraphs can not be reordered
+    // - paragraphs can't really be deleted, only excluded from the
+    // next version of the document (by marking them as deleted here in the FE),
+    // - new paragraphs are always appended to the end.
 
     var documentPath = AdhUtil.parentPath(oldVersion.path);
     var poolPath = AdhUtil.parentPath(documentPath);
@@ -561,4 +564,3 @@ export var editDirective = (
         }
     };
 };
-

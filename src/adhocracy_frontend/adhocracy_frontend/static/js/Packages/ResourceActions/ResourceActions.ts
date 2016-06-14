@@ -1,4 +1,5 @@
 import * as AdhConfig from "../Config/Config";
+import * as AdhHttp from "../Http/Http";
 import * as AdhMovingColumns from "../MovingColumns/MovingColumns";
 import * as AdhPermissions from "../Permissions/Permissions";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
@@ -57,24 +58,6 @@ export var shareActionDirective = () => {
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             scope.report = () => {
                 column.toggleOverlay("share");
-            };
-        }
-    };
-};
-
-export var deleteActionDirective = () => {
-    return {
-        restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"delete();\">{{ 'TR__DELETE' | translate }}</a>",
-        require: "^adhMovingColumn",
-        scope: {
-            resourcePath: "@",
-            parentPath: "=?",
-            class: "@"
-        },
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            scope.delete = () => {
-                column.$broadcast("triggerDelete", scope.resourcePath);
             };
         }
     };
@@ -169,6 +152,38 @@ export var cancelActionDirective = (
                 var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
                 var url = adhResourceUrl(path);
                 adhTopLevelState.goToCameFrom(url);
+            };
+        }
+    };
+};
+
+export var hideActionDirective = (
+    adhHttp: AdhHttp.Service<any>,
+    adhTopLevelState: AdhTopLevelState.Service,
+    $q : angular.IQService,
+    $translate,
+    $window : Window
+) => {
+    return {
+        restrict: "E",
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"hide();\">{{ 'TR__HIDE' | translate }}</a>",
+        require: "^adhMovingColumn",
+        scope: {
+            resourcePath: "@",
+            parentPath: "=?",
+            class: "@",
+            contentType: "@"
+        },
+        link: (scope, element) => {
+            scope.hide = (): angular.IPromise<void> => {
+                return $translate("TR__ASK_TO_CONFIRM_HIDE_ACTION").then((question) => {
+                    var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
+                    if ($window.confirm(question)) {
+                        adhHttp.hide(path, scope.contentType).then(() => {
+                            adhTopLevelState.goToCameFrom("/");
+                        });
+                    }
+                });
             };
         }
     };
