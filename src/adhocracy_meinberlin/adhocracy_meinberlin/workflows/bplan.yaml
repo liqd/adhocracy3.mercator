@@ -24,6 +24,7 @@ states:
         - [view,                     ~,         A,           A,         A,       A,         ~]
         - [create,                  A,         ~,           A,          A,      A,         ~]
         - [create_proposal,         A,         ~,           ~,          ~,      ~,         ~]
+        - [delete_proposal,         A,         A,           A,          A,      A,         A]   
   closed:
     title: Closed
     acm:
