@@ -9,6 +9,7 @@ import * as AdhTopLevelState from "../../../TopLevelState/TopLevelState";
 import * as AdhUtil from "../../../Util/Util";
 
 import RICommentVersion from "../../../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
+import RIMercatorProposal from "../../../../Resources_/adhocracy_mercator/resources/mercator/IMercatorProposal";
 import RIMercatorProposalVersion from "../../../../Resources_/adhocracy_mercator/resources/mercator/IMercatorProposalVersion";
 import RIProcess from "../../../../Resources_/adhocracy_mercator/resources/mercator/IProcess";
 import * as SIComment from "../../../../Resources_/adhocracy_core/sheets/comment/IComment";
@@ -78,9 +79,7 @@ export var proposalDetailColumnDirective = (
             column.bindVariablesAndClear(scope, ["platformUrl", "proposalUrl"]);
             adhPermissions.bindScope(scope, () => scope.proposalUrl && AdhUtil.parentPath(scope.proposalUrl), "proposalItemOptions");
 
-            scope.delete = () => {
-                column.$broadcast("triggerDelete", scope.proposalUrl);
-            };
+            scope.contentType = RIMercatorProposal.content_type;
 
             scope.print = () => {
                 // only the focused column is printed

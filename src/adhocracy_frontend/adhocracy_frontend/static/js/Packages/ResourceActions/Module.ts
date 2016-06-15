@@ -16,10 +16,10 @@ export var register = (angular) => {
         .directive("adhResourceActions", ["adhPermissions", "adhConfig", AdhResourceActions.resourceActionsDirective])
         .directive("adhReportAction", [AdhResourceActions.reportActionDirective])
         .directive("adhShareAction", [AdhResourceActions.shareActionDirective])
-        .directive("adhDeleteAction", [AdhResourceActions.deleteActionDirective])
         .directive("adhEditAction", ["adhTopLevelState", "adhResourceUrlFilter", "$location", AdhResourceActions.editActionDirective])
         .directive("adhModerateAction", [
             "adhTopLevelState", "adhResourceUrlFilter", "$location", AdhResourceActions.moderateActionDirective])
         .directive("adhPrintAction", ["adhTopLevelState", "$window", AdhResourceActions.printActionDirective])
-        .directive("adhCancelAction", ["adhTopLevelState", "adhResourceUrlFilter", AdhResourceActions.cancelActionDirective]);
+        .directive("adhCancelAction", ["adhTopLevelState", "adhResourceUrlFilter", AdhResourceActions.cancelActionDirective])
+        .directive("adhHideAction", ["adhHttp", "adhTopLevelState", "$q", "$translate", "$window", AdhResourceActions.hideActionDirective]);
 };

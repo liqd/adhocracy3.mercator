@@ -14,14 +14,29 @@
     </a>
 
     <adh-recompile-on-change data-ng-switch-when="body" data-value="{{proposalUrl}}">
-        <adh-resource-actions
-            data-resource-path="{{proposalUrl}}"
-            data-edit="true"
-            data-report="true"
-            data-share="true"
-            data-delete="true"
-            data-print="true"></adh-resource-actions>
-
+        <div class="action-bar">
+            <adh-edit-action
+                data-ng-if="proposalUrl && proposalItemOptions.PUT"
+                data-class="action-bar-item"
+                data-resource-path="{{proposalUrl}}"></adh-edit-action>
+            <adh-report-action
+                data-class="action-bar-item"
+                data-parent-path="true"
+                data-resource-path="{{proposalUrl}}"></adh-report-action>
+            <adh-share-action
+                data-class="action-bar-item">
+            </adh-share-action>
+            <adh-hide-action
+                data-ng-if="proposalUrl && proposalItemOptions.hide"
+                data-class="action-bar-item"
+                data-parent-path="true"
+                data-resource-path="{{proposalUrl}}"
+                data-content-type="{{contentType}}">
+            </adh-hide-action>
+            <adh-print-action
+                data-class="action-bar-item">
+            </adh-print-action>
+        </div>
         <adh-document-create data-path="{{processUrl}}" data-has-map="true" data-has-image="true" data-polygon="polygon"></adh-document-create>
         <adh-resource-wrapper>
             <adh-mercator-2015-proposal-detail-view data-ng-if="proposalUrl" data-path="{{proposalUrl}}"></adh-mercator-2015-proposal-detail-view>

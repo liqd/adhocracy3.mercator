@@ -25,7 +25,7 @@ var pkgLocation = "/Comment";
 export interface ICommentResourceScope extends angular.IScope {
     path : string;
     submit : () => any;
-    delete : () => angular.IPromise<void>;
+    hide : () => angular.IPromise<void>;
     refersTo : string;
     poolPath : string;
     hideCancel? : boolean;
@@ -175,7 +175,8 @@ export var commentDetailDirective = (
     adhTopLevelState : AdhTopLevelState.Service,
     adhRecursionHelper,
     $window : Window,
-    $q : angular.IQService
+    $q : angular.IQService,
+    $translate
 ) => {
     var _update = update(adhHttp, $q);
     var _postEdit = postEdit(adhHttp, adhPreliminaryNames);
@@ -238,7 +239,7 @@ export var commentDetailDirective = (
             });
         };
 
-        scope.delete = () : angular.IPromise<void> => {
+        scope.hide = () : angular.IPromise<void> => {
             // FIXME: translate
             if ($window.confirm("Do you really want to delete this?")) {
                 return adhHttp.hide(scope.data.itemPath, RIComment.content_type).then(() => {
