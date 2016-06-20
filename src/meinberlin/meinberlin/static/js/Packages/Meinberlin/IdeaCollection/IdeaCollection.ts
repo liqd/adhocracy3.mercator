@@ -98,6 +98,7 @@ export var proposalDetailColumnDirective = (
     adhConfig : AdhConfig.IService,
     adhHttp : AdhHttp.Service<any>,
     adhPermissions : AdhPermissions.Service,
+    adhResourceUrlFilter,
     adhTopLevelState : AdhTopLevelState.Service
 ) => {
     return {
@@ -107,6 +108,9 @@ export var proposalDetailColumnDirective = (
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
             column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
             adhPermissions.bindScope(scope, () => scope.proposalUrl && AdhUtil.parentPath(scope.proposalUrl), "proposalItemOptions");
+            scope.setCameFromToProcess = () => {
+                adhTopLevelState.setCameFrom(adhResourceUrlFilter(scope.processUrl));
+            };
 
             var badgeAssignmentPoolPath;
             scope.$watch("proposalUrl", (proposalUrl) => {

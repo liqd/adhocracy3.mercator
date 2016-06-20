@@ -91,7 +91,7 @@ export var documentDetailColumnDirective = (
     adhPermissions : AdhPermissions.Service,
     adhTopLevelState : AdhTopLevelState.Service,
     adhHttp : AdhHttp.Service<any>,
-    adhResourceUrl,
+    adhResourceUrlFilter,
     $location : angular.ILocationService,
     $window : angular.IWindowService,
     $translate
@@ -106,6 +106,10 @@ export var documentDetailColumnDirective = (
 
             scope.setCameFrom = () => {
                 adhTopLevelState.setCameFrom();
+            };
+
+            scope.setCameFromToProcess = () => {
+                adhTopLevelState.setCameFrom(adhResourceUrlFilter(scope.processUrl));
             };
         }
     };

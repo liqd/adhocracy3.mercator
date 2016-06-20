@@ -35,6 +35,7 @@
                     data-ng-if="badgeAssignmentPoolOptions.POST && badgesExist">{{ "TR__MANAGE_BADGE_ASSIGNMENTS" | translate }}</a>
                 <adh-hide-action
                     data-ng-if="proposalUrl && proposalItemOptions.hide"
+                    data-ng-click="setCameFromToProcess()"
                     data-class="action-bar-item"
                     data-parent-path="true"
                     data-resource-path="{{proposalUrl}}"></adh-hide-action>

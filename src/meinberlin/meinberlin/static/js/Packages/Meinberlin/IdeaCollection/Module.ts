@@ -47,6 +47,7 @@ export var register = (angular) => {
             "adhConfig",
             "adhHttp",
             "adhPermissions",
+            "adhResourceUrlFilter",
             "adhTopLevelState",
             "$location",
             "$window",
