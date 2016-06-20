@@ -15,6 +15,7 @@ export interface IService {
     rest_platform_path : string;
     canonical_url : string;
     redirect_url : string;
+    leaflet_options : string;
     pkg_path : string;
     ws_url : string;
     embedded : boolean;

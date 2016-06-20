@@ -114,7 +114,8 @@ export var mapInput = (
             mapElement.height(scope.height);
 
             var map = leaflet.map(mapElement[0]);
-            leaflet.tileLayer("https://maps.berlinonline.de/tile/bright/{z}/{x}/{y}.png", {maxZoom: 18}).addTo(map);
+            var leafletOptions = JSON.parse(adhConfig.leaflet_options);
+            leaflet.tileLayer(leafletOptions).addTo(map);
 
             scope.polygon = leaflet.polygon(leaflet.GeoJSON.coordsToLatLngs(scope.rawPolygon), adhMapData.style);
             scope.polygon.addTo(map);
