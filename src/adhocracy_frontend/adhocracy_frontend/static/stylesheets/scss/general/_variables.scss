@@ -10,9 +10,11 @@ $color-text-highlight-extrovert: lighten($color-text-highlight-normal, 10%);
 $color-text-inverted: white;
 
 // Function colors
-$color-function-valid: #2eac66;
-$color-function-invalid: #e6332a;
+$color-function-valid: #4a6d21;
+$color-function-invalid: #b30000;
 $color-function-neutral: #f6d02b;
+$color-function-informative: #706047;
+$color-function-warning: #c80013;
 
 // Background colors
 $color-background-base: white;
@@ -24,7 +26,7 @@ $color-structure-normal: #e6e6e6;
 $color-structure-introvert: #ccc;
 $color-structure-transparent: transparent;
 
-//Brand colors
+// Brand colors
 $color-brand-one-normal: #fcb813;
 $color-brand-one-introvert: darken($color-brand-one-normal, 10%);
 $color-brand-one-extrovert: lighten($color-brand-one-normal, 10%);
@@ -50,21 +52,21 @@ $moving-column-menu-height: 24px;
 $moving-column-border-width: 5px;
 $annotation-width: 34%;
 
-//Padding
+// Padding
 $padding-small: 0.5rem;
 $padding-medium: 1rem;
 
-//Other
+// Other
 $section-jump-navigation-width: 2rem;
 $moving-column-single-width-max: 55rem;
 $moving-column-single-width-min: 35rem;
 $badge-line-height: 1 + 4px / $font-size-smaller;
 $badge-height: $badge-line-height * $font-size-smaller;
 
-//Line-height (leading)
+// Line-height (leading)
 $line-height-normal: 1.15;
 $line-height-large: 1.2;
 $line-height-plus: 1.6;
 
-//Breakpoints
+// Breakpoints
 $breakpoint-small-device: 640px;

@@ -2,10 +2,6 @@
 $color-text-normal: #333;
 $color-text-highlight-normal: #00b4cc;
 
-// Function colors
-$color-function-valid: #73bf44;
-$color-function-invalid: #f00;
-
 // Brand colors
 $color-brand-one-normal: #00b4cc;
 $color-brand-one-introvert: darken($color-brand-one-normal, 10%);
@@ -18,10 +14,10 @@ $font-family-normal: "Open Sans", sans-serif;
 $font-size-large: 18px;
 $font-size-huge: 20px;
 
-//images
+// Images
 $thumbnail-width: 105px;
 $thumbnail-height: 90px;
 
-//Buttons
+// Buttons
 $color-button-cta-base: $color-brand-two-normal;
 $color-button-cta-hover-background: $color-brand-two-introvert;

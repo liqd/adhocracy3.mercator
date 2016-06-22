@@ -22,8 +22,8 @@ Badges for labeling things
     @include inline-block;
     @include rem(margin-right, 5px);
     @include rem(font-size, $font-size-smaller);
-    background: $color-structure-normal;
-    color: $color-text-normal;
+    background: $color-brand-two-normal;
+    color: $color-text-inverted;
     line-height: $badge-line-height;
     text-transform: uppercase;
 }

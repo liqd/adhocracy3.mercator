@@ -92,6 +92,16 @@ category: Variables
         <td>For invalid content</td>
     </tr>
     <tr>
+        <td><div class="example-color color-function-warning"></div></td>
+        <td><code>color-function-warning</code></td>
+        <td>For warnings</td>
+    </tr>
+    <tr>
+        <td><div class="example-color color-function-informative"></div></td>
+        <td><code>color-function-informative</code></td>
+        <td>For messages</td>
+    </tr>
+    <tr>
         <td><div class="example-color color-function-neutral"></div></td>
         <td><code>color-function-neutral</code></td>
         <td>For neutral (neither valid nor invalid) content</td>
@@ -193,6 +203,8 @@ category: Variables
 .color-function-valid {background-color: $color-function-valid;}
 .color-function-invalid {background-color: $color-function-invalid;}
 .color-function-neutral {background-color: $color-function-neutral;}
+.color-function-warning {background-color: $color-function-warning;}
+.color-function-informative {background-color: $color-function-informative;}
 
 .color-background-base {background-color: $color-background-base;}
 .color-background-base-introvert {background-color: $color-background-base-introvert;}
@@ -219,3 +231,7 @@ category: Variables
 @include check-contrast($color-text-inverted, $color-text-highlight-normal);
 @include check-contrast($color-text-highlight-normal, $color-background-base);
 @include check-contrast($color-text-highlight-normal, $color-background-base-introvert);
+@include check-contrast($color-text-inverted, $color-function-valid);
+@include check-contrast($color-text-inverted, $color-function-invalid);
+@include check-contrast($color-text-inverted, $color-function-informative);
+@include check-contrast($color-text-inverted, $color-function-warning);

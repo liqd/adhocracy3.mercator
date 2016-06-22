@@ -350,7 +350,8 @@ A list of alert messages to notify users in the moving column
 
 .moving-column-alert {
     @include rem(padding, 1rem);
-    background: $color-structure-normal;
+    background: $color-function-informative;
+    color: $color-text-inverted;
     text-align: center;
 
     &.m-error {
@@ -358,7 +359,7 @@ A list of alert messages to notify users in the moving column
     }
 
     &.m-warning {
-        background: mix($color-function-invalid, $color-structure-normal);
+        background: $color-function-warning;
     }
 
     &.m-success {

@@ -30,7 +30,7 @@ Badge modifiers for labeling if a proposal has been realized or not.
     }
 
     &.m-is-realized {
-        background-color: $color-brand-two-normal;
+        background-color: $color-brand-one-normal;
     }
 
     &.m-is-not-realized {
@@ -39,7 +39,7 @@ Badge modifiers for labeling if a proposal has been realized or not.
 
     &.m-info {
         padding-left: 0;
-        background-color: $color-brand-two-normal;
+        background-color: $color-brand-one-normal;
 
         &:before {
             @include inline-block;
