@@ -21,6 +21,12 @@
         data-parent-path="parentPath"
         data-redirect-url="{{deleteRedirectUrl}}"
         data-resource-path="{{resourcePath}}"></adh-hide-action>
+    <adh-hide-comment
+        data-ng-if="hideComment && options.hide"
+        data-class="action-bar-item"
+        data-parent-path="true"
+        data-redirect-url="{{deleteRedirectUrl}}"
+        data-resource-path="{{resourcePath}}"></adh-hide-comment>
     <adh-resource-widget-delete-action
         data-ng-if="resourceWidgetDelete && resourcePath && options.hide"
         data-class="action-bar-item"

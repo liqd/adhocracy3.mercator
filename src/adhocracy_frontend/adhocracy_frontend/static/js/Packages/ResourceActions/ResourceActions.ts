@@ -19,6 +19,7 @@ export var resourceActionsDirective = (
             deleteRedirectUrl: "@?",
             share: "=?",
             hide: "=?",
+            hideComment: "=?",
             resourceWidgetDelete: "=?",
             print: "=?",
             report: "=?",
@@ -76,12 +77,11 @@ export var hideActionDirective = (
     return {
         restrict: "E",
         template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"hide();\">{{ 'TR__HIDE' | translate }}</a>",
-        require: "^adhMovingColumn",
         scope: {
             resourcePath: "@",
             parentPath: "=?",
             class: "@",
-            redirectUrl: "@?",
+            redirectUrl: "@?"
         },
         link: (scope, element) => {
             scope.hide = () => {
@@ -102,6 +102,43 @@ export var hideActionDirective = (
         }
     };
 };
+
+export var hideCommentDirective = (
+    adhHttp : AdhHttp.Service<any>,
+    adhTopLevelState : AdhTopLevelState.Service,
+    adhResourceUrlFilter,
+    $translate,
+    $window : Window
+) => {
+    return {
+        restrict: "E",
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"hideComment();\"><i class=\"comment-header-icon icon-x\"></a>",
+        scope: {
+            resourcePath: "@",
+            parentPath: "=?",
+            class: "@",
+            redirectUrl: "@?"
+        },
+        link: (scope, element) => {
+            scope.hideComment = () => {
+                return $translate("TR__ASK_TO_CONFIRM_HIDE_ACTION").then((question) => {
+                    var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
+                    if ($window.confirm(question)) {
+                        return adhHttp.hide(path).then(() => {
+                            var url = scope.redirectUrl;
+                            if (!url) {
+                                var processUrl = adhTopLevelState.get("processUrl");
+                                url = processUrl ? adhResourceUrlFilter(processUrl) : "/";
+                            }
+                            adhTopLevelState.goToCameFrom(url);
+                        });
+                    }
+                });
+            };
+        }
+    };
+};
+
 
 export var resourceWidgetDeleteActionDirective = () => {
     return {
