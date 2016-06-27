@@ -28,22 +28,13 @@
                         class="comment-header-link"
                         title="{{ 'TR__EDIT' | translate }}">
                         <i class="comment-header-icon icon-pencil"></i>
-
                     </a>
-                    <a href=""
-                        data-ng-click="hide()"
-                        data-ng-if="versionOptions.hide"
-                        class="comment-header-link"
-                        title="{{ 'TR__HIDE' | translate }}">
-                        <i class="comment-header-icon icon-x"></i>
-                    </a>
-                    <a href=""
-                        data-ng-click="report()"
-                        data-ng-if="report"
-                        class="comment-header-link comment-header-link-report"
-                        title="{{ 'TR__REPORT' | translate }}">
-                        <i class="comment-header-icon icon-flag"></i>
-                    </a>
+                    <adh-resource-actions
+                        data-resource-path="{{path}}"
+                        data-content-type="{{contentType}}"
+                        data-parent-path="true"
+                        data-report="true"
+                        data-hide="true"></adh-resource-actions>
                 </span>
                 <adh-recompile-on-change data-value="{{data.path}}">
                     <adh-rate data-refers-to="{{data.path}}"></adh-rate>

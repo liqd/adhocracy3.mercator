@@ -5,6 +5,8 @@ import * as AdhPermissions from "../Permissions/Permissions";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 import * as AdhUtil from "../Util/Util";
 
+import RIComment from "../../Resources_/adhocracy_core/resources/comment/IComment";
+
 var pkgLocation = "/ResourceActions";
 
 
@@ -62,6 +64,7 @@ export var resourceActionsDirective = (
             resourcePath: "@",
             parentPath: "=?",
             deleteRedirectUrl: "@?",
+            contentType: "@?",
             share: "=?",
             hide: "=?",
             resourceWidgetDelete: "=?",
@@ -83,12 +86,16 @@ export var resourceActionsDirective = (
 export var reportActionDirective = () => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"report();\">{{ 'TR__REPORT' | translate }}</a>",
+        template: "<a data-ng-if=\"!commentTemplate\" class=\"{{class}}\" href=\"\" data-ng-click=\"report();\">" +
+            "{{ 'TR__REPORT' | translate }}</a><a data-ng-if=\"commentTemplate\" class=\"comment-header-link\" href=\"\"" +
+            "data-ng-click=\"report();\"><i class=\"comment-header-icon icon-flag\"></i></a>",
         scope: {
             class: "@",
+            contentType: "@?",
             modals: "=",
         },
         link: (scope) => {
+            scope.commentTemplate = scope.contentType === RIComment.content_type;
             scope.report = () => {
                 scope.modals.toggleOverlay("abuse");
             };
@@ -99,13 +106,13 @@ export var reportActionDirective = () => {
 export var shareActionDirective = () => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"report();\">{{ 'TR__SHARE' | translate }}</a>",
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"share();\">{{ 'TR__SHARE' | translate }}</a>",
         scope: {
             class: "@",
             modals: "=",
         },
         link: (scope) => {
-            scope.report = () => {
+            scope.share = () => {
                 scope.modals.toggleOverlay("share");
             };
         }
@@ -121,14 +128,18 @@ export var hideActionDirective = (
 ) => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"hide();\">{{ 'TR__HIDE' | translate }}</a>",
+        template: "<a data-ng-if=\"!commentTemplate\" class=\"{{class}}\" href=\"\" data-ng-click=\"hide();\">" +
+            "{{ 'TR__HIDE' | translate }}</a><a data-ng-if=\"commentTemplate\" class=\"comment-header-link\" href=\"\"" +
+            "data-ng-click=\"hide();\"><i class=\"comment-header-icon icon-x\"></i></a>",
         scope: {
             resourcePath: "@",
             parentPath: "=?",
             class: "@",
+            contentType: "@?",
             redirectUrl: "@?",
         },
         link: (scope, element) => {
+            scope.commentTemplate = scope.contentType === RIComment.content_type;
             scope.hide = () => {
                 return $translate("TR__ASK_TO_CONFIRM_HIDE_ACTION").then((question) => {
                     var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;

@@ -24,6 +24,11 @@
     }
 }
 
+.comment-header-links .action-bar {
+    display: inherit;
+    background: $color-background-base;
+}
+
 .action-bar {
     @include rem(font-size, $font-size-small);
     @include inline-block;
