@@ -47,11 +47,15 @@ export var register = (angular) => {
         .directive("adhMeinberlinAlexanderplatzProcessColumn", [
             "adhConfig", "adhPermissions", "adhTopLevelState", "adhHttp", Workbench.processDetailColumnDirective])
         .directive("adhMeinberlinAlexanderplatzDocumentDetailColumn", [
-            "adhConfig", "adhPermissions", Workbench.documentDetailColumnDirective])
+            "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.documentDetailColumnDirective])
         .directive("adhMeinberlinAlexanderplatzProposalDetailColumn", [
-            "adhConfig", "adhPermissions", Workbench.proposalDetailColumnDirective])
-        .directive("adhMeinberlinAlexanderplatzDocumentCreateColumn", ["adhConfig", "adhHttp", Workbench.documentCreateColumnDirective])
-        .directive("adhMeinberlinAlexanderplatzProposalCreateColumn", ["adhConfig", Workbench.proposalCreateColumnDirective])
-        .directive("adhMeinberlinAlexanderplatzDocumentEditColumn", ["adhConfig", "adhHttp", Workbench.documentEditColumnDirective])
-        .directive("adhMeinberlinAlexanderplatzProposalEditColumn", ["adhConfig", Workbench.proposalEditColumnDirective]);
+            "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.proposalDetailColumnDirective])
+        .directive("adhMeinberlinAlexanderplatzDocumentCreateColumn", [
+            "adhConfig", "adhHttp", "adhTopLevelState", Workbench.documentCreateColumnDirective])
+        .directive("adhMeinberlinAlexanderplatzProposalCreateColumn", [
+            "adhConfig", "adhTopLevelState", Workbench.proposalCreateColumnDirective])
+        .directive("adhMeinberlinAlexanderplatzDocumentEditColumn", [
+            "adhConfig", "adhHttp", "adhTopLevelState", Workbench.documentEditColumnDirective])
+        .directive("adhMeinberlinAlexanderplatzProposalEditColumn", [
+            "adhConfig", "adhTopLevelState", Workbench.proposalEditColumnDirective]);
 };

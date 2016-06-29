@@ -1,12 +1,7 @@
 <div data-ng-switch="transclusionId">
     <div data-ng-switch-when="menu">
-        <div class="moving-column-tab" data-ng-switch="overlay">
-            <span data-ng-switch-when="abuse">
-                <i class="icon-flag moving-column-icon"></i>
-            </span>
-            <span data-ng-switch-default="">
-                <i class="icon-speechbubbles moving-column-icon"></i>
-            </span>
+        <div class="moving-column-tab">
+            <i class="icon-speechbubbles moving-column-icon"></i>
         </div>
         <div class="moving-column-menu-nav">
             <a
@@ -21,11 +16,4 @@
         data-path="{{commentableUrl}}"
         data-ng-switch-when="body">
     </adh-comment-listing>
-
-    <adh-report-abuse
-        data-ng-switch-when="overlays"
-        data-ng-if="overlay === 'abuse'"
-        data-modals="column"
-        data-url="{{ shared.abuseUrl | adhParentPath | adhResourceUrl | adhCanonicalUrl }}">
-    </adh-report-abuse>
 </div>

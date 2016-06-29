@@ -31,9 +31,12 @@ export var register = (angular) => {
                 .registerDirective("debate-workbench");
         }])
         .directive("adhDebateWorkbench", ["adhConfig", "adhTopLevelState", DebateWorkbench.debateWorkbenchDirective])
-        .directive("adhDocumentDetailColumn", ["adhConfig", "adhPermissions", DebateWorkbench.documentDetailColumnDirective])
-        .directive("adhDocumentCreateColumn", ["adhConfig", DebateWorkbench.documentCreateColumnDirective])
-        .directive("adhDocumentEditColumn", ["adhConfig", DebateWorkbench.documentEditColumnDirective])
-        .directive("adhDebateProcessDetailColumn", ["adhConfig", "adhPermissions", DebateWorkbench.processDetailColumnDirective])
-        .directive("adhDebateProcessDetailAnnounceColumn", ["adhConfig", DebateWorkbench.processDetailAnnounceColumnDirective]);
+        .directive("adhDocumentDetailColumn", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", DebateWorkbench.documentDetailColumnDirective])
+        .directive("adhDocumentCreateColumn", ["adhConfig", "adhTopLevelState", DebateWorkbench.documentCreateColumnDirective])
+        .directive("adhDocumentEditColumn", ["adhConfig", "adhTopLevelState", DebateWorkbench.documentEditColumnDirective])
+        .directive("adhDebateProcessDetailColumn", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", DebateWorkbench.processDetailColumnDirective])
+        .directive("adhDebateProcessDetailAnnounceColumn", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", DebateWorkbench.processDetailAnnounceColumnDirective]);
 };

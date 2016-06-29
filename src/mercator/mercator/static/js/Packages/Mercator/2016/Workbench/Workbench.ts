@@ -54,15 +54,15 @@ var bindRedirectsToScope = (scope, adhConfig, adhResourceUrlFilter, $location) =
 
 export var proposalCreateColumnDirective = (
     adhConfig : AdhConfig.IService,
+    adhTopLevelState : AdhTopLevelState.Service,
     adhResourceUrlFilter : (path : string) => string,
     $location : angular.ILocationService
 ) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalCreateColumn.html",
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl"]);
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
             bindRedirectsToScope(scope, adhConfig, adhResourceUrlFilter, $location);
         }
     };
@@ -80,7 +80,8 @@ export var proposalDetailColumnDirective = (
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalDetailColumn.html",
         require: "^adhMovingColumn",
         link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            scope.$on("$destroy", adhTopLevelState.bind("proposalUrl", scope));
             adhPermissions.bindScope(scope, () => scope.proposalUrl && AdhUtil.parentPath(scope.proposalUrl), "proposalItemOptions");
             adhPermissions.bindScope(scope, () => scope.proposalUrl, "proposalOptions");
 
@@ -102,15 +103,16 @@ export var proposalDetailColumnDirective = (
 
 export var proposalEditColumnDirective = (
     adhConfig : AdhConfig.IService,
+    adhTopLevelState : AdhTopLevelState.Service,
     adhResourceUrlFilter : (path : string) => string,
     $location : angular.ILocationService
 ) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalEditColumn.html",
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            scope.$on("$destroy", adhTopLevelState.bind("proposalUrl", scope));
             bindRedirectsToScope(scope, adhConfig, adhResourceUrlFilter, $location);
         }
     };
@@ -119,15 +121,16 @@ export var proposalEditColumnDirective = (
 
 export var proposalModerateColumnDirective = (
     adhConfig : AdhConfig.IService,
+    adhTopLevelState : AdhTopLevelState.Service,
     adhResourceUrlFilter : (path : string) => string,
     $location : angular.ILocationService
 ) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalModerateColumn.html",
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            scope.$on("$destroy", adhTopLevelState.bind("proposalUrl", scope));
             bindRedirectsToScope(scope, adhConfig, adhResourceUrlFilter, $location);
         }
     };
@@ -142,9 +145,9 @@ export var proposalListingColumnDirective = (
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ProposalListingColumn.html",
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl", "proposalUrl"]);
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            scope.$on("$destroy", adhTopLevelState.bind("proposalUrl", scope));
             scope.contentType = RIProposal.content_type;
 
             scope.sorts = [{

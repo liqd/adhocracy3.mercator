@@ -135,7 +135,8 @@ export var register = (angular) => {
             "adhConfig", "adhResourceArea", "adhTopLevelState", "adhPermissions", "$location", AdhUserViews.indicatorDirective])
         .directive("adhUserMeta", ["adhConfig", "adhResourceArea", "adhGetBadges", AdhUserViews.metaDirective])
         .directive("adhUserMessage", ["adhConfig", "adhHttp", AdhUserViews.userMessageDirective])
-        .directive("adhUserDetailColumn", ["adhPermissions", "adhConfig", "$timeout", AdhUserViews.userDetailColumnDirective])
+        .directive("adhUserDetailColumn", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", "$timeout", AdhUserViews.userDetailColumnDirective])
         .directive("adhUserProfileImage", ["adhHttp", "adhConfig", AdhUserViews.adhUserProfileImageDirective])
         .directive("adhUserProfileImageEdit", ["adhHttp", "adhPermissions", "adhConfig", AdhUserViews.adhUserProfileImageEditDirective])
         .directive("adhUserActivityOverview", ["adhConfig", "adhHttp", AdhUserViews.adhUserActivityOverviewDirective])

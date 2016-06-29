@@ -13,7 +13,7 @@ var pkgLocation = "/ResourceActions";
 
 
 export class Modals {
-    public overlay : string;
+    public modal : string;
     public alerts : {[id : number]: {message : string, mode : string}};
     private lastId : number;
 
@@ -36,27 +36,27 @@ export class Modals {
         delete this.alerts[id];
     }
 
-    public showOverlay(key : string) : void {
-        this.overlay = key;
+    public showModal(key : string) : void {
+        this.modal = key;
     }
 
-    public hideOverlay(key? : string) : void {
-        if (typeof key === "undefined" || this.overlay === key) {
-            this.overlay = undefined;
+    public hideModal(key? : string) : void {
+        if (typeof key === "undefined" || this.modal === key) {
+            this.modal = undefined;
         }
     }
 
-    public toggleOverlay(key : string, condition? : boolean) : void {
-        if (condition || (typeof condition === "undefined" && this.overlay !== key)) {
-            this.overlay = key;
-        } else if (this.overlay === key) {
-            this.overlay = undefined;
+    public toggleModal(key : string, condition? : boolean) : void {
+        if (condition || (typeof condition === "undefined" && this.modal !== key)) {
+            this.modal = key;
+        } else if (this.modal === key) {
+            this.modal = undefined;
         }
     }
 
     public clear() : void {
         this.alerts = {};
-        this.overlay = undefined;
+        this.modal = undefined;
     }
 }
 
@@ -126,7 +126,7 @@ export var reportActionDirective = () => {
         },
         link: (scope) => {
             scope.report = () => {
-                scope.modals.toggleOverlay("abuse");
+                scope.modals.toggleModal("abuse");
             };
         }
     };
@@ -142,7 +142,7 @@ export var shareActionDirective = () => {
         },
         link: (scope) => {
             scope.share = () => {
-                scope.modals.toggleOverlay("share");
+                scope.modals.toggleModal("share");
             };
         }
     };
@@ -160,7 +160,7 @@ export var assignBadgesActionDirective = () => {
         },
         link: (scope) => {
             scope.assignBadges = () => {
-                scope.modals.toggleOverlay("badges");
+                scope.modals.toggleModal("badges");
             };
         }
     };

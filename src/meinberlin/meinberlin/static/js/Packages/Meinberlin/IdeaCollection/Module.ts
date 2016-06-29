@@ -44,19 +44,13 @@ export var register = (angular) => {
         .directive("adhMeinberlinIdeaCollectionWorkbench", [
             "adhTopLevelState", "adhConfig", "adhHttp", IdeaCollection.workbenchDirective])
         .directive("adhMeinberlinIdeaCollectionProposalDetailColumn", [
-            "adhConfig",
-            "adhHttp",
-            "adhPermissions",
-            "adhTopLevelState",
-            "$location",
-            "$window",
-            "$translate",
-            IdeaCollection.proposalDetailColumnDirective])
+            "adhConfig", "adhTopLevelState", IdeaCollection.proposalDetailColumnDirective])
         .directive("adhMeinberlinIdeaCollectionProposalCreateColumn", [
-            "adhConfig", IdeaCollection.proposalCreateColumnDirective])
-        .directive("adhMeinberlinIdeaCollectionProposalEditColumn", ["adhConfig", IdeaCollection.proposalEditColumnDirective])
-        .directive("adhMeinberlinIdeaCollectionDetailColumn", ["adhConfig", IdeaCollection.detailColumnDirective])
-        .directive("adhMeinberlinIdeaCollectionEditColumn", ["adhConfig", IdeaCollection.editColumnDirective])
+            "adhConfig", "adhTopLevelState", IdeaCollection.proposalCreateColumnDirective])
+        .directive("adhMeinberlinIdeaCollectionProposalEditColumn", [
+            "adhConfig", "adhTopLevelState", IdeaCollection.proposalEditColumnDirective])
+        .directive("adhMeinberlinIdeaCollectionDetailColumn", ["adhConfig", "adhTopLevelState", IdeaCollection.detailColumnDirective])
+        .directive("adhMeinberlinIdeaCollectionEditColumn", ["adhConfig", "adhTopLevelState", IdeaCollection.editColumnDirective])
         .directive("adhMeinberlinIdeaCollectionAddProposalButton", [
             "adhConfig", "adhPermissions", "adhTopLevelState", IdeaCollection.addProposalButtonDirective])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider: AdhResourceArea.Provider, adhConfig) => {

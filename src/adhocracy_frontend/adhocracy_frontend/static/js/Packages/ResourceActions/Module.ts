@@ -26,7 +26,7 @@ export var register = (angular) => {
             "adhTopLevelState", "adhResourceUrlFilter", "$location", AdhResourceActions.moderateActionDirective])
         .directive("adhPrintAction", ["adhTopLevelState", "$window", AdhResourceActions.printActionDirective])
         .directive("adhCancelAction", ["adhTopLevelState", "adhResourceUrlFilter", AdhResourceActions.cancelActionDirective])
-        .animation(".action-bar-modal", () => {
+        .animation(".modal", () => {
             return {
                 enter: (element, done) => {
                     element.hide().slideDown(done);

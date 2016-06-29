@@ -265,7 +265,7 @@ export var badgeAssignment = (
 
                             return transaction.commit()
                                 .then((responses) => {
-                                    scope.modals.hideOverlay("badges");
+                                    scope.modals.hideModal("badges");
                                     scope.modals.alert("TR__BADGE_ASSIGNMENT_UPDATED", "success");
                                 }, (response) => {
                                     scope.serverError = response[0].description;
@@ -274,7 +274,7 @@ export var badgeAssignment = (
                     };
 
                     scope.cancel = () => {
-                        scope.modals.hideOverlay("badges");
+                        scope.modals.hideModal("badges");
                     };
                 });
             });

@@ -62,5 +62,5 @@ export var register = (angular) => {
             "$translate",
             AdhComment.commentDetailDirective])
         .directive("adhCommentCreate", ["adhConfig", "adhHttp", "adhPreliminaryNames", AdhComment.commentCreateDirective])
-        .directive("adhCommentColumn", ["adhConfig", AdhComment.commentColumnDirective]);
+        .directive("adhCommentColumn", ["adhConfig", "adhTopLevelState", AdhComment.commentColumnDirective]);
 };

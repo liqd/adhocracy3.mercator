@@ -149,7 +149,7 @@
     "TR__REPLY": "antworten",
     "TR__REPORT": "melden",
     "TR__REPORT_ABUSE_STATUS_OK": "Die Moderator*innen wurden benachrichtigt.",
-    "TR__REPORT_HELP": "Nutze dieses Fenster, um Verstöße gegen die [[linkNetiquette:Netiquette]] zu melden. Wenn Du einem Kommentar inhaltlich widersprechen möchtest, [[link:schließe bitte das Overlay]] und benutze den Antworte-Button.",
+    "TR__REPORT_HELP": "Nutze dieses Fenster, um Verstöße gegen die [[linkNetiquette:Netiquette]] zu melden. Wenn Du einem Kommentar inhaltlich widersprechen möchtest, [[link:schließe bitte den Modaldialog]] und benutze den Antworte-Button.",
     "TR__REPORT_PLACEHOLDER": "Bitte erkläre, wieso du diesen Beitrag melden möchtest.",
     "TR__RESET": "Zurücksetzen",
     "TR__SAVE": "speichern",

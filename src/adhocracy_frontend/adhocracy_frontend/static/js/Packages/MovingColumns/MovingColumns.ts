@@ -159,122 +159,20 @@ export var movingColumns = (
 };
 
 
-/**
- * Moving Column directive
- *
- * Every moving column should be wrapped in an instance of this
- * directive.  It provides common functionality, e.g. alerts and
- * overlays via a controller that can be required by subelements.
- *
- * Subelements can inject template code with the following transclusionIds
- * (see AdhInject):
- *
- * -   body
- * -   menu
- * -   collapsed
- * -   overlays
- */
-export interface IMovingColumnScope extends angular.IScope {
-    // the controller with interfaces for alerts, overlays, ...
-    ctrl : MovingColumnController;
-
-    // an object that can be used to share data between different parts of the column.
-    shared;
-
-    // key of the currently active overlay or undefined
-    overlay : string;
-
-    // private
-    _alerts : {[id : number]: {
-        message : string;
-        mode : string;
-    }};
-}
-
 export class MovingColumnController {
-    private lastId : number;
-
     constructor(
         protected adhTopLevelState : AdhTopLevelState.Service,
-        protected $timeout : angular.ITimeoutService,
-        public $scope : IMovingColumnScope,
+        public $scope : angular.IScope,
         protected $element : angular.IAugmentedJQuery
-    ) {
-        $scope.ctrl = this;
-        $scope._alerts = {};
-        $scope.shared = {};
-
-        this.lastId = 0;
-    }
+    ) {}
 
     public focus() : void {
         var index = this.$element.index();
         this.adhTopLevelState.set("focus", index);
     }
 
-    public clear() : void {
-        this.$scope._alerts = {};
-        this.$scope.overlay = undefined;
-    }
-
-    public alert(message : string, mode : string = "info", duration : number = 3000) : void {
-        var id = this.lastId++;
-        this.$timeout(() => this.removeAlert(id), duration);
-
-        this.$scope._alerts[id] = {
-            message: message,
-            mode: mode
-        };
-    }
-
-    public removeAlert(id : number) : void {
-        delete this.$scope._alerts[id];
-    }
-
-    public showOverlay(key : string) : void {
-        this.$scope.overlay = key;
-    }
-
-    public hideOverlay(key? : string) : void {
-        if (typeof key === "undefined" || this.$scope.overlay === key) {
-            this.$scope.overlay = undefined;
-        }
-    }
-
-    public toggleOverlay(key : string, condition? : boolean) : void {
-        if (condition || (typeof condition === "undefined" && this.$scope.overlay !== key)) {
-            this.$scope.overlay = key;
-        } else if (this.$scope.overlay === key) {
-            this.$scope.overlay = undefined;
-        }
-    }
-
     public $broadcast(name : string, ...args : any[]) {
         return this.$scope.$broadcast.apply(this.$scope, arguments);
-    }
-
-    /**
-     * Bind variables from topLevelState and clear this column whenever one of them changes.
-     */
-    public bindVariablesAndClear(scope, keys : string[]) : void {
-        var self : MovingColumnController = this;
-
-        // NOTE: column directives are typically injected mutliple times
-        // with different transcludionIds. But we want to trigger clear() only once.
-        var clear = () => {
-            if (scope.transclusionId === "body") {
-                self.clear();
-            }
-        };
-
-        clear();
-
-        keys.forEach((key : string) => {
-            scope.$on("$destroy", self.adhTopLevelState.on(key, (value) => {
-                scope[key] = value;
-                clear();
-            }));
-        });
     }
 }
 
@@ -286,6 +184,6 @@ export var movingColumnDirective = (adhConfig : AdhConfig.IService) => {
         replace: true,
         transclude: true,
         templateUrl: adhConfig.pkg_path + pkgLocation + "/MovingColumn.html",
-        controller: ["adhTopLevelState", "$timeout", "$scope", "$element", MovingColumnController]
+        controller: ["adhTopLevelState", "$scope", "$element", MovingColumnController]
     };
 };

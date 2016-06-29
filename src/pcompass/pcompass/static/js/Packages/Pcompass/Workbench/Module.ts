@@ -37,8 +37,10 @@ export var register = (angular) => {
                 "<adh-pcompass-workbench></adh-pcompass-workbench>";
         }])
         .directive("adhPcompassWorkbench", ["adhTopLevelState", "adhConfig", "adhHttp", Workbench.workbenchDirective])
-        .directive("adhPcompassProposalDetailColumn", ["adhConfig", "adhHttp", "adhPermissions", Workbench.proposalDetailColumnDirective])
-        .directive("adhPcompassProposalCreateColumn", ["adhConfig", Workbench.proposalCreateColumnDirective])
-        .directive("adhPcompassProposalEditColumn", ["adhConfig", Workbench.proposalEditColumnDirective])
-        .directive("adhPcompassProcessDetailColumn", ["adhConfig", "adhPermissions", Workbench.processDetailColumnDirective]);
+        .directive("adhPcompassProposalDetailColumn", [
+            "adhConfig", "adhHttp", "adhPermissions", "adhTopLevelState", Workbench.proposalDetailColumnDirective])
+        .directive("adhPcompassProposalCreateColumn", ["adhConfig", "adhTopLevelState", Workbench.proposalCreateColumnDirective])
+        .directive("adhPcompassProposalEditColumn", ["adhConfig", "adhTopLevelState", Workbench.proposalEditColumnDirective])
+        .directive("adhPcompassProcessDetailColumn", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.processDetailColumnDirective]);
 };

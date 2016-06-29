@@ -149,7 +149,7 @@
     "TR__REPLY": "reply",
     "TR__REPORT": "report",
     "TR__REPORT_ABUSE_STATUS_OK": "The moderators have been notified.",
-    "TR__REPORT_HELP": "Please only use this form to report violations in [[linkNetiquette:Netiquette]]. To be a normal part of this discussion please [[link:close this overlay]] and use the regular reply functionality.",
+    "TR__REPORT_HELP": "Please only use this form to report violations in [[linkNetiquette:Netiquette]]. To be a normal part of this discussion please [[link:close this modal]] and use the regular reply functionality.",
     "TR__REPORT_PLACEHOLDER": "Please explain why would you like to report this comment.",
     "TR__RESET": "Reset",
     "TR__SAVE": "save",

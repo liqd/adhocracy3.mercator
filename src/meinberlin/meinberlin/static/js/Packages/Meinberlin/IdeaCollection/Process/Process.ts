@@ -6,7 +6,6 @@ import * as _ from "lodash";
 import * as AdhBadge from "../../../Badge/Badge";
 import * as AdhConfig from "../../../Config/Config";
 import * as AdhHttp from "../../../Http/Http";
-import * as AdhMovingColumns from "../../../MovingColumns/MovingColumns";
 import * as AdhPermissions from "../../../Permissions/Permissions";
 import * as AdhProcess from "../../../Process/Process";
 import * as AdhUtil from "../../../Util/Util";
@@ -39,8 +38,7 @@ export var detailDirective = (
             isBuergerhaushalt: "=?",
             isKiezkasse: "=?"
         },
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
+        link: (scope) => {
             AdhBadge.getBadgeFacets(adhHttp, $q)(scope.path).then((facets) => {
                 scope.facets = facets;
             });
@@ -104,8 +102,7 @@ export var editDirective = (
         scope: {
             path: "@"
         },
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
+        link: (scope, element) => {
             var process;
             scope.data = {};
             scope.showError = adhShowError;

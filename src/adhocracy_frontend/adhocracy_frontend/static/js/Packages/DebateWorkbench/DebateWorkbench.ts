@@ -2,7 +2,6 @@
 
 import * as AdhConfig from "../Config/Config";
 import * as AdhHttp from "../Http/Http";
-import * as AdhMovingColumns from "../MovingColumns/MovingColumns";
 import * as AdhPermissions from "../Permissions/Permissions";
 import * as AdhResourceArea from "../ResourceArea/ResourceArea";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
@@ -38,55 +37,57 @@ export var debateWorkbenchDirective = (
 
 export var documentDetailColumnDirective = (
     adhConfig : AdhConfig.IService,
-    adhPermissions : AdhPermissions.Service
+    adhPermissions : AdhPermissions.Service,
+    adhTopLevelState : AdhTopLevelState.Service
 ) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/DocumentDetailColumn.html",
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl", "documentUrl"]);
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            scope.$on("$destroy", adhTopLevelState.bind("documentUrl", scope));
             adhPermissions.bindScope(scope, () => scope.documentUrl && AdhUtil.parentPath(scope.documentUrl), "proposalItemOptions");
         }
     };
 };
 
 export var documentCreateColumnDirective = (
-    adhConfig : AdhConfig.IService
+    adhConfig : AdhConfig.IService,
+    adhTopLevelState : AdhTopLevelState.Service
 ) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/DocumentCreateColumn.html",
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl"]);
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
         }
     };
 };
 
 export var documentEditColumnDirective = (
-    adhConfig : AdhConfig.IService
+    adhConfig : AdhConfig.IService,
+    adhTopLevelState : AdhTopLevelState.Service
 ) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/DocumentEditColumn.html",
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl", "documentUrl"]);
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            scope.$on("$destroy", adhTopLevelState.bind("documentUrl", scope));
         }
     };
 };
 
 export var processDetailColumnDirective = (
     adhConfig : AdhConfig.IService,
-    adhPermissions : AdhPermissions.Service
+    adhPermissions : AdhPermissions.Service,
+    adhTopLevelState : AdhTopLevelState.Service
 ) => {
     return {
         restrict: "E",
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ProcessDetailColumn.html",
-        require: "^adhMovingColumn",
-        link: (scope, element, attrs, column : AdhMovingColumns.MovingColumnController) => {
-            column.bindVariablesAndClear(scope, ["processUrl"]);
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
             adhPermissions.bindScope(scope, () => scope.processUrl, "processOptions");
         }
     };
@@ -94,9 +95,10 @@ export var processDetailColumnDirective = (
 
 export var processDetailAnnounceColumnDirective = (
     adhConfig : AdhConfig.IService,
-    adhPermissions : AdhPermissions.Service
+    adhPermissions : AdhPermissions.Service,
+    adhTopLevelState : AdhTopLevelState.Service
 ) => {
-    var directive = processDetailColumnDirective(adhConfig, adhPermissions);
+    var directive = processDetailColumnDirective(adhConfig, adhPermissions, adhTopLevelState);
     directive.templateUrl = adhConfig.pkg_path + pkgLocation + "/ProcessDetailAnnounceColumn.html";
     return directive;
 };

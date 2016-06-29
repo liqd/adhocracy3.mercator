@@ -28,10 +28,11 @@ export var register = (angular) => {
         }])
         .directive("adhS1Workbench", ["adhConfig", "adhTopLevelState", Workbench.s1WorkbenchDirective])
         .directive("adhS1Landing", ["$translate", "adhConfig", "adhTopLevelState", Workbench.s1LandingDirective])
-        .directive("adhS1CurrentColumn", ["adhConfig", "adhHttp", Workbench.s1CurrentColumnDirective])
-        .directive("adhS1NextColumn", ["adhConfig", "adhHttp", Workbench.s1NextColumnDirective])
-        .directive("adhS1ArchiveColumn", ["adhConfig", "adhHttp", Workbench.s1ArchiveColumnDirective])
-        .directive("adhS1ProposalDetailColumn", ["adhConfig", "adhPermissions", Workbench.s1ProposalDetailColumnDirective])
-        .directive("adhS1ProposalCreateColumn", ["adhConfig", Workbench.s1ProposalCreateColumnDirective])
-        .directive("adhS1ProposalEditColumn", ["adhConfig", Workbench.s1ProposalEditColumnDirective]);
+        .directive("adhS1CurrentColumn", ["adhConfig", "adhHttp", "adhTopLevelState", Workbench.s1CurrentColumnDirective])
+        .directive("adhS1NextColumn", ["adhConfig", "adhHttp", "adhTopLevelState", Workbench.s1NextColumnDirective])
+        .directive("adhS1ArchiveColumn", ["adhConfig", "adhHttp", "adhTopLevelState", Workbench.s1ArchiveColumnDirective])
+        .directive("adhS1ProposalDetailColumn", [
+            "adhConfig", "adhPermissions", "adhTopLevelState", Workbench.s1ProposalDetailColumnDirective])
+        .directive("adhS1ProposalCreateColumn", ["adhConfig", "adhTopLevelState", Workbench.s1ProposalCreateColumnDirective])
+        .directive("adhS1ProposalEditColumn", ["adhConfig", "adhTopLevelState", Workbench.s1ProposalEditColumnDirective]);
 };

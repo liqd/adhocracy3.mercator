@@ -8,13 +8,4 @@
     <div class="moving-column-collapsed">
         <adh-inject data-transclusion-id="collapsed"></adh-inject>
     </div>
-    <div class="moving-column-mask" data-ng-show="overlay"></div>
-    <div class="moving-column-overlay" data-ng-if="overlay">
-        <adh-inject data-transclusion-id="overlays"></adh-inject>
-    </div>
-    <ul class="moving-column-alerts">
-        <li data-ng-repeat="(id, alert) in _alerts" class="moving-column-alert m-{{alert.mode}}" data-ng-click="ctrl.removeAlert(id)">
-            {{ alert.message | translate }}
-        </li>
-    </ul>
 </div>
