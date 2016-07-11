@@ -1,7 +1,12 @@
 <!-- FIXME: may contain links in adh-user-meta -->
-<a class="meinberlin-proposal-list-item {{selectedState}}" href="{{path | adhParentPath | adhResourceUrl }}">
+<a class="idea-collection-proposal-list-item {{selectedState}}" href="{{path | adhParentPath | adhResourceUrl }}">
+    <adh-show-image
+        data-css-class="proposal-list-item-image"
+        data-path="{{data.picture}}"
+        data-format="thumbnail"
+    ></adh-show-image>
     <div class="proposal-list-item-col-left">
-        <h3 class="meinberlin-proposal-list-item-title">{{data.title}}</h3>
+        <h3 class="idea-collection-proposal-list-item-title">{{data.title}}</h3>
         {{ "TR__BY" | translate }}
         <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta>
         {{ "TR__ON" | translate }}
@@ -22,7 +27,7 @@
             <li class="meta-list-item"><i class="meta-list-meta-item-icon icon-voting"></i
             > {{ data.rateCount | signum }} {{ "TR__RATES" | translate }}</li>
             <li class="meta-list-item"
-            data-ng-if="isKiezkasse || isBuergerhaushalt"><i class="meta-list-meta-item-icon icon-pin-detail"></i
+            data-ng-if="processOptions.hasLocationText"><i class="meta-list-meta-item-icon icon-pin-detail"></i
             > {{data.locationText}}</li>
         </ul>
     </div>

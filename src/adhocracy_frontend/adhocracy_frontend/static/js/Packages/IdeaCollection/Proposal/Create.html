@@ -1,10 +1,10 @@
 <form
     novalidate="novalidate"
     data-ng-submit="submit()"
-    class="meinberlin-proposal-form"
+    class="idea-collection-proposal-form"
     name="meinberlinProposalForm">
 
-    <div class="meinberlin-proposal-form-upper">
+    <div class="idea-collection-proposal-form-upper">
         <div class="form-error" data-ng-repeat="error in errors track by $index">
             <p>{{ error | adhFormatError | translate }}</p>
         </div>
@@ -13,7 +13,7 @@
 
         <!-- Title -->
         <label>
-            <span class="label-text">{{ "TR__MEINBERLIN_TITLE" | translate }}</span>
+            <span class="label-text">{{ "TR__IDEA_COLLECTION_TITLE" | translate }}</span>
             <input
                 type="text"
                 data-ng-model="data.title"
@@ -22,13 +22,13 @@
                 maxlength="100"
                 required="required" />
             <span class="input-error" data-ng-show="showError(meinberlinProposalForm, meinberlinProposalForm.title, 'required')">
-                {{ "TR__MEINBERLIN_ERROR_REQUIRED_TITLE" | translate }}
+                {{ "TR__IDEA_COLLECTION_ERROR_REQUIRED_TITLE" | translate }}
             </span>
         </label>
 
         <!-- Detail Description -->
         <label>
-            <span class="label-text">{{ "TR__MEINBERLIN_DETAIL" | translate }}</span>
+            <span class="label-text">{{ "TR__IDEA_COLLECTION_DETAIL" | translate }}</span>
 
             <textarea
                 data-msd-elastic=""
@@ -38,29 +38,22 @@
                 required="required"></textarea>
 
             <span class="input-error" data-ng-show="showError(meinberlinProposalForm, meinberlinProposalForm.detail, 'required')">
-                {{ "TR__MEINBERLIN_ERROR_REQUIRED_DETAIL" | translate }}
+                {{ "TR__IDEA_COLLECTION_ERROR_REQUIRED_DETAIL" | translate }}
             </span>
         </label>
 
         <!-- Requested Budget -->
-        <label data-ng-if="isKiezkasse || isBuergerhaushalt">
-            <span class="label-text">{{ "TR__MEINBERLIN_BUDGET" | translate }}</span>
+        <label data-ng-if="processOptions.maxBudget">
+            <span class="label-text">{{ "TR__IDEA_COLLECTION_BUDGET" | translate }}</span>
             <input
-                data-ng-if="isKiezkasse"
                 type="number"
                 data-ng-model="data.budget"
                 name="budget"
                 min="0"
-                max="50000"
+                max="processOptions.maxBudget"
                 required="required" />
-            <input
-                data-ng-if="isBuergerhaushalt"
-                type="number"
-                data-ng-model="data.budget"
-                name="budget"
-                min="0" />
             <span class="input-error" data-ng-show="showError(meinberlinProposalForm, meinberlinProposalForm.budget, 'required')">
-                {{ "TR__MEINBERLIN_ERROR_REQUIRED_BUDGET" | translate }}
+                {{ "TR__IDEA_COLLECTION_ERROR_REQUIRED_BUDGET" | translate }}
             </span>
             <span class="input-error" data-ng-show="showError(meinberlinProposalForm, meinberlinProposalForm.budget, 'number')">
                 {{ "TR__ERROR_MUST_BE_A_NUMBER" | translate }}
@@ -68,22 +61,22 @@
         </label>
 
         <!-- Engagement -->
-        <label data-ng-if="isKiezkasse" class="form-row">
+        <label data-ng-if="processOptions.hasCreatorParticipate" class="form-row">
             <input
                 type="checkbox"
                 data-ng-model="data.creatorParticipate"
                 name="creatorParticipate"
                 />
-                {{ "TR__MEINBERLIN_I_WANT_TO_BE_PART" | translate }}
+                {{ "TR__IDEA_COLLECTION_I_WANT_TO_BE_PART" | translate }}
             <span class="input-error" data-ng-show="showError(meinberlinProposalForm, meinberlinProposalForm.creatorParticipate, 'required')">
-                {{ "TR__MEINBERLIN_ERROR_REQUIRED_I_WANT_TO_BE_PART" | translate }}
+                {{ "TR__IDEA_COLLECTION_ERROR_REQUIRED_I_WANT_TO_BE_PART" | translate }}
             </span>
         </label>
 
         <!-- LOCATION RELATED INFORMATION -->
         <!-- Related Place -->
-        <label data-ng-if="isKiezkasse || isBuergerhaushalt">
-            <span class="label-text">{{ "TR__MEINBERLIN_LOCATION_TEXT" | translate }}</span>
+        <label data-ng-if="processOptions.hasLocationText">
+            <span class="label-text">{{ "TR__IDEA_COLLECTION_LOCATION_TEXT" | translate }}</span>
             <input
                 type="text"
                 data-ng-model="data.locationText"
@@ -91,18 +84,18 @@
                 maxlength="100"
                 required="required" />
             <span class="input-error" data-ng-show="showError(meinberlinProposalForm, meinberlinProposalForm.locationText, 'required')">
-                {{ "TR__MEINBERLIN_ERROR_REQUIRED_LOCATION_TEXT" | translate }}
+                {{ "TR__IDEA_COLLECTION_ERROR_REQUIRED_LOCATION_TEXT" | translate }}
             </span>
         </label>
     </div>
 
     <!-- Map -->
-    <label>
+    <label data-ng-if="processOptions.hasLocation">
         <adh-map-input data-ng-if="data.polygon" data-lng="data.lng" data-lat="data.lat" data-polygon="data.polygon" data-height="250"></adh-map-input>
     </label>
 
     <!-- DATA SUBMIT -->
-    <footer class="form-footer meinberlin-proposal-form-footer">
+    <footer class="form-footer idea-collection-proposal-form-footer">
         <input
             type="submit"
             name="submit"

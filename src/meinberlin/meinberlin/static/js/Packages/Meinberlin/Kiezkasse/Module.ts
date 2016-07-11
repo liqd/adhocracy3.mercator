@@ -1,16 +1,17 @@
 import * as AdhEmbedModule from "../../Embed/Module";
+import * as AdhIdeaCollectionModule from "../../IdeaCollection/Module";
 import * as AdhProcessModule from "../../Process/Module";
 import * as AdhResourceAreaModule from "../../ResourceArea/Module";
 
-import * as AdhMeinberlinIdeaCollectionModule from "../IdeaCollection/Module";
-
 import * as AdhEmbed from "../../Embed/Embed";
+import * as AdhIdeaCollectionWorkbench from "../../IdeaCollection/Workbench/Workbench";
 import * as AdhProcess from "../../Process/Process";
 import * as AdhResourceArea from "../../ResourceArea/ResourceArea";
 
-import * as AdhMeinberlinIdeaCollection from "../IdeaCollection/IdeaCollection";
-
 import RIKiezkasseProcess from "../../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProcess";
+import RIKiezkasseProposal from "../../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProposal";
+import RIKiezkasseProposalVersion from "../../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProposalVersion";
+import * as SIKiezkasseProposal from "../../../Resources_/adhocracy_meinberlin/sheets/kiezkassen/IProposal";
 
 
 export var moduleName = "adhMeinberlinKiezkasse";
@@ -21,7 +22,7 @@ export var register = (angular) => {
     angular
         .module(moduleName, [
             AdhEmbedModule.moduleName,
-            AdhMeinberlinIdeaCollectionModule.moduleName,
+            AdhIdeaCollectionModule.moduleName,
             AdhProcessModule.moduleName,
             AdhResourceAreaModule.moduleName
         ])
@@ -29,15 +30,26 @@ export var register = (angular) => {
             adhEmbedProvider.registerContext("kiezkasse", ["kiezkassen"]);
         }])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider : AdhResourceArea.Provider, adhConfig) => {
-            var registerRoutes = AdhMeinberlinIdeaCollection.registerRoutesFactory(processType);
-            registerRoutes(processType)(adhResourceAreaProvider);
-            registerRoutes(processType, "kiezkasse")(adhResourceAreaProvider);
+            var registerRoutes = AdhIdeaCollectionWorkbench.registerRoutesFactory(
+                RIKiezkasseProcess, RIKiezkasseProposal, RIKiezkasseProposalVersion);
+            registerRoutes()(adhResourceAreaProvider);
+            registerRoutes("kiezkasse")(adhResourceAreaProvider);
 
-            var processHeaderSlot = adhConfig.pkg_path + AdhMeinberlinIdeaCollection.pkgLocation + "/ProcessHeaderSlot.html";
+            var processHeaderSlot = adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
             adhResourceAreaProvider.processHeaderSlots[processType] = processHeaderSlot;
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templates[processType] =
-                "<adh-meinberlin-idea-collection-workbench data-is-kiezkasse=\"true\"></adh-meinberlin-idea-collection-workbench>";
+                "<adh-idea-collection-workbench data-process-options=\"processOptions\">" +
+                "</adh-idea-collection-workbench>";
+            adhProcessProvider.processOptions[processType] = {
+                hasCreatorParticipate: true,
+                hasLocation: true,
+                hasLocationText: true,
+                maxBudget: 50000,
+                proposalClass: RIKiezkasseProposal,
+                proposalSheet: SIKiezkasseProposal,
+                proposalVersionClass: RIKiezkasseProposalVersion
+            };
         }]);
 };

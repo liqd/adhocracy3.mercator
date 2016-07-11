@@ -1,7 +1,7 @@
 import * as AdhDocumentModule from "../../../Document/Module";
 import * as AdhHttpModule from "../../../Http/Module";
 import * as AdhMappingModule from "../../../Mapping/Module";
-import * as AdhMeinberlinIdeaCollectionModule from "../../IdeaCollection/Module";
+import * as AdhIdeaCollectionModule from "../../../IdeaCollection/Module";
 import * as AdhMovingColumnsModule from "../../../MovingColumns/Module";
 import * as AdhPermissionsModule from "../../../Permissions/Module";
 import * as AdhProcessModule from "../../../Process/Module";
@@ -11,7 +11,7 @@ import * as AdhTopLevelStateModule from "../../../TopLevelState/Module";
 import RIAlexanderplatzProcess from "../../../../Resources_/adhocracy_meinberlin/resources/alexanderplatz/IProcess";
 
 import * as AdhProcess from "../../../Process/Process";
-import * as AdhMeinberlinIdeaCollection from "../../IdeaCollection/IdeaCollection";
+import * as AdhIdeaCollectionWorkbench from "../../../IdeaCollection/Workbench/Workbench";
 
 import * as Workbench from "./Workbench";
 
@@ -26,7 +26,7 @@ export var register = (angular) => {
             AdhDocumentModule.moduleName,
             AdhHttpModule.moduleName,
             AdhMappingModule.moduleName,
-            AdhMeinberlinIdeaCollectionModule.moduleName,
+            AdhIdeaCollectionModule.moduleName,
             AdhMovingColumnsModule.moduleName,
             AdhPermissionsModule.moduleName,
             AdhProcessModule.moduleName,
@@ -39,7 +39,7 @@ export var register = (angular) => {
         }])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider, adhConfig) => {
             var processType = RIAlexanderplatzProcess.content_type;
-            var processHeaderSlot = adhConfig.pkg_path + AdhMeinberlinIdeaCollection.pkgLocation + "/ProcessHeaderSlot.html";
+            var processHeaderSlot = adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
             adhResourceAreaProvider.processHeaderSlots[processType] = processHeaderSlot;
             Workbench.registerRoutes(processType)(adhResourceAreaProvider);
         }])

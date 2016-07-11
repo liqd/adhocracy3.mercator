@@ -6,20 +6,14 @@ import * as AdhHttp from "../../Http/Http";
 import * as AdhMapping from "../../Mapping/Mapping";
 import * as AdhPermissions from "../../Permissions/Permissions";
 import * as AdhPreliminaryNames from "../../PreliminaryNames/PreliminaryNames";
+import * as AdhProcess from "../../Process/Process";
 import * as AdhRate from "../../Rate/Rate";
 import * as AdhTopLevelState from "../../TopLevelState/TopLevelState";
 import * as AdhUtil from "../../Util/Util";
 
-import RIBuergerhaushaltProposal from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposal";
-import RIBuergerhaushaltProposalVersion from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposalVersion";
-import RIGeoProposal from "../../../Resources_/adhocracy_core/resources/proposal/IGeoProposal";
-import RIGeoProposalVersion from "../../../Resources_/adhocracy_core/resources/proposal/IGeoProposalVersion";
-import RIKiezkasseProposal from "../../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProposal";
-import RIKiezkasseProposalVersion from "../../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProposalVersion";
-import * as SIBuergerhaushaltProposal from "../../../Resources_/adhocracy_meinberlin/sheets/burgerhaushalt/IProposal";
 import * as SICommentable from "../../../Resources_/adhocracy_core/sheets/comment/ICommentable";
 import * as SIDescription from "../../../Resources_/adhocracy_core/sheets/description/IDescription";
-import * as SIKiezkasseProposal from "../../../Resources_/adhocracy_meinberlin/sheets/kiezkassen/IProposal";
+import * as SIImageReference from "../../../Resources_/adhocracy_core/sheets/image/IImageReference";
 import * as SILocationReference from "../../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
 import * as SIMetadata from "../../../Resources_/adhocracy_core/sheets/metadata/IMetadata";
 import * as SIMultiPolygon from "../../../Resources_/adhocracy_core/sheets/geo/IMultiPolygon";
@@ -28,7 +22,7 @@ import * as SIRateable from "../../../Resources_/adhocracy_core/sheets/rate/IRat
 import * as SITitle from "../../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIVersionable from "../../../Resources_/adhocracy_core/sheets/versions/IVersionable";
 
-var pkgLocation = "/Meinberlin/Proposal";
+var pkgLocation = "/IdeaCollection/Proposal";
 
 
 export interface IScope extends angular.IScope {
@@ -42,18 +36,17 @@ export interface IScope extends angular.IScope {
         creator : string;
         creationDate : string;
         commentCount : number;
-        lng : number;
-        lat : number;
-        polygon: number[][];
+        lng? : number;
+        lat? : number;
+        polygon? : number[][];
         assignments : AdhBadge.IBadgeAssignment[];
-
+        picture? : string;
         budget? : number;
         creatorParticipate? : boolean;
         locationText? : string;
     };
     selectedState? : string;
-    isKiezkasse : boolean;
-    isBuergerhaushalt : boolean;
+    processOptions : AdhProcess.IProcessOptions;
     resource : any;
 }
 
@@ -69,21 +62,21 @@ var bindPath = (
     $q : angular.IQService
 ) => (
     scope : IScope,
-    pathKey : string = "path",
-    isKiezkasse : boolean = false,
-    isBuergerhaushalt : boolean = false
+    pathKey : string = "path"
 ) : void => {
-    var getPolygon = () => {
-        var processUrl = adhTopLevelState.get("processUrl");
-
-        return adhHttp.get(processUrl).then((process) => {
-            var locationUrl = process.data[SILocationReference.nick]["location"];
-
-            return adhHttp.get(locationUrl).then((location) => {
-                return location.data[SIMultiPolygon.nick]["coordinates"][0][0];
-            });
-        });
-    };
+        var getPolygon = () => {
+            if (scope.processOptions.hasLocation) {
+                var processUrl = adhTopLevelState.get("processUrl");
+                return adhHttp.get(processUrl).then((process) => {
+                    var locationUrl = process.data[SILocationReference.nick]["location"];
+                    return adhHttp.get(locationUrl).then((location) => {
+                        return location.data[SIMultiPolygon.nick]["coordinates"][0][0];
+                    });
+                });
+            } else {
+                return $q.when();
+            }
+        };
 
     scope.$watch(pathKey, (value : string) => {
         if (value) {
@@ -96,10 +89,9 @@ var bindPath = (
                 var metadataSheet : SIMetadata.Sheet = resource.data[SIMetadata.nick];
                 var rateableSheet : SIRateable.Sheet = resource.data[SIRateable.nick];
 
-                if (isKiezkasse) {
-                    var kiezkasseSheet : SIKiezkasseProposal.Sheet = resource.data[SIKiezkasseProposal.nick];
-                } else if (isBuergerhaushalt) {
-                    var buergerhaushaltSheet : SIBuergerhaushaltProposal.Sheet = resource.data[SIBuergerhaushaltProposal.nick];
+                var proposalSheetClass = scope.processOptions.proposalSheet;
+                if (proposalSheetClass) {
+                    var proposalSheet = resource.data[proposalSheetClass.nick];
                 }
 
                 $q.all([
@@ -122,18 +114,28 @@ var bindPath = (
                         creator: metadataSheet.creator,
                         creationDate: metadataSheet.item_creation_date,
                         commentCount: resource.data[SICommentable.nick].comments_count,
-                        lng: pointSheet.coordinates[0],
-                        lat: pointSheet.coordinates[1],
-                        polygon: polygon,
                         assignments: assignments
                     };
-                    if (isKiezkasse) {
-                        scope.data.budget = kiezkasseSheet.budget;
-                        scope.data.creatorParticipate = kiezkasseSheet.creator_participate;
-                        scope.data.locationText = kiezkasseSheet.location_text;
-                    } else if (isBuergerhaushalt) {
-                        scope.data.budget = buergerhaushaltSheet.budget;
-                        scope.data.locationText = buergerhaushaltSheet.location_text;
+                    if (scope.processOptions.hasLocation) {
+                        scope.data.lng = pointSheet.coordinates[0];
+                        scope.data.lat = pointSheet.coordinates[1];
+                        scope.data.polygon = polygon;
+                    }
+                    if (scope.processOptions.hasImage) {
+                        scope.data.picture = resource.data[SIImageReference.nick].picture;
+                    }
+                    // WARNING: proposalSheet is not a regular feature of adhocracy, 
+                    // but a hack of Buergerhaushalt and Kiezkasse.
+                    if (proposalSheet) {
+                        if (scope.processOptions.maxBudget) {
+                            scope.data.budget = proposalSheet.budget;
+                        }
+                        if (scope.processOptions.hasCreatorParticipate) {
+                            scope.data.creatorParticipate = proposalSheet.creator_participate;
+                        }
+                        if (scope.processOptions.hasLocationText) {
+                            scope.data.locationText = proposalSheet.location_text;
+                        }
                     }
                 });
             });
@@ -144,19 +146,20 @@ var bindPath = (
 
 var fill = (
     scope : IScope,
-    proposalVersion,
-    isKiezkasse : boolean = false,
-    isBuergerhaushalt : boolean = false
+    proposalVersion
 ) : void => {
-
-    if (isKiezkasse) {
-        proposalVersion.data[SIKiezkasseProposal.nick] = new SIKiezkasseProposal.Sheet({
+    // WARNING: proposalSheet is not a regular feature of adhocracy, 
+    // but a hack of Buergerhaushalt and Kiezkasse.
+    var proposalSheet = scope.processOptions.proposalSheet;
+    if (proposalSheet && scope.processOptions.hasCreatorParticipate
+        && scope.processOptions.hasLocationText && scope.processOptions.maxBudget) {
+        proposalVersion.data[proposalSheet.nick] = new proposalSheet.Sheet({
             budget: scope.data.budget,
             creator_participate: scope.data.creatorParticipate,
             location_text: scope.data.locationText
         });
-    } else if (isBuergerhaushalt) {
-        proposalVersion.data[SIBuergerhaushaltProposal.nick] = new SIBuergerhaushaltProposal.Sheet({
+    } else if (proposalSheet && scope.processOptions.hasLocationText && scope.processOptions.maxBudget) {
+        proposalVersion.data[proposalSheet.nick] = new proposalSheet.Sheet({
             budget: scope.data.budget,
             location_text: scope.data.locationText
         });
@@ -179,20 +182,10 @@ var postCreate = (
     adhPreliminaryNames : AdhPreliminaryNames.Service
 ) => (
     scope : IScope,
-    poolPath : string,
-    isKiezkasse : boolean = false,
-    isBuergerhaushalt : boolean = false
+    poolPath : string
 ) => {
-    var proposalClass = RIGeoProposal;
-    var proposalVersionClass = RIGeoProposalVersion;
-
-    if (isKiezkasse) {
-        proposalClass = RIKiezkasseProposal;
-        proposalVersionClass = RIKiezkasseProposalVersion;
-    } else if (isBuergerhaushalt) {
-        proposalClass = RIBuergerhaushaltProposal;
-        proposalVersionClass = RIBuergerhaushaltProposalVersion;
-    }
+    var proposalClass = scope.processOptions.proposalClass;
+    var proposalVersionClass = scope.processOptions.proposalVersionClass;
 
     var proposal = new proposalClass({preliminaryNames: adhPreliminaryNames});
     proposal.parent = poolPath;
@@ -202,7 +195,7 @@ var postCreate = (
     proposalVersion.data[SIVersionable.nick] = new SIVersionable.Sheet({
         follows: [proposal.first_version_path]
     });
-    fill(scope, proposalVersion, isKiezkasse, isBuergerhaushalt);
+    fill(scope, proposalVersion);
 
     return adhHttp.deepPost([proposal, proposalVersion]);
 };
@@ -212,24 +205,16 @@ var postEdit = (
     adhPreliminaryNames : AdhPreliminaryNames.Service
 ) => (
     scope : IScope,
-    oldVersion,
-    isKiezkasse : boolean = false,
-    isBuergerhaushalt : boolean = false
+    oldVersion
 ) => {
-    var proposalVersionClass = RIGeoProposalVersion;
-
-    if (isKiezkasse) {
-        proposalVersionClass = RIKiezkasseProposalVersion;
-    } else if (isBuergerhaushalt) {
-        proposalVersionClass = RIBuergerhaushaltProposalVersion;
-    }
+    var proposalVersionClass = scope.processOptions.proposalVersionClass;
 
     var proposalVersion = new proposalVersionClass({preliminaryNames: adhPreliminaryNames});
     proposalVersion.parent = AdhUtil.parentPath(oldVersion.path);
     proposalVersion.data[SIVersionable.nick] = new SIVersionable.Sheet({
         follows: [oldVersion.path]
     });
-    fill(scope, proposalVersion, isKiezkasse, isBuergerhaushalt);
+    fill(scope, proposalVersion);
 
     return adhHttp.deepPost([proposalVersion]);
 };
@@ -248,12 +233,11 @@ export var detailDirective = (
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Detail.html",
         scope: {
             path: "@",
-            isKiezkasse: "=?",
-            isBuergerhaushalt: "=?"
+            processOptions : "="
         },
         link: (scope : IScope) => {
             bindPath(adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(
-                scope, undefined, scope.isKiezkasse, scope.isBuergerhaushalt);
+                scope, undefined);
         }
     };
 };
@@ -272,12 +256,11 @@ export var listItemDirective = (
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ListItem.html",
         scope: {
             path: "@",
-            isKiezkasse: "=?",
-            isBuergerhaushalt: "=?"
+            processOptions : "="
         },
         link: (scope : IScope) => {
             bindPath(adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(
-                scope, undefined, scope.isKiezkasse, scope.isBuergerhaushalt);
+                scope, undefined);
             scope.$on("$destroy", adhTopLevelState.on("proposalUrl", (proposalVersionUrl) => {
                 if (!proposalVersionUrl) {
                     scope.selectedState = "";
@@ -306,12 +289,11 @@ export var mapListItemDirective = (
         require: "^adhMapListingInternal",
         scope: {
             path: "@",
-            isKiezkasse: "=?",
-            isBuergerhaushalt: "=?"
+            processOptions : "="
         },
         link: (scope : IScope, element, attrs, mapListing : AdhMapping.MapListingController) => {
             bindPath(adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(
-                scope, undefined, scope.isKiezkasse, scope.isBuergerhaushalt);
+                scope, undefined);
 
             var unregister = scope.$watchGroup(["data.lat", "data.lng"], (values : number[]) => {
                 if (typeof values[0] !== "undefined" && typeof values[1] !== "undefined") {
@@ -347,8 +329,7 @@ export var createDirective = (
         restrict: "E",
         scope: {
             poolPath: "@",
-            isKiezkasse: "=?",
-            isBuergerhaushalt: "=?"
+            processOptions : "="
         },
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Create.html",
         link: (scope, element) => {
@@ -361,16 +342,18 @@ export var createDirective = (
             scope.data.lng = undefined;
 
             adhHttp.get(scope.poolPath).then((pool) => {
-                var locationUrl = pool.data[SILocationReference.nick]["location"];
-                adhHttp.get(locationUrl).then((location) => {
-                    var polygon = location.data[SIMultiPolygon.nick]["coordinates"][0][0];
-                    scope.data.polygon = polygon;
-                });
+                if (scope.processOptions.hasLocation) {
+                    var locationUrl = pool.data[SILocationReference.nick]["location"];
+                    adhHttp.get(locationUrl).then((location) => {
+                        var polygon = location.data[SIMultiPolygon.nick]["coordinates"][0][0];
+                        scope.data.polygon = polygon;
+                    });
+                }
             });
 
             scope.submit = () => {
                 return adhSubmitIfValid(scope, element, scope.meinberlinProposalForm, () => {
-                    return postCreate(adhHttp, adhPreliminaryNames)(scope, scope.poolPath, scope.isKiezkasse, scope.isBuergerhaushalt)
+                    return postCreate(adhHttp, adhPreliminaryNames)(scope, scope.poolPath)
                         .then((result) => {
                             $location.url(adhResourceUrlFilter(AdhUtil.parentPath(result[1].path)));
                         });
@@ -404,19 +387,18 @@ export var editDirective = (
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Create.html",
         scope: {
             path: "@",
-            isKiezkasse: "=?",
-            isBuergerhaushalt: "=?"
+            processOptions : "="
         },
         link: (scope, element) => {
             scope.errors = [];
             scope.showError = adhShowError;
             scope.create = false;
             bindPath(adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(
-                scope, undefined, scope.isKiezkasse, scope.isBuergerhaushalt);
+                scope, undefined);
 
             scope.submit = () => {
                 return adhSubmitIfValid(scope, element, scope.meinberlinProposalForm, () => {
-                    return postEdit(adhHttp, adhPreliminaryNames)(scope, scope.resource, scope.isKiezkasse, scope.isBuergerhaushalt)
+                    return postEdit(adhHttp, adhPreliminaryNames)(scope, scope.resource)
                         .then((result) => {
                             $location.url(adhResourceUrlFilter(AdhUtil.parentPath(result[0].path)));
                     });

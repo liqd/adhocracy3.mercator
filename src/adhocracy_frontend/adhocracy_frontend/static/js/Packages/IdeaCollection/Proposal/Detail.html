@@ -1,6 +1,13 @@
-<article class="meinberlin-proposal-detail">
-    <header class="meinberlin-proposal-detail-header">
+<article class="idea-collection-proposal-detail">
+    <header class="idea-collection-proposal-detail-header">
 
+        <div class="proposal-detail-image-clip" data-ng-if="data.picture">
+            <adh-show-image
+                data-css-path="proposal-detail-image"
+                data-no-fallback="true"
+                data-path="{{data.picture}}"
+            ></adh-show-image>
+        </div>
         <span
             data-ng-repeat="assignment in data.assignments"
             class="badge"
@@ -10,33 +17,33 @@
                 'm-on-test': assignment.name === 'on_test'
             }">{{ assignment.title | translate }}</span>
 
-        <ul class="meinberlin-proposal-detail-meta">
-            <li data-ng-if="isKiezkasse || isBuergerhaushalt" class="meinberlin-proposal-detail-meta-item meinberlin-proposal-detail-meta-item-location">
+        <ul class="idea-collection-proposal-detail-meta">
+            <li data-ng-if="processOptions.hasLocationText" class="idea-collection-proposal-detail-meta-item idea-collection-proposal-detail-meta-item-location">
                 <i class="icon-pin-detail"></i> {{data.locationText}}
             </li>
-            <li class="meinberlin-proposal-detail-meta-item meinberlin-proposal-detail-meta-item-comments">
+            <li class="idea-collection-proposal-detail-meta-item idea-collection-proposal-detail-meta-item-comments">
                 <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="disguised-link">
                     <i class="icon-speechbubble"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}
                 </a>
             </li>
-            <li data-ng-if="!(isKiezkasse || isBuergerhaushalt)"></li>
-            <li class="meinberlin-proposal-detail-meta-item meinberlin-proposal-detail-meta-budget">
-                <div data-ng-if="isKiezkasse || isBuergerhaushalt"><i class="meinberlin-proposal-detail-meta-item-icon icon-budget"></i> {{data.budget | numberOrDash}} &euro;</div>
+            <li data-ng-if="!processOptions.maxBudget"></li>
+            <li class="idea-collection-proposal-detail-meta-item idea-collection-proposal-detail-meta-budget">
+                <div data-ng-if="processOptions.maxBudget"><i class="idea-collection-proposal-detail-meta-item-icon icon-budget"></i> {{data.budget | numberOrDash}} &euro;</div>
             </li>
-            <li class="meinberlin-proposal-detail-meta-item meinberlin-proposal-detail-meta-participation">
+            <li class="idea-collection-proposal-detail-meta-item idea-collection-proposal-detail-meta-participation">
                 <adh-rate data-refers-to="{{path}}"></adh-rate>
             </li>
         </ul>
-        <h1 class="meinberlin-proposal-detail-header-title">{{ data.title }}</h1>
+        <h1 class="idea-collection-proposal-detail-header-title">{{ data.title }}</h1>
     </header>
 
-    <section class="meinberlin-proposal-detail-body">
-        <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="disguised-link meinberlin-proposal-detail-body-comments">
+    <section class="idea-collection-proposal-detail-body">
+        <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="disguised-link idea-collection-proposal-detail-body-comments">
             <i class="icon-speechbubble"></i> {{ data.commentCount }}
         </a>
-        <p class="meinberlin-proposal-detail-detail">{{data.detail}}</p>
+        <p class="idea-collection-proposal-detail-detail">{{data.detail}}</p>
 
-        <p class="meinberlin-proposal-detail-author">
+        <p class="idea-collection-proposal-detail-author">
             {{ "TR__BY" | translate }}
             <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta><br/>
             {{ "TR__ON" | translate }}
@@ -44,7 +51,7 @@
         </p>
     </section>
 
-    <section class="meinberlin-proposal-badge-descriptions">
+    <section class="idea-collection-proposal-badge-descriptions">
         <div
             data-ng-repeat="assignment in data.assignments"
             data-ng-if="assignment.description"
@@ -58,7 +65,7 @@
         </div>
     </section>
 
-    <section>
+    <section data-ng-if="processOptions.hasLocation">
         <adh-map-detail data-ng-if="data.polygon && data.lng && data.lat" data-lng="data.lng" data-lat="data.lat" data-polygon="data.polygon" data-height="250"></adh-map-detail>
     </section>
 

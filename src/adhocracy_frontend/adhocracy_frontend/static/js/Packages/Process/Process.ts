@@ -20,6 +20,21 @@ export interface IStateData {
     start_date : string;
 }
 
+export interface IProcessOptions {
+    hasCreatorParticipate? : boolean;
+    hasImage? : boolean;
+    hasLocation? : boolean;
+    hasLocationText? : boolean;
+    // if a process has a proposal budget, but no max budget, then set maxBudget = Infinity.
+    maxBudget? : number;
+    processClass?;
+    proposalClass;
+    // WARNING: proposalSheet is not a regular feature of adhocracy,
+    // but a hack of Buergerhaushalt and Kiezkasse.
+    proposalSheet?;
+    proposalVersionClass;
+}
+
 export var getStateData = (sheet : SIWorkflow.Sheet, name : string) : IStateData => {
     for (var i = 0; i < sheet.state_data.length; i++) {
         if (sheet.state_data[i].name === name) {
@@ -36,10 +51,12 @@ export var getStateData = (sheet : SIWorkflow.Sheet, name : string) : IStateData
 
 export class Provider implements angular.IServiceProvider {
     public templates : {[processType : string]: string};
+    public processOptions : {[processType : string]: IProcessOptions};
     public $get;
 
     constructor () {
         this.templates = {};
+        this.processOptions = {};
 
         this.$get = ["$injector", ($injector) => {
             return new Service(this, $injector);
@@ -58,6 +75,13 @@ export class Service {
             throw "No template for process type \"" + processType + "\" has been configured.";
         }
         return this.provider.templates[processType];
+    }
+
+    public getProcessOptions(processType : string) : IProcessOptions {
+        if (!this.provider.processOptions.hasOwnProperty(processType)) {
+            return;
+        }
+        return this.provider.processOptions[processType];
     }
 }
 
@@ -113,6 +137,7 @@ export var processViewDirective = (
         link: (scope, element) => {
             adhTopLevelState.on("processType", (processType) => {
                 if (processType) {
+                    scope.processOptions = adhProcess.getProcessOptions(processType);
                     var template = adhProcess.getTemplate(processType);
                     element.html(template);
                     $compile(element.contents())(scope);

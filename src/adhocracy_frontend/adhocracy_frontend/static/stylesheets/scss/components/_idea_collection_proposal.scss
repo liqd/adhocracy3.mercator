@@ -1,0 +1,181 @@
+.idea-collection-proposal-detail {
+    .rate {
+        float: right;
+    }
+}
+
+.idea-collection-proposal-detail-header,
+.idea-collection-proposal-badge-descriptions,
+.idea-collection-proposal-detail-body {
+    @include clearfix;
+    @include rem(padding, 0 10px);
+    background: $color-background-base;
+}
+
+.idea-collection-proposal-detail-body-comments {
+    @include rem(padding-left, 40px);
+    float: right;
+    text-align: center;
+
+    &, a {
+        @include rem(font-size, $font-size-small);
+        color: $color-text-highlight-introvert;
+    }
+
+    [class*="icon-"] {
+        @include rem(font-size, 17px);
+        @include rem(line-height, 17px);
+        display: block;
+    }
+}
+
+.idea-collection-proposal-detail-body-comments-icon {
+    @include rem(font-size, 20px);
+    display: block;
+}
+
+.idea-collection-proposal-detail-header {
+    @include rem(padding-top, 30px);
+
+    .idea-collection-proposal-detail-header-title {
+        @include rem(font-size, $font-size-normal);
+        @include rem(margin, 0 0 30px);
+        color: $color-text-normal;
+        font-weight: $font-weight-extrovert;
+    }
+
+    .badge {
+        @include rem(top, -20px);
+        position: relative;
+    }
+}
+
+.idea-collection-proposal-detail-detail {
+    @include rem(margin-bottom, 30px);
+    padding-right: 15%;
+    white-space: pre-line;
+}
+
+.idea-collection-proposal-detail-meta-item,
+.idea-collection-proposal-detail-author {
+    @include rem(font-size, $font-size-small);
+    color: $color-text-introvert;
+}
+
+.idea-collection-proposal-detail-author {
+    @include rem(margin-bottom, 30px);
+}
+
+.idea-collection-proposal-detail-meta {
+    @include clearfix;
+    @include rem(margin, 0 0 40px);
+    list-style-type: none;
+    padding: 0;
+
+    .idea-collection-proposal-detail-meta-item {
+        @include grid-same-width(4);
+
+        &:nth-child(2) {
+            text-align: center;
+        }
+    }
+
+    .idea-collection-proposal-detail-meta-participation {
+        text-align: right;
+    }
+
+    .idea-collection-proposal-detail-meta-item-icon {
+        @include rem(margin-right, 8px);
+        vertical-align: middle;
+    }
+
+    .idea-collection-proposal-detail-meta-item-text {
+        display: inline-block;
+        margin: 0;
+        text-align: left;
+    }
+
+    .idea-collection-proposal-detail-meta-item-comments,
+    .idea-collection-proposal-detail-meta-item-location {
+        a {
+            color: $color-text-highlight-introvert;
+        }
+    }
+}
+
+/*doc
+---
+title: Kiezkasse Proposal List Item
+name: idea-collection-proposal-list-item
+category: meinberlin
+---
+
+Kiezkasse Proposal List Item contains all the key information about a
+kiezkasse proposal.  Key information may be content from the proposal as well
+as metadata.  It serves as an entry to a detail view.
+
+
+```html_example
+<a class="proposal-list-item is-selected" href="" style="overflow:hidden">
+    <div class="proposal-list-item-col-left">
+        <h3 class="idea-collection-proposal-list-item-title">A title here</h3>
+        by Cliff on 12.10.15
+        <span class="badge is-realized">is realized</span>
+        <span class="badge is-not-realized">is not realized</span>
+    </div>
+    <div class="proposal-list-item-col-right">
+        <ul class="meta-list m-vertical">
+            <li class="meta-list-item"><i class="meta-list-meta-item-icon icon-speechbubble-unfilled"></i
+            > 12 comments</li>
+            <li class="meta-list-item"><i class="meta-list-meta-item-icon icon-voting"></i
+            > +12</li>
+            <li class="meta-list-item"><i class="meta-list-meta-item-icon icon-pin-detail"></i
+            > Berlin</li>
+        </ul>
+    </div>
+</a>
+
+```
+*/
+
+.idea-collection-proposal-list-item {
+    @include clearfix;
+    @include rem(padding, 10px);
+    color: $color-text-normal;
+    display: block;
+    text-decoration: none;
+
+    &:hover, &:focus {
+        @include clearfix;
+        color: $color-text-normal;
+        background: $color-structure-normal;
+    }
+
+    &.is-selected {
+        .idea-collection-proposal-list-item-detail-link {
+            background: $color-structure-normal;
+        }
+    }
+
+    .badge {
+        @include rem(margin-left, 20px);
+    }
+}
+
+.meinberlin-alexanderplatz-proposal-list-item,
+.section-jump-cover {
+    .badge {
+        @include rem(margin-bottom, 20px);
+    }
+}
+
+.m-no-picture {
+    .proposal-list-item-body {
+        margin-left: 0;
+    }
+}
+
+.idea-collection-proposal-list-item-title {
+    @include rem(font-size, $font-size-normal);
+    @include rem(margin, 0 0 15px);
+}
