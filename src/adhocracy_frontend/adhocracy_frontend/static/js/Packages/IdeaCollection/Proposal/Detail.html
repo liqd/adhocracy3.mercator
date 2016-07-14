@@ -1,10 +1,21 @@
 <article class="proposal-detail">
-
     <adh-background-image
         data-css-path="proposal-detail-image"
         data-no-fallback="true"
         data-path="{{data.picture}}">
         <header class="resource-header" data-ng-class="{'m-image': data.picture}">
+            <adh-resource-dropdown
+                class="resource-header-actions"
+                data-resource-path="{{proposalUrl | adhParentPath}}"
+                data-resource-with-badges-url="{{processUrl}}"
+                data-ng-if="proposalUrl"
+                data-edit="true"
+                data-image="processOptions.hasImage"
+                data-assign-badges="true"
+                data-report="true"
+                data-hide="true"
+                data-print="true">
+            </adh-resource-dropdown>
             <div class="resource-header-main">
                 <div class="resource-header-meta">
                     <span

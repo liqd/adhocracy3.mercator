@@ -1,0 +1,149 @@
+/*doc
+---
+title: image modifier
+name: resource-header.m-image
+parent: resource-header
+---
+
+Resource headers can have a background image.
+
+```html_example
+<div class="image-background" style="background-image: url('/static/images/sample.jpg')">
+    <header class="resource-header m-image">
+        <div class="resource-header-navigation">
+            <div class="resource-header-breadcrumbs">
+                <a href="#">← to process</a>
+            </div>
+            <a href="#" class="resource-header-actions">…</a>
+        </div>
+        <div class="resource-header-main">
+            <h1 class="resource-header-title">Johannisthal</h1>
+            <ul class="resource-header-meta">
+                <li>Bebauungsplanverfahren 184a</li>
+                <li>Öffentliche auslegung</li>
+                <li>22.9.-22.10.15</li>
+            </ul>
+            <div class="resource-header-action"><a href="#" class="button-cta">Create proposal</a></div>
+        </div>
+    </header>
+</div>
+```
+*/
+
+// The dropdown wrapper (div)
+.dropdown {
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    outline: 0;
+}
+
+// The dropdown menu (ul)
+.dropdown-menu {
+    border-radius: 3px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+// z-index: @zindex-dropdown;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0; // override default ul
+    list-style: none;
+    font-size: $font-size-normal;
+    text-align: left; // Ensures proper alignment if parent has it changed (e.g., modal footer)
+    background-color: $color-text-inverted;
+    border: 1px solid;
+    background-clip: padding-box;
+
+    // Dividers (basically an hr) within the dropdown
+    &.hr {
+        color: $color-structure-introvert;
+    }
+
+    // Links within the dropdown menu
+    > li > a {
+        display: block;
+        padding: 3px 20px;
+        clear: both;
+        font-weight: $font-weight-introvert;
+        line-height: 2px;
+        color: $color-text-normal;
+        white-space: nowrap; // prevent links from randomly breaking onto new lines
+    }
+}
+
+// Hover/Focus state
+.dropdown-menu > li > a {
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        color: $color-brand-two-normal;
+        background-color: $color-structure-normal;
+    }
+}
+
+// Active state
+.dropdown-menu > .active > a {
+    &,
+    &:hover,
+    &:focus {
+        color: $color-brand-two-normal;
+        text-decoration: none;
+        outline: 0;
+        background-color: $color-structure-normal;
+    }
+}
+
+// Open state for the dropdown
+.open {
+    // Show the menu
+    > .dropdown-menu {
+        display: block;
+    }
+
+    // Remove the outline when :focus is triggered
+    > a {
+        outline: 0;
+    }
+}
+
+// Menu positioning
+//
+// Add extra class to `.dropdown-menu` to flip the alignment of the dropdown
+// menu with the parent.
+.dropdown-menu-right {
+    left: auto; // Reset the default from `.dropdown-menu`
+    right: 0;
+}
+// With v3, we enabled auto-flipping if you have a dropdown within a right
+// aligned nav component. To enable the undoing of that, we provide an override
+// to restore the default dropdown menu alignment.
+//
+// This is only for left-aligning a dropdown menu within a `.navbar-right` or
+// `.pull-right` nav component.
+.dropdown-menu-left {
+    left: 0;
+    right: auto;
+}
+
+// Dropdown section headers
+.dropdown-header {
+    display: block;
+    padding: 3px 20px;
+    font-size: $font-size-small;
+    line-height: 1px;
+    color: $color-structure-introvert;
+    white-space: nowrap; // as with > li > a
+}
+
+// Backdrop to catch body clicks on mobile, etc.
+.dropdown-backdrop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+//    z-index: (@zindex-dropdown - 10);
+}
+

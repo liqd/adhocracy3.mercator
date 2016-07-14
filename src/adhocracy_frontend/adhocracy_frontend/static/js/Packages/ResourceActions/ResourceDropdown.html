@@ -1,0 +1,93 @@
+<div class="dropdown">
+    <div aria-haspopup="isShowDropdown" aria-expanded="isShowDropdown">
+        <i class="icon-document moving-column-icon" data-ng-click="data.toggleDropdown()"></i>
+    </div>
+    <ul class="dropdown-menu dropdown-menu-right" data-ng-if="isShowDropdown" aria-labelledby="dropdownMenu1">
+        <adh-view-action
+            data-ng-if="data.edit && data.resourcePath && options.PUT"
+            data-class="li"
+            data-view="edit"
+            data-label="TR__EDIT"
+            data-resource-path="{{data.resourcePath}}"></adh-view-action>
+        <hr data-ng-if="data.edit && data.resourcePath && options.PUT"></hr>
+        <adh-view-action data-ng-if="data.image && data.resourcePath && options.PUT"
+            data-class="li"
+            data-view="image"
+            data-label="TR__IMAGE_UPLOAD"
+            data-resource-path="{{data.resourcePath}}"></adh-view-action>
+        <hr data-ng-if="data.image && data.resourcePath && options.PUT"></hr>
+        <adh-view-action
+            data-ng-if="data.moderate && data.resourcePath"
+            data-class="li"
+            data-view="moderate"
+            data-label="TR__MODERATE"
+            data-resource-path="{{resourcePath}}"></adh-view-action>
+        <hr data-ng-if="data.moderate && data.resourcePath"></hr>
+        <adh-assign-badges-action
+            data-ng-if="data.assignBadges && data.resourcePath"
+            data-modals="data.modals"
+            data-class="li"
+            data-resource-with-badges-url="{{data.resourceWithBadgesUrl}}"
+            data-resource-path="{{data.resourcePath}}"></adh-assign-badges-action>
+        <hr data-ng-if="data.assignBadges && data.resourcePath"></hr>
+        <adh-modal-action
+            data-ng-if="data.report"
+            data-modals="data.modals"
+            data-modal="abuse"
+            data-label="TR__REPORT"
+            data-class="li"></adh-modal-action>
+        <hr data-ng-if="data.report"></hr>
+        <adh-modal-action
+            data-ng-if="data.share"
+            data-modals="data.modals"
+            data-modal="share"
+            data-label="TR__SHARE"
+            data-class="li"></adh-modal-action>
+        <hr data-ng-if="data.share"></hr>
+        <adh-hide-action
+            data-ng-if="data.hide && data.resourcePath && options.hide"
+            data-class="li"
+            data-redirect-url="{{data.deleteRedirectUrl}}"
+            data-resource-path="{{data.resourcePath}}"></adh-hide-action>
+        <hr data-ng-if="data.hide && data.resourcePath && options.hide"></hr>
+        <adh-resource-widget-delete-action
+            data-ng-if="data.resourceWidgetDelete && data.resourcePath && options.hide"
+            data-class="li"
+            data-resource-path="{{data.resourcePath}}"></adh-resource-widget-delete-action>
+        <hr data-ng-if="data.resourceWidgetDelete && data.resourcePath && options.hide"></hr>
+        <adh-print-action
+            data-ng-if="data.print"
+            data-class="li"></adh-print-action>
+        <hr data-ng-if="data.print"></hr>
+        <adh-cancel-action
+            data-ng-if="data.cancel && data.resourcePath"
+            data-class="li"
+            data-resource-path="{{data.resourcePath}}"></adh-cancel-action>
+    </ul>
+</div>
+
+<ul class="alerts">
+    <li data-ng-repeat="(id, alert) in modals.alerts" class="alerts-message m-{{alert.mode}}" data-ng-click="modals.removeAlert(id)">
+        {{ alert.message | translate }}
+    </li>
+</ul>
+
+<div class="modal" data-ng-if="data.modals.modal">
+    <adh-report-abuse
+        data-ng-if="data.modals.modal === 'abuse'"
+        data-modals="data.modals"
+        class="report-abuse"
+        data-url="{{ data.resourcePath | adhResourceUrl | adhCanonicalUrl }}">
+    </adh-report-abuse>
+
+    <adh-badge-assignment
+        data-ng-if="data.modals.modal === 'badges'"
+        data-modals="data.modals"
+        data-path="{{data.resourcePath}}">
+    </adh-badge-assignment>
+
+    <div data-ng-if="data.modals.modal === 'share'">
+        <adh-social-share data-uri="{{ data.resourcePath | adhResourceUrl | adhCanonicalUrl }}"></adh-social-share>
+        <a href="" class="button" data-ng-click="data.modals.hideModal('share')">{{ "TR__CANCEL" | translate }}</a>
+    </div>
+</div>
