@@ -95,19 +95,76 @@ export var resourceActionsDirective = (
     };
 };
 
+export var resourceDropdownDirective = (
+    $timeout : angular.ITimeoutService,
+    adhConfig : AdhConfig.IService,
+    adhPermissions : AdhPermissions.Service
+) => {
+    return {
+        restrict: "E",
+        scope: {
+            resourcePath: "@",
+            resourceWithBadgesUrl: "@?",
+            deleteRedirectUrl: "@?",
+            assignBadges: "=?",
+            share: "=?",
+            hide: "=?",
+            resourceWidgetDelete: "=?",
+            print: "=?",
+            report: "=?",
+            cancel: "=?",
+            edit: "=?",
+            moderate: "=?",
+            modals: "=?"
+        },
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceDropdown.html",
+        link: (scope, element) => {
+            scope.data = {
+                resourcePath: scope.resourcePath,
+                resourceWithBadgesUrl: scope.resourceWithBadgesUrl,
+                deleteRedirectUrl: scope.deleteRedirectUrl,
+                assignBadges: scope.assignBadges,
+                share: scope.share,
+                hide: scope.hide,
+                resourceWidgetDelete: scope.resourceWidgetDelete,
+                print: scope.print,
+                report: scope.report,
+                cancel: scope.cancel,
+                edit: scope.edit,
+                moderate: scope.moderate,
+                modals: scope.modals
+            };
+            scope.data.modals = new Modals($timeout);
+            adhPermissions.bindScope(scope, scope.data.resourcePath, "options");
+
+            scope.$watch("resourcePath", () => {
+                scope.data.modals.clear();
+            });
+
+            scope.data.toggleDropdown = () => {
+                scope.isShowDropdown = !scope.isShowDropdown;
+            };
+        }
+    };
+};
+
 export var modalActionDirective = () => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"toggle();\">{{ label | translate }}</a>",
+        transclude: true,
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"toggle();\">" +
+            "<ng-transclude></ng-transclude>{{ label | translate }}</a>",
         scope: {
             class: "@",
             modals: "=",
             modal: "@",
             label: "@",
+            toggleDropdown: "=?"
         },
         link: (scope) => {
             scope.toggle = () => {
                 scope.modals.toggleModal(scope.modal);
+                scope.toggleDropdown();
             };
         }
     };
@@ -120,13 +177,15 @@ export var assignBadgesActionDirective = (
 ) => {
     return {
         restrict: "E",
-        template: "<a data-ng-if=\"badgesExist && badgeAssignmentPoolOptions.PUT\" class=\"{{class}}\""
-            + "href=\"\" data-ng-click=\"assignBadges();\">{{ 'TR__MANAGE_BADGE_ASSIGNMENTS' | translate }}</a>",
+        transclude: true,
+        template: "<a data-ng-if=\"badgesExist && badgeAssignmentPoolOptions.PUT\" class=\"{{class}}\" href=\"\"" +
+            "data-ng-click=\"assignBadges();\"><ng-transclude></ng-transclude>{{ 'TR__MANAGE_BADGE_ASSIGNMENTS' | translate }}</a>",
         scope: {
             resourcePath: "@",
             resourceWithBadgesUrl: "@?",
             class: "@",
             modals: "=",
+            toggleDropdown: "=?"
         },
         link: (scope) => {
             var badgeAssignmentPoolPath;
@@ -148,6 +207,7 @@ export var assignBadgesActionDirective = (
 
             scope.assignBadges = () => {
                 scope.modals.toggleModal("badges");
+                scope.toggleDropdown();
             };
         }
     };
@@ -162,7 +222,9 @@ export var hideActionDirective = (
 ) => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"hide();\">{{ 'TR__HIDE' | translate }}</a>",
+        transclude: true,
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"hide();\">" +
+            "<ng-transclude></ng-transclude>{{ 'TR__HIDE' | translate }}</a>",
         scope: {
             resourcePath: "@",
             class: "@",
@@ -190,7 +252,9 @@ export var hideActionDirective = (
 export var resourceWidgetDeleteActionDirective = () => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"delete();\">{{ 'TR__DELETE' | translate }}</a>",
+        transclude: true,
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"delete();\">" +
+            "<ng-transclude></ng-transclude>{{ 'TR__DELETE' | translate }}</a>",
         require: "^adhMovingColumn",
         scope: {
             resourcePath: "@",
@@ -210,7 +274,9 @@ export var printActionDirective = (
 ) => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"print();\">{{ 'TR__PRINT' | translate }}</a>",
+        transclude: true,
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"print();\">" +
+            "<ng-transclude></ng-transclude>{{ 'TR__PRINT' | translate }}</a>",
         require: "?^adhMovingColumn",
         scope: {
             class: "@"
@@ -234,7 +300,8 @@ export var viewActionDirective = (
 ) => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"link();\">{{ label | translate }}</a>",
+        transclude: true,
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"link();\"><ng-transclude></ng-transclude>{{ label | translate }}</a>",
         scope: {
             resourcePath: "@",
             class: "@",
@@ -257,7 +324,9 @@ export var cancelActionDirective = (
 ) => {
     return {
         restrict: "E",
-        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"cancel();\">{{ 'TR__CANCEL' | translate }}</a>",
+        transclude: true,
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"cancel();\">" +
+            "<ng-transclude></ng-transclude>{{ 'TR__CANCEL' | translate }}</a>",
         scope: {
             resourcePath: "@",
             class: "@"

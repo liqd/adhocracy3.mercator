@@ -1,0 +1,133 @@
+/*doc
+---
+title: dropdown
+name: Dropdown
+parent: resource-header
+---
+
+A basic dropdown that is currently used for resource actions.
+
+```html_example
+<div class="dropdown">
+    <div aria-haspopup="isShowDropdown" aria-expanded="isShowDropdown">
+        <i class="icon-three-dots dropdown-icon dropdown-header-icon" role="button" style="display: block;"></i>
+    </div>
+    <ul class="dropdown-menu dropdown-menu-right" data-ng-if="isShowDropdown" aria-labelledby="dropdownMenu1" style="display: block;">
+        <li>
+            <a class="" href="">
+                <i class="icon-pencil dropdown-icon"></i>bearbeiten
+            </a>
+        </li>
+        <li>
+            <a class="" href="">
+                <i class="icon-tags dropdown-icon"></i>Etiketten
+            </a>
+        </li>
+        <li>
+            <a class="" href="">
+                <i class="icon-flag dropdown-icon"></i>melden
+            </a>
+        </li>
+        <li>
+            <a class="" href="">
+                <i class="icon-trash dropdown-icon"></i>löschen
+            </a>
+        </li>
+        <li>
+            <a class="" href="">
+                <i class="icon-print dropdown-icon"></i>drucken
+            </a>
+        </li>
+        <li>
+            <a class="" href="">
+                <i class="icon-x dropdown-icon"></i>abbrechen
+            </a>
+        </li>
+    </ul>
+</div>
+```
+*/
+
+// Very vaguely based on:
+// https://github.com/angular-ui/bootstrap/tree/master/src/dropdown.
+
+// The dropdown wrapper (div)
+.dropdown {
+    position: absolute;
+    top: $padding-small;
+    right: $padding-small;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.dropdown-icon {
+    @include rem(margin-right, 3px);
+    @include rem(font-size, $font-size-normal);
+    line-height: (24 / 17);
+    vertical-align: middle;
+}
+
+.dropdown-header-icon {
+    float: right;
+}
+
+// The dropdown menu (ul)
+.dropdown-menu {
+    border-radius: 2px;
+    float: left;
+    min-width: 120px;
+    padding: 0;
+    margin: 5px 0 0;
+    background-color: $color-text-inverted;
+    border: 0.5px solid $color-structure-normal;
+    list-style: none;
+
+    // Links within the dropdown menu
+    li {
+        display: block;
+        padding: 8px;
+        color: $color-text-normal;
+        border: 0.5px solid $color-structure-normal;
+        white-space: nowrap;
+
+        a {
+            color: inherit;
+        }
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            color: $color-brand-two-normal;
+            background-color: $color-structure-normal;
+        }
+    }
+}
+
+// Active state
+.dropdown-menu .active > li {
+    &,
+    &:hover,
+    &:focus {
+        color: $color-brand-two-normal;
+        text-decoration: none;
+        outline: 0;
+        background-color: $color-structure-normal;
+    }
+}
+
+// Menu positioning
+.dropdown-menu-right {
+    left: auto;
+    right: 0;
+}
+
+// Dropdown section headers
+.dropdown-header {
+    display: block;
+    padding: 3px 20px;
+    font-size: $font-size-small;
+    line-height: 1px;
+    color: $color-structure-introvert;
+    white-space: nowrap; // as with > li > a
+}
+

@@ -235,7 +235,9 @@ export var detailDirective = (
             path: "@",
             processOptions: "="
         },
-        link: (scope : IScope) => {
+        link: (scope) => {
+            scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            scope.$on("$destroy", adhTopLevelState.bind("proposalUrl", scope));
             bindPath(adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(
                 scope, undefined);
         }
