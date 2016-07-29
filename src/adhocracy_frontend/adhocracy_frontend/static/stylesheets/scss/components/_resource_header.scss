@@ -16,7 +16,6 @@ actions (edit, share, report, print, ...).
         <div class="resource-header-breadcrumbs">
             <a href="#">← to process</a>
         </div>
-        <a href="#" class="resource-header-actions">…</a>
     </div>
     <div class="resource-header-main">
         <h1 class="resource-header-title">Johannisthal</h1>
@@ -34,6 +33,7 @@ actions (edit, share, report, print, ...).
     position: relative;
     padding: $padding-small;
     margin-bottom: $padding-small;
+    z-index: 0;
 }
 
 .resource-header-main {
@@ -74,12 +74,6 @@ actions (edit, share, report, print, ...).
     a {
         color: inherit;
     }
-}
-
-.resource-header-actions {
-    position: absolute;
-    top: $padding-small;
-    right: $padding-small;
 }
 
 .resource-header-breadcrumbs {

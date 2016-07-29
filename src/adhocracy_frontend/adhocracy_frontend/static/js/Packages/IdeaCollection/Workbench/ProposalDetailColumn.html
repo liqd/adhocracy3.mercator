@@ -18,17 +18,6 @@
     <div data-ng-switch-when="body">
         <adh-recompile-on-change
             data-value="{{proposalUrl}}">
-            <adh-resource-actions
-                data-resource-path="{{proposalUrl | adhParentPath}}"
-                data-resource-with-badges-url="{{processUrl}}"
-                data-ng-if="proposalUrl"
-                data-edit="true"
-                data-image="processOptions.hasImage"
-                data-assign-badges="true"
-                data-report="true"
-                data-hide="true"
-                data-print="true">
-            </adh-resource-actions>
             <adh-idea-collection-proposal-detail
                 data-ng-if="proposalUrl"
                 data-process-options="processOptions"

@@ -59,6 +59,28 @@ export class Modals {
     }
 }
 
+export var clickSomewhereElse = ($document) => {
+    return {
+        link: function postLink(scope, element, attrs) {
+            var onClick = function (event) {
+                var isChild = $(element).has(event.target).length > 0;
+                var isSelf = element[0] === event.target;
+                var isInside = isChild || isSelf;
+                if (!isInside) {
+                    scope.$apply(attrs.clickSomewhereElse);
+                }
+            };
+            scope.$watch(attrs.isActive, function(newValue, oldValue) {
+                if (newValue !== oldValue && newValue === true) {
+                    $document.bind("click", onClick);
+                } else if (newValue !== oldValue && newValue === false) {
+                    $document.unbind("click", onClick);
+                }
+            });
+        }
+    };
+};
+
 export var resourceActionsDirective = (
     $timeout : angular.ITimeoutService,
     adhConfig : AdhConfig.IService,
@@ -95,19 +117,75 @@ export var resourceActionsDirective = (
     };
 };
 
+export var resourceDropdownDirective = (
+    $timeout : angular.ITimeoutService,
+    adhConfig : AdhConfig.IService,
+    adhPermissions : AdhPermissions.Service
+) => {
+    return {
+        restrict: "E",
+        scope: {
+            resourcePath: "@",
+            resourceWithBadgesUrl: "@?",
+            deleteRedirectUrl: "@?",
+            assignBadges: "=?",
+            share: "=?",
+            hide: "=?",
+            resourceWidgetDelete: "=?",
+            print: "=?",
+            report: "=?",
+            cancel: "=?",
+            edit: "=?",
+            moderate: "=?",
+            modals: "=?"
+        },
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceDropdown.html",
+        link: (scope, element) => {
+            scope.data = {
+                resourcePath: scope.resourcePath,
+                resourceWithBadgesUrl: scope.resourceWithBadgesUrl,
+                deleteRedirectUrl: scope.deleteRedirectUrl,
+                assignBadges: scope.assignBadges,
+                share: scope.share,
+                hide: scope.hide,
+                resourceWidgetDelete: scope.resourceWidgetDelete,
+                print: scope.print,
+                report: scope.report,
+                cancel: scope.cancel,
+                edit: scope.edit,
+                moderate: scope.moderate,
+                modals: scope.modals
+            };
+            scope.data.modals = new Modals($timeout);
+            adhPermissions.bindScope(scope, scope.data.resourcePath, "options");
+
+            scope.$watch("resourcePath", () => {
+                scope.data.modals.clear();
+            });
+
+            scope.data.toggleDropdown = () => {
+                scope.isShowDropdown = !scope.isShowDropdown;
+            };
+        }
+    };
+};
+
 export var modalActionDirective = () => {
     return {
         restrict: "E",
+        transclude: true,
         template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"toggle();\">{{ label | translate }}</a>",
         scope: {
             class: "@",
             modals: "=",
             modal: "@",
             label: "@",
+            toggleDropdown: "=?"
         },
         link: (scope) => {
             scope.toggle = () => {
                 scope.modals.toggleModal(scope.modal);
+                scope.toggleDropdown();
             };
         }
     };
@@ -120,13 +198,15 @@ export var assignBadgesActionDirective = (
 ) => {
     return {
         restrict: "E",
-        template: "<a data-ng-if=\"badgesExist && badgeAssignmentPoolOptions.PUT\" class=\"{{class}}\""
-            + "href=\"\" data-ng-click=\"assignBadges();\">{{ 'TR__MANAGE_BADGE_ASSIGNMENTS' | translate }}</a>",
+        transclude: true,
+        template: "<a data-ng-if=\"badgesExist && badgeAssignmentPoolOptions.PUT\" class=\"{{class}}\" href=\"\"" +
+            "data-ng-click=\"assignBadges();\">{{ 'TR__MANAGE_BADGE_ASSIGNMENTS' | translate }}</a>",
         scope: {
             resourcePath: "@",
             resourceWithBadgesUrl: "@?",
             class: "@",
             modals: "=",
+            toggleDropdown: "=?"
         },
         link: (scope) => {
             var badgeAssignmentPoolPath;
@@ -148,6 +228,7 @@ export var assignBadgesActionDirective = (
 
             scope.assignBadges = () => {
                 scope.modals.toggleModal("badges");
+                scope.toggleDropdown();
             };
         }
     };
@@ -162,6 +243,7 @@ export var hideActionDirective = (
 ) => {
     return {
         restrict: "E",
+        transclude: true,
         template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"hide();\">{{ 'TR__HIDE' | translate }}</a>",
         scope: {
             resourcePath: "@",
@@ -190,6 +272,7 @@ export var hideActionDirective = (
 export var resourceWidgetDeleteActionDirective = () => {
     return {
         restrict: "E",
+        transclude: true,
         template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"delete();\">{{ 'TR__DELETE' | translate }}</a>",
         require: "^adhMovingColumn",
         scope: {
@@ -210,6 +293,7 @@ export var printActionDirective = (
 ) => {
     return {
         restrict: "E",
+        transclude: true,
         template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"print();\">{{ 'TR__PRINT' | translate }}</a>",
         require: "?^adhMovingColumn",
         scope: {
@@ -234,6 +318,7 @@ export var viewActionDirective = (
 ) => {
     return {
         restrict: "E",
+        transclude: true,
         template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"link();\">{{ label | translate }}</a>",
         scope: {
             resourcePath: "@",
@@ -257,6 +342,7 @@ export var cancelActionDirective = (
 ) => {
     return {
         restrict: "E",
+        transclude: true,
         template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"cancel();\">{{ 'TR__CANCEL' | translate }}</a>",
         scope: {
             resourcePath: "@",
