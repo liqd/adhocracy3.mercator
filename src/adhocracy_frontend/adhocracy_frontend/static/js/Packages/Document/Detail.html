@@ -1,15 +1,30 @@
-<div>
-    <h2 class="print-only section-jump-cover-header" data-aria-hidden="true">{{ data.title }}</h2>
-    <div class="section-jump-cover">
-        <span data-ng-repeat="badge in data.assignments" class="badge {{badgeclass}}">{{ badge.title }}</span>
-        <h1 class="section-jump-cover-header screen-only">{{ data.title }}</h1>
-        <ul class="meta-list">
-            <li class="meta-list-item meta-list-item-total-comments">
-                <i class="icon-speechbubbles"></i>
-                {{ data.commentCountTotal }} {{ "TR__COMMENTS_TOTAL" | translate }}
-            </li>
-        </ul>
-    </div><!-- /.cover -->
+<article class="document-detail">
+    <header class="resource-header" data-ng-class="{'m-image': data.picture}">
+        <div class="resource-header-navigation">
+            <adh-resource-dropdown
+                data-resource-path="{{path | adhParentPath}}"
+                data-ng-if="path"
+                data-edit="true"
+                data-report="true"
+                data-hide="true"
+                data-print="true">
+            </adh-resource-dropdown>
+        </div>
+        <adh-background-image
+            data-css-path="document-detail-image"
+            data-no-fallback="true"
+            data-path="{{data.picture}}">
+            <div class="resource-header-main">
+                <h1 class="resource-header-title">{{ data.title }}</h1>
+
+                <ul class="resource-header-meta">
+                    <li>
+                        <i class="icon-speechbubble"></i> {{ data.commentCountTotal }} {{ "TR__COMMENTS_TOTAL" | translate }}
+                    </li>
+                </ul>
+            </div>
+        </adh-background-image>
+    </header>
 
     <div class="jump-navigation-wrapper m-narrow">
         <nav class="jump-navigation m-unnumbered" data-adh-sticky="" data-ng-if="data.paragraphs.length > 1">
@@ -32,4 +47,4 @@
             </section>
         </div><!-- /.jump-navigation-main -->
     </div><!-- /.jump-navigation-wrapper -->
-</div>
+</article>

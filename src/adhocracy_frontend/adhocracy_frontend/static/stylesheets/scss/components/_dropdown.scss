@@ -1,0 +1,103 @@
+/*doc
+---
+title: Dropdown
+name: dropdown
+parent: resource-header
+---
+
+A basic dropdown to trigger actions. The `m-right` modifier can be used to
+align it to the right.
+
+```html_example
+<div class="dropdown">
+    <a class="dropdown-button" href="#" aria-haspopup="true" aria-expanded="true" id="dropdownButton">
+        <i class="icon-three-dots" title="Actions"></i>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownButton">
+        <a href="#">
+            <i class="icon-pencil"></i> bearbeiten
+        </a>
+        <a href="#">
+            <i class="icon-tags"></i> Etiketten
+        </a>
+        <a href="#">
+            <i class="icon-flag"></i> melden
+        </a>
+        <a href="#">
+            <i class="icon-trash"></i> löschen
+        </a>
+        <a href="#">
+            <i class="icon-print"></i> drucken
+        </a>
+        <a href="#">
+            <i class="icon-x"></i> abbrechen
+        </a>
+    </div>
+</div>
+```
+*/
+
+.dropdown {
+    position: relative;
+    text-align: left;
+
+    &.m-right {
+        text-align: right;
+
+        .dropdown-menu {
+            left: auto;
+            right: 0;
+        }
+    }
+}
+
+.dropdown-button {
+    @include rem(font-size, $font-size-plus);
+    color: $color-text-normal;
+    display: inline-block;
+    width: 1.4em;
+    text-align: center;
+}
+
+.dropdown-menu {
+    position: absolute;
+    left: 0;
+    min-width: 10em;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+    background-color: $color-text-inverted;
+    border: 1px solid $color-structure-normal;
+    border-radius: 2px;
+    text-align: left;
+
+    a {
+        display: block;
+        padding: 0.5em;
+        color: $color-text-normal;
+        border-bottom: 1px solid $color-structure-normal;
+        white-space: nowrap;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: none;
+            color: $color-brand-two-normal;
+            background-color: $color-background-base-introvert;
+        }
+
+        i {
+            display: inline-block;
+            width: 1.5em;
+        }
+    }
+
+    > a:last-child,
+    :last-child a {
+        border-bottom: 0;
+    }
+
+    @media print {
+        display: none;
+    }
+}

@@ -1,0 +1,96 @@
+<div class="dropdown m-right resource-header-actions" data-ng-if="!data.modals.modal && data.isShowDropdownMenu">
+    <a class="dropdown-button" href="" aria-haspopup="true" aria-expanded="{{isShowDropdown}}" data-ng-click="data.toggleDropdown()" id="{{id}}">
+        <i class="icon-three-dots"></i>
+    </a>
+    <div class="dropdown-menu" data-ng-if="isShowDropdown" aria-labelledby="{{id}}">
+        <adh-view-action
+            data-ng-if="data.edit && data.resourcePath && options.PUT"
+            data-view="edit"
+            data-label="TR__EDIT"
+            data-resource-path="{{data.resourcePath}}">
+            <i class="icon-pencil"></i>
+        </adh-view-action>
+        <adh-view-action
+            data-ng-if="data.image && data.resourcePath && options.PUT"
+            data-view="image"
+            data-label="TR__IMAGE_UPLOAD"
+            data-resource-path="{{data.resourcePath}}">
+            <i class="icon-picture-file"></i>
+        </adh-view-action>
+        <adh-view-action
+            data-ng-if="data.moderate && data.resourcePath"
+            data-view="moderate"
+            data-label="TR__MODERATE"
+            data-resource-path="{{resourcePath}}">
+            <i class="icon-picture-file"></i>
+        </adh-view-action>
+        <adh-assign-badges-action
+            data-ng-if="data.assignBadges && data.resourcePath"
+            data-modals="data.modals"
+            data-resource-with-badges-url="{{data.resourceWithBadgesUrl}}"
+            data-resource-path="{{data.resourcePath}}"
+            data-toggle-dropdown="data.toggleDropdown">
+            <i class="icon-tags"></i>
+        </adh-assign-badges-action>
+        <adh-modal-action
+            data-ng-if="data.report"
+            data-modals="data.modals"
+            data-modal="abuse"
+            data-label="TR__REPORT"
+            data-toggle-dropdown="data.toggleDropdown">
+            <i class="icon-flag"></i>
+        </adh-modal-action>
+        <adh-modal-action
+            data-ng-if="data.share"
+            data-modals="data.modals"
+            data-modal="share"
+            data-label="TR__SHARE">
+            <i class="icon-share"></i>
+        </adh-modal-action>
+        <adh-hide-action
+            data-ng-if="data.hide && data.resourcePath && options.hide"
+            data-redirect-url="{{data.deleteRedirectUrl}}"
+            data-resource-path="{{data.resourcePath}}">
+            <i class="icon-trash"></i>
+        </adh-hide-action>
+        <adh-resource-widget-delete-action
+            data-ng-if="data.resourceWidgetDelete && data.resourcePath && options.hide"
+            data-resource-path="{{data.resourcePath}}">
+            <i class="icon-trash"></i>
+        </adh-resource-widget-delete-action>
+        <adh-print-action data-ng-if="data.print">
+            <i class="icon-print"></i>
+        </adh-print-action>
+        <adh-cancel-action
+            data-ng-if="data.cancel && data.resourcePath"
+            data-resource-path="{{data.resourcePath}}">
+            <i class="icon-x"></i>
+        </adh-cancel-action>
+    </div>
+</div>
+
+<ul class="alerts">
+    <li data-ng-repeat="(id, alert) in data.modals.alerts" class="alerts-message m-{{alert.mode}}" data-ng-click="data.modals.removeAlert(id)">
+        {{ alert.message | translate }}
+    </li>
+</ul>
+
+<div class="modal" data-ng-if="data.modals.modal">
+    <adh-report-abuse
+        data-ng-if="data.modals.modal === 'abuse'"
+        data-modals="data.modals"
+        class="report-abuse"
+        data-url="{{ data.resourcePath | adhResourceUrl | adhCanonicalUrl }}">
+    </adh-report-abuse>
+
+    <adh-badge-assignment
+        data-ng-if="data.modals.modal === 'badges'"
+        data-modals="data.modals"
+        data-path="{{data.resourcePath}}">
+    </adh-badge-assignment>
+
+    <div data-ng-if="data.modals.modal === 'share'">
+        <adh-social-share data-uri="{{ data.resourcePath | adhResourceUrl | adhCanonicalUrl }}"></adh-social-share>
+        <a href="" class="button" data-ng-click="data.modals.hideModal('share')">{{ "TR__CANCEL" | translate }}</a>
+    </div>
+</div>

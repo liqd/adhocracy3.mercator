@@ -15,9 +15,6 @@
     <adh-recompile-on-change
             data-ng-switch-when="body"
             data-value="{{documentUrl}}">
-        <adh-resource-actions
-            data-resource-path="{{documentUrl | adhParentPath}}"
-            data-edit="true"></adh-resource-actions>
         <adh-document-detail
             data-ng-if="documentUrl"
             data-path="{{documentUrl}}">

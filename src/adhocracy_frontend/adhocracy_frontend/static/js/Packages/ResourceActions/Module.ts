@@ -15,6 +15,8 @@ export var register = (angular) => {
         ])
         .directive("adhResourceActions", [
             "$timeout", "adhConfig", "adhPermissions", AdhResourceActions.resourceActionsDirective])
+        .directive("adhResourceDropdown", [
+            "$timeout", "adhConfig", "adhPermissions", AdhResourceActions.resourceDropdownDirective])
         .directive("adhModalAction", [AdhResourceActions.modalActionDirective])
         .directive("adhHideAction", [
             "adhHttp", "adhTopLevelState", "adhResourceUrlFilter", "$translate", "$window", AdhResourceActions.hideActionDirective])
@@ -24,6 +26,16 @@ export var register = (angular) => {
         .directive("adhPrintAction", ["adhTopLevelState", "$window", AdhResourceActions.printActionDirective])
         .directive("adhCancelAction", ["adhTopLevelState", "adhResourceUrlFilter", AdhResourceActions.cancelActionDirective])
         .animation(".modal", () => {
+            return {
+                enter: (element, done) => {
+                    element.hide().slideDown(done);
+                },
+                leave: (element, done) => {
+                    element.slideUp(done);
+                }
+            };
+        })
+        .animation(".dropdown-menu", () => {
             return {
                 enter: (element, done) => {
                     element.hide().slideDown(done);

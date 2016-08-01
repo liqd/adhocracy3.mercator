@@ -16,11 +16,6 @@
     </a>
 
     <div data-ng-switch-when="body">
-        <adh-resource-actions
-            data-resource-path="{{documentUrl | adhParentPath}}"
-            data-edit="true"
-            data-hide="true">
-        </adh-resource-actions>
         <adh-document-detail data-path="{{documentUrl}}" data-has-map="true" data-has-badges="true" data-badgeclass="'m-info'"></adh-document-detail>
     </div>
 </div>
