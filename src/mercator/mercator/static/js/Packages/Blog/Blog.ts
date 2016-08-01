@@ -99,20 +99,6 @@ export var detailDirective = (
             adhPermissions.bindScope(scope, () => scope.path);
             adhPermissions.bindScope(scope, () => AdhUtil.parentPath(scope.path), "itemOptions");
 
-            scope.delete = () => {
-                return $translate("TR__ASK_TO_CONFIRM_HIDE_ACTION").then((question) => {
-                    if ($window.confirm(question)) {
-                        var itemPath = AdhUtil.parentPath(scope.path);
-                        adhHttp.delete(itemPath)
-                            .then(() => {
-                                if (typeof scope.onChange !== "undefined") {
-                                    scope.onChange();
-                                }
-                            });
-                    }
-                });
-            };
-
             scope.edit = () => {
                 scope.mode = "edit";
                 unbind();

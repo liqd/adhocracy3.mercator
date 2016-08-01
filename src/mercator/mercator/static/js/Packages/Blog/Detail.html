@@ -6,7 +6,7 @@
 
             <div class="blog-post-actions">
                 <a href="" data-ng-if="itemOptions.POST" data-ng-click="edit()" class="blog-post-actions-item"><i class="icon-pencil"></i> {{ "TR__EDIT" | translate }}</a>
-                <a href="" data-ng-if="options.DELETE" data-ng-click="delete()" class="blog-post-actions-item"><i class="icon-trash"></i> {{ "TR__DELETE" | translate }}</a>
+                <adh-delete-action data-ng-if="options.DELETE" class="blog-post-actions-item"></adh-delete-action>
             </div>
         </header>
 
@@ -28,24 +28,24 @@
         name="documentForm">
         <label>
 
-        <select
-            data-ng-model="data.title"
-            name="titles"
-            class="title"
-            required="required">
-            <!-- FIXME: dummy options -->
-            <option value="data.title" data-selected="selected">{{ data.title | uppercase }}</option>
-            <option data-ng-show="title.value !== data.title" value="{{title.value}}" data-ng-repeat="title in titles">{{title.title | uppercase}}</option>
-        </select>
-        <input
-            type="hidden"
-            data-ng-model="data.title"
-            name="title"
-            data-ng-required="false">
-        <span class="input-error" data-ng-show="showError(documentForm, documentForm.title, 'required')">
-            {{ "TR__ERROR_REQUIRED_TITLE" | translate }}
-        </span>
-    </label>
+            <select
+                data-ng-model="data.title"
+                name="titles"
+                class="title"
+                required="required">
+                <!-- FIXME: dummy options -->
+                <option value="data.title" data-selected="selected">{{ data.title | uppercase }}</option>
+                <option data-ng-show="title.value !== data.title" value="{{title.value}}" data-ng-repeat="title in titles">{{title.title | uppercase}}</option>
+            </select>
+            <input
+                type="hidden"
+                data-ng-model="data.title"
+                name="title"
+                data-ng-required="false">
+            <span class="input-error" data-ng-show="showError(documentForm, documentForm.title, 'required')">
+                {{ "TR__ERROR_REQUIRED_TITLE" | translate }}
+            </span>
+        </label>
 
         <label>
             <textarea

@@ -271,6 +271,43 @@ export var hideActionDirective = (
     };
 };
 
+export var deleteActionDirective = (
+    adhHttp : AdhHttp.Service<any>,
+    adhTopLevelState : AdhTopLevelState.Service,
+    adhResourceUrlFilter,
+    $translate,
+    $window : Window
+) => {
+    return {
+        restrict: "E",
+        template: "<a class=\"{{class}}\" href=\"\" data-ng-click=\"delete();\">{{ 'TR__HIDE' | translate }}</a>",
+        require: "^adhMovingColumn",
+        scope: {
+            resourcePath: "@",
+            parentPath: "=?",
+            class: "@",
+            redirectUrl: "@?",
+        },
+        link: (scope, element) => {
+            scope.delete = () => {
+                return $translate("TR__ASK_TO_CONFIRM_DELETE_ACTION").then((question) => {
+                    var path = scope.parentPath ? AdhUtil.parentPath(scope.resourcePath) : scope.resourcePath;
+                    if ($window.confirm(question)) {
+                        return adhHttp.delete(path).then(() => {
+                            var url = scope.redirectUrl;
+                            if (!url) {
+                                var processUrl = adhTopLevelState.get("processUrl");
+                                url = processUrl ? adhResourceUrlFilter(processUrl) : "/";
+                            }
+                            adhTopLevelState.goToCameFrom(url);
+                        });
+                    }
+                });
+            };
+        }
+    };
+};
+
 export var resourceWidgetDeleteActionDirective = () => {
     return {
         restrict: "E",

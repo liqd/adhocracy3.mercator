@@ -45,6 +45,12 @@
         data-class="action-bar-item"
         data-redirect-url="{{deleteRedirectUrl}}"
         data-resource-path="{{resourcePath}}"></adh-hide-action>
+    <adh-delete-action
+        data-ng-if="hide && resourcePath && options.hide"
+        data-class="action-bar-item"
+        data-parent-path="parentPath"
+        data-redirect-url="{{deleteRedirectUrl}}"
+        data-resource-path="{{resourcePath}}"></adh-delete-action>
     <adh-resource-widget-delete-action
         data-ng-if="resourceWidgetDelete && resourcePath && options.hide"
         data-class="action-bar-item"
