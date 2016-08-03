@@ -80,8 +80,10 @@ export var resourceActionsDirective = (
             cancel: "=?",
             edit: "=?",
             image: "=?",
+            meeting: "@?",
             moderate: "=?",
-            modals: "=?"
+            modals: "=?",
+            goToMeeting: "=?"
         },
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceActions.html",
         link: (scope, element) => {
@@ -114,8 +116,10 @@ export var resourceDropdownDirective = (
             report: "=?",
             cancel: "=?",
             edit: "=?",
+            meeting: "@?",
             moderate: "=?",
-            modals: "=?"
+            modals: "=?",
+            goToMeeting: "=?"
         },
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ResourceDropdown.html",
         link: (scope, element) => {
@@ -131,8 +135,10 @@ export var resourceDropdownDirective = (
                 report: scope.report,
                 cancel: scope.cancel,
                 edit: scope.edit,
+                meeting: scope.meeting,
                 moderate: scope.moderate,
-                modals: scope.modals
+                modals: scope.modals,
+                goToMeeting: scope.goToMeeting
             };
             scope.data.modals = new Modals($timeout);
             adhPermissions.bindScope(scope, scope.data.resourcePath, "options");
@@ -361,6 +367,23 @@ export var cancelActionDirective = (
                 var url = adhResourceUrl(scope.resourcePath);
                 adhTopLevelState.goToCameFrom(url);
             };
+        }
+    };
+};
+
+export var goToMeetingActionDirective = (
+    adhTopLevelState : AdhTopLevelState.Service,
+    adhResourceUrl
+) => {
+    return {
+        restrict: "E",
+        transclude: true,
+        template: "<a class=\"{{class}}\" href=\"{{resourcePath | adhParentPath | adhResourceUrl:meeting}}\">" +
+            "<ng-transclude></ng-transclude> {{ 'TR__CANCEL' | translate }}</a>",
+        scope: {
+            resourcePath: "@",
+            class: "@",
+            meeting: "@"
         }
     };
 };

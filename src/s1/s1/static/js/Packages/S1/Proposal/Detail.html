@@ -1,24 +1,49 @@
 <div class="s1-proposal-detail is-{{data.workflowState}}" data-ng-if="data.title">
-    <h1 class="s1-proposal-title">{{ data.title }}</h1>
+    <header class="resource-header" data-ng-class="{'m-image': data.picture}">
+        <div class="resource-header-navigation">
+            <adh-resource-dropdown
+                data-resource-path="{{path | adhParentPath}}"
+                data-meeting="{{meeting}}"
+                data-ng-if="path"
+                data-edit="true"
+                data-report="true"
+                data-hide="true"
+                data-print="true"
+                data-go-to-meeting="true">
+            </adh-resource-dropdown>
+        </div>
+        <adh-background-image
+            data-css-path="proposal-detail-image"
+            data-no-fallback="true"
+            data-path="{{data.picture}}">
+            <div class="resource-header-main">
 
-    <ul class="meta-list">
-        <li class="meta-list-item"><adh-time data-datetime="data.creationDate" data-format="L"></adh-time></li>
-        <li class="meta-list-item">{{ data.rateCount }} {{ "TR__SUPPORTERS" | translate }}</li>
-        <li class="meta-list-item">{{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</li>
-    </ul>
+                <h1 class="resource-header-title">{{ data.title }}</h1>
 
-    <div class="s1-meta-list-actions">
-        <ul class="meta-list">
-            <li class="meta-list-item meta-list-item-rate"><adh-rate data-refers-to="{{path}}"></adh-rate></li>
-            <li class="meta-list-item meta-list-item-comments"><a data-ng-href="{{ path | adhResourceUrl:'comments' }}"><i class="icon-speechbubble-unfilled meta-list-item-comments-icon"></i> {{ "TR__COMMENTS" | translate }}</a></li>
-        </ul>
-    </div>
+                <ul class="resource-header-meta">
+                    <li>
+                        {{ "TR__BY" | translate }} <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta>
+                    </li>
+                    <li>
+                        {{ "TR__ON" | translate }} <adh-time data-datetime="data.creationDate" data-format="L"></adh-time>
+                    </li>
+                    <li>
+                        <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}"
+                            ><i class="icon-speechbubble"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</a>
+                    </li>
+                </ul>
 
-    <div class="s1-author-details">
-        <adh-user-meta data-path="{{data.creator}}"></adh-user-meta>
-    </div>
+                <div class="resource-header-action">
+                    <adh-rate data-refers-to="{{path}}"></adh-rate>
+                </div>
+            </div>
+        </adh-background-image>
+    </header>
 
-    <div class="s1-proposal-detail-text">
+    <section class="proposal-detail-body">
+        <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="disguised-link proposal-detail-body-comments">
+            <i class="icon-speechbubble"></i> {{ data.commentCount }}
+        </a>
         <adh-parse-markdown data-parsetext="data.description"></adh-parse-markdown>
-    </div>
+    </section>
 </div>

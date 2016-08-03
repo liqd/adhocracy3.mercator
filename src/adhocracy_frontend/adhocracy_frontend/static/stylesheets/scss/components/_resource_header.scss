@@ -81,6 +81,14 @@ actions (edit, share, report, print, ...).
     a {
         color: inherit;
     }
+
+    .user-meta.user-profile-image {
+        vertical-align: -0.5em;
+        margin-left: 0.5em;
+        margin-right: 0.5em;
+        height: 1.5rem;
+        width: 1.5rem;
+    }
 }
 
 .resource-header-actions {

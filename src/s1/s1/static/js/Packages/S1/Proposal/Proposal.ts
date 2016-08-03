@@ -172,6 +172,7 @@ export var detailDirective = (
             path: "@"
         },
         link: (scope : IScope) => {
+            (<any>scope).$on("$destroy", adhTopLevelState.bind("meeting", scope));
             bindPath(adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(scope);
         }
     };

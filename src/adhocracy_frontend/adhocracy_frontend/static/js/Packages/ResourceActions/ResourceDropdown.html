@@ -66,6 +66,12 @@
             data-resource-path="{{data.resourcePath}}">
             <i class="icon-x"></i>
         </adh-cancel-action>
+        <adh-go-to-meeting-action
+            data-ng-if="data.goToMeeting && data.resourcePath"
+            data-resource-path="{{data.resourcePath}}"
+            data-meeting="{{data.meeting}}">
+            <i class="icon-x"></i>
+        </adh-go-to-meeting-action>
     </div>
 </div>
 

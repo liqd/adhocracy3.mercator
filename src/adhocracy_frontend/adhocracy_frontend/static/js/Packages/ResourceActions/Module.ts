@@ -25,6 +25,7 @@ export var register = (angular) => {
         .directive("adhViewAction", ["adhTopLevelState", "adhResourceUrlFilter", "$location", AdhResourceActions.viewActionDirective])
         .directive("adhPrintAction", ["adhTopLevelState", "$window", AdhResourceActions.printActionDirective])
         .directive("adhCancelAction", ["adhTopLevelState", "adhResourceUrlFilter", AdhResourceActions.cancelActionDirective])
+        .directive("adhGoToMeetingAction", ["adhTopLevelState", "adhResourceUrlFilter", AdhResourceActions.goToMeetingActionDirective])
         .animation(".modal", () => {
             return {
                 enter: (element, done) => {
