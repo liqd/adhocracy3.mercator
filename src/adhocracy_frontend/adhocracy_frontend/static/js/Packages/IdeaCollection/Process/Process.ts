@@ -3,12 +3,16 @@
 
 import * as AdhBadge from "../../Badge/Badge";
 import * as AdhConfig from "../../Config/Config";
+import * as AdhEmbed from "../../Embed/Embed";
 import * as AdhHttp from "../../Http/Http";
 import * as AdhPermissions from "../../Permissions/Permissions";
 import * as AdhProcess from "../../Process/Process";
 
+import * as SIDescription from "../../../Resources_/adhocracy_core/sheets/description/IDescription";
 import * as SILocationReference from "../../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
+import * as SIMetadata from "../../../Resources_/adhocracy_core/sheets/metadata/IMetadata";
 import * as SIMultiPolygon from "../../../Resources_/adhocracy_core/sheets/geo/IMultiPolygon";
+import * as SITitle from "../../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIWorkflow from "../../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
 var pkgLocation = "/IdeaCollection/Process";
@@ -16,6 +20,7 @@ var pkgLocation = "/IdeaCollection/Process";
 
 export var detailDirective = (
     adhConfig : AdhConfig.IService,
+    adhEmbed: AdhEmbed.Service,
     adhHttp : AdhHttp.Service,
     adhPermissions : AdhPermissions.Service,
     $q : angular.IQService
@@ -53,6 +58,9 @@ export var detailDirective = (
                         var sheet = resource.data[SIWorkflow.nick];
                         var stateName = sheet.workflow_state;
                         scope.currentPhase = AdhProcess.getStateData(sheet, stateName);
+                        scope.data.title = resource.data[SITitle.nick].title;
+                        scope.data.creator = resource.data[SIMetadata.nick].creator;
+                        scope.data.description = resource.data[SIDescription.nick].description;
 
                         if (scope.processProperties.hasLocation) {
                             var locationUrl = resource.data[SILocationReference.nick].location;
@@ -72,6 +80,9 @@ export var detailDirective = (
             scope.showMap = (isShowMap) => {
                 scope.data.isShowMap = isShowMap;
             };
+
+            var context = adhEmbed.getContext();
+            scope.hasResourceHeader = (context === "mein.bärlin.de");
         }
     };
 };

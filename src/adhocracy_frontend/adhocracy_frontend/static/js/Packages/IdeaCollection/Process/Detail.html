@@ -1,8 +1,39 @@
-<div>
+<div data-ng-if="hasResourceHeader">
+    <div class="resource-navigation">
+        <adh-resource-dropdown
+            data-print="true">
+        </adh-resource-dropdown>
+    </div>
+    <adh-background-image
+        data-no-fallback="true"
+        data-path="{{data.picture}}">
+        <header class="resource-header" data-ng-class="{'m-image': data.picture}">
+            <h1 class="resource-header-title">{{ data.title }}</h1>
+
+            <ul class="resource-header-meta">
+                <li>
+                    {{ "TR__BY" | translate }} <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta>
+                </li>
+                <li>
+                    {{ "TR__ON" | translate }} <adh-time data-datetime="data.creationDate" data-format="L"></adh-time>
+                </li>
+            </ul>
+            <ul class="resource-header-meta">
+                <li>
+                    {{data.description}}
+                </li>
+            </ul>
+        </header>
+    </adh-background-image>
     <div class="action-bar">
-        <adh-print-action data-class="action-bar-item"></adh-print-action>
         <adh-map-switch data-ng-if="processProperties.hasLocation" data-model="data.isShowMap"></adh-map-switch>
     </div>
+</div>
+<div class="action-bar" data-ng-if="!hasResourceHeader">
+    <adh-print-action data-class="action-bar-item"></adh-print-action>
+    <adh-map-switch data-ng-if="processProperties.hasLocation" data-model="data.isShowMap"></adh-map-switch>
+</div>
+<div>
     <div data-ng-switch="currentPhase.name">
         <div data-ng-switch-when="announce">
             {{ currentPhase.description }}

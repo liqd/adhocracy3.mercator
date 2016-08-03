@@ -5,7 +5,11 @@
            "adhocracy_core.sheets.title.ITitle":
            {"title": "Idea collection participation process"},
            "adhocracy_core.sheets.geo.ILocationReference":
-           {"location": "/locations/alt-treptow"}
+           {"location": "/locations/alt-treptow"},
+           "adhocracy_core.sheets.description.IDescription":
+           {"description": "Wir wollen mit Ihnen den kommenden Planungsprozess gemeinsam gestalten. In den Veranstaltungen vor Ort – und auch online – haben Sie die Gelegenheit, Ihre Gedanken und Vorstellungen für die Entwicklung des Wohngebiets Greifswalder Straße einzubringen."},
+           "adhocracy_core.sheets.metadata.IMetadata":
+           {"creator": "Max Mustermann"}
           }},
  {"path": "/organisation/idea_collection/badges",
   "content_type": "adhocracy_core.resources.badge.IParticipantsAssignableBadgeGroup",

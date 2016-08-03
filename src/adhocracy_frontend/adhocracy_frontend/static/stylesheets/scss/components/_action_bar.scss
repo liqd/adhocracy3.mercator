@@ -89,6 +89,7 @@ An action can trigger showing a modal below the action bar.
 .action-bar {
     @include rem(font-size, $font-size-small);
     @include rem(padding, 0 $padding);
+    @include clearfix;
     display: inline-block;
     background: $color-structure-normal;
     width: 100%;
