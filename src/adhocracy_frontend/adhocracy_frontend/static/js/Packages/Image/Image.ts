@@ -107,7 +107,8 @@ export var uploadImageDirective = (
             poolPath: "@",
             path: "@",
             didCompleteUpload: "&?",
-            didCancelUpload: "&?"
+            didCancelUpload: "&?",
+            cancelUrl: "=?"
         },
         link: (scope) => {
             scope.$flow = flowFactory.create();

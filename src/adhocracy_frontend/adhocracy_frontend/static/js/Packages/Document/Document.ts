@@ -455,7 +455,8 @@ export var createDirective = (
             path: "@",
             hasMap: "=?",
             hasImage: "=?",
-            polygon: "=?"
+            polygon: "=?",
+            cancelUrl: "=?"
         },
         link: (scope : IFormScope, element) => {
             scope.errors = [];
@@ -525,7 +526,8 @@ export var editDirective = (
             hasMap: "=?",
             hasBadges: "=?",
             hasImage: "=?",
-            polygon: "=?"
+            polygon: "=?",
+            cancelUrl: "=?"
         },
         link: (scope : IFormScope, element) => {
             scope.errors = [];

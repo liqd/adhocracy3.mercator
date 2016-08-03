@@ -1,62 +1,58 @@
 <article>
-    <header class="resource-header" data-ng-class="{'m-image': data.picture}">
-        <div class="resource-header-navigation">
-            <adh-resource-dropdown
-                data-resource-path="{{path | adhParentPath}}"
-                data-resource-with-badges-url="{{processUrl}}"
-                data-ng-if="path"
-                data-edit="true"
-                data-image="processProperties.hasImage"
-                data-assign-badges="true"
-                data-report="true"
-                data-hide="true"
-                data-print="true">
-            </adh-resource-dropdown>
-        </div>
-        <adh-background-image
-            data-no-fallback="true"
-            data-path="{{data.picture}}">
-            <div class="resource-header-main-wrapper">
-                <div class="resource-header-main">
-                    <div class="resource-header-meta">
-                        <span
-                            data-ng-repeat="assignment in data.assignments"
-                            class="badge"
-                            data-ng-class="{
-                                'm-is-realized': assignment.name === 'going_to_be_realized',
-                                'm-is-not-realized': assignment.name === 'not_realizeable',
-                                'm-on-test': assignment.name === 'on_test'
-                            }">{{ assignment.title | translate }}</span>
-                    </div>
-
-                    <h1 class="resource-header-title">{{ data.title }}</h1>
-
-                    <ul class="resource-header-meta">
-                        <li data-ng-if="processProperties.hasLocationText">
-                            <i class="icon-pin-detail"></i> {{data.locationText}}
-                        </li>
-                        <li data-ng-if="processProperties.maxBudget">
-                            <i class="icon-budget"></i> {{data.budget | numberOrDash}} &euro;
-                        </li>
-                        <li>
-                            {{ "TR__BY" | translate }} <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta>
-                        </li>
-                        <li>
-                            {{ "TR__ON" | translate }} <adh-time data-datetime="data.creationDate" data-format="L"></adh-time>
-                        </li>
-                        <li>
-                            <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}"
-                                ><i class="icon-speechbubble"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</a>
-                        </li>
-                    </ul>
-
-                    <div class="resource-header-action">
-                        <adh-rate data-refers-to="{{path}}"></adh-rate>
-                    </div>
-                </div>
+    <div class="resource-navigation">
+        <adh-resource-dropdown
+            data-resource-path="{{path | adhParentPath}}"
+            data-resource-with-badges-url="{{processUrl}}"
+            data-ng-if="path"
+            data-edit="true"
+            data-image="processProperties.hasImage"
+            data-assign-badges="true"
+            data-report="true"
+            data-hide="true"
+            data-print="true">
+        </adh-resource-dropdown>
+    </div>
+    <adh-background-image
+        data-no-fallback="true"
+        data-path="{{data.picture}}">
+        <header class="resource-header" data-ng-class="{'m-image': data.picture}">
+            <div class="resource-header-meta">
+                <span
+                    data-ng-repeat="assignment in data.assignments"
+                    class="badge"
+                    data-ng-class="{
+                        'm-is-realized': assignment.name === 'going_to_be_realized',
+                        'm-is-not-realized': assignment.name === 'not_realizeable',
+                        'm-on-test': assignment.name === 'on_test'
+                    }">{{ assignment.title | translate }}</span>
             </div>
-        </adh-background-image>
-    </header>
+
+            <h1 class="resource-header-title">{{ data.title }}</h1>
+
+            <ul class="resource-header-meta">
+                <li data-ng-if="processProperties.hasLocationText">
+                    <i class="icon-pin-detail"></i> {{data.locationText}}
+                </li>
+                <li data-ng-if="processProperties.maxBudget">
+                    <i class="icon-budget"></i> {{data.budget | numberOrDash}} &euro;
+                </li>
+                <li>
+                    {{ "TR__BY" | translate }} <adh-user-meta data-path="{{data.creator}}" data-ng-if="data.creator"></adh-user-meta>
+                </li>
+                <li>
+                    {{ "TR__ON" | translate }} <adh-time data-datetime="data.creationDate" data-format="L"></adh-time>
+                </li>
+                <li>
+                    <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}"
+                        ><i class="icon-speechbubble"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</a>
+                </li>
+            </ul>
+
+            <div class="resource-header-action">
+                <adh-rate data-refers-to="{{path}}"></adh-rate>
+            </div>
+        </header>
+    </adh-background-image>
 
 
     <section class="action-section">

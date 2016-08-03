@@ -15,14 +15,11 @@
     <adh-recompile-on-change
             data-ng-switch-when="body"
             data-value="{{proposalUrl}}">
-        <adh-resource-actions
-            data-resource-path="{{proposalUrl | adhParentPath}}"
-            data-cancel="true">
-        </adh-resource-actions>
         <adh-idea-collection-proposal-edit
             data-ng-if="proposalUrl"
             data-process-properties="processProperties"
-            data-path="{{proposalUrl}}">
+            data-path="{{proposalUrl}}"
+            data-cancel-url="proposalUrl | adhParentPath | adhResourceUrl">
         </adh-idea-collection-proposal-edit>
     </adh-recompile-on-change>
 </div>

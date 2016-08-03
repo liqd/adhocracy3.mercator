@@ -16,10 +16,6 @@
     </a>
 
     <div data-ng-switch-when="body">
-        <adh-resource-actions
-            data-resource-path="{{documentUrl | adhParentPath}}"
-            data-cancel="true">
-        </adh-resource-actions>
-        <adh-document-edit data-path="{{documentUrl}}" data-has-map="true" data-has-image="true" data-polygon="polygon"></adh-document-edit>
+        <adh-document-edit data-path="{{documentUrl}}" data-has-map="true" data-has-image="true" data-polygon="polygon" data-cancel-url="documentUrl | adhParentPath | adhResourceUrl"></adh-document-edit>
     </div>
 </div>

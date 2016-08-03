@@ -13,13 +13,10 @@
     <adh-recompile-on-change
             data-ng-switch-when="body"
             data-value="{{documentUrl}}">
-        <adh-resource-actions
-            data-resource-path="{{documentUrl | adhParentPath}}"
-            data-cancel="true">
-        </adh-resource-actions>
         <adh-document-edit
             data-ng-if="documentUrl"
-            data-path="{{documentUrl}}">
+            data-path="{{documentUrl}}"
+            data-cancel-url="documentUrl | adhParentPath | adhResourceUrl">
         </adh-document-edit>
     </adh-recompile-on-change>
 </div>

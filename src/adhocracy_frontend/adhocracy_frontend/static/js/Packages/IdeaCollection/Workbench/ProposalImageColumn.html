@@ -13,15 +13,12 @@
     </a>
 
     <div data-ng-switch-when="body">
-        <adh-resource-actions
-            data-resource-path="{{documentUrl | adhParentPath}}"
-            data-cancel="true">
-        </adh-resource-actions>
         <adh-upload-image
             data-ng-if="proposalUrl"
             data-path="{{proposalUrl}}"
             data-pool-path="{{processUrl}}"
             data-did-complete-upload="goBack()"
-        ></adh-upload-image>
+            data-cancel-url="proposalUrl | adhParentPath | adhResourceUrl">
+        </adh-upload-image>
     </div>
 </div>

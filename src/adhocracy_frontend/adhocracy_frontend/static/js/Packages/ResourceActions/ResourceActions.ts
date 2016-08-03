@@ -114,6 +114,7 @@ export var resourceDropdownDirective = (
             report: "=?",
             cancel: "=?",
             edit: "=?",
+            image: "=?",
             moderate: "=?",
             modals: "=?"
         },
@@ -131,6 +132,7 @@ export var resourceDropdownDirective = (
                 report: scope.report,
                 cancel: scope.cancel,
                 edit: scope.edit,
+                image: scope.image,
                 moderate: scope.moderate,
                 modals: scope.modals
             };

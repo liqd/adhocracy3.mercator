@@ -330,7 +330,8 @@ export var createDirective = (
         restrict: "E",
         scope: {
             poolPath: "@",
-            processProperties: "="
+            processProperties: "=",
+            cancelUrl: "=?"
         },
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Create.html",
         link: (scope, element) => {
@@ -388,7 +389,8 @@ export var editDirective = (
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Create.html",
         scope: {
             path: "@",
-            processProperties: "="
+            processProperties: "=",
+            cancelUrl: "=?"
         },
         link: (scope, element) => {
             scope.errors = [];
