@@ -294,7 +294,7 @@ var getMeeting = (proposal : RIProposal, process : RIS1Process) => {
         var proposalDecisionDate = AdhUtil.deepPluck(
             AdhProcess.getStateData(proposal.data[SIWorkflowAssignment.nick], proposalState), ["start_date"]);
 
-        return (processDecisionDate === proposalDecisionDate) ? "current" : "archive";
+        return (proposalDecisionDate <= processDecisionDate) ? "archive" : "current";
     }
 };
 
