@@ -3,8 +3,8 @@
     <span data-ng-if="data.workflowState === 'voteable'" class="s1-list-item-type">{{ "TR__NEW_PROPOSAL" | translate }}</span>
     <span data-ng-if="data.workflowState === 'selected'" class="s1-list-item-type is-selected">{{ "TR__SELECTED" | translate }} {{ data.decisionDate | limitTo: 10}}</span>
     <ul class="s1-list-item-meta meta-list">
-        <li class="meta-list-item"><i class="icon-voting"></i> {{ data.rateCount | signum }}</li>
-        <li class="meta-list-item"><i class="icon-speechbubble-unfilled"></i> {{ data.commentCount }}</li>
+        <li class="meta-list-item">&#8645; {{ data.rateCount | signum }}</li>
+        <li class="meta-list-item">&#128491; {{ data.commentCount }}</li>
     </ul>
 
     <h1 class="s1-proposal-title">{{ data.title }}</h1>

@@ -68,6 +68,7 @@ States:
 
     .action-section-button {
         @include action-section-button;
+        @include rem(font-size, $font-size-normal);
         @include rem(max-width, 36px);
         @include rem(right, $padding);
         @include rem(top, 1rem);

@@ -25,7 +25,7 @@
             </li>
             <li>
                 <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}"
-                    ><i class="icon-speechbubble"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</a>
+                    >&#128491; {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</a>
             </li>
         </ul>
 
@@ -36,8 +36,7 @@
 
     <section class="action-section">
         <adh-parse-markdown data-parsetext="data.description"></adh-parse-markdown>
-        <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="action-section-button">
-            <i class="icon-speechbubble"></i> {{ data.commentCount }}
-        </a>
+        <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="action-section-button"
+            >&#128491; {{ data.commentCount }}</a>
     </section>
 </div>

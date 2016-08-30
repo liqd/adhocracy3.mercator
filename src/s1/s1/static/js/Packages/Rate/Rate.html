@@ -1,0 +1,23 @@
+<div class="rate" data-ng-class="{
+    'is-disabled': disabled || (!optionsPostPool.POST && optionsPostPool.loggedIn),
+    'is-cast': hasCastInSession
+}" data-ng-if="ready">
+    <a
+        href=""
+        class="rate-pro"
+        data-ng-class="{
+            'is-active': myRate === 1,
+        }"
+        data-ng-click="toggle(1)"
+        title="{{'TR__RATE_VOTE_UP' | translate}}"
+        >{{ rates(1) }}&nbsp;&#9650;</a>
+    <a
+        href=""
+        class="rate-contra"
+        data-ng-class="{
+            'is-active': myRate === -1,
+        }"
+        data-ng-click="toggle(-1)"
+        title="{{'TR__RATE_VOTE_DOWN' | translate}}"
+        >&#9660;&nbsp;{{ rates(-1) }}</a>
+</div>
