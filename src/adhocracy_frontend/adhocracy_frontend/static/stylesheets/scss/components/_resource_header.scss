@@ -55,6 +55,7 @@ and a primary action (e.g. create proposal or like).
 
     li {
         display: inline;
+        white-space: nowrap;
 
         &::after {
             content: " / ";

@@ -33,7 +33,7 @@ A Meta list of items, often with icons
 }
 
 .meta-list-item {
-    @include rem(font-size, $font-size-small);
+    @include rem(font-size, $font-size-normal);
     @include rem(margin-right, 10px);
     color: $color-text-introvert;
     float: left;
