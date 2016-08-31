@@ -19,6 +19,7 @@
     "TR__CHOOSE_BADGES": "Choose one or more badges",
     "TR__CLOSE": "close",
     "TR__COMMENTS": "comments",
+    "TR__COMMENTS_SHOW": "show {{ number }} comments",
     "TR__COMMENTS_TOTAL": "Total Comments",
     "TR__COMMENT_EMPTY_TEXT": "No comments yet.",
     "TR__COMMENT_PLACEHOLDER": "Add comment here",

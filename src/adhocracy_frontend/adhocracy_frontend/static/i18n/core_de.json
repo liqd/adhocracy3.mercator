@@ -20,6 +20,7 @@
     "TR__CHOOSE_BADGES": "Wähle ein oder mehrere Etiketten",
     "TR__CLOSE": "schließen",
     "TR__COMMENTS": "Kommentare",
+    "TR__COMMENTS_SHOW": "{{ number }} Kommentar zeigen",
     "TR__COMMENTS_TOTAL": "Kommentare (gesamt)",
     "TR__COMMENT_EMPTY_TEXT": "Noch keine Kommentare.",
     "TR__COMMENT_PLACEHOLDER": "Kommentar hier einfügen",

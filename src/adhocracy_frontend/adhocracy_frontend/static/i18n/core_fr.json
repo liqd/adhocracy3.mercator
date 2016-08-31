@@ -23,6 +23,7 @@
     "TR__CHOOSE_BADGES": "Choisir une ou quelques catégories",
     "TR__CLOSE": "fermer",
     "TR__COMMENTS": "commentaires",
+    "TR__COMMENTS_SHOW": "Voir les {{ number }} commentaires",
     "TR__COMMENTS_TOTAL": "Tous les commentaires",
     "TR__COMMENT_EMPTY_TEXT": "Il n'y a pas encore de commentaires.",
     "TR__COMMENT_PLACEHOLDER": "Ajouter un commentaire ici",
