@@ -4,7 +4,9 @@
   "data": {"adhocracy_core.sheets.name.IName":
            {"name": "kiezkasse"},
            "adhocracy_core.sheets.title.ITitle":
-           {"title": "Sample Kiezkassen process"},
+           {"title": "Bürgerinformationssysteme"},
            "adhocracy_core.sheets.geo.ILocationReference":
-           {"location": "/locations/alt-treptow"}}}
+           {"location": "/locations/alt-treptow"},
+           "adhocracy_core.sheets.description.IDescription":
+           {"short_description": "Immer mehr Bezirke gehen mit einem neuartigen Informationssystem ins Internet. Es soll Bürgern eine genaue Beschreibung einer Aufgabe sowie den Stand der Umsetzung liefern."}}}
 ]

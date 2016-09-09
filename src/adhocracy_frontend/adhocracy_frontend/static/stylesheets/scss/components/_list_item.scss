@@ -93,6 +93,11 @@ $thumbnail-width: 105px;
     font-weight: $font-weight-medium;
 }
 
+.list-item-text {
+    margin-top: 8px;
+    display: block;
+}
+
 .list-item-author {
     @include rem(font-size, $font-size-small);
     color: $color-text-introvert;

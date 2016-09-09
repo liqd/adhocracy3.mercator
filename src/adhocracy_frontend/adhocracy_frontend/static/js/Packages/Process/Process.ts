@@ -6,12 +6,23 @@ import * as AdhPermissions from "../Permissions/Permissions";
 import * as AdhUtil from "../Util/Util";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 
+import RIBPlan from "../../Resources_/adhocracy_meinberlin/resources/bplan/IProcess";
+import RIBuergerhaushalt from "../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProcess";
+import RICollaborativeText from "../../Resources_/adhocracy_meinberlin/resources/collaborative_text/IProcess";
+import RIIdeaCollection from "../../Resources_/adhocracy_meinberlin/resources/idea_collection/IProcess";
+import RIKiezkasse from "../../Resources_/adhocracy_meinberlin/resources/kiezkassen/IProcess";
+import RIProposalVersion from "../../Resources_/adhocracy_core/resources/proposal/IProposalVersion";
+import RIStadtforum from "../../Resources_/adhocracy_meinberlin/resources/stadtforum/IProcess";
+
+import * as SIDescription from "../../Resources_/adhocracy_core/sheets/description/IDescription";
+import * as SIImageReference from "../../Resources_/adhocracy_core/sheets/image/IImageReference";
+import * as SILocationReference from "../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
 import * as SIName from "../../Resources_/adhocracy_core/sheets/name/IName";
+import * as SIPool from "../../Resources_/adhocracy_core/sheets/pool/IPool";
 import * as SIWorkflow from "../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
-import RIProcess from "../../Resources_/adhocracy_core/resources/process/IProcess";
 import * as SITitle from "../../Resources_/adhocracy_core/sheets/title/ITitle";
 
-var pkgLocation = "/Process";
+export var pkgLocation = "/Process";
 
 
 // mirrors adhocracy_core.sheets.workflow.StateData
@@ -47,6 +58,40 @@ export var getStateData = (sheet : SIWorkflow.Sheet, name : string) : IStateData
         description: null,
         start_date: null
     };
+};
+
+var getDate = (utcDate : string) : string => {
+    var date = new Date(utcDate),
+        year = date.getFullYear(),
+        month = ("0" + (date.getMonth() + 1)).slice(-2),
+        day = ("0" + date.getDate()).slice(-2);
+    return day + "." + month + "." + year;
+};
+
+var getName = (backendName : string) : string => {
+    switch (backendName) {
+        case RIBPlan.content_type:
+            return "TR__BPLAN_PROCESS";
+        case RIBuergerhaushalt.content_type:
+            return "TR__BUERGERHAUSHALT";
+        case RICollaborativeText.content_type:
+            return "TR__COLLABORATIVE_TEXT_EDITING";
+        case RIIdeaCollection.content_type:
+            return "TR__IDEA_COLLECTION";
+        case RIKiezkasse.content_type:
+            return "TR__KIEZKASSE";
+        case RIProposalVersion.content_type:
+            return "TR__POLL";
+    }
+};
+
+var queryParamWithAny = (args : any[]) : string => {
+    var res = "\[\"any\", \[\"";
+    for (var i = 0; i < args.length; i++) {
+        res += args[i] + "\", \"";
+    }
+    res += "\"\]\]";
+    return res;
 };
 
 
@@ -150,26 +195,93 @@ export var processViewDirective = (
     };
 };
 
-export var listItemDirective = () => {
+export var listItemDirective = (
+    adhConfig : AdhConfig.IService,
+    adhHttp : AdhHttp.Service,
+    adhParentPath
+) => {
     return {
         restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ListItem.html",
         scope: {
             path: "@"
         },
-        template: "<a data-ng-href=\"{{ path | adhResourceUrl }}\">{{path}}</a>"
+        link: (scope) => {
+            adhHttp.get(scope.path).then((process) => {
+                if (process.data[SIImageReference.nick] && process.data[SIImageReference.nick].picture) {
+                    scope.picture = process.data[SIImageReference.nick].picture;
+                }
+                scope.title = process.data[SITitle.nick].title;
+                scope.processName = getName(process.content_type);
+                if (process.data[SILocationReference.nick] && process.data[SILocationReference.nick].location) {
+                    adhHttp.get(process.data[SILocationReference.nick].location).then((loc) => {
+                        scope.locationText = loc.data[SITitle.nick].title;
+                    });
+                }
+                scope.shortDesc = process.data[SIDescription.nick].short_description;
+                if (process.content_type === RIProposalVersion.content_type) {
+                    adhHttp.get(adhParentPath(scope.path)).then((poll) => {
+                        var pollWorkflow = poll.data[SIWorkflow.nick];
+                        scope.participationStartDate = getDate(getStateData(pollWorkflow, "participate").start_date);
+                        scope.participationEndDate = getDate(getStateData(pollWorkflow, "closed").start_date);
+                    });
+                } else {
+                    var workflow = process.data[SIWorkflow.nick];
+                    scope.participationStartDate = getDate(getStateData(workflow, "participate").start_date);
+                    scope.participationEndDate = getDate(getStateData(workflow, "closed").start_date);
+                }
+            });
+        }
     };
 };
 
-export var listingDirective = (adhConfig : AdhConfig.IService) => {
+export var listingDirective = (
+    adhConfig : AdhConfig.IService,
+    adhHttp : AdhHttp.Service,
+    $translate
+) => {
     return {
         restrict: "E",
         scope: {},
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Listing.html",
         link: (scope) => {
-            scope.contentType = RIProcess.content_type;
+            var contentType = queryParamWithAny([
+                    RIBPlan.content_type,
+                    RIBuergerhaushalt.content_type,
+                    RICollaborativeText.content_type,
+                    RIIdeaCollection.content_type,
+                    RIKiezkasse.content_type
+                ]);
             scope.params = {
-                depth: "all"
+                depth: "all",
+                content_type: contentType
             };
+
+            var stadtforumParams = {
+                depth: "all",
+                content_type: RIStadtforum.content_type
+            };
+            adhHttp.get("/", stadtforumParams). then((stadtforums) => {
+                scope.stadtforums = stadtforums.data[SIPool.nick].elements;
+            });
+            scope.pollParams = {
+                depth: 2,
+                content_type: RIProposalVersion.content_type,
+                tag: "LAST"
+            };
+
+            var countParams = {
+                depth: "all",
+                content_type: contentType,
+                elements: "omit"
+            };
+            adhHttp.get("/", countParams).then((res) => {
+                scope.processCount = res.data[SIPool.nick].count;
+            });
+
+            $translate("TR__PROCESS_LIST_INFO").then((translated) => {
+                scope.processListInfo = translated;
+            });
         }
     };
 };

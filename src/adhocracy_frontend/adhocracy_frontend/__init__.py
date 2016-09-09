@@ -180,6 +180,7 @@ def includeme(config):
     add_frontend_route(config, 'activate', 'activate/{key}')
     add_frontend_route(config, 'activation_error', 'activation_error')
     add_frontend_route(config, 'root', '')
+    add_frontend_route(config, 'home', 'home')
     add_frontend_route(config, 'resource', 'r/*path')
     config.add_route('require_config', 'static/require-config.js')
     config.add_view(require_config_view, route_name='require_config',

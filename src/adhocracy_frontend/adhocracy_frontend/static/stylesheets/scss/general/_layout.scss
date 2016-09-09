@@ -92,6 +92,13 @@ depends on a lot of factors:
     @include rem(padding, 0.5rem);
 }
 
+
+.l-broad {
+    @include rem(max-width, 60rem);
+    @include rem(margin, 5rem auto 10rem);
+    @include rem(padding, 0.5rem);
+}
+
 /*doc
 ---
 title: Grid
