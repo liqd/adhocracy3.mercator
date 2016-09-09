@@ -1,0 +1,27 @@
+.header-logo {
+    color: $color-text-highlight-normal;
+    font-size: 145%;
+}
+
+.header-logo-image {
+	width: 75px;
+	margin-top: 5px;
+}
+
+.header-logo-image {
+	width: 75px;
+	margin-top: 10px;
+	vertical-align: middle;
+	margin-right: 15px;
+}
+
+.header-logo-title {
+	float: right;
+	color: $color-text-normal;
+	font-size: 30px;
+	font-weight: $font-weight-extrovert;
+}
+
+.l-content {
+	position: relative;
+}

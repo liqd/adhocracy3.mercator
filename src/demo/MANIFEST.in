@@ -1,0 +1,8 @@
+include RELEASE-VERSION version.py
+recursive-include demo/build *.js *.css *.woff *.eot *.ttf *.svg *.xml *.json *.jpg *.ico *.gif *.png *.html *.md *.mako *.pt
+global-exclude *Spec.js
+prune demo/build/styleguide
+prune demo/build/lib/DefinitelyTyped
+prune demo/build/lib/q
+prune demo/build/lib/jasmine
+prune demo/build/lib/blanket
