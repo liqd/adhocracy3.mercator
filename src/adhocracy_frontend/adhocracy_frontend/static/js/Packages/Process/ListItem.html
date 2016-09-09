@@ -1,0 +1,14 @@
+<a class="process-list-item" href="{{path | adhResourceUrl}}">
+    <adh-show-image
+        data-css-class="process-image"
+        data-path="{{picture}}"
+    ></adh-show-image>
+    <div class="list-item-body">
+		<div class="process-type" data-ng-if="processName">{{ processName | translate }}</div>
+		<div class="process-timespan" data-ng-if="participationStartDate">{{participationStartDate}} - {{participationEndDate}}</div>
+        <div class="process-text process-title">{{title}}</div>
+	    <div class="process-text">{{shortDesc}}</div>
+		<div class="process-type" data-ng-if="locationText">{{ locationText | translate }}</div>
+	    <div class="process-breadcrumbs">{{"TR__GO_TO_PROCESS" | translate}}</div>
+	</div>
+</a>

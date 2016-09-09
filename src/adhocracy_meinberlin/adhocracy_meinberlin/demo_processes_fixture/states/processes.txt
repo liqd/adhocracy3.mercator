@@ -5,3 +5,4 @@ demo/stadtforum:announce->participate
 demo/buergerhaushalt:announce->participate
 demo/kiezkasse:announce->participate
 demo/alexanderplatz:announce->participate
+demo/stadtforum/poll_0000000:announce->participate

@@ -1,0 +1,78 @@
+$process-image-margin: 25px;
+$process-image-width: 210px;
+
+.process-breadcrumbs {
+    color: inherit;
+    display: block;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-size: $font-size-small;
+    font-weight: $font-weight-extrovert;
+    margin-right: 1em;
+    padding: 0 0 $padding 0;
+
+    &:before {
+        content: "→ ";
+    }
+}
+
+.process-image {
+    float: left;
+    width: $process-image-width;
+    margin-right: $process-image-margin;
+}
+
+.process-list-box,
+.process-list-item {
+    @include container;
+    @include rem(padding, 1.25em $padding);
+    @include rem(margin, 1em);
+    display: block;
+    position: relative;
+    background-color: $color-background-base-introvert;
+
+    // reset link styling
+    &, &:hover, &:focus {
+        color: inherit;
+        text-decoration: inherit;
+    }
+}
+
+.process-list-count {
+    text-transform: uppercase;
+    font-weight: $font-weight-extrovert;
+}
+
+.process-list-item {
+    border: solid $color-structure-introvert;
+    border-width: 1px;
+    box-shadow: 8px 5px 5px $color-structure-introvert;
+    padding: 0;
+
+    &:hover, &:focus {
+        background: $color-background-base;
+    }
+}
+
+.process-text {
+    padding-right: $padding;
+}
+
+.process-timespan,
+.process-type {
+    :after {
+        content: "\n";
+    }
+}
+
+.process-title {
+    font-size: $font-size-plus;
+    font-weight: $font-weight-extrovert;
+    padding: $padding 0;
+}
+
+.process-type {
+    font-weight: $font-weight-extrovert;
+    color: $color-text-highlight-normal;
+    padding: $padding 0;
+}
