@@ -46,8 +46,8 @@
             type="password"
             name="password_repeat"
             data-ng-model="data.passwordRepeat"
-            data-ng-class="{'ng-invalid': (input.password !== input.passwordRepeat) && userEditForm.password_repeat.$dirty}"/>
-        <span class="input-error" data-ng-show="(input.password !== input.passwordRepeat) && userEditForm.password_repeat.$dirty">
+            data-ng-class="{'ng-invalid': (data.password !== data.passwordRepeat) && userEditForm.password.$dirty}"/>
+        <span class="input-error" data-ng-show="(data.password !== data.passwordRepeat) && userEditForm.password_repeat.$dirty">
             {{ "TR__ERROR_MATCH_PASSWORD" | translate }}
         </span>
     </label>
@@ -64,7 +64,8 @@
 	            type="submit"
 	            name="submit"
 	            value="{{ 'TR__SAVE' | translate }}"
-	            class="button-cta form-footer-button-cta" />
+	            class="button-cta form-footer-button-cta"
+                data-ng-disabled="data.password.$dirty && data.password !== data.passwordRepeat" />
         </div>
         <div class="form-footer-left">
 	        <a
