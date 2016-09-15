@@ -9,7 +9,7 @@ TypeScript modules providing the resource classes.  This may trigger
 compiler errors that have to be resolved manually.  For more details,
 see comment in the beginning of mkResources.ts.
 
-Frontend wokflow
+Frontend workflow
 ----------------
 
 Run buildout once after switching project or the git branch. For changes to the

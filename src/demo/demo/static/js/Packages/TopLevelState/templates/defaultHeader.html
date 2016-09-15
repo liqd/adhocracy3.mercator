@@ -1,0 +1,13 @@
+<header data-ng-hide="hideHeader" class="l-header main-header">
+    <div class="l-header-left">
+        <a href="" class="header-logo-title" target="_top">
+            <img class="header-logo-image" src="static/images/nicos-logo.png" title="demo.adhocracy.de"></img>
+            DEMO.ADHOCRACY.DE
+        </a>
+    </div>
+    <ng-include data-ng-if="areaHeaderSlot" src="areaHeaderSlot"></ng-include>
+    <div class="l-header-right">
+        <adh-user-indicator></adh-user-indicator>
+        <adh-help-link></adh-help-link>
+    </div>
+</header>

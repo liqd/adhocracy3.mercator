@@ -61,6 +61,7 @@ src/pyramid_cachebust/
 /node_modules
 /Gruntfile.js
 src/adhocracy_frontend/adhocracy_frontend/build/
+src/demo/demo/build/
 src/mercator/mercator/build/
 src/meinberlin/meinberlin/build/
 src/pcompass/pcompass/build/

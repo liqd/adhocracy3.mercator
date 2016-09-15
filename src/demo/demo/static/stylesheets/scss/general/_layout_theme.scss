@@ -1,0 +1,24 @@
+.header-logo {
+    color: $color-text-highlight-normal;
+    font-size: 145%;
+}
+
+.header-logo-image {
+    width: 75px;
+    margin-top: 10px;
+    vertical-align: top;
+    margin-right: 25px;
+}
+
+.header-logo-title {
+    float: right;
+    color: $color-text-normal;
+    font-size: $font-size-plus;
+    font-weight: $font-weight-extrovert;
+    text-decoration: none;
+    margin-right: 50px;
+}
+
+.l-content {
+    @include rem(top, $demo-header-height);
+}
