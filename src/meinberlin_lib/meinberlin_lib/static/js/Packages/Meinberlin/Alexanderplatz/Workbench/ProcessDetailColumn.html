@@ -67,7 +67,8 @@
                 data-ng-show="!data.isShowMap"
                 data-no-create-form="true"
                 data-empty-text="{{ 'TR__PROPOSAL_EMPTY_TEXT' | translate }}"
-                data-content-type="{{proposalType}}">
+                data-content-type="{{proposalType}}"
+                data-counter="true">
                 <adh-idea-collection-proposal-list-item
                     data-path="{{element}}"
                     data-process-properties="custom.processProperties">
@@ -107,7 +108,8 @@
                 data-no-create-form="true"
                 data-sorts="[{key: 'title', index: 'title'}]"
                 data-empty-text="{{ 'TR__DOCUMENT_EMPTY_TEXT' | translate }}"
-                data-content-type="{{documentType}}">
+                data-content-type="{{documentType}}"
+                data-counter="true">
                 <adh-document-list-item data-path="{{element}}" data-has-badges="true"></adh-document-list-item>
             </adh-listing>
         </div>

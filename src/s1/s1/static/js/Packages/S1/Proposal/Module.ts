@@ -10,6 +10,8 @@ import * as AdhTopLevelStateModule from "../../TopLevelState/Module";
 
 import * as Proposal from "./Proposal";
 
+import RIProposalVersion from "../../../Resources_/adhocracy_s1/resources/s1/IProposalVersion";
+
 export var moduleName = "adhS1Proposal";
 
 export var register = (angular) => {
@@ -24,6 +26,9 @@ export var register = (angular) => {
         AdhResourceAreaModule.moduleName,
         AdhTopLevelStateModule.moduleName
     ])
+    .config(["adhResourceAreaProvider", (adhResourceAreaProvider) => {
+            adhResourceAreaProvider.names[RIProposalVersion.content_type] = "TR__PROPOSALS";
+        }])
     .directive("adhS1ProposalDetail", [
         "adhConfig", "adhHttp", "adhPermissions", "adhRate", "adhTopLevelState", "adhGetBadges", "$q", Proposal.detailDirective])
     .directive("adhS1ProposalListItem", [

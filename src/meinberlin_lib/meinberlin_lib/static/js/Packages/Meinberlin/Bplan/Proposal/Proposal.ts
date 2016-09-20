@@ -3,7 +3,7 @@
 import * as AdhConfig from "../../../Config/Config";
 import * as AdhHttp from "../../../Http/Http";
 import * as AdhPreliminaryNames from "../../../PreliminaryNames/PreliminaryNames";
-import * as AdhProcess from "../../../Process/Process";
+import * as AdhResourceArea from "../../../ResourceArea/ResourceArea";
 
 import RIProposal from "../../../../Resources_/adhocracy_meinberlin/resources/bplan/IProposal";
 import RIProposalVersion from "../../../../Resources_/adhocracy_meinberlin/resources/bplan/IProposalVersion";
@@ -122,8 +122,8 @@ export var embedDirective = (
             adhHttp.get(scope.path).then((resource) => {
                 var sheet = resource.data[SIWorkflow.nick];
                 scope.currentPhase = sheet.workflow_state;
-                scope.announceText = AdhProcess.getStateData(sheet, "announce").description;
-                scope.frozenText = AdhProcess.getStateData(sheet, "frozen").description;
+                scope.announceText = AdhResourceArea.getStateData(sheet, "announce").description;
+                scope.frozenText = AdhResourceArea.getStateData(sheet, "frozen").description;
             });
         }
     };

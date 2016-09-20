@@ -27,6 +27,22 @@ a form for creating new elements. This form is then always visible.
 </div>
 ```
 */
+
+.listing-counter,
+.listing-info-text {
+    @include container;
+    @include rem(padding, 1.25em $padding);
+    display: block;
+    position: relative;
+    margin-bottom: 1em;
+    background: $color-background-base-introvert;
+}
+
+.listing-counter {
+    text-transform: uppercase;
+    font-weight: $font-weight-extrovert;
+}
+
 .listing-elements {
     padding: 0;
     list-style: none;

@@ -15,6 +15,8 @@ import * as AdhTopLevelStateModule from "../../../TopLevelState/Module";
 
 import * as AdhEmbed from "../../../Embed/Embed";
 
+import RIMercatorProposal from "../../../../Resources_/adhocracy_mercator/resources/mercator2/IMercatorProposal";
+
 import * as Proposal from "./Proposal";
 
 
@@ -64,6 +66,10 @@ export var register = (angular) => {
             adhEmbedProvider.registerDirective("mercator-2016-proposal-create");
             adhEmbedProvider.registerDirective("mercator-2016-proposal-detail");
             adhEmbedProvider.registerDirective("mercator-2016-proposal-listitem");
+        }])
+        // FIXME: doesn't work
+        .config(["adhResourceAreaProvider", (adhResourceAreaProvider) => {
+            adhResourceAreaProvider.names[RIMercatorProposal.content_type] = "TR__PROPOSALS";
         }])
         .directive("adhMercator2016ProposalCreate", [
             "$location",

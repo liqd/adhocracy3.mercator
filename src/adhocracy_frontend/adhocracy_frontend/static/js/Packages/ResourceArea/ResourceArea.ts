@@ -13,8 +13,13 @@ import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 import * as AdhUtil from "../Util/Util";
 
 import RIProcess from "../../Resources_/adhocracy_core/resources/process/IProcess";
+import * as SIDescription from "../../Resources_/adhocracy_core/sheets/description/IDescription";
+import * as SIImageReference from "../../Resources_/adhocracy_core/sheets/image/IImageReference";
+import * as SILocationReference from "../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
 import * as SITags from "../../Resources_/adhocracy_core/sheets/tags/ITags";
+import * as SITitle from "../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIVersionable from "../../Resources_/adhocracy_core/sheets/versions/IVersionable";
+import * as SIWorkflow from "../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 import * as SIWorkflowAssignment from "../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
 var pkgLocation = "/ResourceArea";
@@ -23,6 +28,26 @@ var pkgLocation = "/ResourceArea";
 export interface Dict {
     [key : string]: string;
 }
+
+// mirrors adhocracy_core.sheets.workflow.StateData
+export interface IStateData {
+    name : string;
+    description : string;
+    start_date : string;
+}
+
+export var getStateData = (sheet : SIWorkflow.Sheet, name : string) : IStateData => {
+    for (var i = 0; i < sheet.state_data.length; i++) {
+        if (sheet.state_data[i].name === name) {
+            return sheet.state_data[i];
+        }
+    }
+    return {
+        name: null,
+        description: null,
+        start_date: null
+    };
+};
 
 
 export class Provider implements angular.IServiceProvider {
@@ -33,12 +58,14 @@ export class Provider implements angular.IServiceProvider {
         type? : string;
     }};
     public processHeaderSlots : {[processType : string]: string};
+    public names : {[resourceType : string]: string};
 
     constructor() {
         var self = this;
         this.defaults = {};
         this.specifics = {};
         this.processHeaderSlots = {};
+        this.names = {};
         this.$get = [
             "$q",
             "$injector",
@@ -289,6 +316,10 @@ export class Service implements AdhTopLevelState.IAreaInput {
         });
     }
 
+    public getName(resourceType : string) : string {
+        return this.provider.names[resourceType];
+    }
+
     public getTemplate() : angular.IPromise<string> {
         var templateUrl = this.adhConfig.pkg_path + pkgLocation + "/ResourceArea.html";
         return this.$templateRequest(templateUrl);
@@ -428,6 +459,55 @@ export var directive = (adhResourceArea : Service, $compile : angular.ICompileSe
                 var childScope = scope.$new();
                 element.html(template);
                 $compile(element.contents())(childScope);
+            });
+        }
+    };
+};
+
+export var processListItemDirective = (
+    adhConfig : AdhConfig.IService,
+    adhHttp : AdhHttp.Service,
+    adhResourceArea : Service
+) => {
+    return {
+        restrict: "E",
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ProcessListItem.html",
+        scope: {
+            path: "@"
+        },
+        link: (scope) => {
+            adhHttp.get(scope.path).then((process) => {
+                if (process.data[SIImageReference.nick] && process.data[SIImageReference.nick].picture) {
+                    scope.picture = process.data[SIImageReference.nick].picture;
+                }
+                scope.title = process.data[SITitle.nick].title;
+                scope.processName = adhResourceArea.getName(process.content_type);
+                if (process.data[SILocationReference.nick] && process.data[SILocationReference.nick].location) {
+                    adhHttp.get(process.data[SILocationReference.nick].location).then((loc) => {
+                        scope.locationText = loc.data[SITitle.nick].title;
+                    });
+                }
+                var workflow = process.data[SIWorkflow.nick];
+                scope.participationStartDate = getStateData(workflow, "participate").start_date;
+                scope.participationEndDate = getStateData(workflow, "evaluate").start_date;
+                scope.shortDesc = process.data[SIDescription.nick].short_description;
+            });
+        }
+    };
+};
+
+export var processListingDirective = (adhConfig : AdhConfig.IService, adhHttp : AdhHttp.Service) => {
+    return {
+        restrict: "E",
+        scope: {},
+        templateUrl: adhConfig.pkg_path + pkgLocation + "/ProcessListing.html",
+        link: (scope) => {
+            scope.contentType = RIProcess.content_type;
+            scope.params = {
+                depth: "all"
+            };
+            adhHttp.get("/").then((root) => {
+                scope.overviewDesc = root.data[SIDescription.nick].description;
             });
         }
     };

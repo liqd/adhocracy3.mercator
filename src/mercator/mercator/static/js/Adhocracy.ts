@@ -22,6 +22,7 @@ import * as webshim from "polyfiller";
 
 import * as AdhAbuseModule from "./Packages/Abuse/Module";
 import * as AdhAngularHelpersModule from "./Packages/AngularHelpers/Module";
+import * as AdhAnonymizeModule from "./Packages/Anonymize/Module";
 import * as AdhBadgeModule from "./Packages/Badge/Module";
 import * as AdhBlogModule from "./Packages/Blog/Module";
 import * as AdhCommentModule from "./Packages/Comment/Module";
@@ -162,6 +163,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
 
     // register our modules
     AdhAbuseModule.register(angular);
+    AdhAnonymizeModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhBlogModule.register(angular);
     AdhCommentModule.register(angular);

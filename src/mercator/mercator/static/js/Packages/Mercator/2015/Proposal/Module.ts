@@ -16,6 +16,7 @@ import * as AdhTopLevelStateModule from "../../../TopLevelState/Module";
 import * as AdhUtil from "../../../Util/Util";
 
 import RIMercator2015Process from "../../../../Resources_/adhocracy_mercator/resources/mercator/IProcess";
+import RIProposalVersion from "../../../../Resources_/adhocracy_core/resources/proposal/IProposalVersion";
 
 import * as Proposal from "./Proposal";
 
@@ -50,6 +51,7 @@ export var register = (angular) => {
             var processType = RIMercator2015Process.content_type;
             var processHeaderSlot = adhConfig.pkg_path + Proposal.pkgLocation + "/ProcessHeaderSlot.html";
             adhResourceAreaProvider.processHeaderSlots[processType] = processHeaderSlot;
+            adhResourceAreaProvider.names[RIProposalVersion.content_type] = "TR__PROPOSALS";
             Proposal.registerRoutes(processType)(adhResourceAreaProvider, adhMetaApi);
         }])
         .config(["flowFactoryProvider", (flowFactoryProvider) => {
