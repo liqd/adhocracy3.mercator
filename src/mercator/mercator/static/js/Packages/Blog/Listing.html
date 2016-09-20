@@ -3,7 +3,8 @@
         data-path="{{path}}"
         data-content-type="{{contentType}}"
         data-sorts="[{key: 'creation_date', index: 'item_creation_date', reverse: true}]"
-        data-empty-text="{{ 'TR__BLOG_EMPTY_TEXT' | translate }}">
+        data-empty-text="{{ 'TR__BLOG_EMPTY_TEXT' | translate }}"
+        data-counter="true">
         <div data-ng-switch="transclusionId">
             <adh-blog-post-create
                 data-ng-switch-when="create-form-id"

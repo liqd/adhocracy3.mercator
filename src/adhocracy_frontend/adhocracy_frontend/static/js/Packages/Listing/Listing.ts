@@ -8,6 +8,7 @@ import * as AdhConfig from "../Config/Config";
 import * as AdhHttp from "../Http/Http";
 import * as AdhPermissions from "../Permissions/Permissions";
 import * as AdhPreliminaryNames from "../PreliminaryNames/PreliminaryNames";
+import * as AdhResourceArea from "../ResourceArea/ResourceArea";
 import * as AdhWebSocket from "../WebSocket/WebSocket";
 
 import * as ResourcesBase from "../../ResourcesBase";
@@ -70,6 +71,7 @@ export interface ListingScope<Container> extends angular.IScope {
     toggleItem : (facet : IFacet, item : IFacetItem, event) => void;
     disableItem : (facet : IFacet, item : IFacetItem) => void;
     setSort : (sort : string) => void;
+    counter? : boolean;
 }
 
 export interface IFacetsScope extends angular.IScope {
@@ -111,7 +113,8 @@ export class Listing<Container extends ResourcesBase.IResource> {
                 noCreateForm: "=?",
                 emptyText: "@",
                 // use this to pass custom data to the injected templates
-                custom: "=?"
+                custom: "=?",
+                counter: "=?"
             },
             transclude: true,
             link: (scope, element, attrs, controller, transclude) => {
@@ -119,12 +122,13 @@ export class Listing<Container extends ResourcesBase.IResource> {
                     unregisterWebsocket(scope);
                 });
             },
-            controller: ["$filter", "$scope", "adhHttp", "adhPreliminaryNames", "adhPermissions", (
+            controller: ["$filter", "$scope", "adhHttp", "adhPreliminaryNames", "adhPermissions", "adhResourceArea", (
                 $filter: angular.IFilterService,
                 $scope: ListingScope<Container>,
                 adhHttp: AdhHttp.Service,
                 adhPreliminaryNames : AdhPreliminaryNames.Service,
-                adhPermissions : AdhPermissions.Service
+                adhPermissions : AdhPermissions.Service,
+                adhResourceArea : AdhResourceArea.Service
             ) : void => {
                 adhPermissions.bindScope($scope, () => $scope.poolPath, "poolOptions");
 

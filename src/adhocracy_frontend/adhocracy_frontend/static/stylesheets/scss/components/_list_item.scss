@@ -107,13 +107,3 @@ $thumbnail-width: 105px;
 .list-item-badges {
     float: right;
 }
-
-.overview-description {
-    @include container;
-    @include rem(padding, 1.25em $padding);
-    display: block;
-    position: relative;
-    margin-bottom: 1em;
-    background: $color-background-base-introvert;
-}
-
