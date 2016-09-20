@@ -358,6 +358,14 @@ export var adhCommentListing = (
             }];
             scope.params = {};
 
+            // what's bad about this: we add yet another http request.
+            // what's good: the resource may be in the cache anyway + this is generic.
+            adhHttp.get(scope.path).then((resource) => {
+                if (resource.content_type !== RICommentVersion.content_type) {
+                    scope.counterValue = resource.data[SICommentable.nick].comments_count;
+                }
+            });
+
             var update = () => {
                 return adhHttp.get(scope.path).then((commentable) => {
                     scope.params[SIComment.nick + ":refers_to"] = scope.path;

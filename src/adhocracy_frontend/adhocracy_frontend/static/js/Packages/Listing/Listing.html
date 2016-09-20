@@ -34,6 +34,8 @@
             </a>
         </div>
     </div>
+    <div class="listing-counter" data-ng-if="counter && counterValue > 0">{{counterValue}} {{contentName | translate}}</div>
+    <div class="listing-counter" data-ng-if="counter && !counterValue && elements.length > 0">{{elements.length}} {{contentName | translate}}</div>
     <ol class="listing-elements">
         <li class="listing-element" data-ng-repeat="element in elements">
             <adh-inject data-transclusion-id="element-id"></adh-inject>

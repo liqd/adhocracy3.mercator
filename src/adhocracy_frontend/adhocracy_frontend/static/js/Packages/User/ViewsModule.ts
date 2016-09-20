@@ -18,10 +18,12 @@ import * as AdhImageModule from "../Image/Module";
 
 import * as AdhEmbed from "../Embed/Embed";
 import * as AdhHttp from "../Http/Http";
+import * as AdhResourceArea from "../ResourceArea/ResourceArea";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 
 import * as AdhUserViews from "./Views";
 
+import RIUser from "../../Resources_/adhocracy_core/resources/principal/IUser";
 
 export var moduleName = "adhUserViews";
 
@@ -84,7 +86,10 @@ export var register = (angular) => {
                 }])
                 .when("activate", ["adhConfig", "adhUser", "adhDone", "$rootScope", "$location", AdhUserViews.activateArea]);
         }])
-        .config(["adhResourceAreaProvider", AdhUserViews.registerRoutes()])
+        .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
+            adhResourceAreaProvider.names[RIUser.content_type] = "TR__USER";
+            AdhUserViews.registerRoutes();
+        }])
         .config(["adhEmbedProvider", (adhEmbedProvider : AdhEmbed.Provider) => {
             adhEmbedProvider
                 .registerDirective("login")

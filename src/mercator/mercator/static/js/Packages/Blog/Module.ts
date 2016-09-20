@@ -7,8 +7,11 @@ import * as AdhPermissionsModule from "../Permissions/Module";
 import * as AdhPreliminaryNamesModule from "../PreliminaryNames/Module";
 
 import * as AdhEmbed from "../Embed/Embed";
+import * as AdhResourceArea from "../ResourceArea/ResourceArea";
 
 import * as Blog from "./Blog";
+
+import RIParagraphVersion from "../../Resources_/adhocracy_core/resources/paragraph/IParagraphVersion";
 
 
 export var moduleName = "adhBlog";
@@ -29,6 +32,9 @@ export var register = (angular) => {
                 .registerDirective("blog-post")
                 .registerDirective("blog-post-create")
                 .registerDirective("blog");
+        }])
+        .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
+            adhResourceAreaProvider.names[RIParagraphVersion.content_type] = "TR__PARAGRAPHS";
         }])
         .directive("adhBlogPost", [
             "$q",
