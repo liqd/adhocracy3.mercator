@@ -27,7 +27,7 @@ export var register = (angular) => {
         AdhTopLevelStateModule.moduleName
     ])
     .config(["adhResourceAreaProvider", (adhResourceAreaProvider) => {
-            adhResourceAreaProvider.names[RIProposalVersion.content_type] = "TR__PROPOSALS";
+            adhResourceAreaProvider.names[RIProposalVersion.content_type] = "TR__RESOURCE_PROPOSAL";
         }])
     .directive("adhS1ProposalDetail", [
         "adhConfig", "adhHttp", "adhPermissions", "adhRate", "adhTopLevelState", "adhGetBadges", "$q", Proposal.detailDirective])

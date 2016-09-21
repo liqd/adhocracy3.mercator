@@ -34,7 +34,7 @@ export var register = (angular) => {
                 .registerDirective("blog");
         }])
         .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
-            adhResourceAreaProvider.names[RIDocumentVersion.content_type] = "TR__DOCUMENTS";
+            adhResourceAreaProvider.names[RIDocumentVersion.content_type] = "TR__RESOURCE_DOCUMENT";
         }])
         .directive("adhBlogPost", [
             "$q",

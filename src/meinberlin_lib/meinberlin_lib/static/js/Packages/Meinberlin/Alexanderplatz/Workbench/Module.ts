@@ -36,7 +36,6 @@ export var register = (angular) => {
             AdhTopLevelStateModule.moduleName
         ])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
-            adhProcessProvider.names[processType] = "TR__PROCESS_ALEXANDERPLATZ";
             adhProcessProvider.templates[processType] = "<adh-meinberlin-alexanderplatz-workbench " +
                 "data-process-properties=\"processProperties\"></adh-meinberlin-alexanderplatz-workbench>";
             adhProcessProvider.processProperties[processType] = {
@@ -50,7 +49,8 @@ export var register = (angular) => {
             var processHeaderSlot = adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
             adhResourceAreaProvider.processHeaderSlots[processType] = processHeaderSlot;
             Workbench.registerRoutes(processType)(adhResourceAreaProvider);
-            adhResourceAreaProvider.names[RIGeoProposalVersion.content_type] = "TR__PROPOSALS";
+            adhResourceAreaProvider.names[RIAlexanderplatzProcess.content_type] = "TR__RESOURCE_ALEXANDERPLATZ";
+            adhResourceAreaProvider.names[RIGeoProposalVersion.content_type] = "TR__RESOURCE_PROPOSAL";
         }])
         .directive("adhMeinberlinAlexanderplatzWorkbench", ["adhConfig", "adhTopLevelState", Workbench.workbenchDirective])
         .directive("adhMeinberlinAlexanderplatzProcessColumn", [

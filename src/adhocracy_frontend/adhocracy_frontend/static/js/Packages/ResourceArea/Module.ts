@@ -32,10 +32,12 @@ export var register = (angular) => {
             adhResourceAreaProvider.default(RIRootPool, "", "", "", {
                 space: "overview"
             });
-            adhResourceAreaProvider.names[RIProcess.content_type] = "TR__PROCESSES";
+            adhResourceAreaProvider.names[RIProcess.content_type] = "TR__RESOURCE_PROCESS";
         }])
         .provider("adhResourceArea", AdhResourceArea.Provider)
         .directive("adhResourceArea", ["adhResourceArea", "$compile", AdhResourceArea.directive])
+        .directive("adhProcessListItem", ["adhConfig", "adhHttp", "adhResourceArea", AdhResourceArea.processListItemDirective])
+        .directive("adhProcessListing", ["adhConfig", AdhResourceArea.processListingDirective])
         .filter("adhResourceName", ["adhResourceArea", AdhResourceArea.nameFilter])
         .filter("adhParentPath", () => AdhUtil.parentPath)
         .filter("adhResourceUrl", ["adhConfig", AdhResourceArea.resourceUrl]);

@@ -6,7 +6,7 @@ import * as AdhConfig from "../../Config/Config";
 import * as AdhEmbed from "../../Embed/Embed";
 import * as AdhHttp from "../../Http/Http";
 import * as AdhPermissions from "../../Permissions/Permissions";
-import * as AdhProcess from "../../Process/Process";
+import * as AdhResourceArea from "../../ResourceArea/ResourceArea";
 
 import * as SIDescription from "../../../Resources_/adhocracy_core/sheets/description/IDescription";
 import * as SILocationReference from "../../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
@@ -56,7 +56,7 @@ export var detailDirective = (
                     adhHttp.get(value).then((resource) => {
                         var sheet = resource.data[SIWorkflow.nick];
                         var stateName = sheet.workflow_state;
-                        scope.currentPhase = AdhProcess.getStateData(sheet, stateName);
+                        scope.currentPhase = AdhResourceArea.getStateData(sheet, stateName);
                         scope.data.title = resource.data[SITitle.nick].title;
                         scope.data.shortDescription = resource.data[SIDescription.nick].short_description;
 

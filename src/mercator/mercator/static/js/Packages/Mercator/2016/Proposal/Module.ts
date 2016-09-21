@@ -68,7 +68,7 @@ export var register = (angular) => {
             adhEmbedProvider.registerDirective("mercator-2016-proposal-listitem");
         }])
         .config(["adhResourceAreaProvider", (adhResourceAreaProvider) => {
-            adhResourceAreaProvider.names[RIMercatorProposal.content_type] = "TR__PROPOSALS";
+            adhResourceAreaProvider.names[RIMercatorProposal.content_type] = "TR__RESOURCE_PROPOSAL";
         }])
         .directive("adhMercator2016ProposalCreate", [
             "$location",

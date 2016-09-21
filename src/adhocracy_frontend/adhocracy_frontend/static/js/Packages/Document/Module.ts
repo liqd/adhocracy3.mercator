@@ -46,7 +46,7 @@ export var register = (angular) => {
                 .registerDirective("document-list-item");
         }])
         .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
-            adhResourceAreaProvider.names[RIGeoDocumentVersion.content_type] = "TR__DOCUMENTS";
+            adhResourceAreaProvider.names[RIGeoDocumentVersion.content_type] = "TR__RESOURCE_DOCUMENT";
         }])
         .directive("adhDocumentDetail", ["$q", "adhConfig", "adhHttp", "adhGetBadges", "adhTopLevelState", AdhDocument.detailDirective])
         .directive("adhDocumentCreate", [
