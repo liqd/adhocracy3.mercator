@@ -16,7 +16,7 @@
         <h3 class="list-item-title">{{data.title}}</h3>
         <ul class="meta-list list-item-meta">
             <li class="meta-list-item"><i class="meta-list-meta-item-icon icon-speechbubble-unfilled"></i
-            > {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</li>
+            > {{ data.commentCount }} {{ commentType | adhResourceName:data.commentCount | translate }}</li>
             <li class="meta-list-item"><i class="meta-list-meta-item-icon icon-voting"></i
             > {{ data.rateCount | signum }} {{ "TR__RATES" | translate }}</li>
             <li class="meta-list-item"

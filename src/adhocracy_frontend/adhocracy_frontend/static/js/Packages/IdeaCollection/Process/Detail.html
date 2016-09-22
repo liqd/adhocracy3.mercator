@@ -11,6 +11,13 @@
 
             <h1 class="resource-header-title">{{ data.title }}</h1>
 
+            <ul class="resource-header-meta">
+                <li data-ng-if="data.participationStartDate && data.participationEndDate">{{ "TR__PARTICIPATION_DATES" | translate:{
+                    startDate: data.participationStartDate,
+                    endDate: data.participationEndDate}
+                }}</li>
+            </ul>
+
             <ul class="resource-header-description">
                 <li>
                     {{data.shortDescription}}

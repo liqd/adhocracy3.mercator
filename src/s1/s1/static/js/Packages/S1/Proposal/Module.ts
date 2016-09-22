@@ -2,11 +2,14 @@ import * as AdhAngularHelpersModule from "../../AngularHelpers/Module";
 import * as AdhAnonymizeModule from "../../Anonymize/Module";
 import * as AdhBadgeModule from "../../Badge/Module";
 import * as AdhHttpModule from "../../Http/Module";
+import * as AdhNamesModule from "../../Names/Module";
 import * as AdhPermissionsModule from "../../Permissions/Module";
 import * as AdhPreliminaryNamesModule from "../../PreliminaryNames/Module";
 import * as AdhRateModule from "../../Rate/Module";
 import * as AdhResourceAreaModule from "../../ResourceArea/Module";
 import * as AdhTopLevelStateModule from "../../TopLevelState/Module";
+
+import * as AdhNames from "../../Names/Names";
 
 import * as Proposal from "./Proposal";
 
@@ -20,15 +23,16 @@ export var register = (angular) => {
         AdhAnonymizeModule.moduleName,
         AdhBadgeModule.moduleName,
         AdhHttpModule.moduleName,
+        AdhNamesModule.moduleName,
         AdhPermissionsModule.moduleName,
         AdhPreliminaryNamesModule.moduleName,
         AdhRateModule.moduleName,
         AdhResourceAreaModule.moduleName,
         AdhTopLevelStateModule.moduleName
     ])
-    .config(["adhResourceAreaProvider", (adhResourceAreaProvider) => {
-            adhResourceAreaProvider.names[RIProposalVersion.content_type] = "TR__PROPOSALS";
-        }])
+    .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
+        adhNamesProvider.names[RIProposalVersion.content_type] = "TR__RESOURCE_PROPOSAL";
+    }])
     .directive("adhS1ProposalDetail", [
         "adhConfig", "adhHttp", "adhPermissions", "adhRate", "adhTopLevelState", "adhGetBadges", "$q", Proposal.detailDirective])
     .directive("adhS1ProposalListItem", [

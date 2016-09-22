@@ -25,7 +25,6 @@ import * as webshim from "polyfiller";
 
 import * as AdhAbuseModule from "./Packages/Abuse/Module";
 import * as AdhAngularHelpersModule from "./Packages/AngularHelpers/Module";
-import * as AdhAnonymizeModule from "./Packages/Anonymize/Module";
 import * as AdhBadgeModule from "./Packages/Badge/Module";
 import * as AdhCommentModule from "./Packages/Comment/Module";
 import * as AdhConfigModule from "./Packages/Config/Module";
@@ -34,6 +33,7 @@ import * as AdhDateTimeModule from "./Packages/DateTime/Module";
 import * as AdhDocumentModule from "./Packages/Document/Module";
 import * as AdhDoneModule from "./Packages/Done/Module";
 import * as AdhEmbedModule from "./Packages/Embed/Module";
+import * as AdhEuthModule from "./Packages/Euth/Module";
 import * as AdhEventManagerModule from "./Packages/EventManager/Module";
 import * as AdhHomeModule from "./Packages/Home/Module";
 import * as AdhHttpModule from "./Packages/Http/Module";
@@ -45,7 +45,6 @@ import * as AdhLocaleModule from "./Packages/Locale/Module";
 import * as AdhMappingModule from "./Packages/Mapping/Module";
 import * as AdhMarkdownModule from "./Packages/Markdown/Module";
 import * as AdhMetaApiModule from "./Packages/MetaApi/Module";
-import * as AdhEuthModule from "./Packages/Euth/Module";
 import * as AdhMovingColumnsModule from "./Packages/MovingColumns/Module";
 import * as AdhPermissionsModule from "./Packages/Permissions/Module";
 import * as AdhPreliminaryNamesModule from "./Packages/PreliminaryNames/Module";
@@ -177,6 +176,7 @@ export var init = (config: AdhConfig.IService, metaApi) => {
 
     // register our modules
     AdhAbuseModule.register(angular);
+    AdhAngularHelpersModule.register(angular);
     AdhAnonymizeModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhCommentModule.register(angular);
@@ -186,6 +186,7 @@ export var init = (config: AdhConfig.IService, metaApi) => {
     AdhDocumentModule.register(angular);
     AdhDoneModule.register(angular);
     AdhEmbedModule.register(angular);
+    AdhEuthModule.register(angular);
     AdhEventManagerModule.register(angular);
     AdhHomeModule.register(angular);
     AdhHttpModule.register(angular, config);
@@ -194,16 +195,15 @@ export var init = (config: AdhConfig.IService, metaApi) => {
     AdhInjectModule.register(angular);
     AdhListingModule.register(angular);
     AdhLocaleModule.register(angular);
-    AdhEuthModule.register(angular);
     AdhMappingModule.register(angular);
     AdhMarkdownModule.register(angular);
     AdhMetaApiModule.register(angular, metaApi);
     AdhMovingColumnsModule.register(angular);
+    AdhNamesModule.register(angular);
     AdhPermissionsModule.register(angular);
     AdhPreliminaryNamesModule.register(angular);
     AdhProcessModule.register(angular);
     AdhRateModule.register(angular);
-    AdhAngularHelpersModule.register(angular);
     AdhResourceActionsModule.register(angular);
     AdhResourceAreaModule.register(angular);
     AdhResourceWidgetsModule.register(angular);

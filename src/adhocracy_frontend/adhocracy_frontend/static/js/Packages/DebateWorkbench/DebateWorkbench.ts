@@ -1,8 +1,10 @@
 /// <reference path="../../../lib2/types/angular.d.ts"/>
 
 import * as AdhConfig from "../Config/Config";
+import * as AdhEmbed from "../Embed/Embed";
 import * as AdhHttp from "../Http/Http";
 import * as AdhPermissions from "../Permissions/Permissions";
+import * as AdhProcess from "../Process/Process";
 import * as AdhResourceArea from "../ResourceArea/ResourceArea";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 import * as AdhUtil from "../Util/Util";
@@ -16,7 +18,11 @@ import RIDocumentVersion from "../../Resources_/adhocracy_core/resources/documen
 import RIParagraph from "../../Resources_/adhocracy_core/resources/paragraph/IParagraph";
 import RIParagraphVersion from "../../Resources_/adhocracy_core/resources/paragraph/IParagraphVersion";
 import * as SIComment from "../../Resources_/adhocracy_core/sheets/comment/IComment";
+import * as SIDescription from "../../Resources_/adhocracy_core/sheets/description/IDescription";
+import * as SIImageReference from "../../Resources_/adhocracy_core/sheets/image/IImageReference";
 import * as SIParagraph from "../../Resources_/adhocracy_core/sheets/document/IParagraph";
+import * as SITitle from "../../Resources_/adhocracy_core/sheets/title/ITitle";
+import * as SIWorkflow from "../../Resources_/adhocracy_core/sheets/workflow/IWorkflowAssignment";
 
 var pkgLocation = "/DebateWorkbench";
 
@@ -80,6 +86,8 @@ export var documentEditColumnDirective = (
 
 export var processDetailColumnDirective = (
     adhConfig : AdhConfig.IService,
+    adhEmbed : AdhEmbed.Service,
+    adhHttp : AdhHttp.Service,
     adhPermissions : AdhPermissions.Service,
     adhTopLevelState : AdhTopLevelState.Service
 ) => {
@@ -88,17 +96,33 @@ export var processDetailColumnDirective = (
         templateUrl: adhConfig.pkg_path + pkgLocation + "/ProcessDetailColumn.html",
         link: (scope) => {
             scope.$on("$destroy", adhTopLevelState.bind("processUrl", scope));
+            scope.$watch("path", (value : string) => {
+                if (value) {
+                    adhHttp.get(value).then((resource) => {
+                        var workflow = resource.data[SIWorkflow.nick];
+                        scope.picture = resource.data[SIImageReference.nick].picture;
+                        scope.data.title = resource.data[SITitle.nick].title;
+                        scope.data.participationStartDate = AdhProcess.getStateData(workflow, "participate").start_date;
+                        scope.data.participationEndDate = AdhProcess.getStateData(workflow, "evaluate").start_date;
+                        scope.data.shortDescription = resource.data[SIDescription.nick].short_description;
+                    });
+                }
+            });
             adhPermissions.bindScope(scope, () => scope.processUrl, "processOptions");
+            var context = adhEmbed.getContext();
+            scope.hasResourceHeader = (context === "");
         }
     };
 };
 
 export var processDetailAnnounceColumnDirective = (
     adhConfig : AdhConfig.IService,
+    adhEmbed : AdhEmbed.Service,
+    adhHttp : AdhHttp.Service,
     adhPermissions : AdhPermissions.Service,
     adhTopLevelState : AdhTopLevelState.Service
 ) => {
-    var directive = processDetailColumnDirective(adhConfig, adhPermissions, adhTopLevelState);
+    var directive = processDetailColumnDirective(adhConfig, adhEmbed, adhHttp, adhPermissions, adhTopLevelState);
     directive.templateUrl = adhConfig.pkg_path + pkgLocation + "/ProcessDetailAnnounceColumn.html";
     return directive;
 };

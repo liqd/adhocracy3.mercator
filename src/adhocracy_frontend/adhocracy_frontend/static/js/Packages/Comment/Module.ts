@@ -8,6 +8,7 @@ import * as AdhEmbedModule from "../Embed/Module";
 import * as AdhHttpModule from "../Http/Module";
 import * as AdhListingModule from "../Listing/Module";
 import * as AdhMovingColumnsModule from "../MovingColumns/Module";
+import * as AdhNamesModule from "../Names/Module";
 import * as AdhPermissionsModule from "../Permissions/Module";
 import * as AdhPreliminaryNamesModule from "../PreliminaryNames/Module";
 import * as AdhRateModule from "../Rate/Module";
@@ -15,6 +16,7 @@ import * as AdhTopLevelStateModule from "../TopLevelState/Module";
 
 import * as AdhComment from "./Comment";
 import * as AdhEmbed from "../Embed/Embed";
+import * as AdhNames from "../Names/Names";
 
 import RICommentVersion from "../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 
@@ -33,6 +35,7 @@ export var register = (angular) => {
             AdhHttpModule.moduleName,
             AdhListingModule.moduleName,
             AdhMovingColumnsModule.moduleName,
+            AdhNamesModule.moduleName,
             AdhPermissionsModule.moduleName,
             AdhPreliminaryNamesModule.moduleName,
             AdhRateModule.moduleName,
@@ -43,8 +46,8 @@ export var register = (angular) => {
                 .registerDirective("comment-listing")
                 .registerDirective("create-or-show-comment-listing");
         }])
-        .config(["adhResourceAreaProvider", (adhResourceAreaProvider) => {
-            adhResourceAreaProvider.names[RICommentVersion.content_type] = "TR__COMMENTS";
+        .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
+            adhNamesProvider.names[RICommentVersion.content_type] = "TR__RESOURCE_COMMENT";
         }])
         .directive("adhCommentListing", [
             "adhConfig",

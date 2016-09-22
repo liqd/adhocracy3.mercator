@@ -2,6 +2,7 @@
 
 import * as AdhConfig from "../Config/Config";
 import * as AdhHttp from "../Http/Http";
+import * as AdhNames from "../Names/Names";
 import * as AdhPermissions from "../Permissions/Permissions";
 import * as AdhUtil from "../Util/Util";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
@@ -54,13 +55,11 @@ export var getStateData = (sheet : SIWorkflow.Sheet, name : string) : IStateData
 
 
 export class Provider implements angular.IServiceProvider {
-    public names : {[processType : string]: string};
     public templates : {[processType : string]: string};
     public processProperties : {[processType : string]: IProcessProperties};
     public $get;
 
     constructor () {
-        this.names = {};
         this.templates = {};
         this.processProperties = {};
 
@@ -75,10 +74,6 @@ export class Service {
         private provider : Provider,
         private $injector : angular.auto.IInjectorService
     ) {}
-
-    public getName(processType : string) : string {
-        return this.provider.names[processType];
-    }
 
     public getTemplate(processType : string) : string {
         if (!this.provider.templates.hasOwnProperty(processType)) {
@@ -163,7 +158,7 @@ export var processViewDirective = (
 export var listItemDirective = (
     adhConfig : AdhConfig.IService,
     adhHttp : AdhHttp.Service,
-    adhProcess : Service
+    adhNames : AdhNames.Service
 ) => {
     return {
         restrict: "E",
@@ -177,7 +172,7 @@ export var listItemDirective = (
                     scope.picture = process.data[SIImageReference.nick].picture;
                 }
                 scope.title = process.data[SITitle.nick].title;
-                scope.processName = adhProcess.getName(process.content_type);
+                scope.processName = adhNames.getName(process.content_type, 1);
                 if (process.data[SILocationReference.nick] && process.data[SILocationReference.nick].location) {
                     adhHttp.get(process.data[SILocationReference.nick].location).then((loc) => {
                         scope.locationText = loc.data[SITitle.nick].title;

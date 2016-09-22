@@ -6,6 +6,7 @@ import * as AdhImageModule from "../../../Image/Module";
 import * as AdhInjectModule from "../../../Inject/Module";
 import * as AdhLocaleModule from "../../../Locale/Module";
 import * as AdhMetaApiModule from "../../../MetaApi/Module";
+import * as AdhNamesModule from "../../../Names/Module";
 import * as AdhPermissionsModule from "../../../Permissions/Module";
 import * as AdhPreliminaryNamesModule from "../../../PreliminaryNames/Module";
 import * as AdhResourceAreaModule from "../../../ResourceArea/Module";
@@ -13,6 +14,7 @@ import * as AdhResourceWidgetsModule from "../../../ResourceWidgets/Module";
 import * as AdhStickyModule from "../../../Sticky/Module";
 import * as AdhTopLevelStateModule from "../../../TopLevelState/Module";
 
+import * as AdhNames from "../../../Names/Names";
 import * as AdhUtil from "../../../Util/Util";
 
 import RIMercator2015Process from "../../../../Resources_/adhocracy_mercator/resources/mercator/IProcess";
@@ -36,6 +38,7 @@ export var register = (angular) => {
             AdhInjectModule.moduleName,
             AdhLocaleModule.moduleName,
             AdhMetaApiModule.moduleName,
+            AdhNamesModule.moduleName,
             AdhPermissionsModule.moduleName,
             AdhPreliminaryNamesModule.moduleName,
             AdhResourceAreaModule.moduleName,
@@ -51,7 +54,6 @@ export var register = (angular) => {
             var processType = RIMercator2015Process.content_type;
             var processHeaderSlot = adhConfig.pkg_path + Proposal.pkgLocation + "/ProcessHeaderSlot.html";
             adhResourceAreaProvider.processHeaderSlots[processType] = processHeaderSlot;
-            adhResourceAreaProvider.names[RIProposalVersion.content_type] = "TR__PROPOSALS";
             Proposal.registerRoutes(processType)(adhResourceAreaProvider, adhMetaApi);
         }])
         .config(["flowFactoryProvider", (flowFactoryProvider) => {
@@ -73,6 +75,9 @@ export var register = (angular) => {
                     "png"
                 ]  // correspond to exact mime types EG image/png
             };
+        }])
+        .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
+            adhNamesProvider.names[RIProposalVersion.content_type] = "TR__RESOURCE_PROPOSAL";
         }])
         // NOTE: we do not use a Widget based directive here for performance reasons
         .directive("adhMercator2015Proposal", ["adhConfig", "adhHttp", "adhTopLevelState", "adhGetBadges", Proposal.listItem])

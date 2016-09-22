@@ -916,6 +916,9 @@ export var adhUserActivityOverviewDirective = (
             requestCountInto(RIComment, "commentCount", attrs.showComments);
             requestCountInto(RIProposal, "proposalCount", attrs.showProposals);
             requestCountInto(RIRate, "rateCount", attrs.showRatings);
+            scope.commentType = RIComment.content_type;
+            scope.proposalType = RIProposal.content_type;
+            scope.rateType = RIRate.content_type;
         }
     };
 };

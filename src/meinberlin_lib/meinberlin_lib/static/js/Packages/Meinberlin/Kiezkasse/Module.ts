@@ -1,10 +1,12 @@
 import * as AdhEmbedModule from "../../Embed/Module";
 import * as AdhIdeaCollectionModule from "../../IdeaCollection/Module";
+import * as AdhNamesModule from "../../Names/Module";
 import * as AdhProcessModule from "../../Process/Module";
 import * as AdhResourceAreaModule from "../../ResourceArea/Module";
 
 import * as AdhEmbed from "../../Embed/Embed";
 import * as AdhIdeaCollectionWorkbench from "../../IdeaCollection/Workbench/Workbench";
+import * as AdhNames from "../../Names/Names";
 import * as AdhProcess from "../../Process/Process";
 import * as AdhResourceArea from "../../ResourceArea/ResourceArea";
 
@@ -23,6 +25,7 @@ export var register = (angular) => {
         .module(moduleName, [
             AdhEmbedModule.moduleName,
             AdhIdeaCollectionModule.moduleName,
+            AdhNamesModule.moduleName,
             AdhProcessModule.moduleName,
             AdhResourceAreaModule.moduleName
         ])
@@ -37,10 +40,8 @@ export var register = (angular) => {
 
             var processHeaderSlot = adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
             adhResourceAreaProvider.processHeaderSlots[processType] = processHeaderSlot;
-            adhResourceAreaProvider.names[RIKiezkasseProposalVersion.content_type] = "TR__PROPOSALS";
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
-            adhProcessProvider.names[processType] = "TR__PROCESS_KIEZKASSE";
             adhProcessProvider.templates[processType] =
                 "<adh-idea-collection-workbench data-process-properties=\"processProperties\">" +
                 "</adh-idea-collection-workbench>";
@@ -53,5 +54,9 @@ export var register = (angular) => {
                 proposalSheet: SIKiezkasseProposal,
                 proposalVersionClass: RIKiezkasseProposalVersion
             };
+        }])
+        .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
+            adhNamesProvider.names[RIKiezkasseProcess.content_type] = "TR__RESOURCE_KIEZKASSE";
+            adhNamesProvider.names[RIKiezkasseProposalVersion.content_type] = "TR__RESOURCE_PROPOSAL";
         }]);
 };

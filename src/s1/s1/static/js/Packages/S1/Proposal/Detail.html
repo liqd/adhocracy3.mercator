@@ -25,7 +25,7 @@
             </li>
             <li>
                 <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}"
-                    ><i class="icon-speechbubble"></i> {{ data.commentCount }} {{ "TR__COMMENTS" | translate }}</a>
+                    ><i class="icon-speechbubble"></i> {{ data.commentCount }} {{ commentType | adhResourceName:data.commentCount | translate }}</a>
             </li>
         </ul>
 

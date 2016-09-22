@@ -1,10 +1,12 @@
 import * as AdhEmbedModule from "../../Embed/Module";
+import * as AdhNamesModule from "../../Names/Module";
 import * as AdhProcessModule from "../../Process/Module";
 import * as AdhResourceAreaModule from "../../ResourceArea/Module";
 
 import * as AdhIdeaCollectionModule from "../../IdeaCollection/Module";
 
 import * as AdhEmbed from "../../Embed/Embed";
+import * as AdhNames from "../../Names/Names";
 import * as AdhProcess from "../../Process/Process";
 import * as AdhResourceArea from "../../ResourceArea/ResourceArea";
 
@@ -25,6 +27,7 @@ export var register = (angular) => {
         .module(moduleName, [
             AdhEmbedModule.moduleName,
             AdhIdeaCollectionModule.moduleName,
+            AdhNamesModule.moduleName,
             AdhProcessModule.moduleName,
             AdhResourceAreaModule.moduleName
         ])
@@ -39,10 +42,8 @@ export var register = (angular) => {
 
             var processHeaderSlot = adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
             adhResourceAreaProvider.processHeaderSlots[processType] = processHeaderSlot;
-            adhResourceAreaProvider.names[RIBuergerhaushaltProposalVersion.content_type] = "TR__PROPOSALS";
         }])
         .config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
-            adhProcessProvider.names[processType] = "TR__PROCESS_BUERGERHAUSHALT";
             adhProcessProvider.templates[processType] =
                 "<adh-idea-collection-workbench data-process-properties=\"processProperties\">" +
                 "</adh-idea-collection-workbench>";
@@ -54,5 +55,9 @@ export var register = (angular) => {
                 proposalSheet: SIBuergerhaushaltProposal,
                 proposalVersionClass: RIBuergerhaushaltProposalVersion
             };
+        }])
+        .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
+            adhNamesProvider.names[RIBuergerhaushaltProcess.content_type] = "TR__RESOURCE_BUERGERHAUSHALT";
+            adhNamesProvider.names[RIBuergerhaushaltProposalVersion.content_type] = "TR__RESOURCE_PROPOSAL";
         }]);
 };

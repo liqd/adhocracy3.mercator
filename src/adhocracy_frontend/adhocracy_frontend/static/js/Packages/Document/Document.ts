@@ -8,6 +8,7 @@ import * as AdhUtil from "../Util/Util";
 
 import * as ResourcesBase from "../ResourcesBase";
 
+import RICommentVersion from "../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 import RIDocument from "../../Resources_/adhocracy_core/resources/document/IDocument";
 import RIDocumentVersion from "../../Resources_/adhocracy_core/resources/document/IDocumentVersion";
 import RIGeoDocument from "../../Resources_/adhocracy_core/resources/document/IGeoDocument";
@@ -61,6 +62,8 @@ export interface IScope extends angular.IScope {
 
     documentVersion? : RIDocumentVersion;
     paragraphVersions? : RIParagraphVersion[];
+
+    commentType? : string;
 }
 
 export interface IFormScope extends IScope {
@@ -360,6 +363,7 @@ export var detailDirective = (
             scope.$on("$destroy", adhTopLevelState.on("commentableUrl", (commentableUrl) => {
                 highlightSelectedParagraph(adhTopLevelState.get("commentableUrl"), scope);
             }));
+            scope.commentType = RICommentVersion.content_type;
         }
     };
 };
@@ -391,6 +395,7 @@ export var listItemDirective = (
                     scope.selectedState = "is-not-selected";
                 }
             }));
+            scope.commentType = RICommentVersion.content_type;
         }
     };
 };

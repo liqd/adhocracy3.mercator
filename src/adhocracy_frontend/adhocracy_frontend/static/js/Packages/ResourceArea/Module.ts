@@ -1,9 +1,11 @@
 import * as AdhEmbedModule from "../Embed/Module";
 import * as AdhHomeModule from "../Home/Module";
 import * as AdhHttpModule from "../Http/Module";
+import * as AdhNamesModule from "../Names/Module";
 import * as AdhProcessModule from "../Process/Module";
 import * as AdhTopLevelStateModule from "../TopLevelState/Module";
 
+import * as AdhNames from "../Names/Names";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 import * as AdhUtil from "../Util/Util";
 
@@ -21,6 +23,7 @@ export var register = (angular) => {
             AdhEmbedModule.moduleName,
             AdhHomeModule.moduleName,
             AdhHttpModule.moduleName,
+            AdhNamesModule.moduleName,
             AdhProcessModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
@@ -32,11 +35,13 @@ export var register = (angular) => {
             adhResourceAreaProvider.default(RIRootPool, "", "", "", {
                 space: "overview"
             });
-            adhResourceAreaProvider.names[RIProcess.content_type] = "TR__PROCESSES";
+        }])
+        .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
+            adhNamesProvider.names[RIProcess.content_type] = "TR__RESOURCE_PROCESS";
         }])
         .provider("adhResourceArea", AdhResourceArea.Provider)
         .directive("adhResourceArea", ["adhResourceArea", "$compile", AdhResourceArea.directive])
-        .filter("adhResourceName", ["adhResourceArea", AdhResourceArea.nameFilter])
+        .filter("adhResourceName", ["adhNames", AdhResourceArea.nameFilter])
         .filter("adhParentPath", () => AdhUtil.parentPath)
         .filter("adhResourceUrl", ["adhConfig", AdhResourceArea.resourceUrl]);
 };

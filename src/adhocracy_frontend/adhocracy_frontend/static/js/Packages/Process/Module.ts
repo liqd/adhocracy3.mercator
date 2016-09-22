@@ -1,4 +1,5 @@
 import * as AdhHttpModule from "../Http/Module";
+import * as AdhNamesModule from "../Names/Module";
 import * as AdhTopLevelStateModule from "../TopLevelState/Module";
 
 import * as AdhProcess from "./Process";
@@ -10,6 +11,7 @@ export var register = (angular) => {
     angular
         .module(moduleName, [
             AdhHttpModule.moduleName,
+            AdhNamesModule.moduleName,
             AdhTopLevelStateModule.moduleName
         ])
         .provider("adhProcess", AdhProcess.Provider)

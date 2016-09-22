@@ -10,6 +10,7 @@ import * as AdhRate from "../../Rate/Rate";
 import * as AdhTopLevelState from "../../TopLevelState/TopLevelState";
 import * as AdhUtil from "../../Util/Util";
 
+import RICommentVersion from "../../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 import RISystemUser from "../../../Resources_/adhocracy_core/resources/principal/ISystemUser";
 import RIProposal from "../../../Resources_/adhocracy_s1/resources/s1/IProposal";
 import RIProposalVersion from "../../../Resources_/adhocracy_s1/resources/s1/IProposalVersion";
@@ -42,6 +43,7 @@ export interface IScope extends angular.IScope {
         anonymize? : boolean;
         createdAnonymously? : boolean;
     };
+    commentType? : string;
 }
 
 export interface IFormScope extends IScope {
@@ -189,6 +191,7 @@ export var detailDirective = (
         },
         link: (scope : IScope) => {
             bindPath(adhConfig, adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(scope);
+            scope.commentType = RICommentVersion.content_type;
         }
     };
 };

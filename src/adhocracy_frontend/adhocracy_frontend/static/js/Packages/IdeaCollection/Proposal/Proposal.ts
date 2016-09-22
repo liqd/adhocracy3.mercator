@@ -11,6 +11,7 @@ import * as AdhRate from "../../Rate/Rate";
 import * as AdhTopLevelState from "../../TopLevelState/TopLevelState";
 import * as AdhUtil from "../../Util/Util";
 
+import RICommentVersion from "../../../Resources_/adhocracy_core/resources/comment/ICommentVersion";
 import RISystemUser from "../../../Resources_/adhocracy_core/resources/principal/ISystemUser";
 import * as SICommentable from "../../../Resources_/adhocracy_core/sheets/comment/ICommentable";
 import * as SIDescription from "../../../Resources_/adhocracy_core/sheets/description/IDescription";
@@ -52,6 +53,7 @@ export interface IScope extends angular.IScope {
     processProperties : AdhProcess.IProcessProperties;
     resource : any;
     config? : AdhConfig.IService;
+    commentType? : string;
 }
 
 var bindPath = (
@@ -252,6 +254,7 @@ export var detailDirective = (
         link: (scope : IScope) => {
             bindPath(adhConfig, adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(
                 scope, undefined);
+            scope.commentType = RICommentVersion.content_type;
         }
     };
 };
@@ -284,6 +287,7 @@ export var listItemDirective = (
                     scope.selectedState = "is-not-selected";
                 }
             }));
+            scope.commentType = RICommentVersion.content_type;
         }
     };
 };

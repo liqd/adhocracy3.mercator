@@ -45,6 +45,7 @@ import * as AdhMappingModule from "./Packages/Mapping/Module";
 import * as AdhMarkdownModule from "./Packages/Markdown/Module";
 import * as AdhMetaApiModule from "./Packages/MetaApi/Module";
 import * as AdhMovingColumnsModule from "./Packages/MovingColumns/Module";
+import * as AdhNamesModule from "./Packages/Names/Module";
 import * as AdhPermissionsModule from "./Packages/Permissions/Module";
 import * as AdhPreliminaryNamesModule from "./Packages/PreliminaryNames/Module";
 import * as AdhProcessModule from "./Packages/Process/Module";
@@ -185,6 +186,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
 
     // register our modules
     AdhAbuseModule.register(angular);
+    AdhAngularHelpersModule.register(angular);
     AdhAnonymizeModule.register(angular);
     AdhBadgeModule.register(angular);
     AdhCommentModule.register(angular);
@@ -192,6 +194,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     AdhCrossWindowMessagingModule.register(angular);
     AdhDateTimeModule.register(angular);
     AdhDebateWorkbenchModule.register(angular);
+    AdhDocumentModule.register(angular);
     AdhDoneModule.register(angular);
     AdhEmbedModule.register(angular);
     AdhEventManagerModule.register(angular);
@@ -204,13 +207,12 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     AdhMappingModule.register(angular);
     AdhMarkdownModule.register(angular);
     AdhMetaApiModule.register(angular, metaApi);
-    AdhDocumentModule.register(angular);
     AdhMovingColumnsModule.register(angular);
+    AdhNamesModule.register(angular);
     AdhPermissionsModule.register(angular);
     AdhPreliminaryNamesModule.register(angular);
     AdhProcessModule.register(angular);
     AdhRateModule.register(angular);
-    AdhAngularHelpersModule.register(angular);
     AdhResourceActionsModule.register(angular);
     AdhResourceAreaModule.register(angular);
     AdhResourceWidgetsModule.register(angular);

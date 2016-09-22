@@ -8,6 +8,7 @@ import * as AdhEmbedModule from "../Embed/Module";
 import * as AdhHttpModule from "../Http/Module";
 import * as AdhLocaleModule from "../Locale/Module";
 import * as AdhMovingColumnsModule from "../MovingColumns/Module";
+import * as AdhNamesModule from "../Names/Module";
 import * as AdhPermissionsModule from "../Permissions/Module";
 import * as AdhResourceAreaModule from "../ResourceArea/Module";
 import * as AdhTopLevelStateModule from "../TopLevelState/Module";
@@ -18,6 +19,7 @@ import * as AdhImageModule from "../Image/Module";
 
 import * as AdhEmbed from "../Embed/Embed";
 import * as AdhHttp from "../Http/Http";
+import * as AdhNames from "../Names/Names";
 import * as AdhResourceArea from "../ResourceArea/ResourceArea";
 import * as AdhTopLevelState from "../TopLevelState/TopLevelState";
 
@@ -36,6 +38,7 @@ export var register = (angular) => {
             AdhEmbedModule.moduleName,
             AdhLocaleModule.moduleName,
             AdhMovingColumnsModule.moduleName,
+            AdhNamesModule.moduleName,
             AdhPermissionsModule.moduleName,
             AdhHttpModule.moduleName,
             AdhTopLevelStateModule.moduleName,
@@ -87,8 +90,10 @@ export var register = (angular) => {
                 .when("activate", ["adhConfig", "adhUser", "adhDone", "$rootScope", "$location", AdhUserViews.activateArea]);
         }])
         .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
-            adhResourceAreaProvider.names[RIUser.content_type] = "TR__USER";
             AdhUserViews.registerRoutes()(adhResourceAreaProvider);
+        }])
+        .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
+            adhNamesProvider.names[RIUser.content_type] = "TR__RESOURCE_USER";
         }])
         .config(["adhEmbedProvider", (adhEmbedProvider : AdhEmbed.Provider) => {
             adhEmbedProvider
