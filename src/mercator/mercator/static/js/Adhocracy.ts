@@ -42,6 +42,7 @@ import * as AdhMarkdownModule from "./Packages/Markdown/Module";
 import * as AdhMercatorModule from "./Packages/Mercator/Module";
 import * as AdhMetaApiModule from "./Packages/MetaApi/Module";
 import * as AdhMovingColumnsModule from "./Packages/MovingColumns/Module";
+import * as AdhMyPackage from "./Packages/MyPackage/Module";
 import * as AdhPermissionsModule from "./Packages/Permissions/Module";
 import * as AdhPreliminaryNamesModule from "./Packages/PreliminaryNames/Module";
 import * as AdhProcessModule from "./Packages/Process/Module";
@@ -95,6 +96,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         AdhCrossWindowMessagingModule.moduleName,
         AdhEmbedModule.moduleName,
         AdhMercatorModule.moduleName,
+        AdhMyPackage.moduleName,
         AdhResourceActionsModule.moduleName,
         AdhResourceAreaModule.moduleName,
         AdhTrackingModule.moduleName,
@@ -190,6 +192,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
     AdhMercatorModule.register(angular);
     AdhMetaApiModule.register(angular, metaApi);
     AdhMovingColumnsModule.register(angular);
+    AdhMyPackage.register(angular);
     AdhPermissionsModule.register(angular);
     AdhPreliminaryNamesModule.register(angular);
     AdhProcessModule.register(angular);

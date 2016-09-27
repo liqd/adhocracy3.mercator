@@ -1,0 +1,10 @@
+<div data-ng-switch="transclusionId">
+    <div data-ng-switch-when="body">
+        <adh-listing
+            data-path="{{processUrl}}"
+            data-content-type="{{contentType}}"
+            data-empty-text="No proposals yet.">
+            <adh-my-proposal-list-item data-path="{{ element }}"></adh-my-proposal-list-item>
+        </adh-listing>
+    </div>
+</div>

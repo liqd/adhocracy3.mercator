@@ -1,0 +1,12 @@
+<div data-adh-moving-columns="" class="moving-columns">
+    <adh-moving-column>
+        <adh-my-workbench-proposal-listing-column data-ng-if="view !== 'create_proposal'"></adh-my-workbench-proposal-listing-column>
+        <adh-my-workbench-proposal-create-column data-ng-if="view === 'create_proposal'"></adh-my-workbench-proposal-create-column>
+    </adh-moving-column>
+    <adh-moving-column>
+        <adh-my-workbench-proposal-detail-column></adh-my-workbench-proposal-detail-column>
+    </adh-moving-column>
+    <adh-moving-column>
+        <adh-comment-column></adh-comment-column>
+    </adh-moving-column>
+</div>
