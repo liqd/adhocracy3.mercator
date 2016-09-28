@@ -1,5 +1,8 @@
 <div data-ng-if="hasResourceHeader">
     <div class="resource-navigation">
+        <div class="resource-navigation-breadcrumbs">
+            <a href="/r/">{{"TR__HOME_LINKTEXT" | translate}}</a>
+        </div>
         <adh-resource-dropdown
             data-print="true">
         </adh-resource-dropdown>
@@ -10,6 +13,13 @@
         <header class="resource-header" data-ng-class="{'m-image': data.picture}">
 
             <h1 class="resource-header-title">{{ data.title }}</h1>
+
+            <ul class="resource-header-meta">
+                <li data-ng-if="data.participationStartDate && data.participationEndDate">{{ "TR__PARTICIPATION_DATES" | translate:{
+                    startDate: data.participationStartDate,
+                    endDate: data.participationEndDate}
+                }}</li>
+            </ul>
 
             <ul class="resource-header-description">
                 <li>

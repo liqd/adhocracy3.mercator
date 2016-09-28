@@ -85,6 +85,7 @@
     "TR__GUEST": "guest",
     "TR__HELP": "help",
     "TR__HIDE": "delete",
+    "TR__HOME_LINKTEXT": "home",
     "TR__IDEA_COLLECTION_BUDGET": "Budget",
     "TR__IDEA_COLLECTION_DETAIL": "Detail",
     "TR__IDEA_COLLECTION_ERROR_REQUIRED_BUDGET": "Please enter the budget",

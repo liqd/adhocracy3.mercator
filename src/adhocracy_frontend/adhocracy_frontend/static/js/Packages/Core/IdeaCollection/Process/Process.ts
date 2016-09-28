@@ -9,6 +9,7 @@ import * as AdhPermissions from "../../Permissions/Permissions";
 import * as AdhProcess from "../../Process/Process";
 
 import * as SIDescription from "../../../../Resources_/adhocracy_core/sheets/description/IDescription";
+import * as SIImageReference from "../../../../Resources_/adhocracy_core/sheets/image/IImageReference";
 import * as SILocationReference from "../../../../Resources_/adhocracy_core/sheets/geo/ILocationReference";
 import * as SIMultiPolygon from "../../../../Resources_/adhocracy_core/sheets/geo/IMultiPolygon";
 import * as SITitle from "../../../../Resources_/adhocracy_core/sheets/title/ITitle";
@@ -54,10 +55,13 @@ export var detailDirective = (
             scope.$watch("path", (value : string) => {
                 if (value) {
                     adhHttp.get(value).then((resource) => {
-                        var sheet = resource.data[SIWorkflow.nick];
-                        var stateName = sheet.workflow_state;
-                        scope.currentPhase = AdhProcess.getStateData(sheet, stateName);
+                        var workflow = resource.data[SIWorkflow.nick];
+                        var stateName = workflow.workflow_state;
+                        scope.currentPhase = AdhProcess.getStateData(workflow, stateName);
+                        scope.picture = resource.data[SIImageReference.nick].picture;
                         scope.data.title = resource.data[SITitle.nick].title;
+                        scope.data.participationStartDate = AdhProcess.getStateData(workflow, "participate").start_date;
+                        scope.data.participationEndDate = AdhProcess.getStateData(workflow, "evaluate").start_date;
                         scope.data.shortDescription = resource.data[SIDescription.nick].short_description;
 
                         scope.hasLocation = scope.processProperties.hasLocation && resource.data[SILocationReference.nick].location;
@@ -81,7 +85,7 @@ export var detailDirective = (
             };
 
             var context = adhEmbed.getContext();
-            scope.hasResourceHeader = (context === "mein.bärlin.de");
+            scope.hasResourceHeader = (context === "");
         }
     };
 };
