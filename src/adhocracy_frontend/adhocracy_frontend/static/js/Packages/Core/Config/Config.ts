@@ -28,7 +28,7 @@ export interface IService {
     anonymize_enabled : boolean;
     // the place for instance specific customizations
     // remember to parse (e.g. booleans) where they are used
-    custom : {[key : string]: string};
+    custom : {[key : string]: any};
     site_name : string;
     netiquette_url : string;
     cachebust : boolean;
