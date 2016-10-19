@@ -44,6 +44,13 @@ States:
 </div>
 ```
 */
+@supports (display: flex) {
+    .moving-columns {
+        display: flex !important;
+        flex-flow: row nowrap;
+        height: 900px;
+    }
+}
 
 .moving-columns {
     overflow: hidden;
@@ -71,12 +78,29 @@ The menu is fixed to the top of the column.
 The menu should always have the same state as its columns.
 
 */
+@supports (display: flex) {
+    .moving-column, .moving-column-body, .moving-column-expand {
+        height: 95%;
+    }
+
+    .moving-column-body {
+        top: 0 !important;
+        height: 96%;
+    }
+
+    .moving-column {
+        margin: 0 5px;
+
+        &.is-last-visible-child {
+            left: 0 !important;
+        }
+    }
+}
+
 .moving-column {
     // layout
     transition: width 0.5s, left 0.5s;
-    position: absolute;
     top: 0;
-    bottom: 0;
     overflow: hidden;
 
     .moving-column-collapsed {
@@ -129,7 +153,6 @@ The menu should always have the same state as its columns.
     @include rem(border-width, 0 $moving-column-border-width $moving-column-border-width);
     @include rem(font-size, $font-size-normal);
 
-    position: absolute;
     top: $moving-column-menu-height;
     left: 0;
     right: 0;
@@ -146,7 +169,6 @@ The menu should always have the same state as its columns.
 }
 
 .moving-column-expand {
-    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;

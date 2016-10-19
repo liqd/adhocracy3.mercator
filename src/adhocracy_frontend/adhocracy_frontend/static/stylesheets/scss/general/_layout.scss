@@ -16,12 +16,143 @@ body {
     padding: 1px 0;
 }
 
-.l-content {
-    @include rem(top, $logo-height);
+@mixin stretch {
     position: absolute;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    overflow: hidden;
+
+    @media print {
+        position: static;
+        overflow: visible;
+    }
+}
+
+/*doc
+---
+title: layout rows
+name: l-rows
+category: Layout
+---
+
+This deeply nested structure allows to have multiple rows where the last one
+stretches to the end of the screen (i.e. a non-static positioned container).
+
+The first version is implemented with `display: flex`, the second with
+`display: table`. Both are needed in order to support a wide range of browsers.
+Modernizr should be used to decide which version to use.
+
+```html_example
+<div style="width: 300px; height: 200px; position: relative" class="modernizr-flexbox">
+    <div class="l-rows-wrapper">
+        <div class="l-rows">
+            <div class="l-row">
+                <div class="l-cell">
+                    <div class="l-cell-inner" style="background: red">
+                        huhu
+                    </div>
+                </div>
+            </div>
+
+            <div class="l-row">
+                <div class="l-cell">
+                    <div class="l-cell-inner">
+                        <div style="overflow-y: auto; background: green; position: absolute; top: 0; bottom: 0; left: 0; right: 0;">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="width: 300px; height: 200px; position: relative" class="modernizr-no-flexbox">
+    <div class="l-rows-wrapper">
+        <div class="l-rows">
+            <div class="l-row">
+                <div class="l-cell">
+                    <div class="l-cell-inner" style="background: red">
+                        huhu
+                    </div>
+                </div>
+            </div>
+
+            <div class="l-row">
+                <div class="l-cell">
+                    <div class="l-cell-inner">
+                        <div style="overflow-y: auto; background: green; position: absolute; top: 0; bottom: 0; left: 0; right: 0;">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+```
+*/
+@media screen {
+    .l-rows-wrapper {
+        @include stretch;
+    }
+
+    .l-rows {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+@supports not (display: flex) {
+    .l-rows {
+        display: table;
+    }
+
+    .l-row {
+        display: table-row;
+
+        &:last-child {
+            &, .l-cell, .l-cell-inner {
+                height: 100%;
+            }
+        }
+    }
+
+    .l-cell {
+        display: table-cell;
+    }
+
+    .l-cell-inner {
+        position: relative;
+    }
+}
+
+@supports (display: flex) {
+    .l-rows {
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    .l-row {
+        position: relative;
+
+        &:last-child {
+            flex-grow: 1;
+        }
+    }
+
+    .l-header-left,
+    .l-header-right {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+}
+
+.l-content {
+    flex-grow: 1;
     overflow: auto;
 
     @media print {

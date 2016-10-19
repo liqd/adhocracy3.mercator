@@ -24,7 +24,6 @@ and a primary action (e.g. create proposal or like).
 .resource-header {
     @include rem(padding, 3rem 4rem 4rem);
     position: relative;
-    margin-bottom: $padding;
     z-index: 0;
     text-align: center;
 }
