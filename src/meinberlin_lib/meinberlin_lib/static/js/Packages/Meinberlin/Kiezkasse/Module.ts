@@ -52,11 +52,11 @@ export var register = (angular) => {
                 hasDescription: true,
                 hasLocation: true,
                 hasLocationText: true,
+                item: RIKiezkasseProposal,
                 maxBudget: 50000,
-                proposalClass: RIKiezkasseProposal,
                 proposalColumn: adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProposalColumn.html",
                 proposalSheet: SIKiezkasseProposal,
-                proposalVersionClass: RIKiezkasseProposalVersion
+                version: RIKiezkasseProposalVersion
             });
         }])
         .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {

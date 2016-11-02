@@ -46,9 +46,9 @@ export var register = (angular) => {
                 hasCommentColumn: true,
                 hasDescription: true,
                 hasLocation: true,
-                proposalClass: RIGeoProposal,
+                item: RIGeoProposal,
                 proposalColumn: adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProposalColumn.html",
-                proposalVersionClass: RIGeoProposalVersion
+                version: RIGeoProposalVersion
             });
         }])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider, adhConfig) => {

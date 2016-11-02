@@ -3,10 +3,16 @@
         <adh-idea-collection-detail-column></adh-idea-collection-detail-column>
     </adh-moving-column>
     <adh-moving-column>
-        <adh-idea-collection-proposal-create-column data-ng-if="view === 'create_proposal'"></adh-idea-collection-proposal-create-column>
-        <adh-idea-collection-proposal-edit-column data-ng-if="view === 'edit'"></adh-idea-collection-proposal-edit-column>
-        <adh-idea-collection-proposal-image-column data-ng-if="processProperties.hasImage && view === 'image'"></adh-idea-collection-proposal-image-column>
-        <ng-include data-ng-if="view !== 'create_proposal' && view !== 'edit' && view !== 'image'" src="processProperties.proposalColumn"></ng-include>
+        <div data-ng-if="!processProperties.document">
+            <adh-idea-collection-proposal-create-column data-ng-if="view === 'create_proposal'"></adh-idea-collection-proposal-create-column>
+            <adh-idea-collection-proposal-edit-column data-ng-if="view === 'edit'"></adh-idea-collection-proposal-edit-column>
+            <adh-idea-collection-proposal-image-column data-ng-if="processProperties.hasImage && view === 'image'"></adh-idea-collection-proposal-image-column>
+        </div>
+        <div data-ng-if="processProperties.document">
+            <adh-document-create-column data-ng-if="view === 'create_document'"></adh-document-create-column>
+            <adh-document-edit-column data-ng-if="view === 'edit'"></adh-document-edit-column>
+        </div>
+        <ng-include data-ng-if="view !== 'create_document' && view !== 'create_proposal' && view !== 'edit' && view !== 'image'" src="processProperties.proposalColumn"></ng-include>
     </adh-moving-column>
     <adh-moving-column>
         <adh-comment-column data-ng-if="processProperties.hasCommentColumn"></adh-comment-column>

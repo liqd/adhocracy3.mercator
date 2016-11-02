@@ -36,12 +36,13 @@ export var register = (angular) => {
         .config(["adhConfig", "adhProcessProvider", (adhConfig, adhProcessProvider : AdhProcess.Provider) => {
             adhProcessProvider.templates[RIPcompassProcess.content_type] =
                 "<adh-idea-collection-workbench data-process-properties=\"processProperties\"></adh-idea-collection-workbench>";
-            adhProcessProvider.processProperties[RIPcompassProcess.content_type] = {
-                hasCommmentColumn: true,
+            adhProcessProvider.setProperties(RIPcompassProcess.content_type, {
+                proposalColumn: adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProposalColumn.html",
+                hasAuthorInListItem: true,
+                hasCommentColumn: true,
                 hasDescription: true,
-                proposalClass: RIProposal,
-                proposalDetailColumn: adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProposalDetailColumn.html",
-                proposalVersionClass: RIProposalVersion
-            };
+                item: RIProposal,
+                version: RIProposalVersion
+            });
         }]);
 };
