@@ -26,7 +26,7 @@ import * as SIRateable from "../../../../Resources_/adhocracy_core/sheets/rate/I
 import * as SITitle from "../../../../Resources_/adhocracy_core/sheets/title/ITitle";
 import * as SIVersionable from "../../../../Resources_/adhocracy_core/sheets/versions/IVersionable";
 
-var pkgLocation = "/Core/IdeaCollection/Proposal";
+export var pkgLocation = "/Core/IdeaCollection/Proposal";
 
 
 export interface IScope extends angular.IScope {
@@ -256,9 +256,12 @@ var postEdit = (
 };
 
 export var detailDirective = (
+    processType? : string
+) => (
     adhConfig : AdhConfig.IService,
     adhHttp : AdhHttp.Service,
     adhPermissions : AdhPermissions.Service,
+    adhProcess : AdhProcess.Service,
     adhRate : AdhRate.Service,
     adhTopLevelState : AdhTopLevelState.Service,
     adhGetBadges : AdhBadge.IGetBadgeAssignments,
@@ -269,9 +272,13 @@ export var detailDirective = (
         templateUrl: adhConfig.pkg_path + pkgLocation + "/Detail.html",
         scope: {
             path: "@",
-            processProperties: "="
+            processProperties: "=?"
         },
         link: (scope : IScope) => {
+            if (!scope.processProperties && processType) {
+                scope.processProperties = adhProcess.getProperties(processType);
+            }
+
             bindPath(adhConfig, adhHttp, adhPermissions, adhRate, adhTopLevelState, adhGetBadges, $q)(
                 scope, undefined);
             scope.commentType = RICommentVersion.content_type;

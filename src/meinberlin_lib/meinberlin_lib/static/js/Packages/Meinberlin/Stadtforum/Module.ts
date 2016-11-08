@@ -47,11 +47,12 @@ export var register = (angular) => {
             "adhConfig",
             "adhHttp",
             "adhPermissions",
+            "adhProcess",
             "adhRate",
             "adhTopLevelState",
             "adhGetBadges",
             "$q",
-            AdhIdeaCollectionProposal.detailDirective])
+            AdhIdeaCollectionProposal.detailDirective(processType)])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider : AdhResourceArea.Provider, adhConfig) => {
             var registerRoutes = AdhIdeaCollectionWorkbench.registerRoutesFactory(
                 RIStadtforumProcess, RIPoll, RIProposalVersion, false);
