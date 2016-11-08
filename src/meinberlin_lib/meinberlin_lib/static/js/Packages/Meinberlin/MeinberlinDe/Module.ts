@@ -2,14 +2,12 @@ import * as AdhEmbedModule from "../../Core/Embed/Module";
 import * as AdhResourceAreaModule from "../../Core/ResourceArea/Module";
 import * as AdhTopLevelStateModule from "../../Core/TopLevelState/Module";
 
-import * as AdhDebateWorkbenchModule from "../../Core/DebateWorkbench/Module";
 import * as AdhMeinberlinAlexanderplatzWorkbenchModule from "../Alexanderplatz/Workbench/Module";
 import * as AdhIdeaCollectionModule from "../../Core/IdeaCollection/Module";
 
 import * as AdhEmbed from "../../Core/Embed/Embed";
 import * as AdhResourceArea from "../../Core/ResourceArea/ResourceArea";
 
-import * as AdhDebateWorkbench from "../../Core/DebateWorkbench/DebateWorkbench";
 import * as AdhMeinberlinAlexanderplatzWorkbench from "../Alexanderplatz/Workbench/Workbench";
 import * as AdhIdeaCollectionWorkbench from "../../Core/IdeaCollection/Workbench/Workbench";
 
@@ -18,6 +16,8 @@ import RIBuergerhaushaltProcess from "../../../Resources_/adhocracy_meinberlin/r
 import RIBuergerhaushaltProposal from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposal";
 import RIBuergerhaushaltProposalVersion from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposalVersion";
 import RICollaborativeTextProcess from "../../../Resources_/adhocracy_meinberlin/resources/collaborative_text/IProcess";
+import RIDocument from "../../../Resources_/adhocracy_core/resources/document/IDocument";
+import RIDocumentVersion from "../../../Resources_/adhocracy_core/resources/document/IDocumentVersion";
 import RIGeoProposal from "../../../Resources_/adhocracy_core/resources/proposal/IGeoProposal";
 import RIGeoProposalVersion from "../../../Resources_/adhocracy_core/resources/proposal/IGeoProposalVersion";
 import RIIdeaCollectionProcess from "../../../Resources_/adhocracy_meinberlin/resources/idea_collection/IProcess";
@@ -36,7 +36,6 @@ export var moduleName = "adhMeinberlinDe";
 export var register = (angular) => {
     angular
         .module(moduleName, [
-            AdhDebateWorkbenchModule.moduleName,
             AdhEmbedModule.moduleName,
             AdhIdeaCollectionModule.moduleName,
             AdhMeinberlinAlexanderplatzWorkbenchModule.moduleName,
@@ -48,23 +47,40 @@ export var register = (angular) => {
             adhEmbedProvider.contextHeaders["mein.berlin.de"] = "<adh-meinberlin-de-header></adh-meinberlin-de-header>";
         }])
         .config(["adhResourceAreaProvider", (adhResourceAreaProvider : AdhResourceArea.Provider) => {
-            AdhDebateWorkbench.registerRoutes(
-                RICollaborativeTextProcess, "mein.berlin.de")(adhResourceAreaProvider);
             AdhMeinberlinAlexanderplatzWorkbench.registerRoutes(
                 RIAlexanderplatzProcess.content_type, "mein.berlin.de")(adhResourceAreaProvider);
 
-            var registerRoutes1 = AdhIdeaCollectionWorkbench.registerRoutesFactory(
-                RIBuergerhaushaltProcess, RIBuergerhaushaltProposal, RIBuergerhaushaltProposalVersion, true);
+            var registerRoutes1 = AdhIdeaCollectionWorkbench.registerCommonRoutesFactory(
+                RIBuergerhaushaltProcess, RIBuergerhaushaltProposal, RIBuergerhaushaltProposalVersion);
             registerRoutes1("mein.berlin.de")(adhResourceAreaProvider);
-            var registerRoutes2 = AdhIdeaCollectionWorkbench.registerRoutesFactory(
-                RIIdeaCollectionProcess, RIGeoProposal, RIGeoProposalVersion, true);
+            var registerRoutes2 = AdhIdeaCollectionWorkbench.registerCommonRoutesFactory(
+                RIIdeaCollectionProcess, RIGeoProposal, RIGeoProposalVersion);
             registerRoutes2("mein.berlin.de")(adhResourceAreaProvider);
-            var registerRoutes3 = AdhIdeaCollectionWorkbench.registerRoutesFactory(
-                RIKiezkasseProcess, RIKiezkasseProposal, RIKiezkasseProposalVersion, true);
+            var registerRoutes3 = AdhIdeaCollectionWorkbench.registerCommonRoutesFactory(
+                RIKiezkasseProcess, RIKiezkasseProposal, RIKiezkasseProposalVersion);
             registerRoutes3("mein.berlin.de")(adhResourceAreaProvider);
-            var registerRoutes4 = AdhIdeaCollectionWorkbench.registerRoutesFactory(
-                RIStadtforumProcess, RIPoll, RIProposalVersion, false);
+            var registerRoutes4 = AdhIdeaCollectionWorkbench.registerCommonRoutesFactory(
+                RIStadtforumProcess, RIPoll, RIProposalVersion);
             registerRoutes4("mein.berlin.de")(adhResourceAreaProvider);
+            var registerRoutes5 = AdhIdeaCollectionWorkbench.registerCommonRoutesFactory(
+                RICollaborativeTextProcess, RIDocument, RIDocumentVersion);
+            registerRoutes5("mein.berlin.de")(adhResourceAreaProvider);
+
+            var registerRoutes6 = AdhIdeaCollectionWorkbench.registerProposalRoutesFactory(
+                RIBuergerhaushaltProcess, RIBuergerhaushaltProposal, RIBuergerhaushaltProposalVersion, true);
+            registerRoutes6("mein.berlin.de")(adhResourceAreaProvider);
+            var registerRoutes7 = AdhIdeaCollectionWorkbench.registerProposalRoutesFactory(
+                RIIdeaCollectionProcess, RIGeoProposal, RIGeoProposalVersion, true);
+            registerRoutes7("mein.berlin.de")(adhResourceAreaProvider);
+            var registerRoutes8 = AdhIdeaCollectionWorkbench.registerProposalRoutesFactory(
+                RIKiezkasseProcess, RIKiezkasseProposal, RIKiezkasseProposalVersion, true);
+            registerRoutes8("mein.berlin.de")(adhResourceAreaProvider);
+            var registerRoutes9 = AdhIdeaCollectionWorkbench.registerProposalRoutesFactory(
+                RIStadtforumProcess, RIPoll, RIProposalVersion, false);
+            registerRoutes9("mein.berlin.de")(adhResourceAreaProvider);
+            var registerRoutes10 = AdhIdeaCollectionWorkbench.registerDocumentRoutesFactory(
+                RICollaborativeTextProcess, RIDocument, RIDocumentVersion);
+            registerRoutes10("mein.berlin.de")(adhResourceAreaProvider);
         }])
         .directive("adhMeinberlinDeHeader", ["adhConfig", "adhTopLevelState", AdhMeinberlinDe.headerDirective]);
 };

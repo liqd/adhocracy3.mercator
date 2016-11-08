@@ -26,21 +26,23 @@ export interface IStateData {
 }
 
 export interface IProcessProperties {
+    createSlot : string;
     detailSlot : string;
+    editSlot : string;
+    hasAuthorInListItem? : boolean;
     hasCommentColumn? : boolean;
     hasCreatorParticipate? : boolean;
     hasDescription? : boolean;
-    hasImage? : boolean;
     hasLocation? : boolean;
     hasLocationText? : boolean;
-    hasAuthorInListItem? : boolean;
+    imageSlot? : string;
+    itemClass;
     // if a process has a proposal budget, but no max budget, then set maxBudget = Infinity.
     maxBudget? : number;
-    proposalClass;
     // WARNING: proposalSheet is not a regular feature of adhocracy,
     // but a hack of Buergerhaushalt and Kiezkasse.
     proposalSheet?;
-    proposalVersionClass;
+    versionClass;
 }
 
 export var getStateData = (sheet : SIWorkflow.ISheet, name : string) : IStateData => {

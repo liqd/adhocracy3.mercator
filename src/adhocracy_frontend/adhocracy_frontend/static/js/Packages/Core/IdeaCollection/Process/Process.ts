@@ -73,8 +73,7 @@ export var detailDirective = (
                             });
                         }
 
-                        var proposalVersion = scope.processProperties.proposalVersionClass;
-                        scope.contentType = proposalVersion.content_type;
+                        scope.contentType = scope.processProperties.versionClass.content_type;
                     });
                 }
             });

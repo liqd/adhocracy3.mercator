@@ -42,8 +42,12 @@ export var register = (angular) => {
             "$q",
             AdhIdeaCollectionPoll.detailDirective(processType)])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider : AdhResourceArea.Provider, adhConfig) => {
-            var registerRoutes = AdhIdeaCollectionWorkbench.registerRoutesFactory(
-                RIStadtforumProcess, RIPoll, RIProposalVersion, false);
+            var registerRoutes = (context? : string) => (provider) => {
+                AdhIdeaCollectionWorkbench.registerCommonRoutesFactory(
+                    RIStadtforumProcess, RIPoll, RIProposalVersion)(context)(provider);
+                AdhIdeaCollectionWorkbench.registerProposalRoutesFactory(
+                    RIStadtforumProcess, RIPoll, RIProposalVersion, false)(context)(provider);
+            };
             registerRoutes()(adhResourceAreaProvider);
 
             var processHeaderSlot = adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
@@ -54,9 +58,11 @@ export var register = (angular) => {
                 "<adh-idea-collection-workbench data-process-properties=\"processProperties\">" +
                 "</adh-idea-collection-workbench>";
             adhProcessProvider.setProperties(processType, {
+                createSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/CreateSlot.html",
                 detailSlot: adhConfig.pkg_path + AdhPoll.pkgLocation + "/DetailSlot.html",
-                proposalClass: RIPoll,
-                proposalVersionClass: RIProposalVersion
+                editSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/EditSlot.html",
+                itemClass: RIPoll,
+                versionClass: RIProposalVersion
             });
         }])
         .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {

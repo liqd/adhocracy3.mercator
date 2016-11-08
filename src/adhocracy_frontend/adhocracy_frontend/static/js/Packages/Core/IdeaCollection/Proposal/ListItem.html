@@ -1,7 +1,7 @@
-<a class="list-item {{selectedState}}" data-ng-class="{ 'm-contains-image': processProperties.hasImage }" href="{{path | adhParentPath | adhResourceUrl }}">
+<a class="list-item {{selectedState}}" data-ng-class="{ 'm-contains-image': processProperties.imageSlot }" href="{{path | adhParentPath | adhResourceUrl }}">
     <adh-show-image
         data-css-class="list-item-image"
-        data-ng-if="processProperties.hasImage"
+        data-ng-if="processProperties.imageSlot"
         data-path="{{data.picture}}"
         data-format="thumbnail"
     ></adh-show-image>

@@ -24,15 +24,10 @@ import * as moment from "moment";
 import * as webshim from "polyfiller";
 
 import * as AdhCoreModule from "./Packages/Core/Module";
-import * as AdhDebateWorkbenchModule from "./Packages/Core/DebateWorkbench/Module";
+import * as AdhSpdCollaborativeTextModule from "./Packages/spd/CollaborativeText/Module";
 
 import * as AdhConfig from "./Packages/Core/Config/Config";
-import * as AdhDebateWorkbench from "./Packages/Core/DebateWorkbench/DebateWorkbench";
-import * as AdhNames from "./Packages/Core/Names/Names";
-import * as AdhProcess from "./Packages/Core/Process/Process";
 import * as AdhTopLevelState from "./Packages/Core/TopLevelState/TopLevelState";
-
-import RIDigitalLebenProcess from "./Resources_/adhocracy_spd/resources/digital_leben/IProcess";
 
 import * as AdhTemplates from "adhTemplates";  if (AdhTemplates) { ; };
 
@@ -66,7 +61,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "duScroll",
         "flow",
         AdhCoreModule.moduleName,
-        AdhDebateWorkbenchModule.moduleName
+        AdhSpdCollaborativeTextModule.moduleName
     ];
 
     if (config.cachebust) {
@@ -123,20 +118,6 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         });
     }]);
 
-    // register workbench
-    app.config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
-        adhProcessProvider.templates[RIDigitalLebenProcess.content_type] =
-            "<adh-debate-workbench></adh-debate-workbench>";
-    }]);
-    app.config(["adhConfig", "adhResourceAreaProvider", (adhConfig, adhResourceAreaProvider) => {
-        var processHeaderSlot = adhConfig.pkg_path + AdhDebateWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
-        adhResourceAreaProvider.processHeaderSlots[RIDigitalLebenProcess.content_type] = processHeaderSlot;
-        AdhDebateWorkbench.registerRoutes(RIDigitalLebenProcess)(adhResourceAreaProvider);
-    }]);
-    app.config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
-        adhNamesProvider.names[RIDigitalLebenProcess.content_type] = "TR__RESOURCE_COLLABORATIVE_TEXT_EDITING";
-    }]);
-
     app.value("angular", angular);
     app.value("leaflet", leaflet);
     app.value("markdownit", markdownit);
@@ -145,6 +126,7 @@ export var init = (config : AdhConfig.IService, metaApi) => {
 
     // register our modules
     AdhCoreModule.register(angular, config, metaApi);
+    AdhSpdCollaborativeTextModule.register(angular);
 
     // force-load some services
     var injector = angular.bootstrap(document.body, ["a3spd"], {strictDi: true});

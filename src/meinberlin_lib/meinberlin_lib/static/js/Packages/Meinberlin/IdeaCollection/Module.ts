@@ -27,8 +27,12 @@ export var register = (angular) => {
             AdhResourceAreaModule.moduleName,
         ])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider: AdhResourceArea.Provider, adhConfig) => {
-            var registerRoutes = AdhIdeaCollectionWorkbench.registerRoutesFactory(
-                RIIdeaCollectionProcess, RIGeoProposal, RIGeoProposalVersion, true);
+            var registerRoutes = (context? : string) => (provider) => {
+                AdhIdeaCollectionWorkbench.registerCommonRoutesFactory(
+                    RIIdeaCollectionProcess, RIGeoProposal, RIGeoProposalVersion)(context)(provider);
+                AdhIdeaCollectionWorkbench.registerProposalRoutesFactory(
+                    RIIdeaCollectionProcess, RIGeoProposal, RIGeoProposalVersion, true)(context)(provider);
+            };
             registerRoutes()(adhResourceAreaProvider);
 
             var processHeaderSlot = adhConfig.pkg_path + AdhIdeaCollectionWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
@@ -39,13 +43,16 @@ export var register = (angular) => {
                 "<adh-idea-collection-workbench data-process-properties=\"processProperties\">" +
                 "</adh-idea-collection-workbench>";
             adhProcessProvider.setProperties(processType, {
+                createSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/CreateSlot.html",
                 detailSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/DetailSlot.html",
+                editSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/EditSlot.html",
                 hasAuthorInListItem: true,
                 hasCommentColumn: true,
                 hasDescription: true,
                 hasLocation: true,
-                proposalClass: RIGeoProposal,
-                proposalVersionClass: RIGeoProposalVersion
+                imageSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/ImageSlot.html",
+                itemClass: RIGeoProposal,
+                versionClass: RIGeoProposalVersion
             });
         }])
         .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {

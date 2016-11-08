@@ -138,7 +138,7 @@ export var bindPath = (
                         scope.data.lat = pointSheet.coordinates[1];
                         scope.data.polygon = polygon;
                     }
-                    if (scope.processProperties.hasImage) {
+                    if (scope.processProperties.imageSlot) {
                         scope.data.picture = SIImageReference.get(resource).picture;
                     }
                     // WARNING: proposalSheet is not a regular feature of adhocracy,
@@ -203,8 +203,8 @@ var postCreate = (
     scope : IScope,
     poolPath : string
 ) => {
-    var proposalClass = scope.processProperties.proposalClass;
-    var proposalVersionClass = scope.processProperties.proposalVersionClass;
+    var proposalClass = scope.processProperties.itemClass;
+    var proposalVersionClass = scope.processProperties.versionClass;
 
     var proposal : ResourcesBase.IResource = {
         path: adhPreliminaryNames.nextPreliminary(),
@@ -237,7 +237,7 @@ var postEdit = (
     scope : IScope,
     oldVersion
 ) => {
-    var proposalVersionClass = scope.processProperties.proposalVersionClass;
+    var proposalVersionClass = scope.processProperties.versionClass;
 
     var proposalVersion : ResourcesBase.IResource = {
         path: adhPreliminaryNames.nextPreliminary(),

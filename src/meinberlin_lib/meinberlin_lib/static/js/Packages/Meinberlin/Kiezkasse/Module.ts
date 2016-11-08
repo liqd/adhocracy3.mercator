@@ -34,8 +34,12 @@ export var register = (angular) => {
             adhEmbedProvider.registerContext("kiezkasse", ["kiezkassen"]);
         }])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider : AdhResourceArea.Provider, adhConfig) => {
-            var registerRoutes = AdhIdeaCollectionWorkbench.registerRoutesFactory(
-                RIKiezkasseProcess, RIKiezkasseProposal, RIKiezkasseProposalVersion, true);
+            var registerRoutes = (context? : string) => (provider) => {
+                AdhIdeaCollectionWorkbench.registerCommonRoutesFactory(
+                    RIKiezkasseProcess, RIKiezkasseProposal, RIKiezkasseProposalVersion)(context)(provider);
+                AdhIdeaCollectionWorkbench.registerProposalRoutesFactory(
+                    RIKiezkasseProcess, RIKiezkasseProposal, RIKiezkasseProposalVersion, true)(context)(provider);
+            };
             registerRoutes()(adhResourceAreaProvider);
             registerRoutes("kiezkasse")(adhResourceAreaProvider);
 
@@ -47,17 +51,19 @@ export var register = (angular) => {
                 "<adh-idea-collection-workbench data-process-properties=\"processProperties\">" +
                 "</adh-idea-collection-workbench>";
             adhProcessProvider.setProperties(processType, {
+                createSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/CreateSlot.html",
                 detailSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/DetailSlot.html",
+                editSlot: adhConfig.pkg_path + AdhIdeaCollectionProposal.pkgLocation + "/EditSlot.html",
                 hasAuthorInListItem: true,
                 hasCommentColumn: true,
                 hasCreatorParticipate: true,
                 hasDescription: true,
                 hasLocation: true,
                 hasLocationText: true,
+                itemClass: RIKiezkasseProposal,
                 maxBudget: 50000,
-                proposalClass: RIKiezkasseProposal,
                 proposalSheet: SIKiezkasseProposal,
-                proposalVersionClass: RIKiezkasseProposalVersion
+                versionClass: RIKiezkasseProposalVersion
             });
         }])
         .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
