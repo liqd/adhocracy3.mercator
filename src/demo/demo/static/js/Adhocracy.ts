@@ -24,17 +24,11 @@ import * as moment from "moment";
 import * as webshim from "polyfiller";
 
 import * as AdhCoreModule from "./Packages/Core/Module";
-import * as AdhDebateWorkbenchModule from "./Packages/Core/DebateWorkbench/Module";
 import * as AdhIdeaCollectionModule from "./Packages/Core/IdeaCollection/Module";
 import * as AdhMeinberlinModule from "./Packages/Meinberlin/Module";
 
 import * as AdhConfig from "./Packages/Core/Config/Config";
-import * as AdhDebateWorkbench from "./Packages/Core/DebateWorkbench/DebateWorkbench";
-import * as AdhNames from "./Packages/Core/Names/Names";
-import * as AdhProcess from "./Packages/Core/Process/Process";
 import * as AdhTopLevelState from "./Packages/Core/TopLevelState/TopLevelState";
-
-import RICollaborativeTextProcess from "./Resources_/adhocracy_meinberlin/resources/collaborative_text/IProcess";
 
 import * as AdhTemplates from "adhTemplates";  if (AdhTemplates) { ; };
 
@@ -67,7 +61,6 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         "ngMessages",
         "flow",
         AdhCoreModule.moduleName,
-        AdhDebateWorkbenchModule.moduleName,
         AdhIdeaCollectionModule.moduleName,
         AdhMeinberlinModule.moduleName
     ];
@@ -127,20 +120,6 @@ export var init = (config : AdhConfig.IService, metaApi) => {
         $ariaProvider.config({
             tabindex: false
         });
-    }]);
-
-    // register debate workbench
-    app.config(["adhProcessProvider", (adhProcessProvider : AdhProcess.Provider) => {
-        adhProcessProvider.templates[RICollaborativeTextProcess.content_type] =
-            "<adh-debate-workbench></adh-debate-workbench>";
-    }]);
-    app.config(["adhConfig", "adhResourceAreaProvider", (adhConfig, adhResourceAreaProvider) => {
-        var processHeaderSlot = adhConfig.pkg_path + AdhDebateWorkbench.pkgLocation + "/ProcessHeaderSlot.html";
-        adhResourceAreaProvider.processHeaderSlots[RICollaborativeTextProcess.content_type] = processHeaderSlot;
-        AdhDebateWorkbench.registerRoutes(RICollaborativeTextProcess)(adhResourceAreaProvider);
-    }]);
-    app.config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
-        adhNamesProvider.names[RICollaborativeTextProcess.content_type] = "TR__RESOURCE_COLLABORATIVE_TEXT_EDITING";
     }]);
 
     app.value("angular", angular);

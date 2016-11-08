@@ -48,8 +48,8 @@ export var register = (angular) => {
                 hasCommentColumn: true,
                 hasDescription: true,
                 hasLocation: true,
-                proposalClass: RIGeoProposal,
-                proposalVersionClass: RIGeoProposalVersion
+                item: RIGeoProposal,
+                version: RIGeoProposalVersion
             });
         }])
         .config(["adhResourceAreaProvider", "adhConfig", (adhResourceAreaProvider, adhConfig) => {

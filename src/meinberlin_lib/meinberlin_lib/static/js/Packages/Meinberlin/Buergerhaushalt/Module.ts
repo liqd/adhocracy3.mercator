@@ -1,17 +1,15 @@
 import * as AdhEmbedModule from "../../Core/Embed/Module";
+import * as AdhIdeaCollectionModule from "../../Core/IdeaCollection/Module";
 import * as AdhNamesModule from "../../Core/Names/Module";
 import * as AdhProcessModule from "../../Core/Process/Module";
 import * as AdhResourceAreaModule from "../../Core/ResourceArea/Module";
 
-import * as AdhIdeaCollectionModule from "../../Core/IdeaCollection/Module";
-
 import * as AdhEmbed from "../../Core/Embed/Embed";
+import * as AdhIdeaCollectionProposal from "../../Core/IdeaCollection/Proposal/Proposal";
+import * as AdhIdeaCollectionWorkbench from "../../Core/IdeaCollection/Workbench/Workbench";
 import * as AdhNames from "../../Core/Names/Names";
 import * as AdhProcess from "../../Core/Process/Process";
 import * as AdhResourceArea from "../../Core/ResourceArea/ResourceArea";
-
-import * as AdhIdeaCollectionProposal from "../../Core/IdeaCollection/Proposal/Proposal";
-import * as AdhIdeaCollectionWorkbench from "../../Core/IdeaCollection/Workbench/Workbench";
 
 import RIBuergerhaushaltProcess from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProcess";
 import RIBuergerhaushaltProposal from "../../../Resources_/adhocracy_meinberlin/resources/burgerhaushalt/IProposal";
@@ -55,10 +53,10 @@ export var register = (angular) => {
                 hasDescription: true,
                 hasLocation: true,
                 hasLocationText: true,
+                item: RIBuergerhaushaltProposal,
                 maxBudget: Infinity,
-                proposalClass: RIBuergerhaushaltProposal,
                 proposalSheet: SIBuergerhaushaltProposal,
-                proposalVersionClass: RIBuergerhaushaltProposalVersion
+                version: RIBuergerhaushaltProposalVersion
             });
         }])
         .config(["adhNamesProvider", (adhNamesProvider : AdhNames.Provider) => {
