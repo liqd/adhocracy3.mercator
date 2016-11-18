@@ -64,7 +64,6 @@ src/mercator/mercator/build/
 src/meinberlin/meinberlin/build/
 src/s1/s1/build/
 src/spd/spd/build/
-src/demo/demo/build/
 /tmp
 /wheelhouse
 /share
