@@ -32,6 +32,7 @@ import * as SIMetadata from "../../../Resources_/adhocracy_core/sheets/metadata/
 import * as SIPasswordAuthentication from "../../../Resources_/adhocracy_core/sheets/principal/IPasswordAuthentication";
 import * as SIPool from "../../../Resources_/adhocracy_core/sheets/pool/IPool";
 import * as SIUserBasic from "../../../Resources_/adhocracy_core/sheets/principal/IUserBasic";
+import * as SIUserExtended from "../../../Resources_/adhocracy_core/sheets/principal/IUserExtended";
 
 var pkgLocation = "/Core/User";
 
@@ -735,7 +736,7 @@ var postEdit = (
 ) => (
     path : string,
     data : {
-        name : string;
+        name? : string;
         email? : string;
         password? : string;
         anonymize? : boolean;
@@ -797,30 +798,66 @@ export var userEditDirective = (
                     adhHttp.get(path).then((user) => {
                         scope.data = {
                             name: SIUserBasic.get(user).name,
-                            email: "",
+                            editingName: false,
+                            email: SIUserExtended.get(user).email,
+                            editingEmail: false,
                             password: "",
+                            passwordRepeat: "",
+                            editingPassword: false,
                             anonymize: SIAnonymizeDefault.get(user).anonymize,
                         };
+                        scope.data.toggleEditName = () => { scope.data.editingName = !scope.data.editingName; };
+                        scope.data.toggleEditEmail = () => { scope.data.editingEmail = !scope.data.editingEmail; };
+                        scope.data.toggleEditPassword = () => { scope.data.editingPassword = !scope.data.editingPassword; };
+
+                        if (scope.data.editingPassword) {
+                            scope.$watchGroup(["data.passwordRepeat", "data.password"], (values) => {
+                                // empty may by "" or undefined, so it needs special handling
+                                scope.userPasswordEditForm.password_repeat.$setValidity(
+                                    "repeat", (values[0] === values[1]) || (!values[0] && !values[1]));
+                            });
+                        }
                     });
                 }
             });
 
-            scope.$watchGroup(["data.passwordRepeat", "data.password"], (values) => {
-                // empty may by "" or undefined, so it needs special handling
-                scope.userEditForm.password_repeat.$setValidity("repeat", (values[0] === values[1]) || (!values[0] && !values[1]));
-            });
-
-            scope.submit = () => {
-                return adhSubmitIfValid(scope, element, scope.userEditForm, () => {
-                    return postEdit(adhHttp)(scope.path, scope.data).then((result) => {
-                        $location.url(adhResourceUrlFilter(scope.path));
+            scope.submitName = () => {
+                return adhSubmitIfValid(scope, element, scope.userNameEditForm, () => {
+                    scope.data.email = undefined;
+                    return postEdit(adhHttp)(scope.path, scope.data).then(() => {
                         adhUser.loadUser(scope.path);
+                        scope.data.toggleEditName();
+                    });
+                });
+            };
+            scope.submitEmail = () => {
+                if (scope.userEmailEditForm.email.$dirty) {
+                    return adhSubmitIfValid(scope, element, scope.userEmailEditForm, () => {
+                        return postEdit(adhHttp)(scope.path, scope.data).then(() => {
+                            adhUser.loadUser(scope.path);
+                            scope.data.toggleEditEmail();
+                        });
+                    });
+                } else {
+                    scope.data.toggleEditEmail();
+                }
+            };
+            scope.submitPassword = () => {
+                return adhSubmitIfValid(scope, element, scope.userPasswordEditForm, () => {
+                    scope.data.email = undefined;
+                    return postEdit(adhHttp)(scope.path, scope.data).then(() => {
+                        adhUser.loadUser(scope.path);
+                        scope.data.toggleEditPassword();
                     });
                 });
             };
 
-            scope.cancel = () => {
-                adhTopLevelState.goToCameFrom(adhResourceUrlFilter(scope.path));
+            scope.backToUserProfile = () => {
+                scope.data.email = undefined;
+                return postEdit(adhHttp)(scope.path, scope.data).then(() => {
+                    adhUser.loadUser(scope.path);
+                    adhTopLevelState.goToCameFrom(adhResourceUrlFilter(scope.path));
+                });
             };
         }
     };

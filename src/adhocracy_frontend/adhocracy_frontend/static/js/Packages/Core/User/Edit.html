@@ -1,90 +1,146 @@
-<div class="resource-navigation">
-    <div class="resource-navigation-breadcrumbs">
-        <adh-go-to-came-from data-default="path | adhResourceUrl"></adh-go-to-came-from>
-    </div>
+<div class="form-error" data-ng-repeat="error in errors track by $index">
+    <p>{{ error | adhFormatError | translate }}</p>
 </div>
-
 <form
-    name="userEditForm"
+    name="userNameEditForm"
     class="l-padding"
     novalidate="novalidate"
-    data-ng-submit="submit()">
-
-    <div class="form-error" data-ng-repeat="error in errors track by $index">
-        <p>{{ error | adhFormatError | translate }}</p>
-    </div>
-
-    <label>
-        <span class="label-text">{{ "TR__USERNAME" | translate }}</span>
-        <input
-            type="text"
-            name="name"
-            required="required"
-            data-ng-model="data.name" />
-        <span class="input-error" data-ng-show="showError(userEditForm, userEditForm.name, 'required')">
-            {{ "TR__ERROR_REQUIRED" | translate }}
-        </span>
-    </label>
-    <label>
-        <span class="label-text">{{ "TR__EMAIL" | translate }}</span>
-        <input
-            type="email"
-            name="email"
-            data-ng-model="data.email" />
-    </label>
-    <label>
-        <span class="label-text">{{ "TR__PASSWORD" | translate }}</span>
-        <input
-            type="password"
-            name="password"
-            data-ng-model="data.password"
-            data-ng-minlength="6"
-            data-ng-maxlength="100" />
-        <span class="input-error" data-ng-show="showError(userEditForm, userEditForm.password, 'minlength')">
-            {{ "TR__ERROR_TOO_SHORT_PASSWORD" | translate }}
-        </span>
-    </label>
-    <label>
-        <span class="label-text">{{ "TR__PASSWORD_REPEAT" | translate }}</span>
-        <input
-            type="password"
-            name="password_repeat"
-            data-ng-model="data.passwordRepeat" />
-        <span class="input-error" data-ng-show="showError(userEditForm, userEditForm.password_repeat, 'repeat')">
-            {{ "TR__ERROR_MATCH_PASSWORD" | translate }}
-        </span>
-    </label>
-    <label>
-        <span class="label-text">{{ "TR__PASSWORD_OLD" | translate }}</span>
-        <input
-            type="password"
-            name="password_old"
-            data-ng-required="data.password || data.email"
-            data-ng-model="data.passwordOld" />
-        <span class="input-error" data-ng-show="showError(userEditForm, userEditForm.password_old, 'required')">
-            {{ "TR__ERROR_REQUIRED_PASSWORD" | translate }}
-        </span>
-    </label>
-    <label data-ng-if="config.anonymize_enabled">
-        <input
-            type="checkbox"
-            data-ng-model="data.anonymize" />
-        <span class="label-text">{{ "TR__ANONYMIZE_DEFAULT" | translate }}</span>
-    </label>
-
-    <footer class="form-footer">
-        <div class="form-footer-right">
+    data-ng-submit="submitName()">
+    <p>
+        <h4>{{ "TR__USERNAME" | translate }}</h4>
+        <div data-ng-if="!data.editingName">
+            <span class="user-edit-form-field">{{data.name}}</span>
+            <button
+                type="button"
+                class="button-cta"
+                data-ng-if="!data.editingName"
+                data-ng-disabled="data.editingEmail || data.editingPassword"
+                data-ng-click="data.toggleEditName()">{{ "TR__EDIT" | translate}}</button>
+        </div>
+        <div data-ng-if="data.editingName">
+            <input
+                type="text"
+                name="name"
+                class="user-edit-form-field"
+                data-ng-model="data.name" />
+            <button
+                type="button"
+                class="button-cta"
+                data-ng-click="data.toggleEditName()">{{ "TR__CANCEL" | translate}}</button>
             <input
                 type="submit"
-                name="submit"
                 value="{{ 'TR__SAVE' | translate }}"
                 class="button-cta form-footer-button-cta" />
         </div>
-        <div class="form-footer-left">
-            <a
-                href=""
-                data-ng-click="cancel()"
-                class="button form-footer-button">{{ "TR__CANCEL" | translate }}</a>
-        </div>
-    </footer>
+    </p>
 </form>
+<form
+    name="userEmailEditForm"
+    class="l-padding"
+    novalidate="novalidate"
+    data-ng-submit="submitEmail()">
+    <p>
+        <h4>{{ "TR__EMAIL" | translate }}</h4>
+        <div data-ng-if="!data.editingEmail">
+            <span class="user-edit-form-field">{{data.email}}</span>
+            <button
+                type="button"
+                class="button-cta"
+                data-ng-if="!data.editingEmail"
+                data-ng-disabled="data.editingName || data.editingPassword"
+                data-ng-click="data.toggleEditEmail()">{{ "TR__EDIT" | translate}}</button>
+        </div>
+        <div data-ng-if="data.editingEmail">
+            <input
+                type="text"
+                name="email"
+                class="user-edit-form-field"
+                data-ng-model="data.email" />
+            <span class="label-text">{{ "TR__PASSWORD" | translate }}</span>
+            <input
+                type="password"
+                name="password_old"
+                data-ng-required="userEditForm.email.$dirty"
+                data-ng-model="data.passwordOld" />
+            <span class="input-error" data-ng-show="showError(userEmailEditForm, userEmailEditForm.password_old, 'required')">
+                {{ "TR__ERROR_REQUIRED_PASSWORD" | translate }}
+            </span>
+            <button
+                type="button"
+                class="button-cta"
+                data-ng-click="data.toggleEditEmail()">{{ "TR__CANCEL" | translate}}</button>
+            <input
+                type="submit"
+                value="{{ 'TR__SAVE' | translate }}"
+                class="button-cta form-footer-button-cta" />
+        </div>
+    </p>
+</form>
+<form
+    name="userPasswordEditForm"
+    class="l-padding"
+    novalidate="novalidate"
+    data-ng-submit="submitPassword()">
+    <p>
+        <div data-ng-if="!data.editingPassword">
+            <h4>{{ "TR__PASSWORD" | translate }}</h4>
+            <button
+                type="button"
+                class="button-cta"
+                data-ng-if="!data.editingPassword"
+                data-ng-disabled="data.editingEmail || data.editingName"
+                data-ng-click="data.toggleEditPassword()">{{ "TR__EDIT" | translate}}</button>
+        </div>
+        <div data-ng-if="data.editingPassword">
+            <span class="label-text">{{ "TR__PASSWORD_NEW" | translate }}</span>
+            <input
+                type="password"
+                name="password"
+                data-ng-model="data.password"
+                data-ng-minlength="6"
+                data-ng-maxlength="100" />
+            <span class="input-error" data-ng-show="showError(userPasswordEditForm, userPasswordEditForm.password, 'minlength')">
+                {{ "TR__ERROR_TOO_SHORT_PASSWORD" | translate }}
+            </span>
+            <span class="label-text">{{ "TR__PASSWORD_REPEAT" | translate }}</span>
+            <input
+                type="password"
+                name="password_repeat"
+                data-ng-model="data.passwordRepeat" />
+            <span class="input-error" data-ng-show="showError(userPasswordEditForm, userPasswordEditForm.password_repeat, 'repeat')">
+                {{ "TR__ERROR_MATCH_PASSWORD" | translate }}
+            </span>
+            <span class="label-text">{{ "TR__PASSWORD_OLD" | translate }}</span>
+            <input
+                type="password"
+                name="password_old"
+                data-ng-required="userEditForm.password.$dirty"
+                data-ng-model="data.passwordOld" />
+            <span class="input-error" data-ng-show="showError(userPasswordEditForm, userPasswordEditForm.password_old, 'required')">
+                {{ "TR__ERROR_REQUIRED_PASSWORD" | translate }}
+            </span>
+            <button
+                type="button"
+                class="button-cta"
+                data-ng-click="data.toggleEditPassword()">{{ "TR__CANCEL" | translate}}</button>
+            <input
+                type="submit"
+                value="{{ 'TR__SAVE' | translate }}"
+                class="button-cta form-footer-button-cta" />
+        </div>
+    </p>
+</form>
+<p data-ng-if="config.anonymize_enabled">
+    <input
+        type="checkbox"
+        data-ng-model="data.anonymize" />
+    <span class="label-text">{{ "TR__ANONYMIZE_DEFAULT" | translate }}</span>
+</p>
+<footer class="form-footer">
+    <div class="form-footer-left">
+        <a
+            href=""
+            data-ng-click="backToUserProfile()"
+            class="button form-footer-button">{{ "TR__BACK_TO_USER_PROFILE" | translate }}</a>
+    </div>
+</footer>
