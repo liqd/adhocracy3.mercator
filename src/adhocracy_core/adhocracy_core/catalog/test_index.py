@@ -227,14 +227,16 @@ class TestReference:
         with raises(KeyError):
             inst.apply(query)
 
-    def test_apply_intersect_reference_not_exists(self, mock_objectmap):
+    def test_apply_intersect_reference_not_exists(self, mock_objectmap, mock_graph):
         # actually we test the default implementation in hypatia.util
         import BTrees
         from adhocracy_core.interfaces import ISheet
         from adhocracy_core.interfaces import Reference
         mock_objectmap.sourceids.return_value = set()
         inst = self.make_one()
-        inst._mock_objectmap = mock_objectmap
+        inst._objectmap = mock_objectmap
+        mock_graph.get_reftypes.return_value = []
+        inst.__graph__ = mock_graph
         target = testing.DummyResource()
         reference = Reference(None, ISheet, '', target)
         query = {'reference': reference}

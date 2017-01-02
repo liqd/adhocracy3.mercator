@@ -65,6 +65,9 @@ src/meinberlin/meinberlin/build/
 src/s1/s1/build/
 src/spd/spd/build/
 src/demo/demo/build/
+src/hypatia
+src/sphinxcontrib-programoutput
+src/bpython/
 /tmp
 /wheelhouse
 /share

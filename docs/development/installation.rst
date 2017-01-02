@@ -32,9 +32,9 @@ Checkout source code ::
 
 Create virtualenv ::
 
-    virtualenv -p python3.4 .
+    pyvenv-3.5 .
 
-If you don't have python 3.4 on your system, you may compile python 3.4 and
+If you don't have python 3.5 on your system, you may compile python 3.5 and
 Pillow instead of creating a virtualenv ::
 
     cd python
@@ -45,7 +45,7 @@ Pillow instead of creating a virtualenv ::
 
 Install adhocracy ::
 
-    ./bin/python ./bootstrap.py --buildout-version 2.4.4 --setuptools-version=18.3.2
+    ./bin/python ./bootstrap.py --buildout-version 2.5.3 --setuptools-version=32.3.0
     ./bin/buildout
 
 Update your shell environment::

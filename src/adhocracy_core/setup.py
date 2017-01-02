@@ -52,11 +52,11 @@ test_requires = [
     'lingua',
     'testfixtures',
     'Sphinx',
+    'sphinxcontrib_programoutput',
     'repoze.sphinx.autointerface',
     'sphinx-autodoc-annotation',
     'sphinxcontrib-blockdiag',
     'sphinxcontrib-actdiag',
-    'sphinxcontrib-programoutput',
     'sphinx-rtd-theme',
     'requires.io',
 ]

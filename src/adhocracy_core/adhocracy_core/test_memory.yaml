@@ -3,6 +3,7 @@
 # include 3rd party pyramid packages
 
 include:
+  pyramid_mailer: False
   pyramid_mailer.testing: True
 
 # configure 3rd party pyramid packages

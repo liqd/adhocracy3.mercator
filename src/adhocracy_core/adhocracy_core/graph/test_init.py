@@ -412,7 +412,7 @@ class TestGraphSetReferencesForIsheet:
     def test_with_references_is_none(self, context, mock_graph, registry):
         references = {'references': None}
         self.call_fut(mock_graph, context, ISheet, references, registry)
-        mock_graph.set_references.assert_called is False
+        mock_graph.set_references.called is False
 
     def test_with_references_is_one_resource(self, context, mock_graph, registry):
         from adhocracy_core.interfaces import IResource

@@ -1374,7 +1374,7 @@ class TestDeferredValidateResetPasswordEmail:
                                      activate=Mock())
         mock_user_locator.get_user_by_email.return_value = user
         validator(node, 'test@email.de')
-        user.activate.assert_called
+        assert user.activate.called
         assert request_.validated['user'] is user
 
 

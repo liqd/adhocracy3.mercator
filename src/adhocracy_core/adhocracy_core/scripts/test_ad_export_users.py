@@ -31,8 +31,9 @@ class TestGetUsers:
     def test_get_users(self, context, registry, user1):
         mock_locator = Mock()
         registry.getMultiAdapter = mock_locator
+        import pdb; pdb.set_trace()
         users = self.call_fut(context, registry)
-        mock_locator.get_users.assert_called_once()
+        assert mock_locator.get_users.called
 
 class TestWriteUsersToCSV:
 

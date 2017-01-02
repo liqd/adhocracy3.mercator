@@ -1301,7 +1301,7 @@ class TestPasswordResetView:
         mock_remember.return_value = [('X-User-Token', 'token')]
         inst = self.make_one(context, request_)
         result = inst.post()
-        mock_reset.reset_password.assert_called()
+        assert mock_reset.reset_password.called
         mock_remember.assert_called_with(request_, '/')
         mock_reset.reset_password.assert_called_with('password')
         assert result == {'status': 'success',
