@@ -42,3 +42,4 @@ deploy:
   script:
   - bin/ad_make_wheels
   - rsync -e "ssh -o ProxyCommand='ssh root@russell.partou.org lxc exec %h nc localhost 22' -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" -r --quiet $TRAVIS_BUILD_DIR/parts/wheels/ build@partou-build-prod-guest12:/var/www/wheels.partou.org/"
+  all_branches: true
