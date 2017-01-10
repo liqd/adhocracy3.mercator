@@ -49,7 +49,12 @@ class ImageDownload(File, AssetDownload):
             return self._get_response()
         elif self.dimensions:
             original = self._get_asset_file_in_lineage(registry)
-            self._upload_crop_and_resize(original)
+            self._upload(original)
+            transaction.commit()  # to avoid BlobError: Uncommitted changes
+            return self._get_response()
+        elif self.name == '0000002':
+            original = self._get_asset_file_in_lineage(registry)
+            self._upload(original, False)
             transaction.commit()  # to avoid BlobError: Uncommitted changes
             return self._get_response()
         else:
@@ -65,11 +70,21 @@ class ImageDownload(File, AssetDownload):
     def _get_response(self) -> FileResponse:
         return File.get_response(self)
 
-    def _upload_crop_and_resize(self, original: File):
+    def _upload(self, original: File, crop_and_resize: bool = True):
         with original.blob.open('r') as blobdata:
             image = Image.open(blobdata)
-            cropped = crop(image, self.dimensions)
-            resized = cropped.resize(self.dimensions, Image.ANTIALIAS)
+            if crop_and_resize:
+                cropped = crop(image, self.dimensions)
+                resized = cropped.resize(self.dimensions, Image.ANTIALIAS)
+            else:
+                if image.size[0] < 10 or image.size[1] < 10:
+                    raise ValueError('Image is too slim!')
+                elif image.size[0] * image.size[1] > 1000000:
+                    ratio = image.size[1] / image.size[0]
+                    dimensions = (1000, int(1000 * ratio))
+                    resized = image.resize(dimensions, Image.ANTIALIAS)
+                else:
+                    resized = image
             bytestream = io.BytesIO()
             if image.format == 'PNG':
                 reduced_colors = resized.convert('P',

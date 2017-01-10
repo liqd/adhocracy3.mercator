@@ -27,7 +27,8 @@ class TestImageMetadataSheet:
                               'mime_type': '',
                               'size': 0,
                               'detail': None,
-                              'thumbnail': None}
+                              'thumbnail': None,
+                              'original': None}
 
     @mark.usefixtures('integration')
     def test_includeme_register(self, meta, registry):

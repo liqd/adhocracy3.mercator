@@ -45,6 +45,8 @@ class ImageMetadataSchema(AssetMetadataSchema):
                       readonly=True)
     thumbnail = Resource(dimensions=Dimensions(width=100, height=100),
                          readonly=True)
+    original = Resource(dimensions=None,
+                        readonly=True)
 
 
 image_metadata_meta = asset_metadata_meta._replace(

@@ -94,12 +94,13 @@ class TestImageDownload:
         asset['download'] = inst
         original = Mock()
         mock_sheet.get.return_value = {'data': original}
-        inst._upload_crop_and_resize = Mock()
+        inst._upload = Mock()
         inst.dimensions = dimensions
         inst._get_response = Mock(return_value='FileResponse')
+        import bpdb;bpdb.set_trace()
         response = inst.get_response(registry)
         assert response is inst._get_response.return_value
-        inst._upload_crop_and_resize.assert_called_with(original)
+        inst._upload.assert_called_with(original)
 
     def test_allow_view_everyone(context, registry, mocker):
         from . import image
@@ -156,7 +157,7 @@ class TestImageDownload:
         from PIL.Image import ANTIALIAS
         inst.upload = Mock()
         inst.dimensions = (1, 1)
-        inst._upload_crop_and_resize(mock_file)
+        inst._upload(mock_file, True)
         assert mock_crop.call_args[0] == (mock_original, inst.dimensions)
         assert mock_cropped.resize.call_args(dimensions, ANTIALIAS)
         file_resized = mock_resized.save.call_args[0][0]
@@ -169,7 +170,7 @@ class TestImageDownload:
                                          mock_resized, mock_file):
         mock_original.format = 'JPEG'
         inst.upload = Mock()
-        inst._upload_crop_and_resize(mock_file)
+        inst._upload(mock_file, True)
         assert mock_resized.save.call_args[0][1] == 'JPEG'
 
     def test_upload_crop_and_resize_png(self, inst, mock_crop, mock_original,
@@ -178,7 +179,7 @@ class TestImageDownload:
         mock_converted = copy(mock_original)
         mock_resized.convert.return_value = mock_converted
         inst.upload = Mock()
-        inst._upload_crop_and_resize(mock_file)
+        inst._upload(mock_file, True)
         assert mock_resized.convert.call_args[0][0] == 'P'
         assert mock_converted.save.call_args[0][1] == 'PNG'
 
