@@ -56,7 +56,7 @@
 
 
     <section class="action-section">
-        <p>{{data.detail}}</p>
+        <adh-parse-markdown data-parsetext="data.detail"></adh-parse-markdown>
         <a href="{{ path | adhParentPath | adhResourceUrl:'comments' }}" class="action-section-button">
             <i class="icon-speechbubble"></i> {{ data.commentCount }}
         </a>
