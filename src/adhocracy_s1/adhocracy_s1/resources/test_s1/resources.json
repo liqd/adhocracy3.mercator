@@ -1,0 +1,8 @@
+[{"path": "/",
+  "creator": "god",
+  "content_type": "adhocracy_s1.resources.s1.IProcess",
+  "data": {"adhocracy_core.sheets.name.IName":
+           {"name": "s1"},
+           "adhocracy_core.sheets.title.ITitle":
+           {"title": "Sample S1 process"}}}
+]
