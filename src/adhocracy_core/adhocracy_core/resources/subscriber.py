@@ -209,10 +209,11 @@ def _create_new_version(event, appstruct) -> IResource:
     appstructs[event.isheet.__identifier__] = appstruct
     registry = event.registry
     iresource = get_iresource(event.object)
+    creator = get_sheet(event.object, IMetadata, registry).get()['creator']
     new_version = registry.content.create(iresource.__identifier__,
                                           parent=event.object.__parent__,
                                           appstructs=appstructs,
-                                          creator=event.creator,
+                                          creator=creator,
                                           registry=event.registry,
                                           root_versions=event.root_versions,
                                           is_batchmode=event.is_batchmode,
