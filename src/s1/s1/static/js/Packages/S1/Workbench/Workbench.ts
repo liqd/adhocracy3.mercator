@@ -294,7 +294,7 @@ var getMeeting = (proposal : ResourcesBase.IResource, process : ResourcesBase.IR
         var proposalDecisionDate = AdhUtil.deepPluck(
             AdhProcess.getStateData(SIWorkflowAssignment.get(proposal), proposalState), ["start_date"]);
 
-        return (processDecisionDate === proposalDecisionDate) ? "current" : "archive";
+        return (proposalDecisionDate <= processDecisionDate) ? "archive" : "current";
     }
 };
 
