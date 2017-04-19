@@ -88,14 +88,27 @@ rather than in response to user action.
     border-radius: 50%;
     box-shadow: 0 0 1px 1px $color-text-inverted;
     background: $color-brand-two-normal;
+    border: solid 10px $color-brand-two-normal;
     color: $color-text-inverted;
     text-align: center;
 
     &.is-active, &:hover, &:focus {
         background: $color-brand-one-introvert;
+        border: solid 10px $color-brand-one-introvert;
     }
 
-    &.marker-cluster {
+@media print {
+    .marker-cluster {
+        border: solid 20px $color-brand-two-normal;
+
+        &.is-active, &:hover, &:focus {
+            border: solid 20px $color-brand-one-introvert;
+        }
+    }
+}
+
+@media screen {
+    .leaflet-marker-icon {
         display: table;
 
         div {
