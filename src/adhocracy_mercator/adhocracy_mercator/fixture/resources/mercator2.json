@@ -1,0 +1,43 @@
+[ {"path": "/",
+   "content_type": "adhocracy_core.resources.organisation.IOrganisation",
+   "data": {"adhocracy_core.sheets.name.IName":
+            {"name": "organisation"}
+           }},
+  {"path": "/organisation",
+   "content_type": "adhocracy_mercator.resources.mercator2.IProcess",
+   "data": {"adhocracy_core.sheets.name.IName":
+            {"name": "advocate-europe2"},
+            "adhocracy_core.sheets.title.ITitle":
+            {"title": "Sample mercator2 process"}
+           }},
+  {"path": "/organisation/advocate-europe2/badges",
+   "creator": "/principals/users/0000000",
+   "content_type": "adhocracy_core.resources.badge.IBadge",
+   "data": {"adhocracy_core.sheets.name.IName":
+              {"name": "winning"},
+              "adhocracy_core.sheets.title.ITitle":
+              {"title" : "Winning"},
+              "adhocracy_core.sheets.description.IDescription" :
+              {"description" : "This is the badge for winning proposals"}
+           }},
+  {"path": "/organisation/advocate-europe2/badges",
+   "creator": "/principals/users/0000000",
+   "content_type": "adhocracy_core.resources.badge.IBadge",
+   "data": {"adhocracy_core.sheets.name.IName":
+              {"name": "community"},
+              "adhocracy_core.sheets.title.ITitle":
+              {"title" : "Community"},
+              "adhocracy_core.sheets.description.IDescription" :
+              {"description" : "This is the badge for proposal which won the community award"}
+           }},
+  {"path": "/organisation/advocate-europe2/badges",
+   "creator": "/principals/users/0000000",
+   "content_type": "adhocracy_core.resources.badge.IBadge",
+   "data": {"adhocracy_core.sheets.name.IName":
+              {"name": "shortlist"},
+              "adhocracy_core.sheets.title.ITitle":
+              {"title" : "Shortlist"},
+              "adhocracy_core.sheets.description.IDescription" :
+              {"description" : "This is the badge for proposal which is on the shortlist"}
+           }}
+]
