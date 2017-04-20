@@ -31,3 +31,24 @@ class TestDescriptionSheet:
     def test_includeme_register_sheet(self, meta, config):
         context = testing.DummyResource(__provides__=meta.isheet)
         assert config.registry.content.get_sheet(context, meta.isheet)
+
+
+class TestDescriptionSchema:
+
+    def make_one(self):
+        from .description import DescriptionSchema
+        return DescriptionSchema().bind()
+
+    def test_create(self):
+        from adhocracy_core.schema import Text
+        inst = self.make_one()
+        assert isinstance(inst['description'], Text)
+        assert isinstance(inst['short_description'], Text)
+
+    def test_serialize_emtpy(self):
+        import colander
+        inst = self.make_one()
+        assert inst.deserialize({}) == {
+            'description': '',
+            'short_description': '',
+        }

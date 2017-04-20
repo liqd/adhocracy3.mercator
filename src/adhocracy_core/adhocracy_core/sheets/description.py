@@ -18,8 +18,8 @@ class DescriptionSchema(MappingSchema):
     `description`: a full description
     """
 
-    short_description = Text()
-    description = Text()
+    short_description = Text(missing='')
+    description = Text(missing='')
 
 
 description_meta = sheet_meta._replace(isheet=IDescription,
