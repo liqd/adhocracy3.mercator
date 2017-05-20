@@ -64,7 +64,6 @@ export var register = (angular) => {
             "adhUploadImage",
             "flowFactory",
             AdhDocument.editDirective])
-        .directive("adhDocumentListing", ["adhConfig", AdhDocument.listingDirective])
         .directive("adhDocumentListItem", [
             "$q", "adhConfig", "adhHttp", "adhGetBadges", "adhTopLevelState", AdhDocument.listItemDirective])
         .directive("adhDocumentMapListItem", [

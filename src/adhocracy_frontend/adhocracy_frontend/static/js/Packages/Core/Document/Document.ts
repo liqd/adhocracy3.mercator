@@ -459,21 +459,6 @@ export var mapListItemDirective = (
     return directive;
 };
 
-export var listingDirective = (
-    adhConfig : AdhConfig.IService
-) => {
-    return {
-        restrict: "E",
-        templateUrl: adhConfig.pkg_path + pkgLocation + "/Listing.html",
-        scope: {
-            path: "@"
-        },
-        link: (scope) => {
-            scope.contentType = RIDocumentVersion.content_type;
-        }
-    };
-};
-
 export var createDirective = (
     $location : angular.ILocationService,
     adhConfig : AdhConfig.IService,
